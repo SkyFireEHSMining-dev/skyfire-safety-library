@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SkyFire Safety Library</title>
+
+<meta name="theme-color" content="#1a1a1a">
+
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="styles.css">
+
+<script src="app.js" defer></script>
+
+</head>
+
+<body>
+
+<header class="main-header">
+
+<h1>SkyFire Safety Library</h1>
+<p class="subtitle">Field Safety Hub</p>
+
+<input type="text" id="searchBar" placeholder="Search CFR...">
+
+</header>
+
+
+<main>
+
+<!-- DASHBOARD -->
+
+<section id="dashboard">
+
+<div class="alerts-card">
+
+<h2>⚠ Safety Alerts</h2>
+
+<div id="alertsList">
+<p>No active alerts</p>
+</div>
+
+</div>
+
+
+<div class="tool-grid">
+
+<button class="tool-btn" id="btn-cfr">
+CFR Library
+</button>
+
+<button class="tool-btn" id="btn-alerts">
+Safety Alerts
+</button>
+
+<button class="tool-btn" id="btn-checklists">
+Checklists
+</button>
+
+<button class="tool-btn" id="btn-training">
+Training
+</button>
+
+<button class="tool-btn" id="btn-contacts">
+Contacts
+</button>
+
+<button class="tool-btn" id="btn-partners">
+Partners
+</button>
+
+</div>
+
+</section>
+
+
+<!-- CFR TOOL -->
+
+<section id="cfrSection">
+
+<div id="statusMessage">
+Loading CFR data...
+</div>
+
+<div class="layout">
+
+<aside id="bookmarkSidebar">
+
+<h2>Bookmarks</h2>
+<p>Save important sections here for quick access.</p>
+
+<div class="folder-create-row">
+
+<input type="text" id="newFolderInput" placeholder="New folder name">
+<button id="createFolderBtn">Create</button>
+
+</div>
+
+<div id="bookmarkFolders">
+
+<p><em>No bookmarks yet.</em></p>
+
+</div>
+
+</aside>
+
+<section id="cfrContainer"></section>
+
+</div>
+
+</section>
+
+
+<section id="aboutPanel">
+
+<h2>About This Tool</h2>
+
+<p><strong>SkyFire Safety CFR Field Reference</strong></p>
+
+<p>
+Developed by <strong>Nicholas R. Murphy</strong><br>
+SkyFire Safety — Mine Safety Tools
+</p>
+
+<p>
+This tool is designed to improve field access to Title 30 CFR content
+for mine safety and health work, including offline-ready reference use.
+</p>
+
+<p>
+Licensed under <strong>CC BY-NC 4.0</strong><br>
+Attribution required. Non-commercial use only.
+</p>
+
+</section>
+
+</main>
+
+
+<footer id="siteFooter">
+
+<div>Developed by Nicholas R. Murphy</div>
+<div>SkyFire Safety — Mine Safety Tools</div>
+
+</footer>
+
+
+<script>
+
+if ("serviceWorker" in navigator) {
+
+window.addEventListener("load", function () {
+
+navigator.serviceWorker
+.register("./service-worker.js")
+
+.then(function (registration) {
+
+console.log("Service Worker registered:", registration.scope);
+
+})
+
+.catch(function (error) {
+
+console.log("Service Worker registration failed:", error);
+
+});
+
+});
+
+}
+
+</script>
+
+
+</body>
+</html>

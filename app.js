@@ -13,7 +13,7 @@ const alertsList = document.getElementById("alertsList");
 
 let allSections = [];
 let bookmarkFolders = loadBookmarkFolders();
-let searchDebounceTimer;
+let searchDebounceTimer = null;
 
 function decodeHtmlEntities(text) {
   const txt = document.createElement("textarea");
@@ -400,7 +400,6 @@ function renderSections(sectionsToRender, query = "") {
 
   const tree = buildHierarchy(sectionsToRender);
   const hasQuery = query.trim() !== "";
-  const autoOpenMatches = hasQuery && sectionsToRender.length <= 20;
 
   for (const volumeName of Object.keys(tree)) {
     const volumeNode = createDetails(
@@ -415,7 +414,7 @@ function renderSections(sectionsToRender, query = "") {
     for (const chapterName of Object.keys(chapters)) {
       const chapterNode = createDetails(
         highlightText(chapterName, query),
-        autoOpenMatches,
+        hasQuery,
         "section level-chapter"
       );
       volumeNode.content.appendChild(chapterNode.details);
@@ -425,7 +424,7 @@ function renderSections(sectionsToRender, query = "") {
       for (const subchapterName of Object.keys(subchapters)) {
         const subchapterNode = createDetails(
           highlightText(subchapterName, query),
-          autoOpenMatches,
+          hasQuery,
           "section level-subchapter"
         );
         chapterNode.content.appendChild(subchapterNode.details);
@@ -435,7 +434,7 @@ function renderSections(sectionsToRender, query = "") {
         for (const partName of Object.keys(parts)) {
           const partNode = createDetails(
             highlightText(partName, query),
-            autoOpenMatches,
+            hasQuery,
             "section level-part"
           );
           subchapterNode.content.appendChild(partNode.details);
@@ -445,7 +444,7 @@ function renderSections(sectionsToRender, query = "") {
           for (const section of sections) {
             const sectionNode = createDetails(
               highlightText(section.heading, query),
-              autoOpenMatches,
+              hasQuery,
               "section level-section"
             );
 
@@ -484,6 +483,12 @@ function filterSections(query) {
 
     return headingMatch || sectionNumberMatch || paragraphMatch;
   });
+}
+
+function runSearch() {
+  const query = searchBar.value.trim();
+  const filtered = filterSections(query);
+  renderSections(filtered, query);
 }
 
 function getXmlPathCandidates() {
@@ -607,10 +612,8 @@ searchBar.addEventListener("input", function () {
   clearTimeout(searchDebounceTimer);
 
   searchDebounceTimer = setTimeout(function () {
-    const query = searchBar.value.trim();
-    const filtered = filterSections(query);
-    renderSections(filtered, query);
-  }, 300);
+    runSearch();
+  }, 250);
 });
 
 createFolderBtn.addEventListener("click", createFolder);

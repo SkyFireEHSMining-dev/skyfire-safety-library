@@ -1,5 +1,6 @@
-const xmlPath = "./Data/ECFR-title30.xml";
-const CACHE_KEY = "title30_xml_cache_v2";
+const XML_FILE_NAME = "ECFR-title30.xml";
+const XML_FOLDER_NAME = "Data";
+const CACHE_KEY = "title30_xml_cache_v3";
 const BOOKMARKS_KEY = "title30_bookmark_folders_v1";
 
 const cfrContainer = document.getElementById("cfrContainer");
@@ -8,6 +9,7 @@ const statusMessage = document.getElementById("statusMessage");
 const newFolderInput = document.getElementById("newFolderInput");
 const createFolderBtn = document.getElementById("createFolderBtn");
 const bookmarkFoldersContainer = document.getElementById("bookmarkFolders");
+const alertsList = document.getElementById("alertsList");
 
 let allSections = [];
 let bookmarkFolders = loadBookmarkFolders();
@@ -482,23 +484,90 @@ function filterSections(query) {
   });
 }
 
+function getXmlPathCandidates() {
+  const origin = window.location.origin;
+  const pathname = window.location.pathname;
+
+  // Folder where index.html is living
+  const currentFolder = pathname.endsWith("/")
+    ? pathname
+    : pathname.substring(0, pathname.lastIndexOf("/") + 1);
+
+  const candidates = [
+    `./${XML_FOLDER_NAME}/${XML_FILE_NAME}`,
+    `${XML_FOLDER_NAME}/${XML_FILE_NAME}`,
+    `${currentFolder}${XML_FOLDER_NAME}/${XML_FILE_NAME}`,
+    `${origin}${currentFolder}${XML_FOLDER_NAME}/${XML_FILE_NAME}`
+  ];
+
+  return [...new Set(candidates)];
+}
+
+function looksLikeValidXml(xmlText) {
+  if (!xmlText) return false;
+
+  const hasHead = xmlText.includes("<HEAD>");
+  const hasParagraph = xmlText.includes("<P>");
+  const hasHtml404 = /<html|<!doctype html/i.test(xmlText);
+
+  return (hasHead || hasParagraph) && !hasHtml404;
+}
+
+async function fetchXmlFromCandidates() {
+  const candidates = getXmlPathCandidates();
+  let lastError = null;
+
+  for (const candidate of candidates) {
+    try {
+      const response = await fetch(candidate, { cache: "no-store" });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status} loading ${candidate}`);
+      }
+
+      const xmlText = await response.text();
+
+      if (!looksLikeValidXml(xmlText)) {
+        throw new Error(`Received invalid XML content from ${candidate}`);
+      }
+
+      return {
+        xmlText,
+        source: "live XML",
+        pathUsed: candidate
+      };
+    } catch (error) {
+      console.warn("XML candidate failed:", candidate, error);
+      lastError = error;
+    }
+  }
+
+  throw lastError || new Error("Unable to load XML from any candidate path.");
+}
+
+function updateAlertsPlaceholder() {
+  if (!alertsList) return;
+
+  alertsList.innerHTML = `
+    <p>No active alerts</p>
+  `;
+}
+
 async function loadCfr() {
   try {
     statusMessage.textContent = "Loading CFR data...";
 
     let xmlText = null;
     let source = "";
+    let pathUsed = "";
 
     try {
-      const response = await fetch(xmlPath, { cache: "no-store" });
+      const result = await fetchXmlFromCandidates();
+      xmlText = result.xmlText;
+      source = result.source;
+      pathUsed = result.pathUsed;
 
-      if (!response.ok) {
-        throw new Error("HTTP " + response.status + " loading " + xmlPath);
-      }
-
-      xmlText = await response.text();
       saveXmlCache(xmlText);
-      source = "local XML";
     } catch (liveError) {
       const cachedXml = loadXmlCache();
 
@@ -508,18 +577,19 @@ async function loadCfr() {
 
       xmlText = cachedXml;
       source = "saved cache";
-      console.warn("Local XML unavailable, using cache instead.", liveError);
+      pathUsed = "browser cache";
+      console.warn("Live XML unavailable, using saved cache instead.", liveError);
     }
 
     statusMessage.textContent = "Building CFR hierarchy...";
     buildSectionsFromXmlText(xmlText);
 
-    if (source === "local XML") {
+    if (source === "live XML") {
       statusMessage.textContent =
-        "Loaded " + allSections.length + " CFR sections from local XML. Offline cache refreshed just now.";
+        `Loaded ${allSections.length} CFR sections from ${pathUsed}. Offline cache refreshed just now.`;
     } else {
       statusMessage.textContent =
-        "Local XML unavailable. Loaded " + allSections.length + " CFR sections from saved cache.";
+        `Live XML unavailable. Loaded ${allSections.length} CFR sections from saved cache.`;
     }
 
     renderBookmarkFolders();
@@ -546,5 +616,6 @@ newFolderInput.addEventListener("keydown", function (event) {
   }
 });
 
+updateAlertsPlaceholder();
 renderBookmarkFolders();
 loadCfr();

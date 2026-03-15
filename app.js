@@ -13,6 +13,7 @@ const alertsList = document.getElementById("alertsList");
 
 let allSections = [];
 let bookmarkFolders = loadBookmarkFolders();
+let searchDebounceTimer;
 
 function decodeHtmlEntities(text) {
   const txt = document.createElement("textarea");
@@ -399,6 +400,7 @@ function renderSections(sectionsToRender, query = "") {
 
   const tree = buildHierarchy(sectionsToRender);
   const hasQuery = query.trim() !== "";
+  const autoOpenMatches = hasQuery && sectionsToRender.length <= 20;
 
   for (const volumeName of Object.keys(tree)) {
     const volumeNode = createDetails(
@@ -413,7 +415,7 @@ function renderSections(sectionsToRender, query = "") {
     for (const chapterName of Object.keys(chapters)) {
       const chapterNode = createDetails(
         highlightText(chapterName, query),
-        hasQuery,
+        autoOpenMatches,
         "section level-chapter"
       );
       volumeNode.content.appendChild(chapterNode.details);
@@ -423,7 +425,7 @@ function renderSections(sectionsToRender, query = "") {
       for (const subchapterName of Object.keys(subchapters)) {
         const subchapterNode = createDetails(
           highlightText(subchapterName, query),
-          hasQuery,
+          autoOpenMatches,
           "section level-subchapter"
         );
         chapterNode.content.appendChild(subchapterNode.details);
@@ -433,7 +435,7 @@ function renderSections(sectionsToRender, query = "") {
         for (const partName of Object.keys(parts)) {
           const partNode = createDetails(
             highlightText(partName, query),
-            hasQuery,
+            autoOpenMatches,
             "section level-part"
           );
           subchapterNode.content.appendChild(partNode.details);
@@ -443,7 +445,7 @@ function renderSections(sectionsToRender, query = "") {
           for (const section of sections) {
             const sectionNode = createDetails(
               highlightText(section.heading, query),
-              hasQuery,
+              autoOpenMatches,
               "section level-section"
             );
 
@@ -488,7 +490,6 @@ function getXmlPathCandidates() {
   const origin = window.location.origin;
   const pathname = window.location.pathname;
 
-  // Folder where index.html is living
   const currentFolder = pathname.endsWith("/")
     ? pathname
     : pathname.substring(0, pathname.lastIndexOf("/") + 1);
@@ -603,9 +604,13 @@ async function loadCfr() {
 }
 
 searchBar.addEventListener("input", function () {
-  const query = searchBar.value.trim();
-  const filtered = filterSections(query);
-  renderSections(filtered, query);
+  clearTimeout(searchDebounceTimer);
+
+  searchDebounceTimer = setTimeout(function () {
+    const query = searchBar.value.trim();
+    const filtered = filterSections(query);
+    renderSections(filtered, query);
+  }, 300);
 });
 
 createFolderBtn.addEventListener("click", createFolder);

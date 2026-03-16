@@ -1,6 +1,6 @@
 const XML_FILE_NAME = "ECFR-title30.xml";
 const XML_FOLDER_NAME = "Data";
-const CACHE_KEY = "title30_xml_cache_v3";
+const CACHE_KEY = "title30_xml_cache_v4";
 const BOOKMARKS_KEY = "title30_bookmark_folders_v1";
 
 const cfrContainer = document.getElementById("cfrContainer");
@@ -16,7 +16,9 @@ let bookmarkFolders = loadBookmarkFolders();
 let searchDebounceTimer = null;
 
 const MIN_TEXT_SEARCH_LENGTH = 3;
-const MAX_SEARCH_RESULTS = 150;
+const MAX_SEARCH_RESULTS = 100;
+const MAX_PREVIEW_PARAGRAPHS = 2;
+const PREVIEW_SNIPPET_LENGTH = 220;
 
 function decodeHtmlEntities(text) {
   const txt = document.createElement("textarea");
@@ -381,6 +383,67 @@ function createFolderDropdown(section) {
   return wrapper;
 }
 
+function trimPreviewText(text, maxLength = PREVIEW_SNIPPET_LENGTH) {
+  if (!text) return "";
+  if (text.length <= maxLength) return text;
+  return text.slice(0, maxLength).trim() + "...";
+}
+
+function buildSnippetAroundMatch(text, query, maxLength = PREVIEW_SNIPPET_LENGTH) {
+  if (!text) return "";
+
+  const lowerText = text.toLowerCase();
+  const lowerQuery = query.toLowerCase();
+  const index = lowerText.indexOf(lowerQuery);
+
+  if (index === -1) {
+    return trimPreviewText(text, maxLength);
+  }
+
+  const half = Math.floor(maxLength / 2);
+  let start = Math.max(0, index - half);
+  let end = Math.min(text.length, start + maxLength);
+
+  if (end - start < maxLength) {
+    start = Math.max(0, end - maxLength);
+  }
+
+  let snippet = text.slice(start, end).trim();
+
+  if (start > 0) snippet = "..." + snippet;
+  if (end < text.length) snippet = snippet + "...";
+
+  return snippet;
+}
+
+function getPreviewParagraphs(section, query, numericLike) {
+  if (!section.paragraphs || section.paragraphs.length === 0) {
+    return [];
+  }
+
+  if (numericLike) {
+    return section.paragraphs
+      .slice(0, MAX_PREVIEW_PARAGRAPHS)
+      .map(paragraph => trimPreviewText(paragraph));
+  }
+
+  const q = query.toLowerCase();
+
+  const matchingParagraphs = section.paragraphs.filter(paragraph =>
+    paragraph.toLowerCase().includes(q)
+  );
+
+  if (matchingParagraphs.length > 0) {
+    return matchingParagraphs
+      .slice(0, MAX_PREVIEW_PARAGRAPHS)
+      .map(paragraph => buildSnippetAroundMatch(paragraph, query));
+  }
+
+  return section.paragraphs
+    .slice(0, 1)
+    .map(paragraph => trimPreviewText(paragraph));
+}
+
 function renderHierarchySections(sectionsToRender, query = "") {
   cfrContainer.innerHTML = "";
 
@@ -469,6 +532,8 @@ function renderFlatSearchResults(sectionsToRender, query = "") {
     return;
   }
 
+  const numericLike = isNumericLikeQuery(query);
+
   const resultsWrapper = document.createElement("div");
   resultsWrapper.className = "search-results-wrapper";
 
@@ -498,17 +563,26 @@ function renderFlatSearchResults(sectionsToRender, query = "") {
 
     meta.appendChild(createFolderDropdown(section));
 
-    if (section.paragraphs.length === 0) {
+    const previewParagraphs = getPreviewParagraphs(section, query, numericLike);
+
+    if (previewParagraphs.length === 0) {
       const empty = document.createElement("p");
       empty.innerHTML = "<em>No paragraph text under this heading.</em>";
       meta.appendChild(empty);
     } else {
-      for (const paragraph of section.paragraphs) {
+      for (const previewText of previewParagraphs) {
         const p = document.createElement("p");
-        p.innerHTML = highlightText(paragraph, query);
+        p.innerHTML = highlightText(previewText, query);
         p.style.lineHeight = "1.6";
         meta.appendChild(p);
       }
+
+      const note = document.createElement("p");
+      note.style.fontStyle = "italic";
+      note.style.opacity = "0.8";
+      note.style.marginTop = "8px";
+      note.textContent = "Preview shown for speed.";
+      meta.appendChild(note);
     }
 
     card.appendChild(title);
@@ -694,7 +768,7 @@ searchBar.addEventListener("input", function () {
 
   searchDebounceTimer = setTimeout(function () {
     runSearch();
-  }, 300);
+  }, 350);
 });
 
 createFolderBtn.addEventListener("click", createFolder);

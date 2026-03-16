@@ -15,6 +15,9 @@ let allSections = [];
 let bookmarkFolders = loadBookmarkFolders();
 let searchDebounceTimer = null;
 
+const MIN_TEXT_SEARCH_LENGTH = 3;
+const MAX_SEARCH_RESULTS = 150;
+
 function decodeHtmlEntities(text) {
   const txt = document.createElement("textarea");
   txt.innerHTML = text;
@@ -247,7 +250,7 @@ function addBookmarkToFolder(folderId, section) {
   sortBookmarkFolders();
   saveBookmarkFolders();
   renderBookmarkFolders();
-  renderSections(filterSections(searchBar.value.trim()), searchBar.value.trim());
+  runSearch();
 }
 
 function removeBookmarkFromFolder(folderId, sectionNumber) {
@@ -259,7 +262,7 @@ function removeBookmarkFromFolder(folderId, sectionNumber) {
   sortBookmarkFolders();
   saveBookmarkFolders();
   renderBookmarkFolders();
-  renderSections(filterSections(searchBar.value.trim()), searchBar.value.trim());
+  runSearch();
 }
 
 function isBookmarked(sectionNumber) {
@@ -269,24 +272,12 @@ function isBookmarked(sectionNumber) {
 }
 
 function goToBookmark(sectionNumber) {
-  const currentQuery = searchBar.value.trim();
-
-  if (currentQuery) {
-    searchBar.value = sectionNumber;
-    renderSections(filterSections(sectionNumber), sectionNumber);
-  }
+  searchBar.value = sectionNumber;
+  runSearch();
 
   setTimeout(function () {
     const target = document.querySelector(`[data-section-number="${sectionNumber}"]`);
     if (!target) return;
-
-    let parent = target.parentElement;
-    while (parent) {
-      if (parent.tagName === "DETAILS") {
-        parent.open = true;
-      }
-      parent = parent.parentElement;
-    }
 
     target.scrollIntoView({ behavior: "smooth", block: "center" });
     target.classList.add("highlighted-section");
@@ -390,7 +381,7 @@ function createFolderDropdown(section) {
   return wrapper;
 }
 
-function renderSections(sectionsToRender, query = "") {
+function renderHierarchySections(sectionsToRender, query = "") {
   cfrContainer.innerHTML = "";
 
   if (!sectionsToRender.length) {
@@ -399,7 +390,6 @@ function renderSections(sectionsToRender, query = "") {
   }
 
   const tree = buildHierarchy(sectionsToRender);
-  const hasQuery = query.trim() !== "";
 
   for (const volumeName of Object.keys(tree)) {
     const volumeNode = createDetails(
@@ -414,7 +404,7 @@ function renderSections(sectionsToRender, query = "") {
     for (const chapterName of Object.keys(chapters)) {
       const chapterNode = createDetails(
         highlightText(chapterName, query),
-        hasQuery,
+        false,
         "section level-chapter"
       );
       volumeNode.content.appendChild(chapterNode.details);
@@ -424,7 +414,7 @@ function renderSections(sectionsToRender, query = "") {
       for (const subchapterName of Object.keys(subchapters)) {
         const subchapterNode = createDetails(
           highlightText(subchapterName, query),
-          hasQuery,
+          false,
           "section level-subchapter"
         );
         chapterNode.content.appendChild(subchapterNode.details);
@@ -434,7 +424,7 @@ function renderSections(sectionsToRender, query = "") {
         for (const partName of Object.keys(parts)) {
           const partNode = createDetails(
             highlightText(partName, query),
-            hasQuery,
+            false,
             "section level-part"
           );
           subchapterNode.content.appendChild(partNode.details);
@@ -444,7 +434,7 @@ function renderSections(sectionsToRender, query = "") {
           for (const section of sections) {
             const sectionNode = createDetails(
               highlightText(section.heading, query),
-              hasQuery,
+              false,
               "section level-section"
             );
 
@@ -471,24 +461,115 @@ function renderSections(sectionsToRender, query = "") {
   }
 }
 
+function renderFlatSearchResults(sectionsToRender, query = "") {
+  cfrContainer.innerHTML = "";
+
+  if (!sectionsToRender.length) {
+    cfrContainer.innerHTML = "<p><em>No results found.</em></p>";
+    return;
+  }
+
+  const resultsWrapper = document.createElement("div");
+  resultsWrapper.className = "search-results-wrapper";
+
+  const resultCount = document.createElement("p");
+  resultCount.innerHTML = `<strong>${sectionsToRender.length}</strong> result(s) shown`;
+  resultsWrapper.appendChild(resultCount);
+
+  for (const section of sectionsToRender) {
+    const card = document.createElement("div");
+    card.className = "bookmark-folder";
+    card.setAttribute("data-section-number", section.sectionNumber);
+
+    const title = document.createElement("div");
+    title.className = "bookmark-folder-title";
+    title.innerHTML = highlightText(section.heading, query);
+
+    const meta = document.createElement("div");
+    meta.className = "bookmark-item";
+    meta.innerHTML = `
+      <div style="margin-bottom: 10px; line-height: 1.5;">
+        <strong>${highlightText(section.volume, query)}</strong><br>
+        ${highlightText(section.chapter, query)}<br>
+        ${highlightText(section.subchapter, query)}<br>
+        ${highlightText(section.part, query)}
+      </div>
+    `;
+
+    meta.appendChild(createFolderDropdown(section));
+
+    if (section.paragraphs.length === 0) {
+      const empty = document.createElement("p");
+      empty.innerHTML = "<em>No paragraph text under this heading.</em>";
+      meta.appendChild(empty);
+    } else {
+      for (const paragraph of section.paragraphs) {
+        const p = document.createElement("p");
+        p.innerHTML = highlightText(paragraph, query);
+        p.style.lineHeight = "1.6";
+        meta.appendChild(p);
+      }
+    }
+
+    card.appendChild(title);
+    card.appendChild(meta);
+    resultsWrapper.appendChild(card);
+  }
+
+  cfrContainer.appendChild(resultsWrapper);
+}
+
+function isNumericLikeQuery(query) {
+  return /^[0-9.\s§-]+$/.test(query);
+}
+
 function filterSections(query) {
   const q = query.trim().toLowerCase();
 
   if (!q) return allSections;
 
-  return allSections.filter(section => {
+  const numericLike = isNumericLikeQuery(q);
+
+  if (!numericLike && q.length < MIN_TEXT_SEARCH_LENGTH) {
+    return null;
+  }
+
+  const matches = allSections.filter(section => {
     const headingMatch = section.heading.toLowerCase().includes(q);
     const sectionNumberMatch = section.sectionNumber.toLowerCase().includes(q);
     const paragraphMatch = section.paragraphs.some(p => p.toLowerCase().includes(q));
 
     return headingMatch || sectionNumberMatch || paragraphMatch;
   });
+
+  return matches.slice(0, MAX_SEARCH_RESULTS);
 }
 
 function runSearch() {
   const query = searchBar.value.trim();
+
+  if (!query) {
+    statusMessage.textContent =
+      `Loaded ${allSections.length} CFR sections. Browse the full library below.`;
+    renderHierarchySections(allSections);
+    return;
+  }
+
+  const numericLike = isNumericLikeQuery(query);
   const filtered = filterSections(query);
-  renderSections(filtered, query);
+
+  if (filtered === null) {
+    statusMessage.textContent =
+      `Type at least ${MIN_TEXT_SEARCH_LENGTH} letters for text search.`;
+    cfrContainer.innerHTML = "<p><em>Keep typing to search the CFR library.</em></p>";
+    return;
+  }
+
+  statusMessage.textContent = numericLike
+    ? `Showing up to ${MAX_SEARCH_RESULTS} numeric search results for "${query}".`
+    : `Showing up to ${MAX_SEARCH_RESULTS} text search results for "${query}".`;
+
+  renderFlatSearchResults(filtered, query);
 }
 
 function getXmlPathCandidates() {
@@ -599,7 +680,7 @@ async function loadCfr() {
     }
 
     renderBookmarkFolders();
-    renderSections(allSections);
+    renderHierarchySections(allSections);
   } catch (error) {
     statusMessage.textContent = "Error loading CFR data.";
     cfrContainer.innerHTML =
@@ -613,7 +694,7 @@ searchBar.addEventListener("input", function () {
 
   searchDebounceTimer = setTimeout(function () {
     runSearch();
-  }, 250);
+  }, 300);
 });
 
 createFolderBtn.addEventListener("click", createFolder);

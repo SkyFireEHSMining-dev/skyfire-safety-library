@@ -41,7 +41,7 @@ main {
 
 .layout {
   display: grid;
-  grid-template-columns: 340px 1fr;
+  grid-template-columns: 340px minmax(0, 1fr);
   gap: 20px;
   align-items: start;
 }
@@ -54,8 +54,11 @@ main {
   border: 1px solid #dcdcdc;
   border-radius: 10px;
   padding: 16px;
-  max-height: calc(100vh - 140px);
+  height: calc(100vh - 150px);
+  max-height: calc(100vh - 150px);
   overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 #bookmarkSidebar h2 {
@@ -299,6 +302,7 @@ mark {
 
   #bookmarkSidebar {
     position: static;
+    height: auto;
     max-height: none;
     overflow: visible;
   }

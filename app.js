@@ -654,25 +654,30 @@ function renderBookmarkFolders() {
   }
 
   for (const folder of bookmarkFolders) {
-    const folderCard = document.createElement("div");
-    folderCard.className = "bookmark-folder";
+    const details = document.createElement("details");
+    details.className = "bookmark-folder";
+    details.open = false;
 
-    const folderTitle = document.createElement("div");
-    folderTitle.className = "bookmark-folder-title";
-    folderTitle.textContent = `${folder.name} (${folder.items.length})`;
-    folderCard.appendChild(folderTitle);
+    const summary = document.createElement("summary");
+    summary.className = "bookmark-folder-title";
+    summary.textContent = `${folder.name} (${folder.items.length})`;
+    details.appendChild(summary);
+
+    const content = document.createElement("div");
+    content.className = "bookmark-folder-content";
 
     const folderControls = document.createElement("div");
     folderControls.className = "bookmark-item";
 
     const deleteFolderBtn = document.createElement("button");
     deleteFolderBtn.textContent = "Delete Folder";
-    deleteFolderBtn.addEventListener("click", function () {
+    deleteFolderBtn.addEventListener("click", function (event) {
+      event.stopPropagation();
       deleteFolder(folder.id);
     });
 
     folderControls.appendChild(deleteFolderBtn);
-    folderCard.appendChild(folderControls);
+    content.appendChild(folderControls);
 
     if (folder.items.length > 0) {
       for (const item of folder.items) {
@@ -688,13 +693,15 @@ function renderBookmarkFolders() {
 
         const goBtn = document.createElement("button");
         goBtn.textContent = "Go to";
-        goBtn.addEventListener("click", function () {
+        goBtn.addEventListener("click", function (event) {
+          event.stopPropagation();
           goToBookmark(item.sectionNumber);
         });
 
         const removeBtn = document.createElement("button");
         removeBtn.textContent = "Remove";
-        removeBtn.addEventListener("click", function () {
+        removeBtn.addEventListener("click", function (event) {
+          event.stopPropagation();
           removeBookmarkFromFolder(folder.id, item.sectionNumber);
         });
 
@@ -703,11 +710,12 @@ function renderBookmarkFolders() {
 
         itemCard.appendChild(itemTitle);
         itemCard.appendChild(buttonRow);
-        folderCard.appendChild(itemCard);
+        content.appendChild(itemCard);
       }
     }
 
-    bookmarkFoldersContainer.appendChild(folderCard);
+    details.appendChild(content);
+    bookmarkFoldersContainer.appendChild(details);
   }
 }
 

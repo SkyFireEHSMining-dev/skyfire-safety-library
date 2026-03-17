@@ -210,6 +210,11 @@ function sortBookmarkFolders() {
   }
 }
 
+function rerenderCurrentView() {
+  renderBookmarkFolders();
+  runSearch();
+}
+
 function createFolder() {
   const name = newFolderInput.value.trim();
   if (!name) return;
@@ -231,18 +236,37 @@ function createFolder() {
 
   sortBookmarkFolders();
   saveBookmarkFolders();
-  renderBookmarkFolders();
   newFolderInput.value = "";
+  rerenderCurrentView();
+}
+
+function deleteFolder(folderId) {
+  const folder = bookmarkFolders.find(f => f.id === folderId);
+  if (!folder) return;
+
+  const confirmed = confirm(`Delete folder "${folder.name}" and all bookmarks inside it?`);
+  if (!confirmed) return;
+
+  bookmarkFolders = bookmarkFolders.filter(f => f.id !== folderId);
+  saveBookmarkFolders();
+  rerenderCurrentView();
 }
 
 function addBookmarkToFolder(folderId, section) {
   const folder = bookmarkFolders.find(f => f.id === folderId);
-  if (!folder) return;
+  if (!folder) {
+    alert("That folder could not be found. Please try again.");
+    return;
+  }
 
   const alreadyExists = folder.items.some(
     item => item.sectionNumber === section.sectionNumber
   );
-  if (alreadyExists) return;
+
+  if (alreadyExists) {
+    alert("That bookmark is already in this folder.");
+    return;
+  }
 
   folder.items.push({
     sectionNumber: section.sectionNumber,
@@ -251,8 +275,7 @@ function addBookmarkToFolder(folderId, section) {
 
   sortBookmarkFolders();
   saveBookmarkFolders();
-  renderBookmarkFolders();
-  runSearch();
+  rerenderCurrentView();
 }
 
 function removeBookmarkFromFolder(folderId, sectionNumber) {
@@ -263,8 +286,7 @@ function removeBookmarkFromFolder(folderId, sectionNumber) {
 
   sortBookmarkFolders();
   saveBookmarkFolders();
-  renderBookmarkFolders();
-  runSearch();
+  rerenderCurrentView();
 }
 
 function isBookmarked(sectionNumber) {
@@ -306,6 +328,79 @@ function renderBookmarkFolders() {
     folderTitle.className = "bookmark-folder-title";
     folderTitle.textContent = `${folder.name} (${folder.items.length})`;
     folderCard.appendChild(folderTitle);
+
+    const folderControls = document.createElement("div");
+    folderControls.className = "bookmark-item";
+
+    const deleteFolderBtn = document.createElement("button");
+    deleteFolderBtn.textContent = "Delete Folder";
+    deleteFolderBtn.addEventListener("click", function () {
+      deleteFolder(folder.id);
+    });
+
+    folderControls.appendChild(deleteFolderBtn);
+    folderCard.appendChild(folderControls);
+
+    if (folder.items.length > 0) {
+      for (const item of folder.items) {
+        const itemCard = document.createElement("div");
+        itemCard.className = "bookmark-item";
+
+        const itemTitle = document.createElement("div");
+        itemTitle.className = "bookmark-item-title";
+        itemTitle.textContent = item.heading;
+
+        const buttonRow = document.createElement("div");
+        buttonRow.className = "bookmark-button-row";
+
+        const goBtn = document.createElement("button");
+        goBtn.textContent = "Go to";
+        goBtn.addEventListener("click", function () {
+          goToBookmark(item.sectionNumber);
+        });
+
+        const removeBtn = document.createElement("button");
+        removeBtn.textContent = "Remove";
+        removeBtn.addEventListener("click", function () {
+          removeBookmarkFromFolder(folder.id, item.sectionNumber);
+        });
+
+        buttonRow.appendChild(goBtn);
+        buttonRow.appendChild(removeBtn);
+
+        itemCard.appendChild(itemTitle);
+        itemCard.appendChild(buttonRow);
+        folderCard.appendChild(itemCard);
+      }
+    }
+  }
+
+  bookmarkFoldersContainer.appendChild(document.createDocumentFragment());
+  for (const folder of bookmarkFolders) {
+    // no-op loop intentionally removed from rendering logic
+  }
+
+  bookmarkFoldersContainer.innerHTML = "";
+  for (const folder of bookmarkFolders) {
+    const folderCard = document.createElement("div");
+    folderCard.className = "bookmark-folder";
+
+    const folderTitle = document.createElement("div");
+    folderTitle.className = "bookmark-folder-title";
+    folderTitle.textContent = `${folder.name} (${folder.items.length})`;
+    folderCard.appendChild(folderTitle);
+
+    const folderControls = document.createElement("div");
+    folderControls.className = "bookmark-item";
+
+    const deleteFolderBtn = document.createElement("button");
+    deleteFolderBtn.textContent = "Delete Folder";
+    deleteFolderBtn.addEventListener("click", function () {
+      deleteFolder(folder.id);
+    });
+
+    folderControls.appendChild(deleteFolderBtn);
+    folderCard.appendChild(folderControls);
 
     if (folder.items.length > 0) {
       for (const item of folder.items) {
@@ -362,6 +457,10 @@ function createFolderDropdown(section) {
     select.appendChild(option);
   }
 
+  if (bookmarkFolders.length === 1) {
+    select.value = bookmarkFolders[0].id;
+  }
+
   const button = document.createElement("button");
   button.textContent = isBookmarked(section.sectionNumber)
     ? "☆ Bookmarked"
@@ -369,12 +468,14 @@ function createFolderDropdown(section) {
   button.disabled = isBookmarked(section.sectionNumber);
 
   button.addEventListener("click", function () {
-    if (!select.value) {
+    const selectedFolderId = select.value;
+
+    if (!selectedFolderId) {
       alert("Choose a folder first.");
       return;
     }
 
-    addBookmarkToFolder(select.value, section);
+    addBookmarkToFolder(selectedFolderId, section);
   });
 
   wrapper.appendChild(select);

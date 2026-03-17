@@ -54,6 +54,8 @@ main {
   border: 1px solid #dcdcdc;
   border-radius: 10px;
   padding: 16px;
+  max-height: calc(100vh - 140px);
+  overflow-y: auto;
 }
 
 #bookmarkSidebar h2 {
@@ -78,7 +80,9 @@ main {
 
 #createFolderBtn,
 .bookmark-controls button,
-.bookmark-button-row button {
+.bookmark-button-row button,
+#exportBookmarksBtn,
+#importBookmarksBtn {
   padding: 10px 14px;
   font-size: 0.95rem;
   border: 1px solid #bfbfbf;
@@ -89,7 +93,9 @@ main {
 
 #createFolderBtn:hover,
 .bookmark-controls button:hover,
-.bookmark-button-row button:hover {
+.bookmark-button-row button:hover,
+#exportBookmarksBtn:hover,
+#importBookmarksBtn:hover {
   background: #f2f2f2;
 }
 
@@ -105,6 +111,21 @@ main {
   font-weight: bold;
   padding: 12px 14px;
   background: #dfe7f5;
+  cursor: pointer;
+  list-style: none;
+}
+
+.bookmark-folder-title::-webkit-details-marker,
+.bookmark-folder summary::-webkit-details-marker {
+  display: none;
+}
+
+.bookmark-folder[open] .bookmark-folder-title {
+  border-bottom: 1px solid #d5dfef;
+}
+
+.bookmark-folder-content {
+  background: #ffffff;
 }
 
 .bookmark-item {
@@ -209,14 +230,11 @@ summary::-webkit-details-marker {
   border-top: 1px solid #ececec;
 }
 
-/* This is the key anti-cramped fix:
-   nested sections no longer keep adding big outside margins */
 .section-content > details {
   margin-left: 0;
   margin-right: 0;
 }
 
-/* Give real text room to breathe */
 .level-section .section-content {
   padding: 16px 18px;
 }
@@ -281,6 +299,8 @@ mark {
 
   #bookmarkSidebar {
     position: static;
+    max-height: none;
+    overflow: visible;
   }
 }
 
@@ -314,7 +334,9 @@ mark {
 
   #createFolderBtn,
   .bookmark-controls button,
-  .bookmark-button-row button {
+  .bookmark-button-row button,
+  #exportBookmarksBtn,
+  #importBookmarksBtn {
     width: 100%;
   }
 
@@ -352,6 +374,14 @@ mark {
   .section-content p {
     line-height: 1.75;
     font-size: 1.05rem;
+  }
+
+  .bookmark-folder {
+    margin-bottom: 10px;
+  }
+
+  .bookmark-folder-title {
+    padding: 14px;
   }
 }
 

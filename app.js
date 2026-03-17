@@ -373,67 +373,6 @@ function renderBookmarkFolders() {
         folderCard.appendChild(itemCard);
       }
     }
-  }
-
-  bookmarkFoldersContainer.appendChild(document.createDocumentFragment());
-  for (const folder of bookmarkFolders) {
-    // no-op loop intentionally removed from rendering logic
-  }
-
-  bookmarkFoldersContainer.innerHTML = "";
-  for (const folder of bookmarkFolders) {
-    const folderCard = document.createElement("div");
-    folderCard.className = "bookmark-folder";
-
-    const folderTitle = document.createElement("div");
-    folderTitle.className = "bookmark-folder-title";
-    folderTitle.textContent = `${folder.name} (${folder.items.length})`;
-    folderCard.appendChild(folderTitle);
-
-    const folderControls = document.createElement("div");
-    folderControls.className = "bookmark-item";
-
-    const deleteFolderBtn = document.createElement("button");
-    deleteFolderBtn.textContent = "Delete Folder";
-    deleteFolderBtn.addEventListener("click", function () {
-      deleteFolder(folder.id);
-    });
-
-    folderControls.appendChild(deleteFolderBtn);
-    folderCard.appendChild(folderControls);
-
-    if (folder.items.length > 0) {
-      for (const item of folder.items) {
-        const itemCard = document.createElement("div");
-        itemCard.className = "bookmark-item";
-
-        const itemTitle = document.createElement("div");
-        itemTitle.className = "bookmark-item-title";
-        itemTitle.textContent = item.heading;
-
-        const buttonRow = document.createElement("div");
-        buttonRow.className = "bookmark-button-row";
-
-        const goBtn = document.createElement("button");
-        goBtn.textContent = "Go to";
-        goBtn.addEventListener("click", function () {
-          goToBookmark(item.sectionNumber);
-        });
-
-        const removeBtn = document.createElement("button");
-        removeBtn.textContent = "Remove";
-        removeBtn.addEventListener("click", function () {
-          removeBookmarkFromFolder(folder.id, item.sectionNumber);
-        });
-
-        buttonRow.appendChild(goBtn);
-        buttonRow.appendChild(removeBtn);
-
-        itemCard.appendChild(itemTitle);
-        itemCard.appendChild(buttonRow);
-        folderCard.appendChild(itemCard);
-      }
-    }
 
     bookmarkFoldersContainer.appendChild(folderCard);
   }

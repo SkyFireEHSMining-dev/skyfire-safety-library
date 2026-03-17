@@ -324,24 +324,149 @@ function createBookmarkExportData() {
   };
 }
 
+function downloadBookmarksFile(fileText) {
+  const blob = new Blob([fileText], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+
+  const stamp = new Date().toISOString().slice(0, 10);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `skyfire-bookmarks-${stamp}.json`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+
+  setTimeout(function () {
+    URL.revokeObjectURL(url);
+  }, 1000);
+}
+
+function createModalShell(titleText) {
+  const overlay = document.createElement("div");
+  overlay.style.position = "fixed";
+  overlay.style.inset = "0";
+  overlay.style.background = "rgba(0,0,0,0.45)";
+  overlay.style.zIndex = "9999";
+  overlay.style.display = "flex";
+  overlay.style.alignItems = "center";
+  overlay.style.justifyContent = "center";
+  overlay.style.padding = "16px";
+  overlay.addEventListener("click", function (event) {
+    if (event.target === overlay) {
+      overlay.remove();
+    }
+  });
+
+  const modal = document.createElement("div");
+  modal.style.background = "#ffffff";
+  modal.style.width = "100%";
+  modal.style.maxWidth = "720px";
+  modal.style.maxHeight = "85vh";
+  modal.style.overflow = "auto";
+  modal.style.borderRadius = "12px";
+  modal.style.padding = "18px";
+  modal.style.boxSizing = "border-box";
+  modal.style.boxShadow = "0 20px 50px rgba(0,0,0,0.25)";
+
+  const title = document.createElement("h2");
+  title.textContent = titleText;
+  title.style.marginTop = "0";
+
+  modal.appendChild(title);
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+
+  return { overlay, modal };
+}
+
 function exportBookmarks() {
   try {
     const data = createBookmarkExportData();
     const fileText = JSON.stringify(data, null, 2);
-    const blob = new Blob([fileText], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
 
-    const stamp = new Date().toISOString().slice(0, 10);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `skyfire-bookmarks-${stamp}.json`;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
+    const { overlay, modal } = createModalShell("Export Bookmarks");
 
-    setTimeout(function () {
-      URL.revokeObjectURL(url);
-    }, 1000);
+    const help = document.createElement("p");
+    help.textContent =
+      "On desktop, you can download the file. On phones, you can copy or share this bookmark data.";
+    modal.appendChild(help);
+
+    const textArea = document.createElement("textarea");
+    textArea.value = fileText;
+    textArea.readOnly = true;
+    textArea.style.width = "100%";
+    textArea.style.minHeight = "240px";
+    textArea.style.boxSizing = "border-box";
+    textArea.style.padding = "12px";
+    textArea.style.fontFamily = "monospace";
+    textArea.style.fontSize = "0.9rem";
+    textArea.style.border = "1px solid #bfbfbf";
+    textArea.style.borderRadius = "8px";
+    modal.appendChild(textArea);
+
+    const buttonRow = document.createElement("div");
+    buttonRow.style.display = "flex";
+    buttonRow.style.gap = "10px";
+    buttonRow.style.flexWrap = "wrap";
+    buttonRow.style.marginTop = "14px";
+
+    const copyBtn = document.createElement("button");
+    copyBtn.textContent = "Copy";
+    copyBtn.addEventListener("click", async function () {
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(fileText);
+        } else {
+          textArea.select();
+          document.execCommand("copy");
+        }
+        alert("Bookmark data copied.");
+      } catch (error) {
+        console.error(error);
+        alert("Could not copy bookmark data.");
+      }
+    });
+
+    const shareBtn = document.createElement("button");
+    shareBtn.textContent = "Share";
+    shareBtn.addEventListener("click", async function () {
+      try {
+        if (navigator.share) {
+          await navigator.share({
+            title: "SkyFire Bookmarks",
+            text: fileText
+          });
+        } else {
+          alert("Share is not supported on this device.");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    });
+
+    const downloadBtn = document.createElement("button");
+    downloadBtn.textContent = "Download File";
+    downloadBtn.addEventListener("click", function () {
+      try {
+        downloadBookmarksFile(fileText);
+      } catch (error) {
+        console.error(error);
+        alert("Could not download bookmarks file.");
+      }
+    });
+
+    const closeBtn = document.createElement("button");
+    closeBtn.textContent = "Close";
+    closeBtn.addEventListener("click", function () {
+      overlay.remove();
+    });
+
+    buttonRow.appendChild(copyBtn);
+    buttonRow.appendChild(shareBtn);
+    buttonRow.appendChild(downloadBtn);
+    buttonRow.appendChild(closeBtn);
+
+    modal.appendChild(buttonRow);
   } catch (error) {
     console.error(error);
     alert("Could not export bookmarks.");
@@ -426,28 +551,30 @@ function mergeImportedFolders(importedFolders) {
   );
 }
 
+function importBookmarksFromText(text) {
+  try {
+    const parsed = JSON.parse(text);
+    const importedFolders = normalizeImportedFolders(parsed.folders);
+
+    if (importedFolders.length === 0) {
+      alert("No valid bookmark folders were found in that data.");
+      return;
+    }
+
+    mergeImportedFolders(importedFolders);
+  } catch (error) {
+    console.error(error);
+    alert("That bookmark data could not be imported.");
+  }
+}
+
 function importBookmarksFromFile(file) {
   if (!file) return;
 
   const reader = new FileReader();
 
   reader.onload = function (event) {
-    try {
-      const text = event.target.result;
-      const parsed = JSON.parse(text);
-
-      const importedFolders = normalizeImportedFolders(parsed.folders);
-
-      if (importedFolders.length === 0) {
-        alert("No valid bookmark folders were found in that file.");
-        return;
-      }
-
-      mergeImportedFolders(importedFolders);
-    } catch (error) {
-      console.error(error);
-      alert("That file could not be imported. Make sure it is a valid SkyFire bookmarks file.");
-    }
+    importBookmarksFromText(event.target.result);
   };
 
   reader.onerror = function () {
@@ -455,6 +582,67 @@ function importBookmarksFromFile(file) {
   };
 
   reader.readAsText(file);
+}
+
+function openImportModal() {
+  const { overlay, modal } = createModalShell("Import Bookmarks");
+
+  const help = document.createElement("p");
+  help.textContent =
+    "Paste exported SkyFire bookmark data below to merge it into this device. Desktop users can also choose a file.";
+  modal.appendChild(help);
+
+  const textArea = document.createElement("textarea");
+  textArea.placeholder = "Paste SkyFire bookmark JSON here...";
+  textArea.style.width = "100%";
+  textArea.style.minHeight = "220px";
+  textArea.style.boxSizing = "border-box";
+  textArea.style.padding = "12px";
+  textArea.style.fontFamily = "monospace";
+  textArea.style.fontSize = "0.9rem";
+  textArea.style.border = "1px solid #bfbfbf";
+  textArea.style.borderRadius = "8px";
+  modal.appendChild(textArea);
+
+  const buttonRow = document.createElement("div");
+  buttonRow.style.display = "flex";
+  buttonRow.style.gap = "10px";
+  buttonRow.style.flexWrap = "wrap";
+  buttonRow.style.marginTop = "14px";
+
+  const importPasteBtn = document.createElement("button");
+  importPasteBtn.textContent = "Import Pasted Data";
+  importPasteBtn.addEventListener("click", function () {
+    const text = textArea.value.trim();
+    if (!text) {
+      alert("Paste bookmark data first.");
+      return;
+    }
+    importBookmarksFromText(text);
+    overlay.remove();
+  });
+
+  const chooseFileBtn = document.createElement("button");
+  chooseFileBtn.textContent = "Choose File";
+  chooseFileBtn.addEventListener("click", function () {
+    if (importBookmarksInput) {
+      importBookmarksInput.click();
+    } else {
+      alert("File import is not available.");
+    }
+  });
+
+  const closeBtn = document.createElement("button");
+  closeBtn.textContent = "Close";
+  closeBtn.addEventListener("click", function () {
+    overlay.remove();
+  });
+
+  buttonRow.appendChild(importPasteBtn);
+  buttonRow.appendChild(chooseFileBtn);
+  buttonRow.appendChild(closeBtn);
+
+  modal.appendChild(buttonRow);
 }
 
 function renderBookmarkFolders() {
@@ -970,7 +1158,7 @@ if (exportBookmarksBtn) {
 
 if (importBookmarksBtn && importBookmarksInput) {
   importBookmarksBtn.addEventListener("click", function () {
-    importBookmarksInput.click();
+    openImportModal();
   });
 
   importBookmarksInput.addEventListener("change", function (event) {

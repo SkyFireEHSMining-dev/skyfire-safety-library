@@ -122,6 +122,7 @@ main {
 .bookmark-button-row {
   display: flex;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .bookmark-controls {
@@ -129,6 +130,7 @@ main {
   gap: 10px;
   margin-bottom: 14px;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .bookmark-controls select {
@@ -137,13 +139,14 @@ main {
   border: 1px solid #bfbfbf;
   border-radius: 6px;
   background: #ffffff;
+  min-width: 180px;
 }
 
 details {
   background: #ffffff;
   border: 1px solid #dcdcdc;
-  border-radius: 8px;
-  margin-bottom: 12px;
+  border-radius: 10px;
+  margin-bottom: 10px;
   overflow: hidden;
 }
 
@@ -152,10 +155,15 @@ summary {
   list-style: none;
   padding: 14px 16px;
   font-weight: bold;
+  line-height: 1.35;
 }
 
 summary::-webkit-details-marker {
   display: none;
+}
+
+.level-title {
+  margin: 0 0 14px 0;
 }
 
 .level-title > summary {
@@ -164,7 +172,7 @@ summary::-webkit-details-marker {
 }
 
 .level-chapter {
-  margin: 12px;
+  margin: 10px 0;
 }
 
 .level-chapter > summary {
@@ -173,7 +181,7 @@ summary::-webkit-details-marker {
 }
 
 .level-subchapter {
-  margin: 12px;
+  margin: 8px 0;
 }
 
 .level-subchapter > summary {
@@ -181,7 +189,7 @@ summary::-webkit-details-marker {
 }
 
 .level-part {
-  margin: 12px;
+  margin: 8px 0;
 }
 
 .level-part > summary {
@@ -189,7 +197,7 @@ summary::-webkit-details-marker {
 }
 
 .level-section {
-  margin: 12px;
+  margin: 8px 0;
 }
 
 .level-section > summary {
@@ -197,13 +205,28 @@ summary::-webkit-details-marker {
 }
 
 .section-content {
-  padding: 14px 16px;
+  padding: 12px 14px;
   border-top: 1px solid #ececec;
+}
+
+/* This is the key anti-cramped fix:
+   nested sections no longer keep adding big outside margins */
+.section-content > details {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* Give real text room to breathe */
+.level-section .section-content {
+  padding: 16px 18px;
 }
 
 .section-content p {
   margin: 0 0 14px 0;
-  line-height: 1.6;
+  line-height: 1.7;
+  max-width: 100%;
+  word-break: normal;
+  overflow-wrap: break-word;
 }
 
 .section-content p:last-child {
@@ -221,6 +244,14 @@ mark {
   outline: 4px solid #5aa2ff;
   background: #eef5ff;
   transition: background 0.3s ease;
+}
+
+.search-results-wrapper {
+  width: 100%;
+}
+
+.search-results-wrapper .bookmark-folder {
+  margin-bottom: 16px;
 }
 
 #aboutPanel {
@@ -250,5 +281,108 @@ mark {
 
   #bookmarkSidebar {
     position: static;
+  }
+}
+
+@media (max-width: 700px) {
+  header {
+    padding: 16px;
+  }
+
+  main {
+    padding: 14px;
+  }
+
+  h1 {
+    font-size: 1.65rem;
+    line-height: 1.15;
+  }
+
+  #searchBar {
+    font-size: 1rem;
+    padding: 12px;
+  }
+
+  #bookmarkSidebar,
+  #aboutPanel {
+    padding: 16px;
+  }
+
+  .folder-create-row {
+    flex-direction: column;
+  }
+
+  #createFolderBtn,
+  .bookmark-controls button,
+  .bookmark-button-row button {
+    width: 100%;
+  }
+
+  .bookmark-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .bookmark-controls select {
+    width: 100%;
+    min-width: 0;
+  }
+
+  summary {
+    padding: 12px 14px;
+    font-size: 1rem;
+  }
+
+  .level-title > summary {
+    font-size: 1.05rem;
+  }
+
+  .level-chapter > summary {
+    font-size: 1rem;
+  }
+
+  .section-content {
+    padding: 10px 12px;
+  }
+
+  .level-section .section-content {
+    padding: 14px;
+  }
+
+  .section-content p {
+    line-height: 1.75;
+    font-size: 1.05rem;
+  }
+}
+
+@media (max-width: 480px) {
+  main {
+    padding: 10px;
+  }
+
+  h1 {
+    font-size: 1.45rem;
+  }
+
+  summary {
+    padding: 11px 12px;
+  }
+
+  .level-title,
+  .level-chapter,
+  .level-subchapter,
+  .level-part,
+  .level-section {
+    margin-top: 6px;
+    margin-bottom: 6px;
+  }
+
+  .level-section .section-content {
+    padding: 12px;
+  }
+
+  .section-content p {
+    font-size: 1.08rem;
+    line-height: 1.8;
   }
 }

@@ -10,6 +10,9 @@ const newFolderInput = document.getElementById("newFolderInput");
 const createFolderBtn = document.getElementById("createFolderBtn");
 const bookmarkFoldersContainer = document.getElementById("bookmarkFolders");
 const alertsList = document.getElementById("alertsList");
+const exportBookmarksBtn = document.getElementById("exportBookmarksBtn");
+const importBookmarksBtn = document.getElementById("importBookmarksBtn");
+const importBookmarksInput = document.getElementById("importBookmarksInput");
 
 let allSections = [];
 let bookmarkFolders = loadBookmarkFolders();
@@ -310,6 +313,148 @@ function goToBookmark(sectionNumber) {
       target.classList.remove("highlighted-section");
     }, 2000);
   }, 100);
+}
+
+function createBookmarkExportData() {
+  return {
+    app: "SkyFire Safety Library",
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    folders: bookmarkFolders
+  };
+}
+
+function exportBookmarks() {
+  try {
+    const data = createBookmarkExportData();
+    const fileText = JSON.stringify(data, null, 2);
+    const blob = new Blob([fileText], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const stamp = new Date().toISOString().slice(0, 10);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `skyfire-bookmarks-${stamp}.json`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    setTimeout(function () {
+      URL.revokeObjectURL(url);
+    }, 1000);
+  } catch (error) {
+    console.error(error);
+    alert("Could not export bookmarks.");
+  }
+}
+
+function normalizeImportedFolders(rawFolders) {
+  if (!Array.isArray(rawFolders)) return [];
+
+  const validFolders = [];
+
+  for (const folder of rawFolders) {
+    if (!folder || typeof folder.name !== "string") continue;
+
+    const cleanName = folder.name.trim();
+    if (!cleanName) continue;
+
+    const items = Array.isArray(folder.items) ? folder.items : [];
+
+    const cleanItems = items
+      .filter(item =>
+        item &&
+        typeof item.sectionNumber === "string" &&
+        typeof item.heading === "string"
+      )
+      .map(item => ({
+        sectionNumber: item.sectionNumber.trim(),
+        heading: item.heading.trim()
+      }))
+      .filter(item => item.sectionNumber && item.heading);
+
+    validFolders.push({
+      id: crypto.randomUUID(),
+      name: cleanName,
+      items: cleanItems
+    });
+  }
+
+  return validFolders;
+}
+
+function mergeImportedFolders(importedFolders) {
+  let addedFolderCount = 0;
+  let addedBookmarkCount = 0;
+
+  for (const importedFolder of importedFolders) {
+    let existingFolder = bookmarkFolders.find(
+      folder => folder.name.toLowerCase() === importedFolder.name.toLowerCase()
+    );
+
+    if (!existingFolder) {
+      existingFolder = {
+        id: crypto.randomUUID(),
+        name: importedFolder.name,
+        items: []
+      };
+      bookmarkFolders.push(existingFolder);
+      addedFolderCount += 1;
+    }
+
+    for (const importedItem of importedFolder.items) {
+      const alreadyExists = existingFolder.items.some(
+        item => item.sectionNumber === importedItem.sectionNumber
+      );
+
+      if (!alreadyExists) {
+        existingFolder.items.push({
+          sectionNumber: importedItem.sectionNumber,
+          heading: importedItem.heading
+        });
+        addedBookmarkCount += 1;
+      }
+    }
+  }
+
+  sortBookmarkFolders();
+  saveBookmarkFolders();
+  rerenderCurrentView();
+
+  alert(
+    `Import complete. Added ${addedFolderCount} folder(s) and ${addedBookmarkCount} bookmark(s).`
+  );
+}
+
+function importBookmarksFromFile(file) {
+  if (!file) return;
+
+  const reader = new FileReader();
+
+  reader.onload = function (event) {
+    try {
+      const text = event.target.result;
+      const parsed = JSON.parse(text);
+
+      const importedFolders = normalizeImportedFolders(parsed.folders);
+
+      if (importedFolders.length === 0) {
+        alert("No valid bookmark folders were found in that file.");
+        return;
+      }
+
+      mergeImportedFolders(importedFolders);
+    } catch (error) {
+      console.error(error);
+      alert("That file could not be imported. Make sure it is a valid SkyFire bookmarks file.");
+    }
+  };
+
+  reader.onerror = function () {
+    alert("Could not read that file.");
+  };
+
+  reader.readAsText(file);
 }
 
 function renderBookmarkFolders() {
@@ -818,6 +963,24 @@ newFolderInput.addEventListener("keydown", function (event) {
     createFolder();
   }
 });
+
+if (exportBookmarksBtn) {
+  exportBookmarksBtn.addEventListener("click", exportBookmarks);
+}
+
+if (importBookmarksBtn && importBookmarksInput) {
+  importBookmarksBtn.addEventListener("click", function () {
+    importBookmarksInput.click();
+  });
+
+  importBookmarksInput.addEventListener("change", function (event) {
+    const file = event.target.files && event.target.files[0];
+    if (file) {
+      importBookmarksFromFile(file);
+    }
+    importBookmarksInput.value = "";
+  });
+}
 
 updateAlertsPlaceholder();
 renderBookmarkFolders();

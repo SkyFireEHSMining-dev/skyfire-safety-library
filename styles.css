@@ -5,6 +5,27 @@ body {
   color: #111;
 }
 
+body.focus-mode #bookmarkSidebar,
+body.focus-mode #dashboard,
+body.focus-mode #aboutPanel,
+body.focus-mode #siteFooter {
+  display: none;
+}
+
+body.focus-mode .layout {
+  grid-template-columns: 1fr;
+}
+
+body.focus-mode #cfrContainer {
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+body.focus-mode main {
+  padding-top: 14px;
+}
+
 header {
   background: #ffffff;
   border-bottom: 1px solid #d9d9d9;
@@ -14,9 +35,42 @@ header {
   z-index: 100;
 }
 
+.header-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.focus-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#focusModeBtn,
+#mobileBookmarkToggle {
+  padding: 10px 14px;
+  font-size: 0.95rem;
+  border: 1px solid #bfbfbf;
+  border-radius: 6px;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+#focusModeBtn:hover,
+#mobileBookmarkToggle:hover {
+  background: #f2f2f2;
+}
+
 h1 {
   margin: 0 0 15px 0;
   font-size: 2rem;
+}
+
+.subtitle {
+  margin: 0;
 }
 
 #searchBar {
@@ -62,8 +116,19 @@ main {
 }
 
 #bookmarkSidebar h2 {
-  margin-top: 0;
+  margin: 0;
+}
+
+.sidebar-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
   margin-bottom: 12px;
+}
+
+#mobileBookmarkToggle {
+  display: none;
 }
 
 .folder-create-row {
@@ -306,6 +371,10 @@ mark {
     max-height: none;
     overflow: visible;
   }
+
+  body.focus-mode #bookmarkSidebar {
+    display: none;
+  }
 }
 
 @media (max-width: 700px) {
@@ -315,6 +384,19 @@ mark {
 
   main {
     padding: 14px;
+  }
+
+  .header-top-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .focus-controls {
+    width: 100%;
+  }
+
+  #focusModeBtn {
+    width: 100%;
   }
 
   h1 {
@@ -386,6 +468,18 @@ mark {
 
   .bookmark-folder-title {
     padding: 14px;
+  }
+
+  #mobileBookmarkToggle {
+    display: inline-block;
+  }
+
+  #bookmarkSidebarInner {
+    display: none;
+  }
+
+  #bookmarkSidebar.mobile-open #bookmarkSidebarInner {
+    display: block;
   }
 }
 

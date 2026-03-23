@@ -2,7 +2,6 @@ const XML_FILE_NAME = "ECFR-title30.xml";
 const XML_FOLDER_NAME = "Data";
 const CACHE_KEY = "title30_xml_cache_v4";
 const BOOKMARKS_KEY = "title30_bookmark_folders_v1";
-const FOCUS_MODE_KEY = "skyfire_focus_mode_v1";
 
 const cfrContainer = document.getElementById("cfrContainer");
 const searchBar = document.getElementById("searchBar");
@@ -14,14 +13,10 @@ const alertsList = document.getElementById("alertsList");
 const exportBookmarksBtn = document.getElementById("exportBookmarksBtn");
 const importBookmarksBtn = document.getElementById("importBookmarksBtn");
 const importBookmarksInput = document.getElementById("importBookmarksInput");
-const focusModeBtn = document.getElementById("focusModeBtn");
-const bookmarkSidebar = document.getElementById("bookmarkSidebar");
-const mobileBookmarkToggle = document.getElementById("mobileBookmarkToggle");
 
 let allSections = [];
 let bookmarkFolders = loadBookmarkFolders();
 let searchDebounceTimer = null;
-let focusModeEnabled = loadFocusMode();
 
 const MIN_TEXT_SEARCH_LENGTH = 3;
 const MAX_SEARCH_RESULTS = 100;
@@ -206,40 +201,6 @@ function loadBookmarkFolders() {
     console.warn("Could not load bookmark folders:", error);
     return [];
   }
-}
-
-function saveFocusMode(enabled) {
-  try {
-    localStorage.setItem(FOCUS_MODE_KEY, JSON.stringify(enabled));
-  } catch (error) {
-    console.warn("Could not save focus mode:", error);
-  }
-}
-
-function loadFocusMode() {
-  try {
-    const saved = localStorage.getItem(FOCUS_MODE_KEY);
-    return saved ? JSON.parse(saved) : false;
-  } catch (error) {
-    console.warn("Could not load focus mode:", error);
-    return false;
-  }
-}
-
-function applyFocusMode() {
-  document.body.classList.toggle("focus-mode", focusModeEnabled);
-
-  if (focusModeBtn) {
-    focusModeBtn.textContent = focusModeEnabled
-      ? "Exit Focus Mode"
-      : "Enter Focus Mode";
-  }
-}
-
-function toggleFocusMode() {
-  focusModeEnabled = !focusModeEnabled;
-  saveFocusMode(focusModeEnabled);
-  applyFocusMode();
 }
 
 function sortBookmarkFolders() {
@@ -1199,19 +1160,6 @@ newFolderInput.addEventListener("keydown", function (event) {
   }
 });
 
-if (focusModeBtn) {
-  focusModeBtn.addEventListener("click", toggleFocusMode);
-}
-
-if (mobileBookmarkToggle && bookmarkSidebar) {
-  mobileBookmarkToggle.addEventListener("click", function () {
-    bookmarkSidebar.classList.toggle("mobile-open");
-    mobileBookmarkToggle.textContent = bookmarkSidebar.classList.contains("mobile-open")
-      ? "Hide Bookmarks"
-      : "Show Bookmarks";
-  });
-}
-
 if (exportBookmarksBtn) {
   exportBookmarksBtn.addEventListener("click", exportBookmarks);
 }
@@ -1230,7 +1178,6 @@ if (importBookmarksBtn && importBookmarksInput) {
   });
 }
 
-applyFocusMode();
 updateAlertsPlaceholder();
 renderBookmarkFolders();
 loadCfr();

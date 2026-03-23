@@ -1,516 +1,130 @@
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  background: #f7f7f7;
-  color: #111;
-}
-
-body.focus-mode #bookmarkSidebar,
-body.focus-mode #dashboard,
-body.focus-mode #aboutPanel,
-body.focus-mode #siteFooter {
-  display: none;
-}
-
-body.focus-mode .layout {
-  grid-template-columns: 1fr;
-}
-
-body.focus-mode #cfrContainer {
-  max-width: 1100px;
-  width: 100%;
-  margin: 0 auto;
-}
-
-body.focus-mode main {
-  padding-top: 14px;
-}
-
-header {
-  background: #ffffff;
-  border-bottom: 1px solid #d9d9d9;
-  padding: 20px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-.header-top-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 16px;
-  margin-bottom: 12px;
-}
-
-.focus-controls {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-#focusModeBtn,
-#mobileBookmarkToggle {
-  padding: 10px 14px;
-  font-size: 0.95rem;
-  border: 1px solid #bfbfbf;
-  border-radius: 6px;
-  background: #ffffff;
-  cursor: pointer;
-}
-
-#focusModeBtn:hover,
-#mobileBookmarkToggle:hover {
-  background: #f2f2f2;
-}
-
-h1 {
-  margin: 0 0 15px 0;
-  font-size: 2rem;
-}
-
-.subtitle {
-  margin: 0;
-}
-
-#searchBar {
-  width: 100%;
-  max-width: 1000px;
-  padding: 12px;
-  font-size: 1rem;
-  border: 1px solid #bfbfbf;
-  border-radius: 6px;
-  box-sizing: border-box;
-}
-
-main {
-  padding: 20px;
-}
-
-#statusMessage {
-  margin-bottom: 20px;
-  font-style: italic;
-  color: #444;
-}
-
-.layout {
-  display: grid;
-  grid-template-columns: 340px minmax(0, 1fr);
-  gap: 20px;
-  align-items: start;
-}
-
-#bookmarkSidebar {
-  position: sticky;
-  top: 120px;
-  align-self: start;
-  background: #ffffff;
-  border: 1px solid #dcdcdc;
-  border-radius: 10px;
-  padding: 16px;
-  height: calc(100vh - 150px);
-  max-height: calc(100vh - 150px);
-  overflow-y: auto;
-  overflow-x: hidden;
-  box-sizing: border-box;
-}
-
-#bookmarkSidebar h2 {
-  margin: 0;
-}
-
-.sidebar-top-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 12px;
-}
-
-#mobileBookmarkToggle {
-  display: none;
-}
-
-.folder-create-row {
-  display: flex;
-  gap: 10px;
-  margin: 14px 0 18px 0;
-}
-
-#newFolderInput {
-  flex: 1;
-  padding: 10px;
-  font-size: 1rem;
-  border: 1px solid #bfbfbf;
-  border-radius: 6px;
-  box-sizing: border-box;
-}
-
-#createFolderBtn,
-.bookmark-controls button,
-.bookmark-button-row button,
-#exportBookmarksBtn,
-#importBookmarksBtn {
-  padding: 10px 14px;
-  font-size: 0.95rem;
-  border: 1px solid #bfbfbf;
-  border-radius: 6px;
-  background: #ffffff;
-  cursor: pointer;
-}
-
-#createFolderBtn:hover,
-.bookmark-controls button:hover,
-.bookmark-button-row button:hover,
-#exportBookmarksBtn:hover,
-#importBookmarksBtn:hover {
-  background: #f2f2f2;
-}
-
-.bookmark-folder {
-  background: #eef3fb;
-  border: 1px solid #d5dfef;
-  border-radius: 10px;
-  margin-bottom: 14px;
-  overflow: hidden;
-}
-
-.bookmark-folder-title {
-  font-weight: bold;
-  padding: 12px 14px;
-  background: #dfe7f5;
-  cursor: pointer;
-  list-style: none;
-}
-
-.bookmark-folder-title::-webkit-details-marker,
-.bookmark-folder summary::-webkit-details-marker {
-  display: none;
-}
-
-.bookmark-folder[open] .bookmark-folder-title {
-  border-bottom: 1px solid #d5dfef;
-}
-
-.bookmark-folder-content {
-  background: #ffffff;
-}
-
-.bookmark-item {
-  background: #ffffff;
-  border-top: 1px solid #dcdcdc;
-  padding: 14px;
-}
-
-.bookmark-item-title {
-  font-weight: bold;
-  margin-bottom: 12px;
-  line-height: 1.35;
-}
-
-.bookmark-button-row {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.bookmark-controls {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 14px;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-.bookmark-controls select {
-  padding: 10px;
-  font-size: 1rem;
-  border: 1px solid #bfbfbf;
-  border-radius: 6px;
-  background: #ffffff;
-  min-width: 180px;
-}
-
-details {
-  background: #ffffff;
-  border: 1px solid #dcdcdc;
-  border-radius: 10px;
-  margin-bottom: 10px;
-  overflow: hidden;
-}
-
-summary {
-  cursor: pointer;
-  list-style: none;
-  padding: 14px 16px;
-  font-weight: bold;
-  line-height: 1.35;
-}
-
-summary::-webkit-details-marker {
-  display: none;
-}
-
-.level-title {
-  margin: 0 0 14px 0;
-}
-
-.level-title > summary {
-  background: #dfe7f5;
-  font-size: 1.2rem;
-}
-
-.level-chapter {
-  margin: 10px 0;
-}
-
-.level-chapter > summary {
-  background: #e8eef8;
-  font-size: 1.1rem;
-}
-
-.level-subchapter {
-  margin: 8px 0;
-}
-
-.level-subchapter > summary {
-  background: #f0f4fa;
-}
-
-.level-part {
-  margin: 8px 0;
-}
-
-.level-part > summary {
-  background: #f6f6f6;
-}
-
-.level-section {
-  margin: 8px 0;
-}
-
-.level-section > summary {
-  background: #fbfbfb;
-}
-
-.section-content {
-  padding: 12px 14px;
-  border-top: 1px solid #ececec;
-}
-
-.section-content > details {
-  margin-left: 0;
-  margin-right: 0;
-}
-
-.level-section .section-content {
-  padding: 16px 18px;
-}
-
-.section-content p {
-  margin: 0 0 14px 0;
-  line-height: 1.7;
-  max-width: 100%;
-  word-break: normal;
-  overflow-wrap: break-word;
-}
-
-.section-content p:last-child {
-  margin-bottom: 0;
-}
-
-mark {
-  background: #fff176;
-  color: #111;
-  padding: 0 2px;
-  border-radius: 2px;
-}
-
-.highlighted-section {
-  outline: 4px solid #5aa2ff;
-  background: #eef5ff;
-  transition: background 0.3s ease;
-}
-
-.search-results-wrapper {
-  width: 100%;
-}
-
-.search-results-wrapper .bookmark-folder {
-  margin-bottom: 16px;
-}
-
-#aboutPanel {
-  margin-top: 28px;
-  background: #ffffff;
-  border: 1px solid #dcdcdc;
-  border-radius: 10px;
-  padding: 22px;
-}
-
-#aboutPanel h2 {
-  margin-top: 0;
-}
-
-#siteFooter {
-  margin-top: 30px;
-  padding: 18px 20px 24px;
-  text-align: center;
-  color: #444;
-  font-size: 0.95rem;
-}
-
-@media (max-width: 1000px) {
-  .layout {
-    grid-template-columns: 1fr;
-  }
-
-  #bookmarkSidebar {
-    position: static;
-    height: auto;
-    max-height: none;
-    overflow: visible;
-  }
-
-  body.focus-mode #bookmarkSidebar {
-    display: none;
-  }
-}
-
-@media (max-width: 700px) {
-  header {
-    padding: 16px;
-  }
-
-  main {
-    padding: 14px;
-  }
-
-  .header-top-row {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .focus-controls {
-    width: 100%;
-  }
-
-  #focusModeBtn {
-    width: 100%;
-  }
-
-  h1 {
-    font-size: 1.65rem;
-    line-height: 1.15;
-  }
-
-  #searchBar {
-    font-size: 1rem;
-    padding: 12px;
-  }
-
-  #bookmarkSidebar,
-  #aboutPanel {
-    padding: 16px;
-  }
-
-  .folder-create-row {
-    flex-direction: column;
-  }
-
-  #createFolderBtn,
-  .bookmark-controls button,
-  .bookmark-button-row button,
-  #exportBookmarksBtn,
-  #importBookmarksBtn {
-    width: 100%;
-  }
-
-  .bookmark-controls {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .bookmark-controls select {
-    width: 100%;
-    min-width: 0;
-  }
-
-  summary {
-    padding: 12px 14px;
-    font-size: 1rem;
-  }
-
-  .level-title > summary {
-    font-size: 1.05rem;
-  }
-
-  .level-chapter > summary {
-    font-size: 1rem;
-  }
-
-  .section-content {
-    padding: 10px 12px;
-  }
-
-  .level-section .section-content {
-    padding: 14px;
-  }
-
-  .section-content p {
-    line-height: 1.75;
-    font-size: 1.05rem;
-  }
-
-  .bookmark-folder {
-    margin-bottom: 10px;
-  }
-
-  .bookmark-folder-title {
-    padding: 14px;
-  }
-
-  #mobileBookmarkToggle {
-    display: inline-block;
-  }
-
-  #bookmarkSidebarInner {
-    display: none;
-  }
-
-  #bookmarkSidebar.mobile-open #bookmarkSidebarInner {
-    display: block;
-  }
-}
-
-@media (max-width: 480px) {
-  main {
-    padding: 10px;
-  }
-
-  h1 {
-    font-size: 1.45rem;
-  }
-
-  summary {
-    padding: 11px 12px;
-  }
-
-  .level-title,
-  .level-chapter,
-  .level-subchapter,
-  .level-part,
-  .level-section {
-    margin-top: 6px;
-    margin-bottom: 6px;
-  }
-
-  .level-section .section-content {
-    padding: 12px;
-  }
-
-  .section-content p {
-    font-size: 1.08rem;
-    line-height: 1.8;
-  }
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>SkyFire Safety Library</title>
+  <meta name="theme-color" content="#0b0b0b">
+  <meta name="description" content="SkyFire Safety Library - Field Safety Hub for CFR access, mine safety reference, and offline-ready use.">
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="Icons/icon-192.png">
+  <link rel="apple-touch-icon" href="Icons/icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+
+  <script src="app.js" defer></script>
+</head>
+<body>
+
+  <header class="main-header">
+    <h1>SkyFire Safety Library</h1>
+    <p class="subtitle">Field Safety Hub</p>
+
+    <input type="text" id="searchBar" placeholder="Search CFR...">
+  </header>
+
+  <main>
+
+    <!-- DASHBOARD -->
+    <section id="dashboard">
+      <div class="alerts-card">
+        <h2>⚠ Safety Alerts</h2>
+
+        <div id="alertsList">
+          <p>No active alerts</p>
+        </div>
+      </div>
+
+      <div class="tool-grid">
+        <button class="tool-btn" id="btn-cfr">CFR Library</button>
+        <button class="tool-btn" id="btn-alerts">Safety Alerts</button>
+        <button class="tool-btn" id="btn-checklists">Checklists</button>
+        <button class="tool-btn" id="btn-training">Training</button>
+        <button class="tool-btn" id="btn-contacts">Contacts</button>
+        <button class="tool-btn" id="btn-partners">Partners</button>
+      </div>
+    </section>
+
+    <!-- CFR TOOL -->
+    <section id="cfrSection">
+      <div id="statusMessage">
+        Loading CFR data...
+      </div>
+
+      <div class="layout">
+        <aside id="bookmarkSidebar">
+          <h2>Bookmarks</h2>
+          <p>Save important sections here for quick access.</p>
+
+          <div class="folder-create-row">
+            <input type="text" id="newFolderInput" placeholder="New folder name">
+            <button id="createFolderBtn">Create</button>
+          </div>
+
+          <div class="bookmark-button-row" style="margin-bottom: 14px;">
+            <button id="exportBookmarksBtn">Export Bookmarks</button>
+            <button id="importBookmarksBtn">Import Bookmarks</button>
+          </div>
+
+          <input
+            type="file"
+            id="importBookmarksInput"
+            accept=".json,application/json"
+            style="display: none;"
+          >
+
+          <div id="bookmarkFolders">
+            <p><em>No bookmarks yet.</em></p>
+          </div>
+        </aside>
+
+        <section id="cfrContainer"></section>
+      </div>
+    </section>
+
+    <section id="aboutPanel">
+      <h2>About This Tool</h2>
+
+      <p><strong>SkyFire Safety CFR Field Reference</strong></p>
+
+      <p>
+        Developed by <strong>Nicholas R. Murphy</strong><br>
+        SkyFire Safety — Mine Safety Tools
+      </p>
+
+      <p>
+        This tool is designed to improve field access to Title 30 CFR content
+        for mine safety and health work, including offline-ready reference use.
+      </p>
+
+      <p>
+        Licensed under <strong>CC BY-NC 4.0</strong><br>
+        Attribution required. Non-commercial use only.
+      </p>
+    </section>
+
+  </main>
+
+  <footer id="siteFooter">
+    <div>Developed by Nicholas R. Murphy</div>
+    <div>SkyFire Safety — Mine Safety Tools</div>
+  </footer>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function () {
+        navigator.serviceWorker
+          .register("./service-worker.js")
+          .then(function (registration) {
+            console.log("Service Worker registered:", registration.scope);
+          })
+          .catch(function (error) {
+            console.log("Service Worker registration failed:", error);
+          });
+      });
+    }
+  </script>
+
+</body>
+</html>

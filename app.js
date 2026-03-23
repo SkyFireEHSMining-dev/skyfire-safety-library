@@ -3,6 +3,37 @@ const XML_FOLDER_NAME = "Data";
 const CACHE_KEY = "title30_xml_cache_v4";
 const BOOKMARKS_KEY = "title30_bookmark_folders_v1";
 
+const STARTER_PACKS = {
+  "Ground Control": [
+    { sectionNumber: "56.3130", heading: "§ 56.3130 Wall, bank, and slope stability." },
+    { sectionNumber: "56.3131", heading: "§ 56.3131 Inspection and scaling of loose ground." },
+    { sectionNumber: "56.3200", heading: "§ 56.3200 Correction of hazardous conditions." },
+    { sectionNumber: "56.3201", heading: "§ 56.3201 Location for performing scaling." }
+  ],
+  "Fire Protection": [
+    { sectionNumber: "56.4100", heading: "§ 56.4100 Firefighting equipment." },
+    { sectionNumber: "56.4200", heading: "§ 56.4200 Use of mobile equipment for firefighting." },
+    { sectionNumber: "56.4230", heading: "§ 56.4230 Self-propelled equipment; fire extinguishers." },
+    { sectionNumber: "56.4330", heading: "§ 56.4330 Separate exit ways." },
+    { sectionNumber: "56.4600", heading: "§ 56.4600 Extinguishing fires." }
+  ],
+  "Electrical": [
+    { sectionNumber: "56.12001", heading: "§ 56.12001 Circuit breakers and switches." },
+    { sectionNumber: "56.12016", heading: "§ 56.12016 Work on electrically powered equipment." },
+    { sectionNumber: "56.12017", heading: "§ 56.12017 Work on power circuits." },
+    { sectionNumber: "56.12025", heading: "§ 56.12025 Identification of power wires and cables." },
+    { sectionNumber: "56.12071", heading: "§ 56.12071 Movement or operation of equipment near high-voltage power lines; warning." }
+  ],
+  "Training": [
+    { sectionNumber: "46.3", heading: "§ 46.3 Training plans: Submission and approval." },
+    { sectionNumber: "46.5", heading: "§ 46.5 New miner training." },
+    { sectionNumber: "46.6", heading: "§ 46.6 Newly hired experienced miner training." },
+    { sectionNumber: "46.7", heading: "§ 46.7 New task training." },
+    { sectionNumber: "46.8", heading: "§ 46.8 Annual refresher training." },
+    { sectionNumber: "46.11", heading: "§ 46.11 Site-specific hazard awareness training." }
+  ]
+};
+
 const cfrContainer = document.getElementById("cfrContainer");
 const searchBar = document.getElementById("searchBar");
 const statusMessage = document.getElementById("statusMessage");
@@ -336,6 +367,104 @@ function openSectionInFullView(sectionNumber) {
     `Opened full CFR view for section ${sectionNumber}.`;
   renderHierarchySections(allSections);
   scrollToAndHighlightSection(sectionNumber);
+}
+
+function getOrCreateFolderByName(folderName) {
+  let folder = bookmarkFolders.find(
+    item => item.name.toLowerCase() === folderName.toLowerCase()
+  );
+
+  if (!folder) {
+    folder = {
+      id: crypto.randomUUID(),
+      name: folderName,
+      items: []
+    };
+    bookmarkFolders.push(folder);
+  }
+
+  return folder;
+}
+
+function addStarterPack(packName) {
+  const packItems = STARTER_PACKS[packName];
+  if (!packItems) {
+    alert("That starter pack could not be found.");
+    return;
+  }
+
+  const folder = getOrCreateFolderByName(packName);
+  let addedCount = 0;
+
+  for (const packItem of packItems) {
+    const alreadyExists = folder.items.some(
+      item => item.sectionNumber === packItem.sectionNumber
+    );
+
+    if (!alreadyExists) {
+      folder.items.push({
+        sectionNumber: packItem.sectionNumber,
+        heading: packItem.heading
+      });
+      addedCount += 1;
+    }
+  }
+
+  sortBookmarkFolders();
+  saveBookmarkFolders();
+  rerenderCurrentView();
+
+  if (addedCount === 0) {
+    alert(`"${packName}" is already installed.`);
+  } else {
+    alert(`Installed "${packName}" starter pack with ${addedCount} bookmark(s).`);
+  }
+}
+
+function renderStarterPackButtons() {
+  const existing = document.getElementById("starterPackSection");
+  if (existing) {
+    existing.remove();
+  }
+
+  const bookmarkSidebar = document.getElementById("bookmarkSidebar");
+  if (!bookmarkSidebar) return;
+
+  const section = document.createElement("div");
+  section.id = "starterPackSection";
+  section.className = "bookmark-item";
+  section.style.marginBottom = "14px";
+
+  const title = document.createElement("div");
+  title.className = "bookmark-item-title";
+  title.textContent = "Starter Packs";
+
+  const text = document.createElement("p");
+  text.textContent = "Add prebuilt bookmark folders for common safety topics.";
+  text.style.marginTop = "0";
+  text.style.marginBottom = "12px";
+  text.style.lineHeight = "1.5";
+
+  const buttonWrap = document.createElement("div");
+  buttonWrap.className = "bookmark-button-row";
+
+  for (const packName of Object.keys(STARTER_PACKS)) {
+    const button = document.createElement("button");
+    button.textContent = packName;
+    button.addEventListener("click", function () {
+      addStarterPack(packName);
+    });
+    buttonWrap.appendChild(button);
+  }
+
+  section.appendChild(title);
+  section.appendChild(text);
+  section.appendChild(buttonWrap);
+
+  const folderCreateRow = document.querySelector(".folder-create-row");
+  if (folderCreateRow) {
+    folderCreateRow.insertAdjacentElement("afterend", section);
+  }
 }
 
 function createBookmarkExportData() {
@@ -1174,6 +1303,7 @@ async function loadCfr() {
         `Live XML unavailable. Loaded ${allSections.length} CFR sections from saved cache.`;
     }
 
+    renderStarterPackButtons();
     renderBookmarkFolders();
     renderHierarchySections(allSections);
   } catch (error) {
@@ -1219,5 +1349,6 @@ if (importBookmarksBtn && importBookmarksInput) {
 }
 
 updateAlertsPlaceholder();
+renderStarterPackButtons();
 renderBookmarkFolders();
 loadCfr();

@@ -18,8 +18,16 @@
 <body>
 
   <header class="main-header">
-    <h1>SkyFire Safety Library</h1>
-    <p class="subtitle">Field Safety Hub</p>
+    <div class="header-top-row">
+      <div>
+        <h1>SkyFire Safety Library</h1>
+        <p class="subtitle">Field Safety Hub</p>
+      </div>
+
+      <div class="focus-controls">
+        <button id="focusModeBtn" type="button">Enter Focus Mode</button>
+      </div>
+    </div>
 
     <input type="text" id="searchBar" placeholder="Search CFR...">
   </header>
@@ -54,28 +62,34 @@
 
       <div class="layout">
         <aside id="bookmarkSidebar">
-          <h2>Bookmarks</h2>
-          <p>Save important sections here for quick access.</p>
-
-          <div class="folder-create-row">
-            <input type="text" id="newFolderInput" placeholder="New folder name">
-            <button id="createFolderBtn">Create</button>
+          <div class="sidebar-top-row">
+            <h2>Bookmarks</h2>
+            <button id="mobileBookmarkToggle" type="button">Show Bookmarks</button>
           </div>
 
-          <div class="bookmark-button-row" style="margin-bottom: 14px;">
-            <button id="exportBookmarksBtn">Export Bookmarks</button>
-            <button id="importBookmarksBtn">Import Bookmarks</button>
-          </div>
+          <div id="bookmarkSidebarInner">
+            <p>Save important sections here for quick access.</p>
 
-          <input
-            type="file"
-            id="importBookmarksInput"
-            accept=".json,application/json"
-            style="display: none;"
-          >
+            <div class="folder-create-row">
+              <input type="text" id="newFolderInput" placeholder="New folder name">
+              <button id="createFolderBtn">Create</button>
+            </div>
 
-          <div id="bookmarkFolders">
-            <p><em>No bookmarks yet.</em></p>
+            <div class="bookmark-button-row bookmark-top-actions" style="margin-bottom: 14px;">
+              <button id="exportBookmarksBtn">Export Bookmarks</button>
+              <button id="importBookmarksBtn">Import Bookmarks</button>
+            </div>
+
+            <input
+              type="file"
+              id="importBookmarksInput"
+              accept=".json,application/json"
+              style="display: none;"
+            >
+
+            <div id="bookmarkFolders">
+              <p><em>No bookmarks yet.</em></p>
+            </div>
           </div>
         </aside>
 

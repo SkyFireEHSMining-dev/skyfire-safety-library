@@ -298,14 +298,23 @@ function isBookmarked(sectionNumber) {
   );
 }
 
-function goToBookmark(sectionNumber) {
-  searchBar.value = sectionNumber;
-  runSearch();
+function openAncestorsForElement(element) {
+  let current = element.parentElement;
 
+  while (current) {
+    if (current.tagName && current.tagName.toLowerCase() === "details") {
+      current.open = true;
+    }
+    current = current.parentElement;
+  }
+}
+
+function scrollToAndHighlightSection(sectionNumber) {
   setTimeout(function () {
     const target = document.querySelector(`[data-section-number="${sectionNumber}"]`);
     if (!target) return;
 
+    openAncestorsForElement(target);
     target.scrollIntoView({ behavior: "smooth", block: "center" });
     target.classList.add("highlighted-section");
 
@@ -313,6 +322,20 @@ function goToBookmark(sectionNumber) {
       target.classList.remove("highlighted-section");
     }, 2000);
   }, 100);
+}
+
+function goToBookmark(sectionNumber) {
+  searchBar.value = sectionNumber;
+  renderHierarchySections(allSections);
+  scrollToAndHighlightSection(sectionNumber);
+}
+
+function openSectionInFullView(sectionNumber) {
+  searchBar.value = sectionNumber;
+  statusMessage.textContent =
+    `Opened full CFR view for section ${sectionNumber}.`;
+  renderHierarchySections(allSections);
+  scrollToAndHighlightSection(sectionNumber);
 }
 
 function createBookmarkExportData() {
@@ -958,12 +981,29 @@ function renderFlatSearchResults(sectionsToRender, query = "") {
         meta.appendChild(p);
       }
 
+      const noteRow = document.createElement("div");
+      noteRow.style.display = "flex";
+      noteRow.style.alignItems = "center";
+      noteRow.style.justifyContent = "space-between";
+      noteRow.style.gap = "10px";
+      noteRow.style.flexWrap = "wrap";
+      noteRow.style.marginTop = "8px";
+
       const note = document.createElement("p");
       note.style.fontStyle = "italic";
       note.style.opacity = "0.8";
-      note.style.marginTop = "8px";
+      note.style.margin = "0";
       note.textContent = "Preview shown for speed.";
-      meta.appendChild(note);
+
+      const fullViewBtn = document.createElement("button");
+      fullViewBtn.textContent = "Open Full View";
+      fullViewBtn.addEventListener("click", function () {
+        openSectionInFullView(section.sectionNumber);
+      });
+
+      noteRow.appendChild(note);
+      noteRow.appendChild(fullViewBtn);
+      meta.appendChild(noteRow);
     }
 
     card.appendChild(title);

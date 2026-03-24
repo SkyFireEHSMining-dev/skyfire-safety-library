@@ -14,9 +14,189 @@ header {
   z-index: 100;
 }
 
+.brand-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.brand-logo {
+  width: 72px;
+  height: 72px;
+  border-radius: 16px;
+  flex-shrink: 0;
+}
+
 h1 {
-  margin: 0 0 15px 0;
+  margin: 0 0 10px 0;
   font-size: 2rem;
+}
+
+.subtitle {
+  margin: 0;
+  color: #333;
+  font-size: 1rem;
+}
+
+main {
+  padding: 20px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.app-section {
+  display: block;
+}
+
+.home-top-banner {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 20px;
+  margin-bottom: 24px;
+  align-items: stretch;
+}
+
+.home-top-logo-card,
+.home-top-info-card,
+.info-panel,
+#aboutPanel {
+  background: #ffffff;
+  border: 1px solid #dcdcdc;
+  border-radius: 12px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.home-top-logo-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-logo-large {
+  width: 140px;
+  height: 140px;
+  border-radius: 28px;
+}
+
+.home-top-info-card h2 {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.quick-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.quick-info-item {
+  background: #f7f9fc;
+  border: 1px solid #d8e1ee;
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.quick-info-wide {
+  grid-column: 1 / -1;
+}
+
+.quick-label {
+  display: block;
+  font-size: 0.85rem;
+  color: #555;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.quick-value {
+  display: block;
+  font-size: 1rem;
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.dashboard-tile {
+  background: #ffffff;
+  border: 1px solid #d5dfef;
+  border-radius: 14px;
+  min-height: 180px;
+  padding: 20px;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.dashboard-tile:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  border-color: #b8c9e5;
+}
+
+.tile-title {
+  display: block;
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 14px;
+}
+
+.tile-subtitle {
+  display: block;
+  color: #444;
+  line-height: 1.5;
+  font-size: 0.98rem;
+}
+
+.module-header {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 18px;
+  background: #ffffff;
+  border: 1px solid #dcdcdc;
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+
+.module-header-text h2 {
+  margin: 0 0 4px 0;
+}
+
+.module-header-text p {
+  margin: 0;
+  color: #555;
+}
+
+.module-home-btn {
+  padding: 10px 14px;
+  font-size: 0.95rem;
+  border: 1px solid #bfbfbf;
+  border-radius: 8px;
+  background: #ffffff;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.module-home-btn:hover {
+  background: #f2f2f2;
+}
+
+.module-search-wrap {
+  margin-bottom: 18px;
 }
 
 #searchBar {
@@ -27,10 +207,6 @@ h1 {
   border: 1px solid #bfbfbf;
   border-radius: 6px;
   box-sizing: border-box;
-}
-
-main {
-  padding: 20px;
 }
 
 #statusMessage {
@@ -275,12 +451,23 @@ mark {
   margin-bottom: 16px;
 }
 
+.info-panel h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.info-panel p,
+.info-panel li {
+  line-height: 1.7;
+}
+
+.info-panel ul,
+.info-panel ol {
+  padding-left: 22px;
+}
+
 #aboutPanel {
   margin-top: 28px;
-  background: #ffffff;
-  border: 1px solid #dcdcdc;
-  border-radius: 10px;
-  padding: 22px;
 }
 
 #aboutPanel h2 {
@@ -296,6 +483,14 @@ mark {
 }
 
 @media (max-width: 1000px) {
+  .home-top-banner {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .layout {
     grid-template-columns: 1fr;
   }
@@ -317,18 +512,47 @@ mark {
     padding: 14px;
   }
 
+  .brand-row {
+    align-items: flex-start;
+  }
+
+  .brand-logo {
+    width: 58px;
+    height: 58px;
+    border-radius: 12px;
+  }
+
   h1 {
     font-size: 1.65rem;
     line-height: 1.15;
   }
 
-  #searchBar {
-    font-size: 1rem;
-    padding: 12px;
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-tile {
+    min-height: 150px;
+  }
+
+  .quick-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .module-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .module-home-btn {
+    width: 100%;
   }
 
   #bookmarkSidebar,
-  #aboutPanel {
+  #aboutPanel,
+  .home-top-logo-card,
+  .home-top-info-card,
+  .info-panel {
     padding: 16px;
   }
 
@@ -396,6 +620,11 @@ mark {
 
   h1 {
     font-size: 1.45rem;
+  }
+
+  .brand-logo {
+    width: 50px;
+    height: 50px;
   }
 
   summary {

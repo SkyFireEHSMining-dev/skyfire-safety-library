@@ -116,6 +116,7 @@ main {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  gap: 14px;
 }
 
 .dashboard-tile:hover {
@@ -129,7 +130,7 @@ main {
   font-size: 1.35rem;
   font-weight: 700;
   line-height: 1.2;
-  margin-bottom: 14px;
+  margin-bottom: 6px;
 }
 
 .tile-subtitle {
@@ -137,6 +138,28 @@ main {
   color: #444;
   line-height: 1.5;
   font-size: 0.98rem;
+}
+
+.tile-powered {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #8a6426;
+  background: #f7ecd9;
+  border: 1px solid #ecd6ad;
+  border-radius: 999px;
+  padding: 6px 10px;
+}
+
+.lynx-tile {
+  border-color: #dec18d;
+  background: linear-gradient(180deg, #ffffff 0%, #fffaf2 100%);
+}
+
+.lynx-tile:hover {
+  border-color: #cda862;
+  box-shadow: 0 12px 28px rgba(166, 123, 52, 0.14);
 }
 
 .module-header {
@@ -446,6 +469,75 @@ mark {
   padding-left: 22px;
 }
 
+/* Lynx module styling */
+.lynx-brand-panel {
+  border-color: #ead6af;
+  background: linear-gradient(180deg, #fffdf9 0%, #fff8ee 100%);
+  margin-bottom: 20px;
+}
+
+.powered-badge {
+  display: inline-block;
+  margin-bottom: 12px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: #f6ead4;
+  border: 1px solid #e7cfa0;
+  color: #8a6426;
+  font-weight: 700;
+  font-size: 0.86rem;
+}
+
+.lynx-panel-title {
+  margin-bottom: 10px;
+}
+
+.lynx-panel-text {
+  margin-bottom: 10px;
+}
+
+.partner-note {
+  color: #555;
+}
+
+.tool-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 20px;
+}
+
+.tool-card {
+  background: #ffffff;
+  border: 1px solid #d7e0ec;
+  border-radius: 12px;
+  padding: 18px;
+  box-sizing: border-box;
+}
+
+.tool-card h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+}
+
+.tool-card p {
+  margin: 0;
+  line-height: 1.7;
+  color: #333;
+}
+
+.contact-card {
+  margin-bottom: 8px;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 14px;
+}
+
 #aboutPanel {
   margin-top: 28px;
 }
@@ -473,6 +565,11 @@ mark {
 
   .dashboard-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .tool-card-grid,
+  .contact-grid {
+    grid-template-columns: 1fr;
   }
 
   .layout {
@@ -539,7 +636,8 @@ mark {
   #bookmarkSidebar,
   #aboutPanel,
   .quick-info-card,
-  .info-panel {
+  .info-panel,
+  .tool-card {
     padding: 16px;
   }
 

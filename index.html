@@ -18,36 +18,135 @@
 <body>
 
   <header class="main-header">
-    <h1>SkyFire Safety Library</h1>
-    <p class="subtitle">Field Safety Hub</p>
-
-    <input type="text" id="searchBar" placeholder="Search CFR...">
+    <div class="brand-row">
+      <img src="Icons/icon-192.png" alt="SkyFire logo" class="brand-logo">
+      <div>
+        <h1>SkyFire Safety Library</h1>
+        <p class="subtitle">Field Safety Hub</p>
+      </div>
+    </div>
   </header>
 
   <main>
 
-    <!-- DASHBOARD -->
-    <section id="dashboard">
-      <div class="alerts-card">
-        <h2>⚠ Safety Alerts</h2>
+    <!-- HOME DASHBOARD -->
+    <section id="homeSection" class="app-section">
+      <section class="home-top-banner">
+        <div class="home-top-logo-card">
+          <img src="Icons/icon-192.png" alt="SkyFire logo" class="home-logo-large">
+        </div>
 
-        <div id="alertsList">
-          <p>No active alerts</p>
+        <div class="home-top-info-card">
+          <h2>Quick Info · Stats · Alerts</h2>
+          <div class="quick-info-grid">
+            <div class="quick-info-item">
+              <span class="quick-label">Fatalities YTD</span>
+              <span class="quick-value" id="fatalityStat">Placeholder</span>
+            </div>
+
+            <div class="quick-info-item">
+              <span class="quick-label">Current Alert</span>
+              <span class="quick-value" id="homeAlertStatus">No active alerts</span>
+            </div>
+
+            <div class="quick-info-item quick-info-wide">
+              <span class="quick-label">Fatalgram / Quick Safety Note</span>
+              <span class="quick-value" id="fatalgramNote">
+                Offline-ready placeholder. Future fatalgram and quick safety information can live here.
+              </span>
+            </div>
+
+            <div class="quick-info-item">
+              <span class="quick-label">Last Updated</span>
+              <span class="quick-value" id="homeLastUpdated">Just now</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="dashboard-grid">
+        <button class="dashboard-tile" data-open-section="cfrSection">
+          <span class="tile-title">30 CFR</span>
+          <span class="tile-subtitle">Browse the offline CFR field reference.</span>
+        </button>
+
+        <button class="dashboard-tile" data-open-section="trainingSection">
+          <span class="tile-title">Training</span>
+          <span class="tile-subtitle">Training module placeholder for future MSS or in-house content.</span>
+        </button>
+
+        <button class="dashboard-tile" data-open-section="alertsSection">
+          <span class="tile-title">Headlines / Alerts</span>
+          <span class="tile-subtitle">Safety alerts, headlines, fatalgrams, and quick updates.</span>
+        </button>
+
+        <button class="dashboard-tile" data-open-section="legalSection">
+          <span class="tile-title">Legal / Fisher Phillips</span>
+          <span class="tile-subtitle">Offline legal reference and contact-professional module.</span>
+        </button>
+
+        <button class="dashboard-tile" data-open-section="docsSection">
+          <span class="tile-title">MSHA Docs</span>
+          <span class="tile-subtitle">Placeholder for selected MSHA documents and reference material.</span>
+        </button>
+
+        <button class="dashboard-tile" data-open-section="reportSection">
+          <span class="tile-title">Report an Accident</span>
+          <span class="tile-subtitle">Immediate actions, reporting reminders, and key information.</span>
+        </button>
+
+        <button class="dashboard-tile" data-open-section="lynxSection">
+          <span class="tile-title">Lynx</span>
+          <span class="tile-subtitle">Placeholder for future Lynx content or replacement content.</span>
+        </button>
+
+        <button class="dashboard-tile" data-open-section="heatSection">
+          <span class="tile-title">Heat / Environment</span>
+          <span class="tile-subtitle">Heat index and environmental quick-reference module.</span>
+        </button>
+
+        <button class="dashboard-tile" data-open-section="placeholderSection">
+          <span class="tile-title">Placeholder</span>
+          <span class="tile-subtitle">Reserved tile for future expansion.</span>
+        </button>
+      </section>
+
+      <section id="aboutPanel">
+        <h2>About This Tool</h2>
+
+        <p><strong>SkyFire Safety CFR Field Reference</strong></p>
+
+        <p>
+          Developed by <strong>Nicholas R. Murphy</strong><br>
+          SkyFire Safety — Mine Safety Tools
+        </p>
+
+        <p>
+          This tool is designed to improve field access to Title 30 CFR content
+          for mine safety and health work, including offline-ready reference use.
+        </p>
+
+        <p>
+          Licensed under <strong>CC BY-NC 4.0</strong><br>
+          Attribution required. Non-commercial use only.
+        </p>
+      </section>
+    </section>
+
+    <!-- 30 CFR MODULE -->
+    <section id="cfrSection" class="app-section hidden">
+      <div class="module-header">
+        <button class="module-home-btn" data-open-section="homeSection">← Home</button>
+        <div class="module-header-text">
+          <h2>30 CFR Field Reference</h2>
+          <p>Browse and search the CFR module.</p>
         </div>
       </div>
 
-      <div class="tool-grid">
-        <button class="tool-btn" id="btn-cfr">CFR Library</button>
-        <button class="tool-btn" id="btn-alerts">Safety Alerts</button>
-        <button class="tool-btn" id="btn-checklists">Checklists</button>
-        <button class="tool-btn" id="btn-training">Training</button>
-        <button class="tool-btn" id="btn-contacts">Contacts</button>
-        <button class="tool-btn" id="btn-partners">Partners</button>
+      <div class="module-search-wrap">
+        <input type="text" id="searchBar" placeholder="Search CFR...">
       </div>
-    </section>
 
-    <!-- CFR TOOL -->
-    <section id="cfrSection">
       <div id="statusMessage">
         Loading CFR data...
       </div>
@@ -83,25 +182,211 @@
       </div>
     </section>
 
-    <section id="aboutPanel">
-      <h2>About This Tool</h2>
+    <!-- TRAINING MODULE -->
+    <section id="trainingSection" class="app-section hidden">
+      <div class="module-header">
+        <button class="module-home-btn" data-open-section="homeSection">← Home</button>
+        <div class="module-header-text">
+          <h2>Training</h2>
+          <p>Placeholder module for future training content.</p>
+        </div>
+      </div>
 
-      <p><strong>SkyFire Safety CFR Field Reference</strong></p>
+      <div class="info-panel">
+        <h3>Planned Purpose</h3>
+        <p>
+          This space is reserved for future training content. It can later become a Mine Safety Services module,
+          an in-house SkyFire training module, or a hybrid training reference center.
+        </p>
 
-      <p>
-        Developed by <strong>Nicholas R. Murphy</strong><br>
-        SkyFire Safety — Mine Safety Tools
-      </p>
+        <h3>Future Possibilities</h3>
+        <ul>
+          <li>New miner and refresher quick guides</li>
+          <li>Task training references</li>
+          <li>Site-specific training notes</li>
+          <li>Emergency drill and tabletop guidance</li>
+        </ul>
+      </div>
+    </section>
 
-      <p>
-        This tool is designed to improve field access to Title 30 CFR content
-        for mine safety and health work, including offline-ready reference use.
-      </p>
+    <!-- ALERTS MODULE -->
+    <section id="alertsSection" class="app-section hidden">
+      <div class="module-header">
+        <button class="module-home-btn" data-open-section="homeSection">← Home</button>
+        <div class="module-header-text">
+          <h2>Headlines / Alerts</h2>
+          <p>Quick safety information and future alert content.</p>
+        </div>
+      </div>
 
-      <p>
-        Licensed under <strong>CC BY-NC 4.0</strong><br>
-        Attribution required. Non-commercial use only.
-      </p>
+      <div class="info-panel">
+        <h3>Current Status</h3>
+        <div id="alertsList">
+          <p>No active alerts</p>
+        </div>
+
+        <h3>Planned Content</h3>
+        <ul>
+          <li>Fatalgram summaries</li>
+          <li>Quick safety alerts</li>
+          <li>Year-to-date fatality stats</li>
+          <li>Field-ready lessons learned</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- LEGAL MODULE -->
+    <section id="legalSection" class="app-section hidden">
+      <div class="module-header">
+        <button class="module-home-btn" data-open-section="homeSection">← Home</button>
+        <div class="module-header-text">
+          <h2>Legal / Fisher Phillips</h2>
+          <p>Offline legal quick-reference module.</p>
+        </div>
+      </div>
+
+      <div class="info-panel">
+        <h3>Purpose</h3>
+        <p>
+          This module is intended to help users quickly recognize when they may need professional legal guidance.
+        </p>
+
+        <h3>Contact a Professional</h3>
+        <p><strong>Attorney:</strong> Arthur — Fisher Phillips</p>
+        <p><strong>Phone:</strong> To be added</p>
+        <p><strong>Email:</strong> To be added</p>
+
+        <h3>Planned Content</h3>
+        <ul>
+          <li>Labor and employment quick-reference notes</li>
+          <li>Incident response legal considerations</li>
+          <li>Policy and documentation support notes</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- MSHA DOCS MODULE -->
+    <section id="docsSection" class="app-section hidden">
+      <div class="module-header">
+        <button class="module-home-btn" data-open-section="homeSection">← Home</button>
+        <div class="module-header-text">
+          <h2>MSHA Docs</h2>
+          <p>Placeholder for selected MSHA documents.</p>
+        </div>
+      </div>
+
+      <div class="info-panel">
+        <h3>Planned Purpose</h3>
+        <p>
+          This module is reserved for future MSHA reference documents, selected guidance, manuals, and quick-use field resources.
+        </p>
+
+        <h3>Possible Content</h3>
+        <ul>
+          <li>PPM quick references</li>
+          <li>Selected guidance documents</li>
+          <li>Inspection and enforcement references</li>
+          <li>Frequently used field forms or reference sheets</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- REPORT AN ACCIDENT MODULE -->
+    <section id="reportSection" class="app-section hidden">
+      <div class="module-header">
+        <button class="module-home-btn" data-open-section="homeSection">← Home</button>
+        <div class="module-header-text">
+          <h2>Report an Accident</h2>
+          <p>Immediate actions and reporting reminders.</p>
+        </div>
+      </div>
+
+      <div class="info-panel">
+        <h3>Immediate Actions</h3>
+        <ol>
+          <li>Stabilize the scene and protect life first.</li>
+          <li>Call emergency help if needed.</li>
+          <li>Preserve critical evidence when safe to do so.</li>
+          <li>Notify the proper chain of command.</li>
+        </ol>
+
+        <h3>Collect This Information</h3>
+        <ul>
+          <li>Who was involved</li>
+          <li>What happened</li>
+          <li>When it happened</li>
+          <li>Where it happened</li>
+          <li>Immediate hazards still present</li>
+        </ul>
+
+        <h3>Future Expansion</h3>
+        <p>
+          This module can later hold report forms, contact steps, MSHA reminder notes, and accident response workflows.
+        </p>
+      </div>
+    </section>
+
+    <!-- LYNX MODULE -->
+    <section id="lynxSection" class="app-section hidden">
+      <div class="module-header">
+        <button class="module-home-btn" data-open-section="homeSection">← Home</button>
+        <div class="module-header-text">
+          <h2>Lynx</h2>
+          <p>Placeholder for future Lynx module content.</p>
+        </div>
+      </div>
+
+      <div class="info-panel">
+        <h3>Planned Purpose</h3>
+        <p>
+          This space is reserved for future Lynx-related safety and operational content. If no partnership develops,
+          this area can later be repurposed for your own SkyFire material.
+        </p>
+      </div>
+    </section>
+
+    <!-- HEAT MODULE -->
+    <section id="heatSection" class="app-section hidden">
+      <div class="module-header">
+        <button class="module-home-btn" data-open-section="homeSection">← Home</button>
+        <div class="module-header-text">
+          <h2>Heat / Environment</h2>
+          <p>Offline heat and environmental quick-reference module.</p>
+        </div>
+      </div>
+
+      <div class="info-panel">
+        <h3>Purpose</h3>
+        <p>
+          This module can grow into a fast field reference for heat stress, environmental exposure, and related quick-response guidance.
+        </p>
+
+        <h3>Planned Content</h3>
+        <ul>
+          <li>Heat illness signs and symptoms</li>
+          <li>Prevention reminders</li>
+          <li>Water, rest, and shade guidance</li>
+          <li>Environmental condition quick checks</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- PLACEHOLDER MODULE -->
+    <section id="placeholderSection" class="app-section hidden">
+      <div class="module-header">
+        <button class="module-home-btn" data-open-section="homeSection">← Home</button>
+        <div class="module-header-text">
+          <h2>Placeholder</h2>
+          <p>Reserved space for future expansion.</p>
+        </div>
+      </div>
+
+      <div class="info-panel">
+        <h3>Reserved Tile</h3>
+        <p>
+          This module is intentionally left open so SkyFire can stay flexible as future needs or partnerships develop.
+        </p>
+      </div>
     </section>
 
   </main>

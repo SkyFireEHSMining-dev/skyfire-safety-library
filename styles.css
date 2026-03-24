@@ -64,7 +64,7 @@ main {
   box-sizing: border-box;
 }
 
-.quick-info-grid {
+.quick-info-card {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 14px;
@@ -152,14 +152,14 @@ main {
   padding: 6px 10px;
 }
 
-.lynx-tile {
-  border-color: #dec18d;
-  background: linear-gradient(180deg, #ffffff 0%, #fffaf2 100%);
+.lynx-home-tile {
+  background: linear-gradient(180deg, #fffdf8 0%, #fff7eb 100%);
+  border-color: #e7cf9d;
 }
 
-.lynx-tile:hover {
-  border-color: #cda862;
-  box-shadow: 0 12px 28px rgba(166, 123, 52, 0.14);
+.lynx-home-tile:hover {
+  border-color: #d7b06b;
+  box-shadow: 0 12px 28px rgba(150, 112, 42, 0.14);
 }
 
 .module-header {
@@ -469,11 +469,38 @@ mark {
   padding-left: 22px;
 }
 
-/* Lynx module styling */
-.lynx-brand-panel {
-  border-color: #ead6af;
-  background: linear-gradient(180deg, #fffdf9 0%, #fff8ee 100%);
+/* Lynx styling */
+.lynx-module-header {
+  border-color: #e4cfaa;
+  background: linear-gradient(180deg, #fffdfa 0%, #fdf7ed 100%);
+}
+
+.lynx-hero-panel {
+  border-color: #e2c796;
+  background:
+    linear-gradient(135deg, rgba(196, 144, 58, 0.10) 0%, rgba(196, 144, 58, 0.03) 45%, rgba(255,255,255,0.95) 100%),
+    #fffdf9;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
   margin-bottom: 20px;
+}
+
+.lynx-hero-top {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  gap: 22px;
+  align-items: center;
+}
+
+.lynx-logo {
+  width: 100%;
+  max-width: 180px;
+  height: auto;
+  display: block;
+  background: #ffffff;
+  border: 1px solid #ecdab8;
+  border-radius: 14px;
+  padding: 14px;
+  box-sizing: border-box;
 }
 
 .powered-badge {
@@ -481,15 +508,16 @@ mark {
   margin-bottom: 12px;
   padding: 7px 12px;
   border-radius: 999px;
-  background: #f6ead4;
-  border: 1px solid #e7cfa0;
-  color: #8a6426;
+  background: linear-gradient(180deg, #f7ecd8 0%, #f1dfbf 100%);
+  border: 1px solid #e2c48c;
+  color: #7b5617;
   font-weight: 700;
   font-size: 0.86rem;
 }
 
 .lynx-panel-title {
   margin-bottom: 10px;
+  color: #2b2b2b;
 }
 
 .lynx-panel-text {
@@ -515,6 +543,16 @@ mark {
   box-sizing: border-box;
 }
 
+.lynx-tool-card {
+  background: linear-gradient(180deg, #ffffff 0%, #fffaf3 100%);
+  border-color: #e4cfaa;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.75) inset;
+}
+
+.lynx-tool-card h3 {
+  color: #2c2c2c;
+}
+
 .tool-card h3 {
   margin-top: 0;
   margin-bottom: 10px;
@@ -529,6 +567,12 @@ mark {
 
 .contact-card {
   margin-bottom: 8px;
+}
+
+.lynx-contact-card {
+  border-color: #dfc18d;
+  background:
+    linear-gradient(180deg, rgba(252,246,233,1) 0%, rgba(255,255,255,1) 100%);
 }
 
 .contact-grid {
@@ -555,7 +599,7 @@ mark {
 }
 
 @media (max-width: 1000px) {
-  .quick-info-grid {
+  .quick-info-card {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -581,6 +625,14 @@ mark {
     height: auto;
     max-height: none;
     overflow: visible;
+  }
+
+  .lynx-hero-top {
+    grid-template-columns: 1fr;
+  }
+
+  .lynx-logo {
+    max-width: 220px;
   }
 }
 
@@ -608,7 +660,7 @@ mark {
     font-size: 0.95rem;
   }
 
-  .quick-info-grid {
+  .quick-info-card {
     grid-template-columns: 1fr;
   }
 
@@ -687,5 +739,10 @@ mark {
   .section-content p {
     line-height: 1.75;
     font-size: 1.05rem;
+  }
+
+  .lynx-logo {
+    max-width: 180px;
+    margin: 0 auto;
   }
 }

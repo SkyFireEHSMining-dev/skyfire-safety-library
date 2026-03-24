@@ -11,9 +11,9 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="192x192" href="Icons/icon-192.png">
   <link rel="apple-touch-icon" href="Icons/icon-192.png">
-  <link rel="stylesheet" href="styles.css?v=dashboard-fix-2">
+  <link rel="stylesheet" href="styles.css?v=lynx-module-1">
 
-  <script src="app.js?v=dashboard-fix-2" defer></script>
+  <script src="app.js?v=lynx-module-1" defer></script>
 </head>
 <body>
 
@@ -33,26 +33,28 @@
     <section id="homeSection" class="app-section">
       <section class="home-info-strip">
         <div class="quick-info-card">
-          <div class="quick-info-item">
-            <span class="quick-label">Fatalities YTD</span>
-            <span class="quick-value" id="fatalityStat">Placeholder</span>
-          </div>
+          <div class="quick-info-grid">
+            <div class="quick-info-item">
+              <span class="quick-label">Fatalities YTD</span>
+              <span class="quick-value" id="fatalityStat">Placeholder</span>
+            </div>
 
-          <div class="quick-info-item">
-            <span class="quick-label">Current Alert</span>
-            <span class="quick-value" id="homeAlertStatus">No active alerts</span>
-          </div>
+            <div class="quick-info-item">
+              <span class="quick-label">Current Alert</span>
+              <span class="quick-value" id="homeAlertStatus">No active alerts</span>
+            </div>
 
-          <div class="quick-info-item quick-info-wide">
-            <span class="quick-label">Fatalgram / Quick Safety Note</span>
-            <span class="quick-value" id="fatalgramNote">
-              Offline-ready placeholder. Future fatalgram and quick safety information can live here.
-            </span>
-          </div>
+            <div class="quick-info-item quick-info-wide">
+              <span class="quick-label">Fatalgram / Quick Safety Note</span>
+              <span class="quick-value" id="fatalgramNote">
+                Offline-ready placeholder. Future fatalgram and quick safety information can live here.
+              </span>
+            </div>
 
-          <div class="quick-info-item">
-            <span class="quick-label">Last Updated</span>
-            <span class="quick-value" id="homeLastUpdated">Just now</span>
+            <div class="quick-info-item">
+              <span class="quick-label">Last Updated</span>
+              <span class="quick-value" id="homeLastUpdated">Just now</span>
+            </div>
           </div>
         </div>
       </section>
@@ -88,9 +90,10 @@
           <span class="tile-subtitle">Immediate actions, reporting reminders, and key information.</span>
         </button>
 
-        <button class="dashboard-tile" data-open-section="lynxSection">
-          <span class="tile-title">Lynx</span>
-          <span class="tile-subtitle">Placeholder for future Lynx content or replacement content.</span>
+        <button class="dashboard-tile lynx-tile" data-open-section="lynxSection">
+          <span class="tile-title">Safety Program Tools</span>
+          <span class="tile-subtitle">Offline tools for audits, inspections, templates, and tracking.</span>
+          <span class="tile-powered">Powered by Lynx</span>
         </button>
 
         <button class="dashboard-tile" data-open-section="heatSection">
@@ -295,17 +298,100 @@
       <div class="module-header">
         <button class="module-home-btn" data-open-section="homeSection">← Home</button>
         <div class="module-header-text">
-          <h2>Lynx</h2>
-          <p>Placeholder for future Lynx module content.</p>
+          <h2>Safety Program Tools</h2>
+          <p>Offline tools for audits, inspections, templates, and tracking.</p>
         </div>
       </div>
 
-      <div class="info-panel">
-        <h3>Planned Purpose</h3>
-        <p>
-          This space is reserved for future Lynx-related safety and operational content. If no partnership develops,
-          this area can later be repurposed for your own SkyFire material.
+      <div class="info-panel lynx-brand-panel">
+        <div class="powered-badge">Powered by Lynx Global Intelligence</div>
+        <h3 class="lynx-panel-title">AI-driven HSEC workflows for smarter, safer operations</h3>
+        <p class="lynx-panel-text">
+          This module is designed to give field teams useful, offline-friendly tools that help them assess readiness,
+          organize work, and recognize when deeper professional support may be needed.
         </p>
+        <p class="partner-note">
+          The goal is not to replace a full professional platform. The goal is to provide practical tools that create
+          value in the field and encourage users to seek stronger safety systems when they are ready.
+        </p>
+      </div>
+
+      <div class="tool-card-grid">
+        <div class="tool-card">
+          <h3>Safety Audit Tool (Lite)</h3>
+          <p>
+            A simple self-assessment that helps users score safety and compliance readiness, identify weak areas,
+            and see where improvement is needed.
+          </p>
+        </div>
+
+        <div class="tool-card">
+          <h3>Inspection Checklist Builder</h3>
+          <p>
+            A quick builder for printable inspection checklists based on equipment, work areas, or common site categories
+            like mills, pits, electrical systems, and mobile equipment.
+          </p>
+        </div>
+
+        <div class="tool-card">
+          <h3>Printable Safety Templates</h3>
+          <p>
+            Field-ready forms such as inspection sheets, hazard logs, incident forms, and quick documentation templates
+            that crews can actually use.
+          </p>
+        </div>
+
+        <div class="tool-card">
+          <h3>Basic Safety Dashboard (Lite)</h3>
+          <p>
+            A simple input tool where users can enter hazards, inspections, incidents, or actions and get a quick visual
+            snapshot of site safety activity.
+          </p>
+        </div>
+
+        <div class="tool-card">
+          <h3>Environmental / Exposure Awareness</h3>
+          <p>
+            A prompt-based or calculator-style tool to help users think through environmental concerns, exposure risks,
+            and site-specific awareness items before they become bigger problems.
+          </p>
+        </div>
+      </div>
+
+      <div class="info-panel contact-card">
+        <h3>Contact a Professional</h3>
+        <p>
+          These tools are intended to be practical and useful on their own, but they are also designed to help users
+          recognize when a more advanced safety management system could make a major difference.
+        </p>
+
+        <p><strong>Lynx Global Intelligence</strong></p>
+        <p>
+          AI-driven EHS and HSEC data management that helps organizations turn safety, inspections, incidents,
+          commitments, and operational information into actionable insight.
+        </p>
+
+        <div class="contact-grid">
+          <div>
+            <span class="quick-label">Primary Contact</span>
+            <span class="quick-value">Trevor Jones — placeholder</span>
+          </div>
+
+          <div>
+            <span class="quick-label">Secondary Contact</span>
+            <span class="quick-value">Mat — placeholder</span>
+          </div>
+
+          <div>
+            <span class="quick-label">Phone</span>
+            <span class="quick-value">To be added</span>
+          </div>
+
+          <div>
+            <span class="quick-label">Email</span>
+            <span class="quick-value">To be added</span>
+          </div>
+        </div>
       </div>
     </section>
 

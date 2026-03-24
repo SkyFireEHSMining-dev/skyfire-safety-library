@@ -11,16 +11,16 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="192x192" href="Icons/icon-192.png">
   <link rel="apple-touch-icon" href="Icons/icon-192.png">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=dashboard-fix-2">
 
-  <script src="app.js" defer></script>
+  <script src="app.js?v=dashboard-fix-2" defer></script>
 </head>
 <body>
 
   <header class="main-header">
     <div class="brand-row">
       <img src="Icons/icon-192.png" alt="SkyFire logo" class="brand-logo">
-      <div>
+      <div class="brand-text">
         <h1>SkyFire Safety Library</h1>
         <p class="subtitle">Field Safety Hub</p>
       </div>
@@ -31,35 +31,28 @@
 
     <!-- HOME DASHBOARD -->
     <section id="homeSection" class="app-section">
-      <section class="home-top-banner">
-        <div class="home-top-logo-card">
-          <img src="Icons/icon-192.png" alt="SkyFire logo" class="home-logo-large">
-        </div>
+      <section class="home-info-strip">
+        <div class="quick-info-card">
+          <div class="quick-info-item">
+            <span class="quick-label">Fatalities YTD</span>
+            <span class="quick-value" id="fatalityStat">Placeholder</span>
+          </div>
 
-        <div class="home-top-info-card">
-          <h2>Quick Info · Stats · Alerts</h2>
-          <div class="quick-info-grid">
-            <div class="quick-info-item">
-              <span class="quick-label">Fatalities YTD</span>
-              <span class="quick-value" id="fatalityStat">Placeholder</span>
-            </div>
+          <div class="quick-info-item">
+            <span class="quick-label">Current Alert</span>
+            <span class="quick-value" id="homeAlertStatus">No active alerts</span>
+          </div>
 
-            <div class="quick-info-item">
-              <span class="quick-label">Current Alert</span>
-              <span class="quick-value" id="homeAlertStatus">No active alerts</span>
-            </div>
+          <div class="quick-info-item quick-info-wide">
+            <span class="quick-label">Fatalgram / Quick Safety Note</span>
+            <span class="quick-value" id="fatalgramNote">
+              Offline-ready placeholder. Future fatalgram and quick safety information can live here.
+            </span>
+          </div>
 
-            <div class="quick-info-item quick-info-wide">
-              <span class="quick-label">Fatalgram / Quick Safety Note</span>
-              <span class="quick-value" id="fatalgramNote">
-                Offline-ready placeholder. Future fatalgram and quick safety information can live here.
-              </span>
-            </div>
-
-            <div class="quick-info-item">
-              <span class="quick-label">Last Updated</span>
-              <span class="quick-value" id="homeLastUpdated">Just now</span>
-            </div>
+          <div class="quick-info-item">
+            <span class="quick-label">Last Updated</span>
+            <span class="quick-value" id="homeLastUpdated">Just now</span>
           </div>
         </div>
       </section>
@@ -255,13 +248,6 @@
         <p><strong>Attorney:</strong> Arthur — Fisher Phillips</p>
         <p><strong>Phone:</strong> To be added</p>
         <p><strong>Email:</strong> To be added</p>
-
-        <h3>Planned Content</h3>
-        <ul>
-          <li>Labor and employment quick-reference notes</li>
-          <li>Incident response legal considerations</li>
-          <li>Policy and documentation support notes</li>
-        </ul>
       </div>
     </section>
 
@@ -280,14 +266,6 @@
         <p>
           This module is reserved for future MSHA reference documents, selected guidance, manuals, and quick-use field resources.
         </p>
-
-        <h3>Possible Content</h3>
-        <ul>
-          <li>PPM quick references</li>
-          <li>Selected guidance documents</li>
-          <li>Inspection and enforcement references</li>
-          <li>Frequently used field forms or reference sheets</li>
-        </ul>
       </div>
     </section>
 
@@ -309,20 +287,6 @@
           <li>Preserve critical evidence when safe to do so.</li>
           <li>Notify the proper chain of command.</li>
         </ol>
-
-        <h3>Collect This Information</h3>
-        <ul>
-          <li>Who was involved</li>
-          <li>What happened</li>
-          <li>When it happened</li>
-          <li>Where it happened</li>
-          <li>Immediate hazards still present</li>
-        </ul>
-
-        <h3>Future Expansion</h3>
-        <p>
-          This module can later hold report forms, contact steps, MSHA reminder notes, and accident response workflows.
-        </p>
       </div>
     </section>
 
@@ -360,14 +324,6 @@
         <p>
           This module can grow into a fast field reference for heat stress, environmental exposure, and related quick-response guidance.
         </p>
-
-        <h3>Planned Content</h3>
-        <ul>
-          <li>Heat illness signs and symptoms</li>
-          <li>Prevention reminders</li>
-          <li>Water, rest, and shade guidance</li>
-          <li>Environmental condition quick checks</li>
-        </ul>
       </div>
     </section>
 

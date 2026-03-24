@@ -1,15 +1,13 @@
-const CACHE_NAME = "skyfire-cfr-cache-v3";
-const APP_BASE = "/skyfire-safety-library/";
+const CACHE_NAME = "skyfire-cfr-cache-v3-dashboard-fix-2";
 
 const CORE_FILES = [
-  `${APP_BASE}`,
-  `${APP_BASE}index.html`,
-  `${APP_BASE}styles.css`,
-  `${APP_BASE}app.js`,
-  `${APP_BASE}manifest.json`,
-  `${APP_BASE}Icons/icon-192.png`,
-  `${APP_BASE}Icons/icon-512.png`,
-  `${APP_BASE}Data/ECFR-title30.xml`
+  "./",
+  "./index.html",
+  "./styles.css?v=dashboard-fix-2",
+  "./app.js?v=dashboard-fix-2",
+  "./manifest.json",
+  "./Icons/icon-192.png",
+  "./Data/ECFR-title30.xml"
 ];
 
 self.addEventListener("install", event => {
@@ -25,14 +23,15 @@ self.addEventListener("activate", event => {
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheName !== CACHE_NAME) {
-            return caches.delete(cacheName);
+        cacheNames.map(cache => {
+          if (cache !== CACHE_NAME) {
+            return caches.delete(cache);
           }
         })
       );
-    }).then(() => self.clients.claim())
+    })
   );
+  self.clients.claim();
 });
 
 self.addEventListener("fetch", event => {
@@ -40,81 +39,25 @@ self.addEventListener("fetch", event => {
 
   if (request.method !== "GET") return;
 
-  const requestUrl = new URL(request.url);
+  event.respondWith(
+    fetch(request)
+      .then(response => {
+        const responseClone = response.clone();
+        caches.open(CACHE_NAME).then(cache => {
+          cache.put(request, responseClone);
+        });
+        return response;
+      })
+      .catch(() => {
+        return caches.match(request).then(cachedResponse => {
+          if (cachedResponse) {
+            return cachedResponse;
+          }
 
-  if (!requestUrl.pathname.startsWith(APP_BASE)) {
-    return;
-  }
-
-  if (request.mode === "navigate") {
-    event.respondWith(
-      fetch(request)
-        .then(networkResponse => {
-          const responseClone = networkResponse.clone();
-          caches.open(CACHE_NAME).then(cache => {
-            cache.put(`${APP_BASE}index.html`, responseClone);
-          });
-          return networkResponse;
-        })
-        .catch(() => {
-          return caches.match(`${APP_BASE}index.html`);
-        })
-    );
-    return;
-  }
-
-  if (
-    requestUrl.pathname.endsWith("styles.css") ||
-    requestUrl.pathname.endsWith("app.js") ||
-    requestUrl.pathname.endsWith("manifest.json") ||
-    requestUrl.pathname.endsWith("service-worker.js")
-  ) {
-    event.respondWith(
-      fetch(request)
-        .then(networkResponse => {
-          const responseClone = networkResponse.clone();
-          caches.open(CACHE_NAME).then(cache => {
-            cache.put(request, responseClone);
-          });
-          return networkResponse;
-        })
-        .catch(() => caches.match(request))
-    );
-    return;
-  }
-
-  if (
-    requestUrl.pathname.endsWith(".png") ||
-    requestUrl.pathname.endsWith(".jpg") ||
-    requestUrl.pathname.endsWith(".jpeg") ||
-    requestUrl.pathname.endsWith(".xml")
-  ) {
-    event.respondWith(
-      caches.match(request).then(cachedResponse => {
-        if (cachedResponse) {
-          fetch(request)
-            .then(networkResponse => {
-              caches.open(CACHE_NAME).then(cache => {
-                cache.put(request, networkResponse.clone());
-              });
-            })
-            .catch(() => {});
-          return cachedResponse;
-        }
-
-        return fetch(request).then(networkResponse => {
-          const responseClone = networkResponse.clone();
-          caches.open(CACHE_NAME).then(cache => {
-            cache.put(request, responseClone);
-          });
-          return networkResponse;
+          if (request.mode === "navigate") {
+            return caches.match("./index.html");
+          }
         });
       })
-    );
-    return;
-  }
-
-  event.respondWith(
-    fetch(request).catch(() => caches.match(request))
   );
 });

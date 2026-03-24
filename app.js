@@ -45,6 +45,12 @@ const exportBookmarksBtn = document.getElementById("exportBookmarksBtn");
 const importBookmarksBtn = document.getElementById("importBookmarksBtn");
 const importBookmarksInput = document.getElementById("importBookmarksInput");
 
+const appSections = document.querySelectorAll(".app-section");
+const homeAlertStatus = document.getElementById("homeAlertStatus");
+const fatalityStat = document.getElementById("fatalityStat");
+const fatalgramNote = document.getElementById("fatalgramNote");
+const homeLastUpdated = document.getElementById("homeLastUpdated");
+
 let allSections = [];
 let bookmarkFolders = loadBookmarkFolders();
 let searchDebounceTimer = null;
@@ -53,6 +59,30 @@ const MIN_TEXT_SEARCH_LENGTH = 3;
 const MAX_SEARCH_RESULTS = 100;
 const MAX_PREVIEW_PARAGRAPHS = 2;
 const PREVIEW_SNIPPET_LENGTH = 220;
+
+function showSection(sectionId) {
+  appSections.forEach(section => {
+    section.classList.add("hidden");
+  });
+
+  const target = document.getElementById(sectionId);
+  if (target) {
+    target.classList.remove("hidden");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+}
+
+function bindSectionButtons() {
+  const buttons = document.querySelectorAll("[data-open-section]");
+  buttons.forEach(button => {
+    button.addEventListener("click", function () {
+      const targetId = button.getAttribute("data-open-section");
+      if (targetId) {
+        showSection(targetId);
+      }
+    });
+  });
+}
 
 function decodeHtmlEntities(text) {
   const txt = document.createElement("textarea");
@@ -356,12 +386,14 @@ function scrollToAndHighlightSection(sectionNumber) {
 }
 
 function goToBookmark(sectionNumber) {
+  showSection("cfrSection");
   searchBar.value = sectionNumber;
   renderHierarchySections(allSections);
   scrollToAndHighlightSection(sectionNumber);
 }
 
 function openSectionInFullView(sectionNumber) {
+  showSection("cfrSection");
   searchBar.value = sectionNumber;
   statusMessage.textContent =
     `Opened full CFR view for section ${sectionNumber}.`;
@@ -1257,11 +1289,28 @@ async function fetchXmlFromCandidates() {
 }
 
 function updateAlertsPlaceholder() {
-  if (!alertsList) return;
+  const noAlertText = "No active alerts";
 
-  alertsList.innerHTML = `
-    <p>No active alerts</p>
-  `;
+  if (alertsList) {
+    alertsList.innerHTML = `<p>${noAlertText}</p>`;
+  }
+
+  if (homeAlertStatus) {
+    homeAlertStatus.textContent = noAlertText;
+  }
+
+  if (fatalityStat) {
+    fatalityStat.textContent = "Placeholder";
+  }
+
+  if (fatalgramNote) {
+    fatalgramNote.textContent =
+      "Offline-ready placeholder. Future fatalgram and quick safety information can live here.";
+  }
+
+  if (homeLastUpdated) {
+    homeLastUpdated.textContent = new Date().toLocaleDateString();
+  }
 }
 
 async function loadCfr() {
@@ -1314,21 +1363,27 @@ async function loadCfr() {
   }
 }
 
-searchBar.addEventListener("input", function () {
-  clearTimeout(searchDebounceTimer);
+if (searchBar) {
+  searchBar.addEventListener("input", function () {
+    clearTimeout(searchDebounceTimer);
 
-  searchDebounceTimer = setTimeout(function () {
-    runSearch();
-  }, 350);
-});
+    searchDebounceTimer = setTimeout(function () {
+      runSearch();
+    }, 350);
+  });
+}
 
-createFolderBtn.addEventListener("click", createFolder);
+if (createFolderBtn) {
+  createFolderBtn.addEventListener("click", createFolder);
+}
 
-newFolderInput.addEventListener("keydown", function (event) {
-  if (event.key === "Enter") {
-    createFolder();
-  }
-});
+if (newFolderInput) {
+  newFolderInput.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      createFolder();
+    }
+  });
+}
 
 if (exportBookmarksBtn) {
   exportBookmarksBtn.addEventListener("click", exportBookmarks);
@@ -1348,7 +1403,9 @@ if (importBookmarksBtn && importBookmarksInput) {
   });
 }
 
+bindSectionButtons();
 updateAlertsPlaceholder();
 renderStarterPackButtons();
 renderBookmarkFolders();
+showSection("homeSection");
 loadCfr();

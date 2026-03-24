@@ -11,9 +11,9 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="192x192" href="Icons/icon-192.png">
   <link rel="apple-touch-icon" href="Icons/icon-192.png">
-  <link rel="stylesheet" href="styles.css?v=lynx-polish-1">
+  <link rel="stylesheet" href="styles.css?v=mss-module-1">
 
-  <script src="app.js?v=lynx-polish-1" defer></script>
+  <script src="app.js?v=mss-module-1" defer></script>
 </head>
 <body>
 
@@ -63,9 +63,10 @@
           <span class="tile-subtitle">Browse the offline CFR field reference.</span>
         </button>
 
-        <button class="dashboard-tile" data-open-section="trainingSection">
-          <span class="tile-title">Training</span>
-          <span class="tile-subtitle">Training module placeholder for future MSS or in-house content.</span>
+        <button class="dashboard-tile mss-home-tile" data-open-section="mssSection">
+          <span class="tile-title">Field Safety Resources</span>
+          <span class="tile-subtitle">Safety resources, guidance, and field-proven insights from industry experts.</span>
+          <span class="tile-powered mss-powered">Powered by MSHA Safety Services Inc.</span>
         </button>
 
         <button class="dashboard-tile" data-open-section="alertsSection">
@@ -176,30 +177,116 @@
       </div>
     </section>
 
-    <!-- TRAINING MODULE -->
-    <section id="trainingSection" class="app-section hidden">
-      <div class="module-header">
+    <!-- MSS MODULE -->
+    <section id="mssSection" class="app-section hidden">
+      <div class="module-header mss-module-header">
         <button class="module-home-btn" data-open-section="homeSection">← Home</button>
         <div class="module-header-text">
-          <h2>Training</h2>
-          <p>Placeholder module for future training content.</p>
+          <h2>Field Safety Resources</h2>
+          <p>Safety resources, guidance, and field-proven insights from industry experts.</p>
         </div>
       </div>
 
-      <div class="info-panel">
-        <h3>Planned Purpose</h3>
+      <div class="info-panel mss-hero-panel">
+        <div class="mss-hero-top">
+          <div class="mss-hero-copy">
+            <div class="powered-badge mss-badge">Powered by MSHA Safety Services Inc.</div>
+            <h3 class="mss-panel-title">Training, documents, practical guidance, and expert-backed field support</h3>
+            <p class="mss-panel-text">
+              This module is designed to make useful mine safety information easier to access in the field. The goal is
+              to surface practical resources, trusted guidance, and field-proven insights that help crews make stronger decisions.
+            </p>
+            <p class="partner-note">
+              It is not meant to replace expert support. It is meant to increase access to helpful information and make it easier
+              for users to recognize when they should reach out to a professional for deeper help.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tool-card-grid">
+        <div class="tool-card mss-tool-card">
+          <h3>Featured Articles</h3>
+          <p>
+            A space for DJ’s published safety articles, practical writeups, and field lessons that users can quickly browse
+            inside the app.
+          </p>
+        </div>
+
+        <div class="tool-card mss-tool-card">
+          <h3>Useful MSHA Documents</h3>
+          <p>
+            A quick-access section for free forms, checklists, training materials, and MSHA documents that crews can use
+            without digging through websites.
+          </p>
+        </div>
+
+        <div class="tool-card mss-tool-card">
+          <h3>Training FAQs</h3>
+          <p>
+            A field-friendly place for common training questions, practical answers, and reminders based on the kind of
+            questions operators ask most often.
+          </p>
+        </div>
+
+        <div class="tool-card mss-tool-card">
+          <h3>Ask MSS AI</h3>
+          <p>
+            A future place for quick-answer guidance that helps users get pointed in the right direction while still encouraging
+            them to reach out for expert advice when needed.
+          </p>
+        </div>
+
+        <div class="tool-card mss-tool-card">
+          <h3>Standards / Best Practices / Advice</h3>
+          <p>
+            A section for field-proven guidance, operating norms, practical reminders, and expert advice that helps teams think
+            beyond bare compliance.
+          </p>
+        </div>
+
+        <div class="tool-card mss-tool-card">
+          <h3>Contact a Professional</h3>
+          <p>
+            A direct path for users who want help with training, compliance support, documents, or expert answers from MSHA Safety Services.
+          </p>
+        </div>
+      </div>
+
+      <div class="info-panel contact-card mss-contact-card">
+        <h3>Contact a Professional</h3>
         <p>
-          This space is reserved for future training content. It can later become a Mine Safety Services module,
-          an in-house SkyFire training module, or a hybrid training reference center.
+          MSHA Safety Services already provides real-world training support, documents, resources, and practical answers for mine operators.
+          This section is here to make that support more visible and easier to reach from inside SkyFire.
         </p>
 
-        <h3>Future Possibilities</h3>
-        <ul>
-          <li>New miner and refresher quick guides</li>
-          <li>Task training references</li>
-          <li>Site-specific training notes</li>
-          <li>Emergency drill and tabletop guidance</li>
-        </ul>
+        <p><strong>MSHA Safety Services Inc.</strong></p>
+        <p>
+          Training support, practical safety guidance, helpful documents, and field-ready resources designed to help operations improve
+          safety performance and compliance readiness.
+        </p>
+
+        <div class="contact-grid">
+          <div>
+            <span class="quick-label">Primary Contact</span>
+            <span class="quick-value">DJ Schmutz — placeholder</span>
+          </div>
+
+          <div>
+            <span class="quick-label">Company</span>
+            <span class="quick-value">MSHA Safety Services Inc.</span>
+          </div>
+
+          <div>
+            <span class="quick-label">Phone</span>
+            <span class="quick-value">To be added</span>
+          </div>
+
+          <div>
+            <span class="quick-label">Email</span>
+            <span class="quick-value">To be added</span>
+          </div>
+        </div>
       </div>
     </section>
 

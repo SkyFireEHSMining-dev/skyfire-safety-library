@@ -162,6 +162,22 @@ main {
   box-shadow: 0 12px 28px rgba(150, 112, 42, 0.14);
 }
 
+.mss-home-tile {
+  background: linear-gradient(180deg, #fffdf9 0%, #fff8f1 100%);
+  border-color: #e5c99f;
+}
+
+.mss-home-tile:hover {
+  border-color: #d5964a;
+  box-shadow: 0 12px 28px rgba(201, 110, 31, 0.16);
+}
+
+.mss-powered {
+  color: #9a5717;
+  background: #f9ebdb;
+  border-color: #ecc79a;
+}
+
 .module-header {
   display: flex;
   gap: 16px;
@@ -528,6 +544,39 @@ mark {
   color: #555;
 }
 
+.mss-module-header {
+  border-color: #e5c59a;
+  background: linear-gradient(180deg, #fffdf9 0%, #fdf6ed 100%);
+}
+
+.mss-hero-panel {
+  border-color: #e7c896;
+  background:
+    linear-gradient(135deg, rgba(197, 113, 26, 0.10) 0%, rgba(197, 113, 26, 0.03) 45%, rgba(255,255,255,0.95) 100%),
+    #fffdf9;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
+  margin-bottom: 20px;
+}
+
+.mss-hero-top {
+  display: block;
+}
+
+.mss-badge {
+  background: linear-gradient(180deg, #faecd9 0%, #f5dfbc 100%);
+  border-color: #e8bf83;
+  color: #8d4e10;
+}
+
+.mss-panel-title {
+  margin-bottom: 10px;
+  color: #2b2b2b;
+}
+
+.mss-panel-text {
+  margin-bottom: 10px;
+}
+
 .tool-card-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -549,7 +598,14 @@ mark {
   box-shadow: 0 1px 0 rgba(255,255,255,0.75) inset;
 }
 
-.lynx-tool-card h3 {
+.mss-tool-card {
+  background: linear-gradient(180deg, #ffffff 0%, #fffaf5 100%);
+  border-color: #e7cba3;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.75) inset;
+}
+
+.lynx-tool-card h3,
+.mss-tool-card h3 {
   color: #2c2c2c;
 }
 
@@ -571,8 +627,12 @@ mark {
 
 .lynx-contact-card {
   border-color: #dfc18d;
-  background:
-    linear-gradient(180deg, rgba(252,246,233,1) 0%, rgba(255,255,255,1) 100%);
+  background: linear-gradient(180deg, rgba(252,246,233,1) 0%, rgba(255,255,255,1) 100%);
+}
+
+.mss-contact-card {
+  border-color: #e3c595;
+  background: linear-gradient(180deg, rgba(253,247,236,1) 0%, rgba(255,255,255,1) 100%);
 }
 
 .contact-grid {

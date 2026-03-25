@@ -6,14 +6,17 @@
 
   <title>SkyFire Safety Library</title>
   <meta name="theme-color" content="#0b0b0b">
-  <meta name="description" content="SkyFire Safety Library - Field Safety Hub for CFR access, mine safety reference, and offline-ready use.">
+  <meta
+    name="description"
+    content="SkyFire Safety Library - Field Safety Hub for CFR access, mine safety reference, and offline-ready use."
+  >
 
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="192x192" href="Icons/icon-192.png">
   <link rel="apple-touch-icon" href="Icons/icon-192.png">
-  <link rel="stylesheet" href="styles.css?v=mss-colors-2">
+  <link rel="stylesheet" href="styles.css?v=library-shell-1">
 
-  <script src="app.js?v=mss-colors-2" defer></script>
+  <script src="app.js?v=library-shell-1" defer></script>
 </head>
 <body>
 
@@ -61,6 +64,11 @@
         <button class="dashboard-tile" data-open-section="cfrSection">
           <span class="tile-title">30 CFR</span>
           <span class="tile-subtitle">Browse the offline CFR field reference.</span>
+        </button>
+
+        <button class="dashboard-tile osha-home-tile" data-open-section="oshaSection">
+          <span class="tile-title">OSHA / 29 CFR</span>
+          <span class="tile-subtitle">Browse the offline OSHA field reference.</span>
         </button>
 
         <button class="dashboard-tile mss-home-tile" data-open-section="mssSection">
@@ -117,8 +125,8 @@
         </p>
 
         <p>
-          This tool is designed to improve field access to Title 30 CFR content
-          for mine safety and health work, including offline-ready reference use.
+          This tool is designed to improve field access to regulatory and safety reference content
+          for mine safety and health work, including offline-ready use.
         </p>
 
         <p>
@@ -156,7 +164,7 @@
             <button id="createFolderBtn">Create</button>
           </div>
 
-          <div class="bookmark-button-row" style="margin-bottom: 14px;">
+          <div class="bookmark-button-row sidebar-button-row">
             <button id="exportBookmarksBtn">Export Bookmarks</button>
             <button id="importBookmarksBtn">Import Bookmarks</button>
           </div>
@@ -177,6 +185,55 @@
       </div>
     </section>
 
+    <!-- OSHA MODULE -->
+    <section id="oshaSection" class="app-section hidden">
+      <div class="module-header osha-module-header">
+        <button class="module-home-btn" data-open-section="homeSection">← Home</button>
+        <div class="module-header-text">
+          <h2>OSHA / 29 CFR Field Reference</h2>
+          <p>Browse and search the OSHA module.</p>
+        </div>
+      </div>
+
+      <div class="module-search-wrap">
+        <input type="text" id="oshaSearchBar" placeholder="Search OSHA / 29 CFR...">
+      </div>
+
+      <div id="oshaStatusMessage">
+        Loading OSHA data...
+      </div>
+
+      <div class="layout">
+        <aside id="oshaBookmarkSidebar">
+          <h2>Bookmarks</h2>
+          <p>Save important sections here for quick access.</p>
+
+          <div class="folder-create-row">
+            <input type="text" id="oshaNewFolderInput" placeholder="New folder name">
+            <button id="oshaCreateFolderBtn">Create</button>
+          </div>
+
+          <div class="bookmark-button-row sidebar-button-row">
+            <button id="oshaExportBookmarksBtn">Export Bookmarks</button>
+            <button id="oshaImportBookmarksBtn">Import Bookmarks</button>
+          </div>
+
+          <input
+            type="file"
+            id="oshaImportBookmarksInput"
+            accept=".json,application/json"
+            style="display: none;"
+          >
+
+          <div id="oshaBookmarkFolders">
+            <p><em>No bookmarks yet.</em></p>
+          </div>
+        </aside>
+
+        <section id="oshaContainer"></section>
+      </div>
+    </section>
+
     <!-- MSS MODULE -->
     <section id="mssSection" class="app-section hidden">
       <div class="module-header mss-module-header">
@@ -194,12 +251,12 @@
             <div class="powered-badge mss-badge">Powered by MSHA Safety Services Inc.</div>
             <h3 class="mss-panel-title">Training, documents, practical guidance, and expert-backed field support</h3>
             <p class="mss-panel-text">
-              This module is designed to make useful mine safety information easier to access in the field. The goal is
-              to surface practical resources, trusted guidance, and field-proven insights that help crews make stronger decisions.
+              This module is designed to make useful mine safety information easier to access in the field.
+              The goal is to surface practical resources, trusted guidance, and field-proven insights that help crews make stronger decisions.
             </p>
             <p class="partner-note">
-              It is not meant to replace expert support. It is meant to increase access to helpful information and make it easier
-              for users to recognize when they should reach out to a professional for deeper help.
+              It is not meant to replace expert support. It is meant to increase access to helpful information
+              and make it easier for users to recognize when they should reach out to a professional for deeper help.
             </p>
           </div>
         </div>
@@ -209,85 +266,43 @@
         <div class="tool-card mss-tool-card">
           <h3>Featured Articles</h3>
           <p>
-            A space for DJ’s published safety articles, practical writeups, and field lessons that users can quickly browse
-            inside the app.
+            A space for DJ’s published safety articles, practical writeups, and field lessons that users can quickly browse inside the app.
           </p>
         </div>
 
         <div class="tool-card mss-tool-card">
           <h3>Useful MSHA Documents</h3>
           <p>
-            A quick-access section for free forms, checklists, training materials, and MSHA documents that crews can use
-            without digging through websites.
+            A quick-access section for free forms, checklists, training materials, and MSHA documents that crews can use without digging through websites.
           </p>
         </div>
 
         <div class="tool-card mss-tool-card">
           <h3>Training FAQs</h3>
           <p>
-            A field-friendly place for common training questions, practical answers, and reminders based on the kind of
-            questions operators ask most often.
+            A field-friendly place for common training questions, practical answers, and reminders based on the kind of questions operators ask most often.
           </p>
         </div>
 
         <div class="tool-card mss-tool-card">
           <h3>Ask MSHA AI</h3>
           <p>
-            A future place for quick-answer guidance that helps users get pointed in the right direction while still
-            encouraging them to reach out for expert advice when needed.
+            A future place for quick-answer guidance that helps users get pointed in the right direction while still encouraging them to reach out for expert advice when needed.
           </p>
         </div>
 
         <div class="tool-card mss-tool-card">
           <h3>Standards / Best Practices / Advice</h3>
           <p>
-            A section for field-proven guidance, operating norms, practical reminders, and expert advice that helps teams
-            think beyond bare compliance.
+            A section for field-proven guidance, operating norms, practical reminders, and expert advice that helps teams think beyond bare compliance.
           </p>
         </div>
 
         <div class="tool-card mss-tool-card">
           <h3>Contact a Professional</h3>
           <p>
-            A direct path for users who want help with training, compliance support, documents, or expert answers from
-            MSHA Safety Services.
+            A future contact area for direct support when the user needs help beyond what an in-app field reference should provide.
           </p>
-        </div>
-      </div>
-
-      <div class="info-panel contact-card mss-contact-card">
-        <h3>Contact a Professional</h3>
-        <p>
-          MSHA Safety Services already provides real-world training support, documents, resources, and practical answers
-          for mine operators. This section is here to make that support more visible and easier to reach from inside SkyFire.
-        </p>
-
-        <p><strong>MSHA Safety Services Inc.</strong></p>
-        <p>
-          Training support, practical safety guidance, helpful documents, and field-ready resources designed to help operations
-          improve safety performance and compliance readiness.
-        </p>
-
-        <div class="contact-grid">
-          <div>
-            <span class="quick-label">Primary Contact</span>
-            <span class="quick-value">DJ Schmutz — placeholder</span>
-          </div>
-
-          <div>
-            <span class="quick-label">Company</span>
-            <span class="quick-value">MSHA Safety Services Inc.</span>
-          </div>
-
-          <div>
-            <span class="quick-label">Phone</span>
-            <span class="quick-value">To be added</span>
-          </div>
-
-          <div>
-            <span class="quick-label">Email</span>
-            <span class="quick-value">To be added</span>
-          </div>
         </div>
       </div>
     </section>
@@ -359,24 +374,22 @@
       </div>
     </section>
 
-    <!-- REPORT AN ACCIDENT MODULE -->
+    <!-- REPORT MODULE -->
     <section id="reportSection" class="app-section hidden">
       <div class="module-header">
         <button class="module-home-btn" data-open-section="homeSection">← Home</button>
         <div class="module-header-text">
           <h2>Report an Accident</h2>
-          <p>Immediate actions and reporting reminders.</p>
+          <p>Immediate actions, reporting reminders, and key information.</p>
         </div>
       </div>
 
       <div class="info-panel">
-        <h3>Immediate Actions</h3>
-        <ol>
-          <li>Stabilize the scene and protect life first.</li>
-          <li>Call emergency help if needed.</li>
-          <li>Preserve critical evidence when safe to do so.</li>
-          <li>Notify the proper chain of command.</li>
-        </ol>
+        <h3>Immediate Response</h3>
+        <p>
+          This module can grow into a fast response guide for serious accidents, scene control, emergency contacts,
+          notification steps, and documentation reminders.
+        </p>
       </div>
     </section>
 
@@ -390,99 +403,25 @@
         </div>
       </div>
 
-      <div class="info-panel lynx-hero-panel">
-        <div class="lynx-hero-top">
-          <img src="Icons/lynx-logo.png" alt="Lynx Global Intelligence logo" class="lynx-logo">
-          <div class="lynx-hero-copy">
-            <div class="powered-badge">Powered by Lynx Global Intelligence</div>
-            <h3 class="lynx-panel-title">AI-driven HSEC workflows for smarter, safer operations</h3>
-            <p class="lynx-panel-text">
-              This module is designed to give field teams useful, offline-friendly tools that help them assess readiness,
-              organize work, and recognize when deeper professional support may be needed.
-            </p>
-            <p class="partner-note">
-              The goal is not to replace a full professional platform. The goal is to provide practical tools that create
-              value in the field and encourage users to seek stronger safety systems when they are ready.
-            </p>
-          </div>
-        </div>
-      </div>
-
       <div class="tool-card-grid">
-        <div class="tool-card lynx-tool-card">
-          <h3>Safety Audit Tool (Lite)</h3>
-          <p>
-            A simple self-assessment that helps users score safety and compliance readiness, identify weak areas,
-            and see where improvement is needed.
-          </p>
+        <div class="tool-card">
+          <h3>Inspection Templates</h3>
+          <p>Placeholder for offline inspection forms and field-ready checklists.</p>
         </div>
 
-        <div class="tool-card lynx-tool-card">
-          <h3>Inspection Checklist Builder</h3>
-          <p>
-            A quick builder for printable inspection checklists based on equipment, work areas, or common site categories
-            like mills, pits, electrical systems, and mobile equipment.
-          </p>
+        <div class="tool-card">
+          <h3>Audit Tools</h3>
+          <p>Placeholder for practical audit workflows and printable templates.</p>
         </div>
 
-        <div class="tool-card lynx-tool-card">
-          <h3>Printable Safety Templates</h3>
-          <p>
-            Field-ready forms such as inspection sheets, hazard logs, incident forms, and quick documentation templates
-            that crews can actually use.
-          </p>
+        <div class="tool-card">
+          <h3>Training Records</h3>
+          <p>Placeholder for future training record tools and quick references.</p>
         </div>
 
-        <div class="tool-card lynx-tool-card">
-          <h3>Basic Safety Dashboard (Lite)</h3>
-          <p>
-            A simple input tool where users can enter hazards, inspections, incidents, or actions and get a quick visual
-            snapshot of site safety activity.
-          </p>
-        </div>
-
-        <div class="tool-card lynx-tool-card">
-          <h3>Environmental / Exposure Awareness</h3>
-          <p>
-            A prompt-based or calculator-style tool to help users think through environmental concerns, exposure risks,
-            and site-specific awareness items before they become bigger problems.
-          </p>
-        </div>
-      </div>
-
-      <div class="info-panel contact-card lynx-contact-card">
-        <h3>Contact a Professional</h3>
-        <p>
-          These tools are intended to be practical and useful on their own, but they are also designed to help users
-          recognize when a more advanced safety management system could make a major difference.
-        </p>
-
-        <p><strong>Lynx Global Intelligence</strong></p>
-        <p>
-          AI-driven EHS and HSEC data management that helps organizations turn safety, inspections, incidents,
-          commitments, and operational information into actionable insight.
-        </p>
-
-        <div class="contact-grid">
-          <div>
-            <span class="quick-label">Primary Contact</span>
-            <span class="quick-value">Trevor Jones — placeholder</span>
-          </div>
-
-          <div>
-            <span class="quick-label">Secondary Contact</span>
-            <span class="quick-value">Matt Carter — placeholder</span>
-          </div>
-
-          <div>
-            <span class="quick-label">Phone</span>
-            <span class="quick-value">To be added</span>
-          </div>
-
-          <div>
-            <span class="quick-label">Email</span>
-            <span class="quick-value">To be added</span>
-          </div>
+        <div class="tool-card">
+          <h3>Safety Tracking</h3>
+          <p>Placeholder for KPIs, follow-up logs, and action tracking tools.</p>
         </div>
       </div>
     </section>

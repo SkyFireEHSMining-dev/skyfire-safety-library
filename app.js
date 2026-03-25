@@ -1,69 +1,127 @@
-const XML_FILE_NAME = "ECFR-title30.xml";
+const APP_VERSION = "library-shell-1";
 const XML_FOLDER_NAME = "Data";
-const CACHE_KEY = "title30_xml_cache_v4";
-const BOOKMARKS_KEY = "title30_bookmark_folders_v1";
+const MIN_TEXT_SEARCH_LENGTH = 3;
+const MAX_SEARCH_RESULTS = 100;
+const MAX_PREVIEW_PARAGRAPHS = 2;
+const PREVIEW_SNIPPET_LENGTH = 220;
+const LEVELS = ["title", "subtitle", "chapter", "subchapter", "part", "subpart"];
 
 const STARTER_PACKS = {
-  "Ground Control": [
-    { sectionNumber: "56.3130", heading: "§ 56.3130 Wall, bank, and slope stability." },
-    { sectionNumber: "56.3131", heading: "§ 56.3131 Inspection and scaling of loose ground." },
-    { sectionNumber: "56.3200", heading: "§ 56.3200 Correction of hazardous conditions." },
-    { sectionNumber: "56.3201", heading: "§ 56.3201 Location for performing scaling." }
-  ],
-  "Fire Protection": [
-    { sectionNumber: "56.4100", heading: "§ 56.4100 Firefighting equipment." },
-    { sectionNumber: "56.4200", heading: "§ 56.4200 Use of mobile equipment for firefighting." },
-    { sectionNumber: "56.4230", heading: "§ 56.4230 Self-propelled equipment; fire extinguishers." },
-    { sectionNumber: "56.4330", heading: "§ 56.4330 Separate exit ways." },
-    { sectionNumber: "56.4600", heading: "§ 56.4600 Extinguishing fires." }
-  ],
-  "Electrical": [
-    { sectionNumber: "56.12001", heading: "§ 56.12001 Circuit breakers and switches." },
-    { sectionNumber: "56.12016", heading: "§ 56.12016 Work on electrically powered equipment." },
-    { sectionNumber: "56.12017", heading: "§ 56.12017 Work on power circuits." },
-    { sectionNumber: "56.12025", heading: "§ 56.12025 Identification of power wires and cables." },
-    { sectionNumber: "56.12071", heading: "§ 56.12071 Movement or operation of equipment near high-voltage power lines; warning." }
-  ],
-  "Training": [
-    { sectionNumber: "46.3", heading: "§ 46.3 Training plans: Submission and approval." },
-    { sectionNumber: "46.5", heading: "§ 46.5 New miner training." },
-    { sectionNumber: "46.6", heading: "§ 46.6 Newly hired experienced miner training." },
-    { sectionNumber: "46.7", heading: "§ 46.7 New task training." },
-    { sectionNumber: "46.8", heading: "§ 46.8 Annual refresher training." },
-    { sectionNumber: "46.11", heading: "§ 46.11 Site-specific hazard awareness training." }
-  ]
+  cfr: {
+    "Ground Control": [
+      { sectionNumber: "56.3130", heading: "§ 56.3130 Wall, bank, and slope stability." },
+      { sectionNumber: "56.3131", heading: "§ 56.3131 Inspection and scaling of loose ground." },
+      { sectionNumber: "56.3200", heading: "§ 56.3200 Correction of hazardous conditions." },
+      { sectionNumber: "56.3201", heading: "§ 56.3201 Location for performing scaling." }
+    ],
+    "Fire Protection": [
+      { sectionNumber: "56.4100", heading: "§ 56.4100 Firefighting equipment." },
+      { sectionNumber: "56.4200", heading: "§ 56.4200 Use of mobile equipment for firefighting." },
+      { sectionNumber: "56.4230", heading: "§ 56.4230 Self-propelled equipment; fire extinguishers." },
+      { sectionNumber: "56.4330", heading: "§ 56.4330 Separate exit ways." },
+      { sectionNumber: "56.4600", heading: "§ 56.4600 Extinguishing fires." }
+    ],
+    "Electrical": [
+      { sectionNumber: "56.12001", heading: "§ 56.12001 Circuit breakers and switches." },
+      { sectionNumber: "56.12016", heading: "§ 56.12016 Work on electrically powered equipment." },
+      { sectionNumber: "56.12017", heading: "§ 56.12017 Work on power circuits." },
+      { sectionNumber: "56.12025", heading: "§ 56.12025 Identification of power wires and cables." },
+      { sectionNumber: "56.12071", heading: "§ 56.12071 Movement or operation of equipment near high-voltage power lines; warning." }
+    ],
+    "Training": [
+      { sectionNumber: "46.3", heading: "§ 46.3 Training plans: Submission and approval." },
+      { sectionNumber: "46.5", heading: "§ 46.5 New miner training." },
+      { sectionNumber: "46.6", heading: "§ 46.6 Newly hired experienced miner training." },
+      { sectionNumber: "46.7", heading: "§ 46.7 New task training." },
+      { sectionNumber: "46.8", heading: "§ 46.8 Annual refresher training." },
+      { sectionNumber: "46.11", heading: "§ 46.11 Site-specific hazard awareness training." }
+    ]
+  }
 };
 
-const cfrContainer = document.getElementById("cfrContainer");
-const searchBar = document.getElementById("searchBar");
-const statusMessage = document.getElementById("statusMessage");
-const newFolderInput = document.getElementById("newFolderInput");
-const createFolderBtn = document.getElementById("createFolderBtn");
-const bookmarkFoldersContainer = document.getElementById("bookmarkFolders");
-const alertsList = document.getElementById("alertsList");
-const exportBookmarksBtn = document.getElementById("exportBookmarksBtn");
-const importBookmarksBtn = document.getElementById("importBookmarksBtn");
-const importBookmarksInput = document.getElementById("importBookmarksInput");
+const LIBRARY_CONFIGS = {
+  cfr: {
+    key: "cfr",
+    label: "30 CFR",
+    sectionId: "cfrSection",
+    xmlFileName: "ECFR-title30.xml",
+    cacheKey: "skyfire_xml_cache_title30_v1",
+    bookmarksKey: "skyfire_bookmarks_title30_v1",
+    defaultTitle: "Title 30",
+    dom: {
+      container: "cfrContainer",
+      searchInput: "searchBar",
+      statusMessage: "statusMessage",
+      folderInput: "newFolderInput",
+      createFolderBtn: "createFolderBtn",
+      folderContainer: "bookmarkFolders",
+      exportBtn: "exportBookmarksBtn",
+      importBtn: "importBookmarksBtn",
+      importInput: "importBookmarksInput",
+      sidebar: "bookmarkSidebar"
+    }
+  },
+  osha: {
+    key: "osha",
+    label: "OSHA / 29 CFR",
+    sectionId: "oshaSection",
+    xmlFileName: "ECFR-title29.xml",
+    cacheKey: "skyfire_xml_cache_title29_v1",
+    bookmarksKey: "skyfire_bookmarks_title29_v1",
+    defaultTitle: "Title 29",
+    dom: {
+      container: "oshaContainer",
+      searchInput: "oshaSearchBar",
+      statusMessage: "oshaStatusMessage",
+      folderInput: "oshaNewFolderInput",
+      createFolderBtn: "oshaCreateFolderBtn",
+      folderContainer: "oshaBookmarkFolders",
+      exportBtn: "oshaExportBookmarksBtn",
+      importBtn: "oshaImportBookmarksBtn",
+      importInput: "oshaImportBookmarksInput",
+      sidebar: "oshaBookmarkSidebar"
+    }
+  }
+};
 
 const appSections = document.querySelectorAll(".app-section");
 const homeAlertStatus = document.getElementById("homeAlertStatus");
 const fatalityStat = document.getElementById("fatalityStat");
 const fatalgramNote = document.getElementById("fatalgramNote");
 const homeLastUpdated = document.getElementById("homeLastUpdated");
+const alertsList = document.getElementById("alertsList");
 
-let allSections = [];
-let bookmarkFolders = loadBookmarkFolders();
-let searchDebounceTimer = null;
+const libraryStates = {};
 
-const MIN_TEXT_SEARCH_LENGTH = 3;
-const MAX_SEARCH_RESULTS = 100;
-const MAX_PREVIEW_PARAGRAPHS = 2;
-const PREVIEW_SNIPPET_LENGTH = 220;
+function createInitialState(config) {
+  return {
+    config,
+    dom: getLibraryDom(config),
+    allSections: [],
+    bookmarkFolders: loadBookmarkFolders(config.bookmarksKey),
+    searchDebounceTimer: null,
+    currentQuery: "",
+    isLoaded: false
+  };
+}
+
+function getLibraryDom(config) {
+  return {
+    container: document.getElementById(config.dom.container),
+    searchInput: document.getElementById(config.dom.searchInput),
+    statusMessage: document.getElementById(config.dom.statusMessage),
+    folderInput: document.getElementById(config.dom.folderInput),
+    createFolderBtn: document.getElementById(config.dom.createFolderBtn),
+    folderContainer: document.getElementById(config.dom.folderContainer),
+    exportBtn: document.getElementById(config.dom.exportBtn),
+    importBtn: document.getElementById(config.dom.importBtn),
+    importInput: document.getElementById(config.dom.importInput),
+    sidebar: document.getElementById(config.dom.sidebar)
+  };
+}
 
 function showSection(sectionId) {
-  appSections.forEach(section => {
-    section.classList.add("hidden");
-  });
+  appSections.forEach(section => section.classList.add("hidden"));
 
   const target = document.getElementById(sectionId);
   if (target) {
@@ -84,6 +142,24 @@ function bindSectionButtons() {
   });
 }
 
+function setHomePlaceholders() {
+  const today = new Date();
+  const dateText = today.toLocaleDateString(undefined, {
+    year: "numeric",
+    month: "long",
+    day: "numeric"
+  });
+
+  if (fatalityStat) fatalityStat.textContent = "Placeholder";
+  if (homeAlertStatus) homeAlertStatus.textContent = "No active alerts";
+  if (fatalgramNote) {
+    fatalgramNote.textContent =
+      "Offline-ready placeholder. Future fatalgram and quick safety information can live here.";
+  }
+  if (homeLastUpdated) homeLastUpdated.textContent = dateText;
+  if (alertsList) alertsList.innerHTML = "<p>No active alerts</p>";
+}
+
 function decodeHtmlEntities(text) {
   const txt = document.createElement("textarea");
   txt.innerHTML = text;
@@ -98,32 +174,54 @@ function cleanText(text) {
 }
 
 function getHeadingLevel(text) {
-  const t = text.trim();
+  const value = text.trim();
 
-  if (/^Title 30\b/i.test(t)) return "volume";
-  if (/^CHAPTER\b/i.test(t)) return "chapter";
-  if (/^SUBCHAPTER\b/i.test(t)) return "subchapter";
-  if (/^PART\b/i.test(t)) return "part";
-  if (/^§\s*\d+/i.test(t)) return "section";
+  if (/^Title\s+\d+/i.test(value)) return "title";
+  if (/^Subtitle\b/i.test(value)) return "subtitle";
+  if (/^CHAPTER\b/i.test(value)) return "chapter";
+  if (/^SUBCHAPTER\b/i.test(value)) return "subchapter";
+  if (/^PART\b/i.test(value)) return "part";
+  if (/^Subpart\b/i.test(value)) return "subpart";
+  if (/^§\s*\d+/i.test(value)) return "section";
 
   return "other";
 }
 
 function extractSectionNumber(text) {
-  const match = text.match(/^§\s*([0-9]+(?:\.[0-9A-Za-z-]+)?)/i);
+  const match = text.match(/^§\s*([0-9]+(?:\.[0-9A-Za-z-]+)*)/i);
   return match ? match[1] : "";
 }
 
-function buildSectionsFromXmlText(xmlText) {
-  allSections = [];
+function defaultLabelFor(level, config) {
+  const map = {
+    title: config.defaultTitle || "Title",
+    subtitle: "No Subtitle",
+    chapter: "No Chapter",
+    subchapter: "No Subchapter",
+    part: "No Part",
+    subpart: "No Subpart"
+  };
 
+  return map[level];
+}
+
+function isDefaultLevelLabel(level, value, config) {
+  return value === defaultLabelFor(level, config);
+}
+
+function buildSectionsFromXmlText(xmlText, config) {
+  const sections = [];
   const regex = /<HEAD>([\s\S]*?)<\/HEAD>|<P>([\s\S]*?)<\/P>/gi;
-  let match;
 
-  let currentVolume = "";
-  let currentChapter = "";
-  let currentSubchapter = "";
-  let currentPart = "";
+  let match;
+  let current = {
+    title: config.defaultTitle || "Title",
+    subtitle: defaultLabelFor("subtitle", config),
+    chapter: defaultLabelFor("chapter", config),
+    subchapter: defaultLabelFor("subchapter", config),
+    part: defaultLabelFor("part", config),
+    subpart: defaultLabelFor("subpart", config)
+  };
   let currentSection = null;
 
   while ((match = regex.exec(xmlText)) !== null) {
@@ -133,36 +231,52 @@ function buildSectionsFromXmlText(xmlText) {
 
       const level = getHeadingLevel(headingText);
 
-      if (level === "volume") {
-        currentVolume = headingText;
-        currentChapter = "";
-        currentSubchapter = "";
-        currentPart = "";
+      if (level === "title") {
+        current.title = headingText;
+        current.subtitle = defaultLabelFor("subtitle", config);
+        current.chapter = defaultLabelFor("chapter", config);
+        current.subchapter = defaultLabelFor("subchapter", config);
+        current.part = defaultLabelFor("part", config);
+        current.subpart = defaultLabelFor("subpart", config);
+        currentSection = null;
+      } else if (level === "subtitle") {
+        current.subtitle = headingText;
+        current.chapter = defaultLabelFor("chapter", config);
+        current.subchapter = defaultLabelFor("subchapter", config);
+        current.part = defaultLabelFor("part", config);
+        current.subpart = defaultLabelFor("subpart", config);
         currentSection = null;
       } else if (level === "chapter") {
-        currentChapter = headingText;
-        currentSubchapter = "";
-        currentPart = "";
+        current.chapter = headingText;
+        current.subchapter = defaultLabelFor("subchapter", config);
+        current.part = defaultLabelFor("part", config);
+        current.subpart = defaultLabelFor("subpart", config);
         currentSection = null;
       } else if (level === "subchapter") {
-        currentSubchapter = headingText;
-        currentPart = "";
+        current.subchapter = headingText;
+        current.part = defaultLabelFor("part", config);
+        current.subpart = defaultLabelFor("subpart", config);
         currentSection = null;
       } else if (level === "part") {
-        currentPart = headingText;
+        current.part = headingText;
+        current.subpart = defaultLabelFor("subpart", config);
+        currentSection = null;
+      } else if (level === "subpart") {
+        current.subpart = headingText;
         currentSection = null;
       } else if (level === "section") {
         currentSection = {
-          volume: currentVolume || "Title 30",
-          chapter: currentChapter || "No Chapter",
-          subchapter: currentSubchapter || "No Subchapter",
-          part: currentPart || "No Part",
+          title: current.title,
+          subtitle: current.subtitle,
+          chapter: current.chapter,
+          subchapter: current.subchapter,
+          part: current.part,
+          subpart: current.subpart,
           heading: headingText,
           sectionNumber: extractSectionNumber(headingText),
           paragraphs: []
         };
-
-        allSections.push(currentSection);
+        sections.push(currentSection);
       }
     }
 
@@ -175,42 +289,32 @@ function buildSectionsFromXmlText(xmlText) {
       }
     }
   }
+
+  return sections;
 }
 
-function buildHierarchy(sections) {
+function buildHierarchy(sections, config) {
   const tree = {};
 
-  for (const section of sections) {
-    const volumeKey = section.volume;
-    const chapterKey = section.chapter;
-    const subchapterKey = section.subchapter;
-    const partKey = section.part;
+  sections.forEach(section => {
+    let cursor = tree;
 
-    if (!tree[volumeKey]) tree[volumeKey] = {};
-    if (!tree[volumeKey][chapterKey]) tree[volumeKey][chapterKey] = {};
-    if (!tree[volumeKey][chapterKey][subchapterKey]) {
-      tree[volumeKey][chapterKey][subchapterKey] = {};
-    }
-    if (!tree[volumeKey][chapterKey][subchapterKey][partKey]) {
-      tree[volumeKey][chapterKey][subchapterKey][partKey] = [];
+    LEVELS.forEach(level => {
+      const key = section[level] || defaultLabelFor(level, config);
+      if (!cursor[key]) {
+        cursor[key] = {};
+      }
+      cursor = cursor[key];
+    });
+
+    if (!cursor.__sections) {
+      cursor.__sections = [];
     }
 
-    tree[volumeKey][chapterKey][subchapterKey][partKey].push(section);
-  }
+    cursor.__sections.push(section);
+  });
 
   return tree;
-}
-
-function escapeRegExp(string) {
-  return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
-
-function highlightText(text, query) {
-  if (!query) return text;
-
-  const safeQuery = escapeRegExp(query);
-  const regex = new RegExp(`(${safeQuery})`, "gi");
-  return text.replace(regex, "<mark>$1</mark>");
 }
 
 function createDetails(title, openByDefault = false, className = "") {
@@ -233,30 +337,359 @@ function createDetails(title, openByDefault = false, className = "") {
   return { details, content };
 }
 
-function saveXmlCache(xmlText) {
+function levelClassName(index) {
+  const names = [
+    "level-title",
+    "level-subtitle",
+    "level-chapter",
+    "level-subchapter",
+    "level-part",
+    "level-subpart"
+  ];
+
+  return names[index] || "section";
+}
+
+function sortKeysForDisplay(keys) {
+  return keys.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+}
+
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function highlightText(text, query) {
+  if (!query) return text;
+
+  const safeQuery = escapeRegExp(query);
+  const regex = new RegExp(`(${safeQuery})`, "gi");
+  return text.replace(regex, "<mark>$1</mark>");
+}
+
+function createBookmarkControls(libraryKey, section) {
+  const state = libraryStates[libraryKey];
+  const controls = document.createElement("div");
+  controls.className = "bookmark-controls";
+
+  if (!state.bookmarkFolders.length) {
+    const note = document.createElement("span");
+    note.className = "inline-note";
+    note.textContent = "Create a folder to save bookmarks.";
+    controls.appendChild(note);
+    return controls;
+  }
+
+  const select = document.createElement("select");
+  state.bookmarkFolders.forEach(folder => {
+    const option = document.createElement("option");
+    option.value = folder.id;
+    option.textContent = folder.name;
+    select.appendChild(option);
+  });
+
+  const button = document.createElement("button");
+  button.textContent = "Add Bookmark";
+  button.addEventListener("click", function () {
+    addBookmarkToFolder(libraryKey, select.value, section);
+  });
+
+  controls.appendChild(select);
+  controls.appendChild(button);
+  return controls;
+}
+
+function createSectionBlock(libraryKey, section, query, options = {}) {
+  const opts = {
+    showFullViewButton: false,
+    openByDefault: false,
+    ...options
+  };
+
+  const { details, content } = createDetails(
+    highlightText(section.heading, query),
+    opts.openByDefault,
+    "level-section"
+  );
+
+  details.dataset.sectionNumber = section.sectionNumber || section.heading;
+  details.dataset.library = libraryKey;
+
+  const path = document.createElement("p");
+  path.className = "section-path";
+  path.textContent = buildSectionPath(section);
+  content.appendChild(path);
+
+  content.appendChild(createBookmarkControls(libraryKey, section));
+
+  if (opts.showFullViewButton) {
+    const openBtn = document.createElement("button");
+    openBtn.textContent = "Open in Full View";
+    openBtn.style.marginBottom = "14px";
+    openBtn.addEventListener("click", function () {
+      openSectionInFullView(libraryKey, section.sectionNumber);
+    });
+    content.appendChild(openBtn);
+  }
+
+  const paragraphs = section.paragraphs.length ? section.paragraphs : ["No paragraph text was parsed for this section."];
+  paragraphs.forEach(paragraph => {
+    const p = document.createElement("p");
+    p.innerHTML = highlightText(paragraph, query);
+    content.appendChild(p);
+  });
+
+  return details;
+}
+
+function renderTree(libraryKey, node, levelIndex, query) {
+  const config = libraryStates[libraryKey].config;
+  const fragment = document.createDocumentFragment();
+
+  if (levelIndex >= LEVELS.length) {
+    const sections = node.__sections || [];
+    sortSectionsForDisplay(sections).forEach(section => {
+      fragment.appendChild(createSectionBlock(libraryKey, section, query, { openByDefault: false }));
+    });
+    return fragment;
+  }
+
+  const level = LEVELS[levelIndex];
+  const keys = sortKeysForDisplay(Object.keys(node).filter(key => key !== "__sections"));
+
+  keys.forEach(key => {
+    const childNode = node[key];
+
+    if (isDefaultLevelLabel(level, key, config)) {
+      fragment.appendChild(renderTree(libraryKey, childNode, levelIndex + 1, query));
+      return;
+    }
+
+    const { details, content } = createDetails(
+      highlightText(key, query),
+      levelIndex === 0,
+      levelClassName(levelIndex)
+    );
+
+    content.appendChild(renderTree(libraryKey, childNode, levelIndex + 1, query));
+    fragment.appendChild(details);
+  });
+
+  if (node.__sections && node.__sections.length) {
+    sortSectionsForDisplay(node.__sections).forEach(section => {
+      fragment.appendChild(createSectionBlock(libraryKey, section, query, { openByDefault: false }));
+    });
+  }
+
+  return fragment;
+}
+
+function buildSectionPath(section) {
+  return [section.title, section.subtitle, section.chapter, section.subchapter, section.part, section.subpart]
+    .filter(Boolean)
+    .filter(value => !/^No /i.test(value))
+    .join(" > ");
+}
+
+function sortSectionsForDisplay(sections) {
+  return [...sections].sort((a, b) =>
+    (a.sectionNumber || a.heading).localeCompare((b.sectionNumber || b.heading), undefined, { numeric: true })
+  );
+}
+
+function renderHierarchySections(libraryKey) {
+  const state = libraryStates[libraryKey];
+  const container = state.dom.container;
+
+  if (!container) return;
+  container.innerHTML = "";
+
+  if (!state.allSections.length) {
+    const panel = document.createElement("div");
+    panel.className = "info-panel";
+    panel.innerHTML = `
+      <h3>${state.config.label} is not loaded yet</h3>
+      <p>
+        Add <strong>${state.config.xmlFileName}</strong> to the <strong>${XML_FOLDER_NAME}</strong> folder, then reload the app.
+      </p>
+    `;
+    container.appendChild(panel);
+    return;
+  }
+
+  const tree = buildHierarchy(state.allSections, state.config);
+  container.appendChild(renderTree(libraryKey, tree, 0, ""));
+}
+
+function getPreviewParagraphs(section, query) {
+  if (!section.paragraphs.length) {
+    return ["No paragraph text was parsed for this section."];
+  }
+
+  if (!query) {
+    return section.paragraphs.slice(0, MAX_PREVIEW_PARAGRAPHS);
+  }
+
+  const lowerQuery = query.toLowerCase();
+  const matchedParagraphs = section.paragraphs.filter(paragraph =>
+    paragraph.toLowerCase().includes(lowerQuery)
+  );
+
+  if (matchedParagraphs.length) {
+    return matchedParagraphs.slice(0, MAX_PREVIEW_PARAGRAPHS);
+  }
+
+  return section.paragraphs.slice(0, MAX_PREVIEW_PARAGRAPHS);
+}
+
+function truncateText(text, maxLength) {
+  if (text.length <= maxLength) return text;
+  return `${text.slice(0, maxLength).trim()}…`;
+}
+
+function getMatchingSections(libraryKey, query) {
+  const state = libraryStates[libraryKey];
+  const lowerQuery = query.toLowerCase();
+
+  return state.allSections.filter(section => {
+    const headingMatch = section.heading.toLowerCase().includes(lowerQuery);
+    const numberMatch = (section.sectionNumber || "").toLowerCase().includes(lowerQuery);
+    const paragraphMatch = section.paragraphs.some(paragraph =>
+      paragraph.toLowerCase().includes(lowerQuery)
+    );
+    const pathMatch = buildSectionPath(section).toLowerCase().includes(lowerQuery);
+
+    return headingMatch || numberMatch || paragraphMatch || pathMatch;
+  });
+}
+
+function isNumericLikeQuery(query) {
+  return /^[0-9.\-§ ]+$/.test(query);
+}
+
+function runSearch(libraryKey) {
+  const state = libraryStates[libraryKey];
+  const container = state.dom.container;
+  const input = state.dom.searchInput;
+  const status = state.dom.statusMessage;
+
+  if (!container || !input || !status) return;
+
+  const query = input.value.trim();
+  state.currentQuery = query;
+
+  if (!query) {
+    status.textContent = state.isLoaded
+      ? `Showing all ${state.config.label} sections.`
+      : `Loading ${state.config.label} data...`;
+    renderHierarchySections(libraryKey);
+    return;
+  }
+
+  if (!isNumericLikeQuery(query) && query.length < MIN_TEXT_SEARCH_LENGTH) {
+    status.textContent = `Type at least ${MIN_TEXT_SEARCH_LENGTH} letters, or enter a section number.`;
+    renderHierarchySections(libraryKey);
+    return;
+  }
+
+  const matches = getMatchingSections(libraryKey, query).slice(0, MAX_SEARCH_RESULTS);
+  container.innerHTML = "";
+
+  if (!matches.length) {
+    status.textContent = `No ${state.config.label} matches found for "${query}".`;
+    return;
+  }
+
+  status.textContent = `Showing ${matches.length} ${state.config.label} result(s) for "${query}".`;
+
+  const wrapper = document.createElement("div");
+  wrapper.className = "search-results-wrapper";
+
+  sortSectionsForDisplay(matches).forEach(section => {
+    const card = document.createElement("div");
+    card.className = "bookmark-folder";
+
+    const header = document.createElement("div");
+    header.className = "bookmark-folder-title";
+    header.innerHTML = highlightText(section.heading, query);
+
+    const body = document.createElement("div");
+    body.className = "bookmark-folder-content";
+
+    const item = document.createElement("div");
+    item.className = "bookmark-item";
+
+    const path = document.createElement("div");
+    path.className = "section-path";
+    path.textContent = buildSectionPath(section);
+
+    const preview = document.createElement("div");
+    preview.className = "preview-snippets";
+
+    getPreviewParagraphs(section, query).forEach(paragraph => {
+      const p = document.createElement("p");
+      p.innerHTML = highlightText(truncateText(paragraph, PREVIEW_SNIPPET_LENGTH), query);
+      preview.appendChild(p);
+    });
+
+    const controls = document.createElement("div");
+    controls.className = "bookmark-button-row";
+
+    const openBtn = document.createElement("button");
+    openBtn.textContent = "Open in Full View";
+    openBtn.addEventListener("click", function () {
+      openSectionInFullView(libraryKey, section.sectionNumber);
+    });
+
+    controls.appendChild(openBtn);
+
+    item.appendChild(path);
+    item.appendChild(preview);
+    item.appendChild(createBookmarkControls(libraryKey, section));
+    item.appendChild(controls);
+
+    body.appendChild(item);
+    card.appendChild(header);
+    card.appendChild(body);
+    wrapper.appendChild(card);
+  });
+
+  container.appendChild(wrapper);
+}
+
+function rerenderCurrentView(libraryKey) {
+  renderBookmarkFolders(libraryKey);
+  renderStarterPacks(libraryKey);
+  runSearch(libraryKey);
+}
+
+function saveXmlCache(cacheKey, xmlText) {
   try {
-    localStorage.setItem(CACHE_KEY, xmlText);
+    localStorage.setItem(cacheKey, xmlText);
   } catch (error) {
     console.warn("Could not save XML cache:", error);
   }
 }
 
-function loadXmlCache() {
+function loadXmlCache(cacheKey) {
   try {
-    return localStorage.getItem(CACHE_KEY);
+    return localStorage.getItem(cacheKey);
   } catch (error) {
     console.warn("Could not load XML cache:", error);
     return null;
   }
 }
 
-function saveBookmarkFolders() {
-  localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(bookmarkFolders));
+function saveBookmarkFolders(bookmarksKey, folders) {
+  try {
+    localStorage.setItem(bookmarksKey, JSON.stringify(folders));
+  } catch (error) {
+    console.warn("Could not save bookmark folders:", error);
+  }
 }
 
-function loadBookmarkFolders() {
+function loadBookmarkFolders(bookmarksKey) {
   try {
-    const saved = localStorage.getItem(BOOKMARKS_KEY);
+    const saved = localStorage.getItem(bookmarksKey);
     return saved ? JSON.parse(saved) : [];
   } catch (error) {
     console.warn("Could not load bookmark folders:", error);
@@ -264,26 +697,35 @@ function loadBookmarkFolders() {
   }
 }
 
-function sortBookmarkFolders() {
-  bookmarkFolders.sort((a, b) => a.name.localeCompare(b.name));
+function randomId() {
+  if (window.crypto && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
 
-  for (const folder of bookmarkFolders) {
+  return `id-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+function sortBookmarkFolders(libraryKey) {
+  const state = libraryStates[libraryKey];
+
+  state.bookmarkFolders.sort((a, b) => a.name.localeCompare(b.name));
+
+  state.bookmarkFolders.forEach(folder => {
     folder.items.sort((a, b) =>
       a.heading.localeCompare(b.heading, undefined, { numeric: true })
     );
-  }
+  });
 }
 
-function rerenderCurrentView() {
-  renderBookmarkFolders();
-  runSearch();
-}
+function createFolder(libraryKey) {
+  const state = libraryStates[libraryKey];
+  const input = state.dom.folderInput;
+  if (!input) return;
 
-function createFolder() {
-  const name = newFolderInput.value.trim();
+  const name = input.value.trim();
   if (!name) return;
 
-  const alreadyExists = bookmarkFolders.some(
+  const alreadyExists = state.bookmarkFolders.some(
     folder => folder.name.toLowerCase() === name.toLowerCase()
   );
 
@@ -292,41 +734,41 @@ function createFolder() {
     return;
   }
 
-  bookmarkFolders.push({
-    id: crypto.randomUUID(),
+  state.bookmarkFolders.push({
+    id: randomId(),
     name,
     items: []
   });
 
-  sortBookmarkFolders();
-  saveBookmarkFolders();
-  newFolderInput.value = "";
-  rerenderCurrentView();
+  sortBookmarkFolders(libraryKey);
+  saveBookmarkFolders(state.config.bookmarksKey, state.bookmarkFolders);
+  input.value = "";
+  rerenderCurrentView(libraryKey);
 }
 
-function deleteFolder(folderId) {
-  const folder = bookmarkFolders.find(f => f.id === folderId);
+function deleteFolder(libraryKey, folderId) {
+  const state = libraryStates[libraryKey];
+  const folder = state.bookmarkFolders.find(item => item.id === folderId);
   if (!folder) return;
 
   const confirmed = confirm(`Delete folder "${folder.name}" and all bookmarks inside it?`);
   if (!confirmed) return;
 
-  bookmarkFolders = bookmarkFolders.filter(f => f.id !== folderId);
-  saveBookmarkFolders();
-  rerenderCurrentView();
+  state.bookmarkFolders = state.bookmarkFolders.filter(item => item.id !== folderId);
+  saveBookmarkFolders(state.config.bookmarksKey, state.bookmarkFolders);
+  rerenderCurrentView(libraryKey);
 }
 
-function addBookmarkToFolder(folderId, section) {
-  const folder = bookmarkFolders.find(f => f.id === folderId);
+function addBookmarkToFolder(libraryKey, folderId, section) {
+  const state = libraryStates[libraryKey];
+  const folder = state.bookmarkFolders.find(item => item.id === folderId);
+
   if (!folder) {
-    alert("That folder could not be found. Please try again.");
+    alert("That folder could not be found.");
     return;
   }
 
-  const alreadyExists = folder.items.some(
-    item => item.sectionNumber === section.sectionNumber
-  );
-
+  const alreadyExists = folder.items.some(item => item.sectionNumber === section.sectionNumber);
   if (alreadyExists) {
     alert("That bookmark is already in this folder.");
     return;
@@ -337,26 +779,20 @@ function addBookmarkToFolder(folderId, section) {
     heading: section.heading
   });
 
-  sortBookmarkFolders();
-  saveBookmarkFolders();
-  rerenderCurrentView();
+  sortBookmarkFolders(libraryKey);
+  saveBookmarkFolders(state.config.bookmarksKey, state.bookmarkFolders);
+  rerenderCurrentView(libraryKey);
 }
 
-function removeBookmarkFromFolder(folderId, sectionNumber) {
-  const folder = bookmarkFolders.find(f => f.id === folderId);
+function removeBookmarkFromFolder(libraryKey, folderId, sectionNumber) {
+  const state = libraryStates[libraryKey];
+  const folder = state.bookmarkFolders.find(item => item.id === folderId);
   if (!folder) return;
 
   folder.items = folder.items.filter(item => item.sectionNumber !== sectionNumber);
-
-  sortBookmarkFolders();
-  saveBookmarkFolders();
-  rerenderCurrentView();
-}
-
-function isBookmarked(sectionNumber) {
-  return bookmarkFolders.some(folder =>
-    folder.items.some(item => item.sectionNumber === sectionNumber)
-  );
+  sortBookmarkFolders(libraryKey);
+  saveBookmarkFolders(state.config.bookmarksKey, state.bookmarkFolders);
+  rerenderCurrentView(libraryKey);
 }
 
 function openAncestorsForElement(element) {
@@ -370,9 +806,10 @@ function openAncestorsForElement(element) {
   }
 }
 
-function scrollToAndHighlightSection(sectionNumber) {
+function scrollToAndHighlightSection(libraryKey, sectionNumber) {
   setTimeout(function () {
-    const target = document.querySelector(`[data-section-number="${sectionNumber}"]`);
+    const safeNumber = CSS.escape(sectionNumber);
+    const target = document.querySelector(`[data-library="${libraryKey}"][data-section-number="${safeNumber}"]`);
     if (!target) return;
 
     openAncestorsForElement(target);
@@ -385,53 +822,144 @@ function scrollToAndHighlightSection(sectionNumber) {
   }, 100);
 }
 
-function goToBookmark(sectionNumber) {
-  showSection("cfrSection");
-  searchBar.value = sectionNumber;
-  renderHierarchySections(allSections);
-  scrollToAndHighlightSection(sectionNumber);
+function goToBookmark(libraryKey, sectionNumber) {
+  const state = libraryStates[libraryKey];
+  showSection(state.config.sectionId);
+
+  if (state.dom.searchInput) {
+    state.dom.searchInput.value = sectionNumber;
+  }
+
+  renderHierarchySections(libraryKey);
+
+  if (state.dom.statusMessage) {
+    state.dom.statusMessage.textContent = `Opened ${state.config.label} section ${sectionNumber}.`;
+  }
+
+  scrollToAndHighlightSection(libraryKey, sectionNumber);
 }
 
-function openSectionInFullView(sectionNumber) {
-  showSection("cfrSection");
-  searchBar.value = sectionNumber;
-  statusMessage.textContent =
-    `Opened full CFR view for section ${sectionNumber}.`;
-  renderHierarchySections(allSections);
-  scrollToAndHighlightSection(sectionNumber);
+function openSectionInFullView(libraryKey, sectionNumber) {
+  const state = libraryStates[libraryKey];
+  showSection(state.config.sectionId);
+
+  if (state.dom.searchInput) {
+    state.dom.searchInput.value = sectionNumber;
+  }
+
+  renderHierarchySections(libraryKey);
+
+  if (state.dom.statusMessage) {
+    state.dom.statusMessage.textContent = `Opened full ${state.config.label} view for section ${sectionNumber}.`;
+  }
+
+  scrollToAndHighlightSection(libraryKey, sectionNumber);
 }
 
-function getOrCreateFolderByName(folderName) {
-  let folder = bookmarkFolders.find(
+function renderBookmarkFolders(libraryKey) {
+  const state = libraryStates[libraryKey];
+  const container = state.dom.folderContainer;
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  if (!state.bookmarkFolders.length) {
+    container.innerHTML = "<p><em>No bookmarks yet.</em></p>";
+    return;
+  }
+
+  state.bookmarkFolders.forEach(folder => {
+    const details = document.createElement("details");
+    details.className = "bookmark-folder";
+    details.open = true;
+
+    const summary = document.createElement("summary");
+    summary.className = "bookmark-folder-title";
+    summary.textContent = folder.name;
+
+    const content = document.createElement("div");
+    content.className = "bookmark-folder-content";
+
+    const folderControls = document.createElement("div");
+    folderControls.className = "bookmark-item";
+
+    const deleteFolderBtn = document.createElement("button");
+    deleteFolderBtn.textContent = "Delete Folder";
+    deleteFolderBtn.addEventListener("click", function () {
+      deleteFolder(libraryKey, folder.id);
+    });
+
+    folderControls.appendChild(deleteFolderBtn);
+    content.appendChild(folderControls);
+
+    folder.items.forEach(item => {
+      const row = document.createElement("div");
+      row.className = "bookmark-item";
+
+      const title = document.createElement("div");
+      title.className = "bookmark-item-title";
+      title.textContent = item.heading;
+
+      const buttonRow = document.createElement("div");
+      buttonRow.className = "bookmark-button-row";
+
+      const openBtn = document.createElement("button");
+      openBtn.textContent = "Open";
+      openBtn.addEventListener("click", function () {
+        goToBookmark(libraryKey, item.sectionNumber);
+      });
+
+      const removeBtn = document.createElement("button");
+      removeBtn.textContent = "Remove";
+      removeBtn.addEventListener("click", function () {
+        removeBookmarkFromFolder(libraryKey, folder.id, item.sectionNumber);
+      });
+
+      buttonRow.appendChild(openBtn);
+      buttonRow.appendChild(removeBtn);
+
+      row.appendChild(title);
+      row.appendChild(buttonRow);
+      content.appendChild(row);
+    });
+
+    details.appendChild(summary);
+    details.appendChild(content);
+    container.appendChild(details);
+  });
+}
+
+function getOrCreateFolderByName(libraryKey, folderName) {
+  const state = libraryStates[libraryKey];
+  let folder = state.bookmarkFolders.find(
     item => item.name.toLowerCase() === folderName.toLowerCase()
   );
 
   if (!folder) {
     folder = {
-      id: crypto.randomUUID(),
+      id: randomId(),
       name: folderName,
       items: []
     };
-    bookmarkFolders.push(folder);
+    state.bookmarkFolders.push(folder);
   }
 
   return folder;
 }
 
-function addStarterPack(packName) {
-  const packItems = STARTER_PACKS[packName];
+function addStarterPack(libraryKey, packName) {
+  const packGroup = STARTER_PACKS[libraryKey] || {};
+  const packItems = packGroup[packName];
   if (!packItems) {
     alert("That starter pack could not be found.");
     return;
   }
 
-  const folder = getOrCreateFolderByName(packName);
+  const folder = getOrCreateFolderByName(libraryKey, packName);
   let addedCount = 0;
 
-  for (const packItem of packItems) {
-    const alreadyExists = folder.items.some(
-      item => item.sectionNumber === packItem.sectionNumber
-    );
+  packItems.forEach(packItem => {
+    const alreadyExists = folder.items.some(item => item.sectionNumber === packItem.sectionNumber);
 
     if (!alreadyExists) {
       folder.items.push({
@@ -440,11 +968,11 @@ function addStarterPack(packName) {
       });
       addedCount += 1;
     }
-  }
+  });
 
-  sortBookmarkFolders();
-  saveBookmarkFolders();
-  rerenderCurrentView();
+  sortBookmarkFolders(libraryKey);
+  saveBookmarkFolders(libraryStates[libraryKey].config.bookmarksKey, libraryStates[libraryKey].bookmarkFolders);
+  rerenderCurrentView(libraryKey);
 
   if (addedCount === 0) {
     alert(`"${packName}" is already installed.`);
@@ -453,19 +981,23 @@ function addStarterPack(packName) {
   }
 }
 
-function renderStarterPackButtons() {
-  const existing = document.getElementById("starterPackSection");
+function renderStarterPacks(libraryKey) {
+  const state = libraryStates[libraryKey];
+  const sidebar = state.dom.sidebar;
+  if (!sidebar) return;
+
+  const existing = sidebar.querySelector(".starter-pack-section");
   if (existing) {
     existing.remove();
   }
 
-  const bookmarkSidebar = document.getElementById("bookmarkSidebar");
-  if (!bookmarkSidebar) return;
+  const packGroup = STARTER_PACKS[libraryKey];
+  if (!packGroup || !Object.keys(packGroup).length) {
+    return;
+  }
 
   const section = document.createElement("div");
-  section.id = "starterPackSection";
-  section.className = "bookmark-item";
-  section.style.marginBottom = "14px";
+  section.className = "bookmark-item starter-pack-section";
 
   const title = document.createElement("div");
   title.className = "bookmark-item-title";
@@ -480,42 +1012,42 @@ function renderStarterPackButtons() {
   const buttonWrap = document.createElement("div");
   buttonWrap.className = "bookmark-button-row";
 
-  for (const packName of Object.keys(STARTER_PACKS)) {
+  Object.keys(packGroup).forEach(packName => {
     const button = document.createElement("button");
     button.textContent = packName;
     button.addEventListener("click", function () {
-      addStarterPack(packName);
+      addStarterPack(libraryKey, packName);
     });
     buttonWrap.appendChild(button);
-  }
+  });
 
   section.appendChild(title);
   section.appendChild(text);
   section.appendChild(buttonWrap);
 
-  const folderCreateRow = document.querySelector(".folder-create-row");
+  const folderCreateRow = sidebar.querySelector(".folder-create-row");
   if (folderCreateRow) {
     folderCreateRow.insertAdjacentElement("afterend", section);
   }
 }
 
-function createBookmarkExportData() {
+function createBookmarkExportData(libraryKey) {
+  const state = libraryStates[libraryKey];
   return {
     app: "SkyFire Safety Library",
-    version: 1,
+    library: state.config.label,
     exportedAt: new Date().toISOString(),
-    folders: bookmarkFolders
+    folders: state.bookmarkFolders
   };
 }
 
-function downloadBookmarksFile(fileText) {
-  const blob = new Blob([fileText], { type: "application/json" });
+function downloadTextFile(fileName, fileText, mimeType) {
+  const blob = new Blob([fileText], { type: mimeType });
   const url = URL.createObjectURL(blob);
 
-  const stamp = new Date().toISOString().slice(0, 10);
   const link = document.createElement("a");
   link.href = url;
-  link.download = `skyfire-bookmarks-${stamp}.json`;
+  link.download = fileName;
   document.body.appendChild(link);
   link.click();
   link.remove();
@@ -527,14 +1059,7 @@ function downloadBookmarksFile(fileText) {
 
 function createModalShell(titleText) {
   const overlay = document.createElement("div");
-  overlay.style.position = "fixed";
-  overlay.style.inset = "0";
-  overlay.style.background = "rgba(0,0,0,0.45)";
-  overlay.style.zIndex = "9999";
-  overlay.style.display = "flex";
-  overlay.style.alignItems = "center";
-  overlay.style.justifyContent = "center";
-  overlay.style.padding = "16px";
+  overlay.className = "modal-overlay";
   overlay.addEventListener("click", function (event) {
     if (event.target === overlay) {
       overlay.remove();
@@ -542,19 +1067,10 @@ function createModalShell(titleText) {
   });
 
   const modal = document.createElement("div");
-  modal.style.background = "#ffffff";
-  modal.style.width = "100%";
-  modal.style.maxWidth = "720px";
-  modal.style.maxHeight = "85vh";
-  modal.style.overflow = "auto";
-  modal.style.borderRadius = "12px";
-  modal.style.padding = "18px";
-  modal.style.boxSizing = "border-box";
-  modal.style.boxShadow = "0 20px 50px rgba(0,0,0,0.25)";
+  modal.className = "modal-card";
 
   const title = document.createElement("h2");
   title.textContent = titleText;
-  title.style.marginTop = "0";
 
   modal.appendChild(title);
   overlay.appendChild(modal);
@@ -563,849 +1079,200 @@ function createModalShell(titleText) {
   return { overlay, modal };
 }
 
-function exportBookmarks() {
-  try {
-    const data = createBookmarkExportData();
-    const fileText = JSON.stringify(data, null, 2);
+function exportBookmarks(libraryKey) {
+  const state = libraryStates[libraryKey];
+  const data = createBookmarkExportData(libraryKey);
+  const fileText = JSON.stringify(data, null, 2);
 
-    const { overlay, modal } = createModalShell("Export Bookmarks");
-
-    const help = document.createElement("p");
-    help.textContent =
-      "On desktop, you can download the file. On phones, you can copy or share this bookmark data.";
-    modal.appendChild(help);
-
-    const textArea = document.createElement("textarea");
-    textArea.value = fileText;
-    textArea.readOnly = true;
-    textArea.style.width = "100%";
-    textArea.style.minHeight = "240px";
-    textArea.style.boxSizing = "border-box";
-    textArea.style.padding = "12px";
-    textArea.style.fontFamily = "monospace";
-    textArea.style.fontSize = "0.9rem";
-    textArea.style.border = "1px solid #bfbfbf";
-    textArea.style.borderRadius = "8px";
-    modal.appendChild(textArea);
-
-    const buttonRow = document.createElement("div");
-    buttonRow.style.display = "flex";
-    buttonRow.style.gap = "10px";
-    buttonRow.style.flexWrap = "wrap";
-    buttonRow.style.marginTop = "14px";
-
-    const copyBtn = document.createElement("button");
-    copyBtn.textContent = "Copy";
-    copyBtn.addEventListener("click", async function () {
-      try {
-        if (navigator.clipboard && window.isSecureContext) {
-          await navigator.clipboard.writeText(fileText);
-        } else {
-          textArea.select();
-          document.execCommand("copy");
-        }
-        alert("Bookmark data copied.");
-      } catch (error) {
-        console.error(error);
-        alert("Could not copy bookmark data.");
-      }
-    });
-
-    const shareBtn = document.createElement("button");
-    shareBtn.textContent = "Share";
-    shareBtn.addEventListener("click", async function () {
-      try {
-        if (navigator.share) {
-          await navigator.share({
-            title: "SkyFire Bookmarks",
-            text: fileText
-          });
-        } else {
-          alert("Share is not supported on this device.");
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    });
-
-    const downloadBtn = document.createElement("button");
-    downloadBtn.textContent = "Download File";
-    downloadBtn.addEventListener("click", function () {
-      try {
-        downloadBookmarksFile(fileText);
-      } catch (error) {
-        console.error(error);
-        alert("Could not download bookmarks file.");
-      }
-    });
-
-    const closeBtn = document.createElement("button");
-    closeBtn.textContent = "Close";
-    closeBtn.addEventListener("click", function () {
-      overlay.remove();
-    });
-
-    buttonRow.appendChild(copyBtn);
-    buttonRow.appendChild(shareBtn);
-    buttonRow.appendChild(downloadBtn);
-    buttonRow.appendChild(closeBtn);
-
-    modal.appendChild(buttonRow);
-  } catch (error) {
-    console.error(error);
-    alert("Could not export bookmarks.");
-  }
-}
-
-function normalizeImportedFolders(rawFolders) {
-  if (!Array.isArray(rawFolders)) return [];
-
-  const validFolders = [];
-
-  for (const folder of rawFolders) {
-    if (!folder || typeof folder.name !== "string") continue;
-
-    const cleanName = folder.name.trim();
-    if (!cleanName) continue;
-
-    const items = Array.isArray(folder.items) ? folder.items : [];
-
-    const cleanItems = items
-      .filter(item =>
-        item &&
-        typeof item.sectionNumber === "string" &&
-        typeof item.heading === "string"
-      )
-      .map(item => ({
-        sectionNumber: item.sectionNumber.trim(),
-        heading: item.heading.trim()
-      }))
-      .filter(item => item.sectionNumber && item.heading);
-
-    validFolders.push({
-      id: crypto.randomUUID(),
-      name: cleanName,
-      items: cleanItems
-    });
-  }
-
-  return validFolders;
-}
-
-function mergeImportedFolders(importedFolders) {
-  let addedFolderCount = 0;
-  let addedBookmarkCount = 0;
-
-  for (const importedFolder of importedFolders) {
-    let existingFolder = bookmarkFolders.find(
-      folder => folder.name.toLowerCase() === importedFolder.name.toLowerCase()
-    );
-
-    if (!existingFolder) {
-      existingFolder = {
-        id: crypto.randomUUID(),
-        name: importedFolder.name,
-        items: []
-      };
-      bookmarkFolders.push(existingFolder);
-      addedFolderCount += 1;
-    }
-
-    for (const importedItem of importedFolder.items) {
-      const alreadyExists = existingFolder.items.some(
-        item => item.sectionNumber === importedItem.sectionNumber
-      );
-
-      if (!alreadyExists) {
-        existingFolder.items.push({
-          sectionNumber: importedItem.sectionNumber,
-          heading: importedItem.heading
-        });
-        addedBookmarkCount += 1;
-      }
-    }
-  }
-
-  sortBookmarkFolders();
-  saveBookmarkFolders();
-  rerenderCurrentView();
-
-  alert(
-    `Import complete. Added ${addedFolderCount} folder(s) and ${addedBookmarkCount} bookmark(s).`
-  );
-}
-
-function importBookmarksFromText(text) {
-  try {
-    const parsed = JSON.parse(text);
-    const importedFolders = normalizeImportedFolders(parsed.folders);
-
-    if (importedFolders.length === 0) {
-      alert("No valid bookmark folders were found in that data.");
-      return;
-    }
-
-    mergeImportedFolders(importedFolders);
-  } catch (error) {
-    console.error(error);
-    alert("That bookmark data could not be imported.");
-  }
-}
-
-function importBookmarksFromFile(file) {
-  if (!file) return;
-
-  const reader = new FileReader();
-
-  reader.onload = function (event) {
-    importBookmarksFromText(event.target.result);
-  };
-
-  reader.onerror = function () {
-    alert("Could not read that file.");
-  };
-
-  reader.readAsText(file);
-}
-
-function openImportModal() {
-  const { overlay, modal } = createModalShell("Import Bookmarks");
+  const { modal } = createModalShell(`Export ${state.config.label} Bookmarks`);
 
   const help = document.createElement("p");
   help.textContent =
-    "Paste exported SkyFire bookmark data below to merge it into this device. Desktop users can also choose a file.";
+    "You can download this file, or copy the text below as a backup.";
   modal.appendChild(help);
 
   const textArea = document.createElement("textarea");
-  textArea.placeholder = "Paste SkyFire bookmark JSON here...";
-  textArea.style.width = "100%";
-  textArea.style.minHeight = "220px";
-  textArea.style.boxSizing = "border-box";
-  textArea.style.padding = "12px";
-  textArea.style.fontFamily = "monospace";
-  textArea.style.fontSize = "0.9rem";
-  textArea.style.border = "1px solid #bfbfbf";
-  textArea.style.borderRadius = "8px";
+  textArea.value = fileText;
+  textArea.readOnly = true;
+  textArea.className = "modal-textarea";
   modal.appendChild(textArea);
 
   const buttonRow = document.createElement("div");
-  buttonRow.style.display = "flex";
-  buttonRow.style.gap = "10px";
-  buttonRow.style.flexWrap = "wrap";
-  buttonRow.style.marginTop = "14px";
+  buttonRow.className = "bookmark-button-row";
 
-  const importPasteBtn = document.createElement("button");
-  importPasteBtn.textContent = "Import Pasted Data";
-  importPasteBtn.addEventListener("click", function () {
-    const text = textArea.value.trim();
-    if (!text) {
-      alert("Paste bookmark data first.");
-      return;
-    }
-    importBookmarksFromText(text);
-    overlay.remove();
-  });
-
-  const chooseFileBtn = document.createElement("button");
-  chooseFileBtn.textContent = "Choose File";
-  chooseFileBtn.addEventListener("click", function () {
-    if (importBookmarksInput) {
-      importBookmarksInput.click();
-    } else {
-      alert("File import is not available.");
+  const copyBtn = document.createElement("button");
+  copyBtn.textContent = "Copy";
+  copyBtn.addEventListener("click", async function () {
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(fileText);
+      } else {
+        textArea.select();
+        document.execCommand("copy");
+      }
+      alert("Bookmark data copied.");
+    } catch (error) {
+      console.error(error);
+      alert("Could not copy bookmark data.");
     }
   });
 
-  const closeBtn = document.createElement("button");
-  closeBtn.textContent = "Close";
-  closeBtn.addEventListener("click", function () {
-    overlay.remove();
+  const downloadBtn = document.createElement("button");
+  downloadBtn.textContent = "Download";
+  downloadBtn.addEventListener("click", function () {
+    const stamp = new Date().toISOString().slice(0, 10);
+    const safeKey = state.config.key;
+    downloadTextFile(`skyfire-${safeKey}-bookmarks-${stamp}.json`, fileText, "application/json");
   });
 
-  buttonRow.appendChild(importPasteBtn);
-  buttonRow.appendChild(chooseFileBtn);
-  buttonRow.appendChild(closeBtn);
-
+  buttonRow.appendChild(copyBtn);
+  buttonRow.appendChild(downloadBtn);
   modal.appendChild(buttonRow);
 }
 
-function renderBookmarkFolders() {
-  bookmarkFoldersContainer.innerHTML = "";
+function importBookmarks(libraryKey, fileText) {
+  const state = libraryStates[libraryKey];
 
-  if (bookmarkFolders.length === 0) {
-    bookmarkFoldersContainer.innerHTML = "<p><em>No bookmarks yet.</em></p>";
+  let data;
+  try {
+    data = JSON.parse(fileText);
+  } catch (error) {
+    alert("That bookmark file could not be read.");
     return;
   }
 
-  for (const folder of bookmarkFolders) {
-    const details = document.createElement("details");
-    details.className = "bookmark-folder";
-    details.open = false;
+  if (!data || !Array.isArray(data.folders)) {
+    alert("That file does not look like a valid SkyFire bookmark export.");
+    return;
+  }
 
-    const summary = document.createElement("summary");
-    summary.className = "bookmark-folder-title";
-    summary.textContent = `${folder.name} (${folder.items.length})`;
-    details.appendChild(summary);
+  state.bookmarkFolders = data.folders.map(folder => ({
+    id: folder.id || randomId(),
+    name: folder.name || "Imported Folder",
+    items: Array.isArray(folder.items) ? folder.items : []
+  }));
 
-    const content = document.createElement("div");
-    content.className = "bookmark-folder-content";
+  sortBookmarkFolders(libraryKey);
+  saveBookmarkFolders(state.config.bookmarksKey, state.bookmarkFolders);
+  rerenderCurrentView(libraryKey);
+  alert(`${state.config.label} bookmarks imported.`);
+}
 
-    const folderControls = document.createElement("div");
-    folderControls.className = "bookmark-item";
+async function loadLibraryXml(libraryKey) {
+  const state = libraryStates[libraryKey];
+  const config = state.config;
+  const status = state.dom.statusMessage;
 
-    const deleteFolderBtn = document.createElement("button");
-    deleteFolderBtn.textContent = "Delete Folder";
-    deleteFolderBtn.addEventListener("click", function (event) {
-      event.stopPropagation();
-      deleteFolder(folder.id);
+  if (status) {
+    status.textContent = `Loading ${config.label} data...`;
+  }
+
+  const xmlPath = `${XML_FOLDER_NAME}/${config.xmlFileName}`;
+  let xmlText = "";
+
+  try {
+    const response = await fetch(xmlPath, { cache: "no-store" });
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    xmlText = await response.text();
+    saveXmlCache(config.cacheKey, xmlText);
+  } catch (error) {
+    console.warn(`Could not fetch ${config.label} XML. Trying local cache.`, error);
+    xmlText = loadXmlCache(config.cacheKey) || "";
+  }
+
+  if (!xmlText) {
+    state.allSections = [];
+    state.isLoaded = false;
+
+    if (status) {
+      status.textContent =
+        `${config.label} data was not found. Add ${config.xmlFileName} to the ${XML_FOLDER_NAME} folder, then reload.`;
+    }
+
+    renderHierarchySections(libraryKey);
+    return;
+  }
+
+  state.allSections = buildSectionsFromXmlText(xmlText, config);
+  state.isLoaded = true;
+
+  if (status) {
+    status.textContent = `Loaded ${state.allSections.length} ${config.label} sections.`;
+  }
+
+  rerenderCurrentView(libraryKey);
+}
+
+function bindLibraryEvents(libraryKey) {
+  const state = libraryStates[libraryKey];
+  const dom = state.dom;
+
+  if (dom.createFolderBtn) {
+    dom.createFolderBtn.addEventListener("click", function () {
+      createFolder(libraryKey);
+    });
+  }
+
+  if (dom.folderInput) {
+    dom.folderInput.addEventListener("keydown", function (event) {
+      if (event.key === "Enter") {
+        createFolder(libraryKey);
+      }
+    });
+  }
+
+  if (dom.searchInput) {
+    dom.searchInput.addEventListener("input", function () {
+      clearTimeout(state.searchDebounceTimer);
+      state.searchDebounceTimer = setTimeout(function () {
+        runSearch(libraryKey);
+      }, 180);
+    });
+  }
+
+  if (dom.exportBtn) {
+    dom.exportBtn.addEventListener("click", function () {
+      exportBookmarks(libraryKey);
+    });
+  }
+
+  if (dom.importBtn && dom.importInput) {
+    dom.importBtn.addEventListener("click", function () {
+      dom.importInput.click();
     });
 
-    folderControls.appendChild(deleteFolderBtn);
-    content.appendChild(folderControls);
-
-    if (folder.items.length > 0) {
-      for (const item of folder.items) {
-        const itemCard = document.createElement("div");
-        itemCard.className = "bookmark-item";
-
-        const itemTitle = document.createElement("div");
-        itemTitle.className = "bookmark-item-title";
-        itemTitle.textContent = item.heading;
-
-        const buttonRow = document.createElement("div");
-        buttonRow.className = "bookmark-button-row";
-
-        const goBtn = document.createElement("button");
-        goBtn.textContent = "Go to";
-        goBtn.addEventListener("click", function (event) {
-          event.stopPropagation();
-          goToBookmark(item.sectionNumber);
-        });
-
-        const removeBtn = document.createElement("button");
-        removeBtn.textContent = "Remove";
-        removeBtn.addEventListener("click", function (event) {
-          event.stopPropagation();
-          removeBookmarkFromFolder(folder.id, item.sectionNumber);
-        });
-
-        buttonRow.appendChild(goBtn);
-        buttonRow.appendChild(removeBtn);
-
-        itemCard.appendChild(itemTitle);
-        itemCard.appendChild(buttonRow);
-        content.appendChild(itemCard);
-      }
-    }
-
-    details.appendChild(content);
-    bookmarkFoldersContainer.appendChild(details);
-  }
-}
-
-function createFolderDropdown(section) {
-  const wrapper = document.createElement("div");
-  wrapper.className = "bookmark-controls";
-
-  const select = document.createElement("select");
-
-  const defaultOption = document.createElement("option");
-  defaultOption.value = "";
-  defaultOption.textContent = "Choose folder";
-  select.appendChild(defaultOption);
-
-  for (const folder of bookmarkFolders) {
-    const option = document.createElement("option");
-    option.value = folder.id;
-    option.textContent = folder.name;
-    select.appendChild(option);
-  }
-
-  if (bookmarkFolders.length === 1) {
-    select.value = bookmarkFolders[0].id;
-  }
-
-  const button = document.createElement("button");
-  button.textContent = isBookmarked(section.sectionNumber)
-    ? "☆ Bookmarked"
-    : "☆ Add Bookmark";
-  button.disabled = isBookmarked(section.sectionNumber);
-
-  button.addEventListener("click", function () {
-    const selectedFolderId = select.value;
-
-    if (!selectedFolderId) {
-      alert("Choose a folder first.");
-      return;
-    }
-
-    addBookmarkToFolder(selectedFolderId, section);
-  });
-
-  wrapper.appendChild(select);
-  wrapper.appendChild(button);
-
-  return wrapper;
-}
-
-function trimPreviewText(text, maxLength = PREVIEW_SNIPPET_LENGTH) {
-  if (!text) return "";
-  if (text.length <= maxLength) return text;
-  return text.slice(0, maxLength).trim() + "...";
-}
-
-function buildSnippetAroundMatch(text, query, maxLength = PREVIEW_SNIPPET_LENGTH) {
-  if (!text) return "";
-
-  const lowerText = text.toLowerCase();
-  const lowerQuery = query.toLowerCase();
-  const index = lowerText.indexOf(lowerQuery);
-
-  if (index === -1) {
-    return trimPreviewText(text, maxLength);
-  }
-
-  const half = Math.floor(maxLength / 2);
-  let start = Math.max(0, index - half);
-  let end = Math.min(text.length, start + maxLength);
-
-  if (end - start < maxLength) {
-    start = Math.max(0, end - maxLength);
-  }
-
-  let snippet = text.slice(start, end).trim();
-
-  if (start > 0) snippet = "..." + snippet;
-  if (end < text.length) snippet = snippet + "...";
-
-  return snippet;
-}
-
-function getPreviewParagraphs(section, query, numericLike) {
-  if (!section.paragraphs || section.paragraphs.length === 0) {
-    return [];
-  }
-
-  if (numericLike) {
-    return section.paragraphs
-      .slice(0, MAX_PREVIEW_PARAGRAPHS)
-      .map(paragraph => trimPreviewText(paragraph));
-  }
-
-  const q = query.toLowerCase();
-
-  const matchingParagraphs = section.paragraphs.filter(paragraph =>
-    paragraph.toLowerCase().includes(q)
-  );
-
-  if (matchingParagraphs.length > 0) {
-    return matchingParagraphs
-      .slice(0, MAX_PREVIEW_PARAGRAPHS)
-      .map(paragraph => buildSnippetAroundMatch(paragraph, query));
-  }
-
-  return section.paragraphs
-    .slice(0, 1)
-    .map(paragraph => trimPreviewText(paragraph));
-}
-
-function renderHierarchySections(sectionsToRender, query = "") {
-  cfrContainer.innerHTML = "";
-
-  if (!sectionsToRender.length) {
-    cfrContainer.innerHTML = "<p><em>No results found.</em></p>";
-    return;
-  }
-
-  const tree = buildHierarchy(sectionsToRender);
-
-  for (const volumeName of Object.keys(tree)) {
-    const volumeNode = createDetails(
-      highlightText(volumeName, query),
-      true,
-      "section level-title"
-    );
-    cfrContainer.appendChild(volumeNode.details);
-
-    const chapters = tree[volumeName];
-
-    for (const chapterName of Object.keys(chapters)) {
-      const chapterNode = createDetails(
-        highlightText(chapterName, query),
-        false,
-        "section level-chapter"
-      );
-      volumeNode.content.appendChild(chapterNode.details);
-
-      const subchapters = chapters[chapterName];
-
-      for (const subchapterName of Object.keys(subchapters)) {
-        const subchapterNode = createDetails(
-          highlightText(subchapterName, query),
-          false,
-          "section level-subchapter"
-        );
-        chapterNode.content.appendChild(subchapterNode.details);
-
-        const parts = subchapters[subchapterName];
-
-        for (const partName of Object.keys(parts)) {
-          const partNode = createDetails(
-            highlightText(partName, query),
-            false,
-            "section level-part"
-          );
-          subchapterNode.content.appendChild(partNode.details);
-
-          const sections = parts[partName];
-
-          for (const section of sections) {
-            const sectionNode = createDetails(
-              highlightText(section.heading, query),
-              false,
-              "section level-section"
-            );
-
-            sectionNode.details.setAttribute("data-section-number", section.sectionNumber);
-            partNode.content.appendChild(sectionNode.details);
-
-            sectionNode.content.appendChild(createFolderDropdown(section));
-
-            if (section.paragraphs.length === 0) {
-              const empty = document.createElement("p");
-              empty.innerHTML = "<em>No paragraph text under this heading.</em>";
-              sectionNode.content.appendChild(empty);
-            } else {
-              for (const paragraph of section.paragraphs) {
-                const p = document.createElement("p");
-                p.innerHTML = highlightText(paragraph, query);
-                sectionNode.content.appendChild(p);
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
-function renderFlatSearchResults(sectionsToRender, query = "") {
-  cfrContainer.innerHTML = "";
-
-  if (!sectionsToRender.length) {
-    cfrContainer.innerHTML = "<p><em>No results found.</em></p>";
-    return;
-  }
-
-  const numericLike = isNumericLikeQuery(query);
-
-  const resultsWrapper = document.createElement("div");
-  resultsWrapper.className = "search-results-wrapper";
-
-  const resultCount = document.createElement("p");
-  resultCount.innerHTML = `<strong>${sectionsToRender.length}</strong> result(s) shown`;
-  resultsWrapper.appendChild(resultCount);
-
-  for (const section of sectionsToRender) {
-    const card = document.createElement("div");
-    card.className = "bookmark-folder";
-    card.setAttribute("data-section-number", section.sectionNumber);
-
-    const title = document.createElement("div");
-    title.className = "bookmark-folder-title";
-    title.innerHTML = highlightText(section.heading, query);
-
-    const meta = document.createElement("div");
-    meta.className = "bookmark-item";
-    meta.innerHTML = `
-      <div style="margin-bottom: 10px; line-height: 1.5;">
-        <strong>${highlightText(section.volume, query)}</strong><br>
-        ${highlightText(section.chapter, query)}<br>
-        ${highlightText(section.subchapter, query)}<br>
-        ${highlightText(section.part, query)}
-      </div>
-    `;
-
-    meta.appendChild(createFolderDropdown(section));
-
-    const previewParagraphs = getPreviewParagraphs(section, query, numericLike);
-
-    if (previewParagraphs.length === 0) {
-      const empty = document.createElement("p");
-      empty.innerHTML = "<em>No paragraph text under this heading.</em>";
-      meta.appendChild(empty);
-    } else {
-      for (const previewText of previewParagraphs) {
-        const p = document.createElement("p");
-        p.innerHTML = highlightText(previewText, query);
-        p.style.lineHeight = "1.6";
-        meta.appendChild(p);
-      }
-
-      const noteRow = document.createElement("div");
-      noteRow.style.display = "flex";
-      noteRow.style.alignItems = "center";
-      noteRow.style.justifyContent = "space-between";
-      noteRow.style.gap = "10px";
-      noteRow.style.flexWrap = "wrap";
-      noteRow.style.marginTop = "8px";
-
-      const note = document.createElement("p");
-      note.style.fontStyle = "italic";
-      note.style.opacity = "0.8";
-      note.style.margin = "0";
-      note.textContent = "Preview shown for speed.";
-
-      const fullViewBtn = document.createElement("button");
-      fullViewBtn.textContent = "Open Full View";
-      fullViewBtn.addEventListener("click", function () {
-        openSectionInFullView(section.sectionNumber);
-      });
-
-      noteRow.appendChild(note);
-      noteRow.appendChild(fullViewBtn);
-      meta.appendChild(noteRow);
-    }
-
-    card.appendChild(title);
-    card.appendChild(meta);
-    resultsWrapper.appendChild(card);
-  }
-
-  cfrContainer.appendChild(resultsWrapper);
-}
-
-function isNumericLikeQuery(query) {
-  return /^[0-9.\s§-]+$/.test(query);
-}
-
-function filterSections(query) {
-  const q = query.trim().toLowerCase();
-
-  if (!q) return allSections;
-
-  const numericLike = isNumericLikeQuery(q);
-
-  if (!numericLike && q.length < MIN_TEXT_SEARCH_LENGTH) {
-    return null;
-  }
-
-  const matches = allSections.filter(section => {
-    const headingMatch = section.heading.toLowerCase().includes(q);
-    const sectionNumberMatch = section.sectionNumber.toLowerCase().includes(q);
-    const paragraphMatch = section.paragraphs.some(p => p.toLowerCase().includes(q));
-
-    return headingMatch || sectionNumberMatch || paragraphMatch;
-  });
-
-  return matches.slice(0, MAX_SEARCH_RESULTS);
-}
-
-function runSearch() {
-  const query = searchBar.value.trim();
-
-  if (!query) {
-    statusMessage.textContent =
-      `Loaded ${allSections.length} CFR sections. Browse the full library below.`;
-    renderHierarchySections(allSections);
-    return;
-  }
-
-  const numericLike = isNumericLikeQuery(query);
-  const filtered = filterSections(query);
-
-  if (filtered === null) {
-    statusMessage.textContent =
-      `Type at least ${MIN_TEXT_SEARCH_LENGTH} letters for text search.`;
-    cfrContainer.innerHTML = "<p><em>Keep typing to search the CFR library.</em></p>";
-    return;
-  }
-
-  statusMessage.textContent = numericLike
-    ? `Showing up to ${MAX_SEARCH_RESULTS} numeric search results for "${query}".`
-    : `Showing up to ${MAX_SEARCH_RESULTS} text search results for "${query}".`;
-
-  renderFlatSearchResults(filtered, query);
-}
-
-function getXmlPathCandidates() {
-  const origin = window.location.origin;
-  const pathname = window.location.pathname;
-
-  const currentFolder = pathname.endsWith("/")
-    ? pathname
-    : pathname.substring(0, pathname.lastIndexOf("/") + 1);
-
-  const candidates = [
-    `./${XML_FOLDER_NAME}/${XML_FILE_NAME}`,
-    `${XML_FOLDER_NAME}/${XML_FILE_NAME}`,
-    `${currentFolder}${XML_FOLDER_NAME}/${XML_FILE_NAME}`,
-    `${origin}${currentFolder}${XML_FOLDER_NAME}/${XML_FILE_NAME}`
-  ];
-
-  return [...new Set(candidates)];
-}
-
-function looksLikeValidXml(xmlText) {
-  if (!xmlText) return false;
-
-  const hasHead = xmlText.includes("<HEAD>");
-  const hasParagraph = xmlText.includes("<P>");
-  const hasHtml404 = /<html|<!doctype html/i.test(xmlText);
-
-  return (hasHead || hasParagraph) && !hasHtml404;
-}
-
-async function fetchXmlFromCandidates() {
-  const candidates = getXmlPathCandidates();
-  let lastError = null;
-
-  for (const candidate of candidates) {
-    try {
-      const response = await fetch(candidate, { cache: "no-store" });
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status} loading ${candidate}`);
-      }
-
-      const xmlText = await response.text();
-
-      if (!looksLikeValidXml(xmlText)) {
-        throw new Error(`Received invalid XML content from ${candidate}`);
-      }
-
-      return {
-        xmlText,
-        source: "live XML",
-        pathUsed: candidate
+    dom.importInput.addEventListener("change", function (event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function () {
+        importBookmarks(libraryKey, reader.result);
+        dom.importInput.value = "";
       };
-    } catch (error) {
-      console.warn("XML candidate failed:", candidate, error);
-      lastError = error;
-    }
-  }
-
-  throw lastError || new Error("Unable to load XML from any candidate path.");
-}
-
-function updateAlertsPlaceholder() {
-  const noAlertText = "No active alerts";
-
-  if (alertsList) {
-    alertsList.innerHTML = `<p>${noAlertText}</p>`;
-  }
-
-  if (homeAlertStatus) {
-    homeAlertStatus.textContent = noAlertText;
-  }
-
-  if (fatalityStat) {
-    fatalityStat.textContent = "Placeholder";
-  }
-
-  if (fatalgramNote) {
-    fatalgramNote.textContent =
-      "Offline-ready placeholder. Future fatalgram and quick safety information can live here.";
-  }
-
-  if (homeLastUpdated) {
-    homeLastUpdated.textContent = new Date().toLocaleDateString();
+      reader.readAsText(file);
+    });
   }
 }
 
-async function loadCfr() {
-  try {
-    statusMessage.textContent = "Loading CFR data...";
-
-    let xmlText = null;
-    let source = "";
-    let pathUsed = "";
-
-    try {
-      const result = await fetchXmlFromCandidates();
-      xmlText = result.xmlText;
-      source = result.source;
-      pathUsed = result.pathUsed;
-
-      saveXmlCache(xmlText);
-    } catch (liveError) {
-      const cachedXml = loadXmlCache();
-
-      if (!cachedXml) {
-        throw liveError;
-      }
-
-      xmlText = cachedXml;
-      source = "saved cache";
-      pathUsed = "browser cache";
-      console.warn("Live XML unavailable, using saved cache instead.", liveError);
-    }
-
-    statusMessage.textContent = "Building CFR hierarchy...";
-    buildSectionsFromXmlText(xmlText);
-
-    if (source === "live XML") {
-      statusMessage.textContent =
-        `Loaded ${allSections.length} CFR sections from ${pathUsed}. Offline cache refreshed just now.`;
-    } else {
-      statusMessage.textContent =
-        `Live XML unavailable. Loaded ${allSections.length} CFR sections from saved cache.`;
-    }
-
-    renderStarterPackButtons();
-    renderBookmarkFolders();
-    renderHierarchySections(allSections);
-  } catch (error) {
-    statusMessage.textContent = "Error loading CFR data.";
-    cfrContainer.innerHTML =
-      "<p><strong>Problem:</strong> " + error.message + "</p>";
-    console.error(error);
-  }
-}
-
-if (searchBar) {
-  searchBar.addEventListener("input", function () {
-    clearTimeout(searchDebounceTimer);
-
-    searchDebounceTimer = setTimeout(function () {
-      runSearch();
-    }, 350);
+function initializeLibraries() {
+  Object.keys(LIBRARY_CONFIGS).forEach(libraryKey => {
+    libraryStates[libraryKey] = createInitialState(LIBRARY_CONFIGS[libraryKey]);
+    sortBookmarkFolders(libraryKey);
+    renderBookmarkFolders(libraryKey);
+    renderStarterPacks(libraryKey);
+    bindLibraryEvents(libraryKey);
+    loadLibraryXml(libraryKey);
   });
 }
 
-if (createFolderBtn) {
-  createFolderBtn.addEventListener("click", createFolder);
+function initializeApp() {
+  bindSectionButtons();
+  setHomePlaceholders();
+  initializeLibraries();
 }
 
-if (newFolderInput) {
-  newFolderInput.addEventListener("keydown", function (event) {
-    if (event.key === "Enter") {
-      createFolder();
-    }
-  });
-}
-
-if (exportBookmarksBtn) {
-  exportBookmarksBtn.addEventListener("click", exportBookmarks);
-}
-
-if (importBookmarksBtn && importBookmarksInput) {
-  importBookmarksBtn.addEventListener("click", function () {
-    openImportModal();
-  });
-
-  importBookmarksInput.addEventListener("change", function (event) {
-    const file = event.target.files && event.target.files[0];
-    if (file) {
-      importBookmarksFromFile(file);
-    }
-    importBookmarksInput.value = "";
-  });
-}
-
-bindSectionButtons();
-updateAlertsPlaceholder();
-renderStarterPackButtons();
-renderBookmarkFolders();
-showSection("homeSection");
-loadCfr();
+initializeApp();

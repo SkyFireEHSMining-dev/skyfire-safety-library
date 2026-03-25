@@ -5,7 +5,8 @@ body {
   color: #111;
 }
 
-header {
+header,
+.main-header {
   background: #ffffff;
   border-bottom: 1px solid #d9d9d9;
   padding: 18px 20px;
@@ -25,6 +26,7 @@ header {
   height: 64px;
   border-radius: 14px;
   flex-shrink: 0;
+  object-fit: cover;
 }
 
 .brand-text h1 {
@@ -178,6 +180,16 @@ main {
   border-color: #f0bf92;
 }
 
+.osha-home-tile {
+  background: linear-gradient(180deg, #fbfcff 0%, #eef4ff 100%);
+  border-color: #b8c9f0;
+}
+
+.osha-home-tile:hover {
+  border-color: #4d79d8;
+  box-shadow: 0 12px 28px rgba(77, 121, 216, 0.16);
+}
+
 .module-header {
   display: flex;
   gap: 16px;
@@ -212,11 +224,27 @@ main {
   background: #f2f2f2;
 }
 
+.osha-module-header {
+  border-color: #b8c9f0;
+  background: linear-gradient(180deg, #f8fbff 0%, #edf4ff 100%);
+}
+
+.lynx-module-header {
+  border-color: #e7cf9d;
+  background: linear-gradient(180deg, #fffdf8 0%, #fff7eb 100%);
+}
+
+.mss-module-header {
+  border-color: #e4c2a1;
+  background: linear-gradient(180deg, #fffdfb 0%, #fff7f1 100%);
+}
+
 .module-search-wrap {
   margin-bottom: 18px;
 }
 
-#searchBar {
+#searchBar,
+#oshaSearchBar {
   width: 100%;
   max-width: 1000px;
   padding: 12px;
@@ -224,9 +252,11 @@ main {
   border: 1px solid #bfbfbf;
   border-radius: 6px;
   box-sizing: border-box;
+  background: #ffffff;
 }
 
-#statusMessage {
+#statusMessage,
+#oshaStatusMessage {
   margin-bottom: 20px;
   font-style: italic;
   color: #444;
@@ -239,7 +269,8 @@ main {
   align-items: start;
 }
 
-#bookmarkSidebar {
+#bookmarkSidebar,
+#oshaBookmarkSidebar {
   position: sticky;
   top: 110px;
   align-self: start;
@@ -254,7 +285,8 @@ main {
   box-sizing: border-box;
 }
 
-#bookmarkSidebar h2 {
+#bookmarkSidebar h2,
+#oshaBookmarkSidebar h2 {
   margin-top: 0;
   margin-bottom: 12px;
 }
@@ -265,20 +297,25 @@ main {
   margin: 14px 0 18px 0;
 }
 
-#newFolderInput {
+#newFolderInput,
+#oshaNewFolderInput {
   flex: 1;
   padding: 10px;
   font-size: 1rem;
   border: 1px solid #bfbfbf;
   border-radius: 6px;
   box-sizing: border-box;
+  background: #ffffff;
 }
 
 #createFolderBtn,
+#oshaCreateFolderBtn,
 .bookmark-controls button,
 .bookmark-button-row button,
 #exportBookmarksBtn,
 #importBookmarksBtn,
+#oshaExportBookmarksBtn,
+#oshaImportBookmarksBtn,
 .module-home-btn {
   padding: 10px 14px;
   font-size: 0.95rem;
@@ -289,12 +326,19 @@ main {
 }
 
 #createFolderBtn:hover,
+#oshaCreateFolderBtn:hover,
 .bookmark-controls button:hover,
 .bookmark-button-row button:hover,
 #exportBookmarksBtn:hover,
 #importBookmarksBtn:hover,
+#oshaExportBookmarksBtn:hover,
+#oshaImportBookmarksBtn:hover,
 .module-home-btn:hover {
   background: #f2f2f2;
+}
+
+.sidebar-button-row {
+  margin-bottom: 14px;
 }
 
 .bookmark-folder {
@@ -361,6 +405,11 @@ main {
   min-width: 180px;
 }
 
+.inline-note {
+  font-size: 0.92rem;
+  color: #666;
+}
+
 details {
   background: #ffffff;
   border: 1px solid #dcdcdc;
@@ -381,6 +430,12 @@ summary::-webkit-details-marker {
   display: none;
 }
 
+.section-content {
+  padding: 14px 16px 16px 16px;
+  border-top: 1px solid #e3e3e3;
+  background: #ffffff;
+}
+
 .level-title {
   margin: 0 0 14px 0;
 }
@@ -388,6 +443,15 @@ summary::-webkit-details-marker {
 .level-title > summary {
   background: #dfe7f5;
   font-size: 1.2rem;
+}
+
+.level-subtitle {
+  margin: 10px 0;
+}
+
+.level-subtitle > summary {
+  background: #e9eef8;
+  font-size: 1.08rem;
 }
 
 .level-chapter {
@@ -412,273 +476,197 @@ summary::-webkit-details-marker {
 }
 
 .level-part > summary {
-  background: #f6f6f6;
+  background: #f5f7fb;
 }
 
-.level-section {
+.level-subpart {
   margin: 8px 0;
 }
 
+.level-subpart > summary {
+  background: #fafbfd;
+}
+
+.level-section {
+  border-color: #d8dee8;
+}
+
 .level-section > summary {
-  background: #fbfbfb;
+  background: #ffffff;
 }
 
-.section-content {
-  padding: 12px 14px;
-  border-top: 1px solid #ececec;
+.section-path {
+  font-size: 0.88rem;
+  color: #666;
+  margin: 0 0 12px 0;
+  line-height: 1.45;
+  word-break: break-word;
 }
 
-.section-content > details {
-  margin-left: 0;
-  margin-right: 0;
-}
-
-.level-section .section-content {
-  padding: 16px 18px;
-}
-
+.preview-snippets p,
 .section-content p {
-  margin: 0 0 14px 0;
-  line-height: 1.7;
-  max-width: 100%;
-  word-break: normal;
-  overflow-wrap: break-word;
-}
-
-.section-content p:last-child {
-  margin-bottom: 0;
-}
-
-mark {
-  background: #fff176;
-  color: #111;
-  padding: 0 2px;
-  border-radius: 2px;
-}
-
-.highlighted-section {
-  outline: 4px solid #5aa2ff;
-  background: #eef5ff;
-  transition: background 0.3s ease;
+  margin-top: 0;
+  line-height: 1.6;
 }
 
 .search-results-wrapper {
-  width: 100%;
-}
-
-.search-results-wrapper .bookmark-folder {
-  margin-bottom: 16px;
-}
-
-.info-panel h3 {
-  margin-top: 0;
-  margin-bottom: 10px;
-}
-
-.info-panel p,
-.info-panel li {
-  line-height: 1.7;
-}
-
-.info-panel ul,
-.info-panel ol {
-  padding-left: 22px;
-}
-
-/* Lynx styling */
-.lynx-module-header {
-  border-color: #e4cfaa;
-  background: linear-gradient(180deg, #fffdfa 0%, #fdf7ed 100%);
-}
-
-.lynx-hero-panel {
-  border-color: #e2c796;
-  background:
-    linear-gradient(135deg, rgba(196, 144, 58, 0.10) 0%, rgba(196, 144, 58, 0.03) 45%, rgba(255,255,255,0.95) 100%),
-    #fffdf9;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
-  margin-bottom: 20px;
-}
-
-.lynx-hero-top {
   display: grid;
-  grid-template-columns: 180px minmax(0, 1fr);
-  gap: 22px;
-  align-items: center;
+  gap: 14px;
 }
 
-.lynx-logo {
-  width: 100%;
-  max-width: 180px;
-  height: auto;
-  display: block;
-  background: #ffffff;
-  border: 1px solid #ecdab8;
-  border-radius: 14px;
-  padding: 14px;
-  box-sizing: border-box;
-}
-
-.powered-badge {
-  display: inline-block;
-  margin-bottom: 12px;
-  padding: 7px 12px;
-  border-radius: 999px;
-  background: linear-gradient(180deg, #f7ecd8 0%, #f1dfbf 100%);
-  border: 1px solid #e2c48c;
-  color: #7b5617;
-  font-weight: 700;
-  font-size: 0.86rem;
-}
-
-.lynx-panel-title {
-  margin-bottom: 10px;
-  color: #2b2b2b;
-}
-
-.lynx-panel-text {
-  margin-bottom: 10px;
-}
-
-.partner-note {
-  color: #555;
-}
-
-/* MSS styling */
-.mss-module-header {
-  border-color: #efc49b;
-  background: linear-gradient(180deg, #fffaf5 0%, #fff3e7 100%);
-}
-
-.mss-hero-panel {
-  border-color: #efc49b;
-  background:
-    linear-gradient(135deg, rgba(18, 42, 102, 0.07) 0%, rgba(18, 42, 102, 0.03) 32%, rgba(223, 115, 27, 0.10) 100%),
-    #fffdfb;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
-  margin-bottom: 20px;
-}
-
-.mss-hero-top {
-  display: grid;
-  grid-template-columns: 180px minmax(0, 1fr);
-  gap: 22px;
-  align-items: center;
-}
-
-.mss-logo {
-  width: 100%;
-  max-width: 180px;
-  height: auto;
-  display: block;
-  background: #ffffff;
-  border: 1px solid #d9e0ef;
-  border-radius: 14px;
-  padding: 14px;
-  box-sizing: border-box;
-}
-
-.mss-badge {
-  background: linear-gradient(180deg, #fff2e5 0%, #ffe6cf 100%);
-  border-color: #efc08f;
-  color: #d86d16;
-}
-
-.mss-panel-title {
-  margin-bottom: 10px;
-  color: #10295f;
-}
-
-.mss-panel-text {
-  margin-bottom: 10px;
+.highlighted-section {
+  box-shadow: 0 0 0 3px rgba(77, 121, 216, 0.2);
+  transition: box-shadow 0.2s ease;
 }
 
 .tool-card-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
-  margin-bottom: 20px;
 }
 
 .tool-card {
   background: #ffffff;
-  border: 1px solid #d7e0ec;
+  border: 1px solid #dcdcdc;
   border-radius: 12px;
   padding: 18px;
-  box-sizing: border-box;
-}
-
-.lynx-tool-card {
-  background: linear-gradient(180deg, #ffffff 0%, #fffaf3 100%);
-  border-color: #e4cfaa;
-  box-shadow: 0 1px 0 rgba(255,255,255,0.75) inset;
-}
-
-.mss-tool-card {
-  background: linear-gradient(180deg, #ffffff 0%, #fff9f3 100%);
-  border-color: #efc49b;
-  box-shadow: 0 1px 0 rgba(255,255,255,0.75) inset;
-}
-
-.mss-tool-card h3 {
-  color: #10295f;
-}
-
-.lynx-tool-card h3 {
-  color: #2c2c2c;
 }
 
 .tool-card h3 {
   margin-top: 0;
   margin-bottom: 10px;
-  font-size: 1.1rem;
 }
 
 .tool-card p {
   margin: 0;
-  line-height: 1.7;
-  color: #333;
+  line-height: 1.6;
+  color: #444;
 }
 
-.contact-card {
-  margin-bottom: 8px;
+.mss-tool-card {
+  border-color: #ecd2b7;
+  background: linear-gradient(180deg, #fffefd 0%, #fff9f5 100%);
 }
 
-.lynx-contact-card {
-  border-color: #dfc18d;
-  background: linear-gradient(180deg, rgba(252,246,233,1) 0%, rgba(255,255,255,1) 100%);
+.mss-hero-panel {
+  margin-bottom: 20px;
+  border-color: #ecd2b7;
+  background: linear-gradient(180deg, #fffefd 0%, #fff9f5 100%);
 }
 
-.mss-contact-card {
-  border-color: #efc49b;
-  background:
-    linear-gradient(135deg, rgba(16, 41, 95, 0.04) 0%, rgba(255,255,255,1) 30%, rgba(255,243,231,1) 100%);
+.mss-hero-top {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
 }
 
-.contact-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
-  margin-top: 14px;
+.mss-logo {
+  width: 110px;
+  max-width: 100%;
+  height: auto;
+  flex-shrink: 0;
+}
+
+.mss-hero-copy {
+  flex: 1;
+}
+
+.powered-badge {
+  display: inline-block;
+  margin-bottom: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.mss-badge {
+  color: #d86d16;
+  background: #fff1e5;
+  border: 1px solid #f0bf92;
+}
+
+.mss-panel-title {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.mss-panel-text,
+.partner-note {
+  line-height: 1.6;
+  margin: 0 0 12px 0;
+  color: #444;
+}
+
+.partner-note {
+  margin-bottom: 0;
 }
 
 #aboutPanel {
-  margin-top: 28px;
-}
-
-#aboutPanel h2 {
-  margin-top: 0;
+  margin-top: 10px;
 }
 
 #siteFooter {
-  margin-top: 30px;
-  padding: 18px 20px 24px;
+  padding: 18px 20px 24px 20px;
+  color: #555;
   text-align: center;
-  color: #444;
-  font-size: 0.95rem;
+  line-height: 1.6;
 }
 
-@media (max-width: 1000px) {
+mark {
+  background: #fff2a8;
+  padding: 0 2px;
+  border-radius: 2px;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.42);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 5000;
+}
+
+.modal-card {
+  width: min(760px, 100%);
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid #dcdcdc;
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.18);
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.modal-card h2 {
+  margin-top: 0;
+}
+
+.modal-textarea {
+  width: 100%;
+  min-height: 260px;
+  resize: vertical;
+  font-family: Consolas, Monaco, monospace;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  border: 1px solid #bfbfbf;
+  border-radius: 8px;
+  padding: 12px;
+  box-sizing: border-box;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 1100px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .tool-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .quick-info-card {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -687,61 +675,25 @@ mark {
     grid-column: span 2;
   }
 
-  .dashboard-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .tool-card-grid,
-  .contact-grid {
-    grid-template-columns: 1fr;
-  }
-
   .layout {
     grid-template-columns: 1fr;
   }
 
-  #bookmarkSidebar {
+  #bookmarkSidebar,
+  #oshaBookmarkSidebar {
     position: static;
     height: auto;
     max-height: none;
-    overflow: visible;
-  }
-
-  .lynx-hero-top,
-  .mss-hero-top {
-    grid-template-columns: 1fr;
-  }
-
-  .lynx-logo,
-  .mss-logo {
-    max-width: 220px;
   }
 }
 
 @media (max-width: 700px) {
-  header {
-    padding: 14px 16px;
-  }
-
   main {
     padding: 14px;
   }
 
-  .brand-logo {
-    width: 42px;
-    height: 42px;
-    border-radius: 10px;
-  }
-
-  .brand-text h1 {
-    font-size: 1.25rem;
-    margin-bottom: 4px;
-  }
-
-  .subtitle {
-    font-size: 0.95rem;
-  }
-
+  .dashboard-grid,
+  .tool-card-grid,
   .quick-info-card {
     grid-template-columns: 1fr;
   }
@@ -750,82 +702,37 @@ mark {
     grid-column: span 1;
   }
 
-  .dashboard-grid {
-    grid-template-columns: 1fr;
+  .brand-row {
+    align-items: flex-start;
   }
 
-  .dashboard-tile {
-    min-height: 150px;
+  .brand-logo {
+    width: 54px;
+    height: 54px;
+  }
+
+  .brand-text h1 {
+    font-size: 1.55rem;
   }
 
   .module-header {
     flex-direction: column;
-    align-items: stretch;
+    align-items: flex-start;
   }
 
-  .module-home-btn {
-    width: 100%;
-  }
-
-  #bookmarkSidebar,
-  #aboutPanel,
-  .quick-info-card,
-  .info-panel,
-  .tool-card {
-    padding: 16px;
-  }
-
-  .folder-create-row {
-    flex-direction: column;
-  }
-
-  #createFolderBtn,
-  .bookmark-controls button,
-  .bookmark-button-row button,
-  #exportBookmarksBtn,
-  #importBookmarksBtn {
-    width: 100%;
-  }
-
-  .bookmark-controls {
+  .folder-create-row,
+  .bookmark-controls,
+  .bookmark-button-row {
     flex-direction: column;
     align-items: stretch;
   }
 
   .bookmark-controls select {
-    width: 100%;
     min-width: 0;
+    width: 100%;
   }
 
-  summary {
-    padding: 12px 14px;
-    font-size: 1rem;
-  }
-
-  .level-title > summary {
-    font-size: 1.05rem;
-  }
-
-  .level-chapter > summary {
-    font-size: 1rem;
-  }
-
-  .section-content {
-    padding: 10px 12px;
-  }
-
-  .level-section .section-content {
-    padding: 14px;
-  }
-
-  .section-content p {
-    line-height: 1.75;
-    font-size: 1.05rem;
-  }
-
-  .lynx-logo,
-  .mss-logo {
-    max-width: 180px;
-    margin: 0 auto;
+  .mss-hero-top {
+    flex-direction: column;
   }
 }

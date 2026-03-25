@@ -1,24 +1,25 @@
 {
   "name": "SkyFire Safety Library",
   "short_name": "SkyFire",
+  "description": "Offline-ready field safety reference for CFR, OSHA, MSHA resources, and future safety modules.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#0b0b0b",
+  "background_color": "#f7f7f7",
   "theme_color": "#0b0b0b",
-  "description": "Field Safety Hub for CFR access, mine safety reference, and offline-ready field use.",
+  "orientation": "portrait-primary",
   "icons": [
     {
       "src": "Icons/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     },
     {
       "src": "Icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     }
   ]
 }

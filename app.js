@@ -1,4 +1,4 @@
-const APP_VERSION = "library-shell-1";
+const APP_VERSION = "library-shell-2-title29-parser";
 const XML_FOLDER_NAME = "Data";
 const MIN_TEXT_SEARCH_LENGTH = 3;
 const MAX_SEARCH_RESULTS = 100;
@@ -42,7 +42,7 @@ const STARTER_PACKS = {
 const LIBRARY_CONFIGS = {
   cfr: {
     key: "cfr",
-    label: "30 CFR",
+    label: "MSHA / 30 CFR",
     sectionId: "cfrSection",
     xmlFileName: "ECFR-title30.xml",
     cacheKey: "skyfire_xml_cache_title30_v1",
@@ -167,29 +167,37 @@ function decodeHtmlEntities(text) {
 }
 
 function cleanText(text) {
-  return decodeHtmlEntities(text)
-    .replace(/<[^>]+>/g, " ")
+  return decodeHtmlEntities(text || "")
     .replace(/\s+/g, " ")
     .trim();
 }
 
 function getHeadingLevel(text) {
-  const value = text.trim();
+  const value = cleanText(text);
 
   if (/^Title\s+\d+/i.test(value)) return "title";
   if (/^Subtitle\b/i.test(value)) return "subtitle";
   if (/^CHAPTER\b/i.test(value)) return "chapter";
+  if (/^Chapter\b/i.test(value)) return "chapter";
   if (/^SUBCHAPTER\b/i.test(value)) return "subchapter";
+  if (/^Subchapter\b/i.test(value)) return "subchapter";
   if (/^PART\b/i.test(value)) return "part";
+  if (/^Part\b/i.test(value)) return "part";
   if (/^Subpart\b/i.test(value)) return "subpart";
-  if (/^§\s*\d+/i.test(value)) return "section";
+  if (/^§\s*[0-9]/i.test(value)) return "section";
 
   return "other";
 }
 
 function extractSectionNumber(text) {
-  const match = text.match(/^§\s*([0-9]+(?:\.[0-9A-Za-z-]+)*)/i);
+  const match = cleanText(text).match(/^§\s*([0-9]+(?:\.[0-9A-Za-z()-]+)*)/i);
   return match ? match[1] : "";
+}
+
+function normalizeHeadingSpacing(text) {
+  return cleanText(text)
+    .replace(/\s+—\s+/g, " — ")
+    .replace(/\s*-\s*/g, " - ");
 }
 
 function defaultLabelFor(level, config) {
@@ -209,12 +217,8 @@ function isDefaultLevelLabel(level, value, config) {
   return value === defaultLabelFor(level, config);
 }
 
-function buildSectionsFromXmlText(xmlText, config) {
-  const sections = [];
-  const regex = /<HEAD>([\s\S]*?)<\/HEAD>|<P>([\s\S]*?)<\/P>/gi;
-
-  let match;
-  let current = {
+function createBaseContext(config) {
+  return {
     title: config.defaultTitle || "Title",
     subtitle: defaultLabelFor("subtitle", config),
     chapter: defaultLabelFor("chapter", config),
@@ -222,6 +226,25 @@ function buildSectionsFromXmlText(xmlText, config) {
     part: defaultLabelFor("part", config),
     subpart: defaultLabelFor("subpart", config)
   };
+}
+
+function cloneContext(context) {
+  return {
+    title: context.title,
+    subtitle: context.subtitle,
+    chapter: context.chapter,
+    subchapter: context.subchapter,
+    part: context.part,
+    subpart: context.subpart
+  };
+}
+
+function parseLegacyHeadParagraphXml(xmlText, config) {
+  const sections = [];
+  const regex = /<HEAD>([\s\S]*?)<\/HEAD>|<P>([\s\S]*?)<\/P>/gi;
+
+  let match;
+  let current = createBaseContext(config);
   let currentSection = null;
 
   while ((match = regex.exec(xmlText)) !== null) {
@@ -266,12 +289,7 @@ function buildSectionsFromXmlText(xmlText, config) {
         currentSection = null;
       } else if (level === "section") {
         currentSection = {
-          title: current.title,
-          subtitle: current.subtitle,
-          chapter: current.chapter,
-          subchapter: current.subchapter,
-          part: current.part,
-          subpart: current.subpart,
+          ...cloneContext(current),
           heading: headingText,
           sectionNumber: extractSectionNumber(headingText),
           paragraphs: []
@@ -291,6 +309,206 @@ function buildSectionsFromXmlText(xmlText, config) {
   }
 
   return sections;
+}
+
+function parseCfrDocXml(xmlText, config) {
+  const parser = new DOMParser();
+  const xmlDoc = parser.parseFromString(xmlText, "application/xml");
+
+  if (xmlDoc.querySelector("parsererror")) {
+    console.warn("XML parser error for", config.label, xmlDoc.querySelector("parsererror").textContent);
+    return [];
+  }
+
+  const sections = [];
+  const current = createBaseContext(config);
+
+  const titleNum = xmlDoc.querySelector("TITLENUM");
+  if (titleNum) {
+    current.title = normalizeHeadingSpacing(titleNum.textContent);
+  }
+
+  const treeWalker = xmlDoc.createTreeWalker(
+    xmlDoc.documentElement,
+    NodeFilter.SHOW_ELEMENT,
+    null
+  );
+
+  let node = treeWalker.currentNode;
+
+  while (node) {
+    const tag = node.tagName ? node.tagName.toUpperCase() : "";
+
+    if (tag === "TITLENUM") {
+      current.title = normalizeHeadingSpacing(node.textContent);
+    } else if (tag === "SUBTITLE" || tag === "SUBTITLEG") {
+      const text = normalizeHeadingSpacing(node.textContent);
+      if (text) {
+        current.subtitle = text;
+        current.chapter = defaultLabelFor("chapter", config);
+        current.subchapter = defaultLabelFor("subchapter", config);
+        current.part = defaultLabelFor("part", config);
+        current.subpart = defaultLabelFor("subpart", config);
+      }
+    } else if (tag === "CHAPNO") {
+      const text = normalizeHeadingSpacing(node.textContent);
+      if (!text) {
+        node = treeWalker.nextNode();
+        continue;
+      }
+
+      if (/^Subtitle\b/i.test(text)) {
+        current.subtitle = text;
+        current.chapter = defaultLabelFor("chapter", config);
+        current.subchapter = defaultLabelFor("subchapter", config);
+        current.part = defaultLabelFor("part", config);
+        current.subpart = defaultLabelFor("subpart", config);
+      } else if (/^Chapter\b/i.test(text)) {
+        current.chapter = text;
+        current.subchapter = defaultLabelFor("subchapter", config);
+        current.part = defaultLabelFor("part", config);
+        current.subpart = defaultLabelFor("subpart", config);
+      }
+    } else if (tag === "HD") {
+      const text = normalizeHeadingSpacing(node.textContent);
+      const source = (node.getAttribute("SOURCE") || "").toUpperCase();
+
+      if (!text) {
+        node = treeWalker.nextNode();
+        continue;
+      }
+
+      if (/^Title\s+\d+/i.test(text)) {
+        current.title = text;
+        current.subtitle = defaultLabelFor("subtitle", config);
+        current.chapter = defaultLabelFor("chapter", config);
+        current.subchapter = defaultLabelFor("subchapter", config);
+        current.part = defaultLabelFor("part", config);
+        current.subpart = defaultLabelFor("subpart", config);
+      } else if (/^Subtitle\b/i.test(text)) {
+        current.subtitle = text;
+        current.chapter = defaultLabelFor("chapter", config);
+        current.subchapter = defaultLabelFor("subchapter", config);
+        current.part = defaultLabelFor("part", config);
+        current.subpart = defaultLabelFor("subpart", config);
+      } else if (/^Chapter\b/i.test(text)) {
+        current.chapter = text;
+        current.subchapter = defaultLabelFor("subchapter", config);
+        current.part = defaultLabelFor("part", config);
+        current.subpart = defaultLabelFor("subpart", config);
+      } else if (/^Subchapter\b/i.test(text)) {
+        current.subchapter = text;
+        current.part = defaultLabelFor("part", config);
+        current.subpart = defaultLabelFor("subpart", config);
+      } else if (/^Part\s+[0-9A-Za-z.-]+/i.test(text)) {
+        current.part = text;
+        current.subpart = defaultLabelFor("subpart", config);
+      } else if (/^Subpart\b/i.test(text)) {
+        current.subpart = text;
+      } else if (source === "HED" && /^§\s*[0-9]/i.test(text)) {
+        const subjectNode = node.parentElement ? node.parentElement.querySelector("SUBJECT") : null;
+        const subjectText = subjectNode ? normalizeHeadingSpacing(subjectNode.textContent) : "";
+        const fullHeading = subjectText ? `${text} ${subjectText}` : text;
+
+        const paragraphNodes = node.parentElement
+          ? Array.from(node.parentElement.querySelectorAll(":scope > P"))
+          : [];
+
+        const paragraphs = paragraphNodes
+          .map(p => cleanText(p.textContent))
+          .filter(Boolean);
+
+        sections.push({
+          ...cloneContext(current),
+          heading: fullHeading,
+          sectionNumber: extractSectionNumber(text),
+          paragraphs
+        });
+      }
+    } else if (tag === "SECTION") {
+      const sectnoNode = node.querySelector(":scope > SECTNO");
+      if (!sectnoNode) {
+        node = treeWalker.nextNode();
+        continue;
+      }
+
+      const sectnoText = normalizeHeadingSpacing(sectnoNode.textContent);
+      if (!sectnoText) {
+        node = treeWalker.nextNode();
+        continue;
+      }
+
+      const subjectNode = node.querySelector(":scope > SUBJECT");
+      const subjectText = subjectNode ? normalizeHeadingSpacing(subjectNode.textContent) : "";
+      const heading = subjectText ? `${sectnoText} ${subjectText}` : sectnoText;
+
+      const paragraphNodes = Array.from(node.querySelectorAll(":scope > P, :scope > FP, :scope > EXTRACT > P"));
+      const paragraphs = paragraphNodes
+        .map(p => cleanText(p.textContent))
+        .filter(Boolean);
+
+      let inferredPart = current.part;
+      if (/^No Part/i.test(inferredPart)) {
+        const match = sectnoText.match(/^§\s*([0-9]+)/);
+        if (match) {
+          inferredPart = `Part ${match[1]}`;
+        }
+      }
+
+      sections.push({
+        title: current.title,
+        subtitle: current.subtitle,
+        chapter: current.chapter,
+        subchapter: current.subchapter,
+        part: inferredPart,
+        subpart: current.subpart,
+        heading,
+        sectionNumber: extractSectionNumber(sectnoText),
+        paragraphs
+      });
+    }
+
+    node = treeWalker.nextNode();
+  }
+
+  return dedupeSections(sections);
+}
+
+function dedupeSections(sections) {
+  const seen = new Set();
+  const unique = [];
+
+  sections.forEach(section => {
+    const key = `${section.sectionNumber}||${section.heading}`;
+    if (!seen.has(key)) {
+      seen.add(key);
+      unique.push(section);
+    }
+  });
+
+  return unique;
+}
+
+function buildSectionsFromXmlText(xmlText, config) {
+  const looksLikeCfrDoc = /<CFRDOC[\s>]/i.test(xmlText);
+
+  if (config.key === "osha" || looksLikeCfrDoc) {
+    const cfrDocSections = parseCfrDocXml(xmlText, config);
+    if (cfrDocSections.length) {
+      return cfrDocSections;
+    }
+  }
+
+  const legacySections = parseLegacyHeadParagraphXml(xmlText, config);
+  if (legacySections.length) {
+    return legacySections;
+  }
+
+  if (looksLikeCfrDoc) {
+    return parseCfrDocXml(xmlText, config);
+  }
+
+  return [];
 }
 
 function buildHierarchy(sections, config) {
@@ -431,7 +649,10 @@ function createSectionBlock(libraryKey, section, query, options = {}) {
     content.appendChild(openBtn);
   }
 
-  const paragraphs = section.paragraphs.length ? section.paragraphs : ["No paragraph text was parsed for this section."];
+  const paragraphs = section.paragraphs.length
+    ? section.paragraphs
+    : ["No paragraph text was parsed for this section."];
+
   paragraphs.forEach(paragraph => {
     const p = document.createElement("p");
     p.innerHTML = highlightText(paragraph, query);
@@ -1197,10 +1418,12 @@ async function loadLibraryXml(libraryKey) {
   }
 
   state.allSections = buildSectionsFromXmlText(xmlText, config);
-  state.isLoaded = true;
+  state.isLoaded = state.allSections.length > 0;
 
   if (status) {
-    status.textContent = `Loaded ${state.allSections.length} ${config.label} sections.`;
+    status.textContent = state.allSections.length
+      ? `Loaded ${state.allSections.length} ${config.label} sections.`
+      : `Loaded ${config.label} XML, but no sections were parsed.`;
   }
 
   rerenderCurrentView(libraryKey);

@@ -14,9 +14,9 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="192x192" href="Icons/icon-192.png">
   <link rel="apple-touch-icon" href="Icons/icon-192.png">
-  <link rel="stylesheet" href="styles.css?v=library-shell-1">
+  <link rel="stylesheet" href="styles.css?v=library-shell-3-dashboard-polish">
 
-  <script src="app.js?v=library-shell-1" defer></script>
+  <script src="app.js?v=library-shell-2-title29-parser" defer></script>
 </head>
 <body>
 
@@ -36,6 +36,11 @@
     <section id="homeSection" class="app-section">
       <section class="home-info-strip">
         <div class="quick-info-card">
+          <div class="quick-info-banner">
+            <span class="quick-banner-title">Quick Info Dashboard</span>
+            <span class="quick-banner-subtitle">Field-ready alerts, notes, and current reference status.</span>
+          </div>
+
           <div class="quick-info-item">
             <span class="quick-label">Fatalities YTD</span>
             <span class="quick-value" id="fatalityStat">Placeholder</span>
@@ -61,14 +66,27 @@
       </section>
 
       <section class="dashboard-grid">
+        <!-- Row 1 -->
+        <button class="dashboard-tile osha-home-tile" data-open-section="oshaSection">
+          <span class="tile-title">OSHA / 29 CFR</span>
+          <span class="tile-subtitle">Browse the offline OSHA field reference.</span>
+        </button>
+
         <button class="dashboard-tile" data-open-section="cfrSection">
           <span class="tile-title">MSHA / 30 CFR</span>
           <span class="tile-subtitle">Browse the offline MSHA field reference.</span>
         </button>
 
-        <button class="dashboard-tile osha-home-tile" data-open-section="oshaSection">
-          <span class="tile-title">OSHA / 29 CFR</span>
-          <span class="tile-subtitle">Browse the offline OSHA field reference.</span>
+        <button class="dashboard-tile" data-open-section="docsSection">
+          <span class="tile-title">MSHA Docs</span>
+          <span class="tile-subtitle">Placeholder for selected MSHA documents and reference material.</span>
+        </button>
+
+        <!-- Row 2 -->
+        <button class="dashboard-tile lynx-home-tile" data-open-section="lynxSection">
+          <span class="tile-title">Safety Program Tools</span>
+          <span class="tile-subtitle">Offline tools for audits, inspections, templates, and tracking.</span>
+          <span class="tile-powered lynx-powered">Powered by Lynx</span>
         </button>
 
         <button class="dashboard-tile mss-home-tile" data-open-section="mssSection">
@@ -82,14 +100,10 @@
           <span class="tile-subtitle">Safety alerts, headlines, fatalgrams, and quick updates.</span>
         </button>
 
+        <!-- Row 3 -->
         <button class="dashboard-tile" data-open-section="legalSection">
           <span class="tile-title">Legal / Fisher Phillips</span>
           <span class="tile-subtitle">Offline legal reference and contact-professional module.</span>
-        </button>
-
-        <button class="dashboard-tile" data-open-section="docsSection">
-          <span class="tile-title">MSHA Docs</span>
-          <span class="tile-subtitle">Placeholder for selected MSHA documents and reference material.</span>
         </button>
 
         <button class="dashboard-tile" data-open-section="reportSection">
@@ -97,19 +111,24 @@
           <span class="tile-subtitle">Immediate actions, reporting reminders, and key information.</span>
         </button>
 
-        <button class="dashboard-tile lynx-home-tile" data-open-section="lynxSection">
-          <span class="tile-title">Safety Program Tools</span>
-          <span class="tile-subtitle">Offline tools for audits, inspections, templates, and tracking.</span>
-          <span class="tile-powered">Powered by Lynx</span>
+        <button class="dashboard-tile placeholder-home-tile" data-open-section="placeholderSection">
+          <span class="tile-title">Coming Soon</span>
+          <span class="tile-subtitle">Reserved tile for future expansion.</span>
         </button>
 
+        <!-- Row 4 -->
         <button class="dashboard-tile" data-open-section="heatSection">
           <span class="tile-title">Heat / Environment</span>
           <span class="tile-subtitle">Heat index and environmental quick-reference module.</span>
         </button>
 
-        <button class="dashboard-tile" data-open-section="placeholderSection">
-          <span class="tile-title">Placeholder</span>
+        <button class="dashboard-tile placeholder-home-tile" data-open-section="placeholderTwoSection">
+          <span class="tile-title">Coming Soon</span>
+          <span class="tile-subtitle">Reserved tile for future expansion.</span>
+        </button>
+
+        <button class="dashboard-tile placeholder-home-tile" data-open-section="placeholderThreeSection">
+          <span class="tile-title">Coming Soon</span>
           <span class="tile-subtitle">Reserved tile for future expansion.</span>
         </button>
       </section>
@@ -403,28 +422,46 @@
         </div>
       </div>
 
+      <div class="info-panel lynx-hero-panel">
+        <div class="lynx-hero-top">
+          <img src="Icons/lynx-logo.png" alt="Lynx logo" class="lynx-logo">
+          <div class="lynx-hero-copy">
+            <div class="powered-badge lynx-badge">Powered by Lynx</div>
+            <h3 class="lynx-panel-title">Program tools, implementation support, and scalable safety system resources</h3>
+            <p class="lynx-panel-text">
+              This module is designed to hold practical safety program tools that help users build, organize,
+              and strengthen their systems in the field and in administration.
+            </p>
+            <p class="partner-note">
+              It is intended to support audits, inspections, templates, tracking tools, and future implementation
+              resources in a format that is simple, useful, and field-ready.
+            </p>
+          </div>
+        </div>
+      </div>
+
       <div class="tool-card-grid">
-        <div class="tool-card">
+        <div class="tool-card lynx-tool-card">
           <h3>Inspection Templates</h3>
           <p>Placeholder for offline inspection forms and field-ready checklists.</p>
         </div>
 
-        <div class="tool-card">
+        <div class="tool-card lynx-tool-card">
           <h3>Audit Tools</h3>
           <p>Placeholder for practical audit workflows and printable templates.</p>
         </div>
 
-        <div class="tool-card">
+        <div class="tool-card lynx-tool-card">
           <h3>Training Records</h3>
           <p>Placeholder for future training record tools and quick references.</p>
         </div>
 
-        <div class="tool-card">
+        <div class="tool-card lynx-tool-card">
           <h3>Safety Tracking</h3>
           <p>Placeholder for KPIs, follow-up logs, and action tracking tools.</p>
         </div>
 
-        <div class="tool-card">
+        <div class="tool-card lynx-tool-card">
           <h3>Contact a Professional</h3>
           <p>Placeholder for direct support, implementation help, and deeper program guidance when needed.</p>
         </div>
@@ -454,7 +491,41 @@
       <div class="module-header">
         <button class="module-home-btn" data-open-section="homeSection">← Home</button>
         <div class="module-header-text">
-          <h2>Placeholder</h2>
+          <h2>Coming Soon</h2>
+          <p>Reserved space for future expansion.</p>
+        </div>
+      </div>
+
+      <div class="info-panel">
+        <h3>Reserved Tile</h3>
+        <p>
+          This module is intentionally left open so SkyFire can stay flexible as future needs or partnerships develop.
+        </p>
+      </div>
+    </section>
+
+    <section id="placeholderTwoSection" class="app-section hidden">
+      <div class="module-header">
+        <button class="module-home-btn" data-open-section="homeSection">← Home</button>
+        <div class="module-header-text">
+          <h2>Coming Soon</h2>
+          <p>Reserved space for future expansion.</p>
+        </div>
+      </div>
+
+      <div class="info-panel">
+        <h3>Reserved Tile</h3>
+        <p>
+          This module is intentionally left open so SkyFire can stay flexible as future needs or partnerships develop.
+        </p>
+      </div>
+    </section>
+
+    <section id="placeholderThreeSection" class="app-section hidden">
+      <div class="module-header">
+        <button class="module-home-btn" data-open-section="homeSection">← Home</button>
+        <div class="module-header-text">
+          <h2>Coming Soon</h2>
           <p>Reserved space for future expansion.</p>
         </div>
       </div>

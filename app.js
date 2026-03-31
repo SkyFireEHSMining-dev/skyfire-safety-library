@@ -1,4 +1,4 @@
-const APP_VERSION = "library-shell-2-title29-parser";
+const APP_VERSION = "library-shell-3-lazy-load";
 const XML_FOLDER_NAME = "Data";
 const MIN_TEXT_SEARCH_LENGTH = 3;
 const MAX_SEARCH_RESULTS = 100;
@@ -101,7 +101,9 @@ function createInitialState(config) {
     bookmarkFolders: loadBookmarkFolders(config.bookmarksKey),
     searchDebounceTimer: null,
     currentQuery: "",
-    isLoaded: false
+    isLoaded: false,
+    isLoading: false,
+    hasRenderedEmptyState: false
   };
 }
 
@@ -120,6 +122,13 @@ function getLibraryDom(config) {
   };
 }
 
+function getLibraryKeyBySectionId(sectionId) {
+  const match = Object.keys(LIBRARY_CONFIGS).find(
+    key => LIBRARY_CONFIGS[key].sectionId === sectionId
+  );
+  return match || null;
+}
+
 function showSection(sectionId) {
   appSections.forEach(section => section.classList.add("hidden"));
 
@@ -127,6 +136,11 @@ function showSection(sectionId) {
   if (target) {
     target.classList.remove("hidden");
     window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  const libraryKey = getLibraryKeyBySectionId(sectionId);
+  if (libraryKey) {
+    ensureLibraryLoaded(libraryKey);
   }
 }
 
@@ -717,12 +731,40 @@ function sortSectionsForDisplay(sections) {
   );
 }
 
+function renderNotLoadedPanel(libraryKey) {
+  const state = libraryStates[libraryKey];
+  const container = state.dom.container;
+  const status = state.dom.statusMessage;
+
+  if (!container) return;
+
+  container.innerHTML = "";
+  const panel = document.createElement("div");
+  panel.className = "info-panel";
+  panel.innerHTML = `
+    <h3>${state.config.label}</h3>
+    <p>Open this module to load the library.</p>
+  `;
+  container.appendChild(panel);
+
+  if (status && !state.isLoading && !state.isLoaded) {
+    status.textContent = `Open this module to load ${state.config.label} data.`;
+  }
+
+  state.hasRenderedEmptyState = true;
+}
+
 function renderHierarchySections(libraryKey) {
   const state = libraryStates[libraryKey];
   const container = state.dom.container;
 
   if (!container) return;
   container.innerHTML = "";
+
+  if (!state.isLoaded && !state.isLoading) {
+    renderNotLoadedPanel(libraryKey);
+    return;
+  }
 
   if (!state.allSections.length) {
     const panel = document.createElement("div");
@@ -787,13 +829,17 @@ function isNumericLikeQuery(query) {
   return /^[0-9.\-§ ]+$/.test(query);
 }
 
-function runSearch(libraryKey) {
+async function runSearch(libraryKey) {
   const state = libraryStates[libraryKey];
   const container = state.dom.container;
   const input = state.dom.searchInput;
   const status = state.dom.statusMessage;
 
   if (!container || !input || !status) return;
+
+  if (!state.isLoaded) {
+    await ensureLibraryLoaded(libraryKey);
+  }
 
   const query = input.value.trim();
   state.currentQuery = query;
@@ -880,7 +926,23 @@ function runSearch(libraryKey) {
 function rerenderCurrentView(libraryKey) {
   renderBookmarkFolders(libraryKey);
   renderStarterPacks(libraryKey);
-  runSearch(libraryKey);
+
+  const state = libraryStates[libraryKey];
+  const currentValue = state.dom.searchInput ? state.dom.searchInput.value.trim() : "";
+
+  if (!state.isLoaded && !state.isLoading) {
+    renderNotLoadedPanel(libraryKey);
+    return;
+  }
+
+  if (currentValue) {
+    runSearch(libraryKey);
+  } else {
+    renderHierarchySections(libraryKey);
+    if (state.dom.statusMessage && state.isLoaded) {
+      state.dom.statusMessage.textContent = `Showing all ${state.config.label} sections.`;
+    }
+  }
 }
 
 function saveXmlCache(cacheKey, xmlText) {
@@ -1043,7 +1105,9 @@ function scrollToAndHighlightSection(libraryKey, sectionNumber) {
   }, 100);
 }
 
-function goToBookmark(libraryKey, sectionNumber) {
+async function goToBookmark(libraryKey, sectionNumber) {
+  await ensureLibraryLoaded(libraryKey);
+
   const state = libraryStates[libraryKey];
   showSection(state.config.sectionId);
 
@@ -1060,7 +1124,9 @@ function goToBookmark(libraryKey, sectionNumber) {
   scrollToAndHighlightSection(libraryKey, sectionNumber);
 }
 
-function openSectionInFullView(libraryKey, sectionNumber) {
+async function openSectionInFullView(libraryKey, sectionNumber) {
+  await ensureLibraryLoaded(libraryKey);
+
   const state = libraryStates[libraryKey];
   showSection(state.config.sectionId);
 
@@ -1384,6 +1450,12 @@ async function loadLibraryXml(libraryKey) {
   const config = state.config;
   const status = state.dom.statusMessage;
 
+  if (state.isLoaded || state.isLoading) {
+    return;
+  }
+
+  state.isLoading = true;
+
   if (status) {
     status.textContent = `Loading ${config.label} data...`;
   }
@@ -1407,6 +1479,7 @@ async function loadLibraryXml(libraryKey) {
   if (!xmlText) {
     state.allSections = [];
     state.isLoaded = false;
+    state.isLoading = false;
 
     if (status) {
       status.textContent =
@@ -1419,6 +1492,7 @@ async function loadLibraryXml(libraryKey) {
 
   state.allSections = buildSectionsFromXmlText(xmlText, config);
   state.isLoaded = state.allSections.length > 0;
+  state.isLoading = false;
 
   if (status) {
     status.textContent = state.allSections.length
@@ -1427,6 +1501,19 @@ async function loadLibraryXml(libraryKey) {
   }
 
   rerenderCurrentView(libraryKey);
+}
+
+async function ensureLibraryLoaded(libraryKey) {
+  const state = libraryStates[libraryKey];
+  if (!state) return;
+
+  if (state.isLoaded) return;
+
+  if (state.isLoading) {
+    return;
+  }
+
+  await loadLibraryXml(libraryKey);
 }
 
 function bindLibraryEvents(libraryKey) {
@@ -1453,6 +1540,10 @@ function bindLibraryEvents(libraryKey) {
       state.searchDebounceTimer = setTimeout(function () {
         runSearch(libraryKey);
       }, 180);
+    });
+
+    dom.searchInput.addEventListener("focus", function () {
+      ensureLibraryLoaded(libraryKey);
     });
   }
 
@@ -1488,7 +1579,7 @@ function initializeLibraries() {
     renderBookmarkFolders(libraryKey);
     renderStarterPacks(libraryKey);
     bindLibraryEvents(libraryKey);
-    loadLibraryXml(libraryKey);
+    renderNotLoadedPanel(libraryKey);
   });
 }
 

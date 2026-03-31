@@ -1,22 +1,25 @@
-const CACHE_NAME = "skyfire-library-shell-v1";
-
-const CORE_FILES = [
+const CACHE_NAME = "skyfire-library-shell-v2";
+const SHELL_CACHE = [
   "./",
-  "./index.html",
-  "./styles.css?v=library-shell-1",
-  "./app.js?v=library-shell-1",
-  "./manifest.json",
-  "./Icons/icon-192.png"
+  "./index.html?v=library-shell-2",
+  "./styles.css?v=library-shell-2",
+  "./app.js?v=library-shell-2",
+  "./manifest.json?v=library-shell-2",
+  "./Icons/icon-192.png",
+  "./Icons/icon-512.png",
+  "./Icons/lynx-logo.png",
+  "./Icons/mss-logo.png",
+  "./Icons/skyfire-logo.jpg"
 ];
 
 self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(async cache => {
-      for (const file of CORE_FILES) {
+      for (const asset of SHELL_CACHE) {
         try {
-          await cache.add(file);
+          await cache.add(asset);
         } catch (error) {
-          console.warn("Could not cache file during install:", file, error);
+          console.warn("Install cache skipped:", asset, error);
         }
       }
     })
@@ -27,18 +30,28 @@ self.addEventListener("install", event => {
 
 self.addEventListener("activate", event => {
   event.waitUntil(
-    caches.keys().then(cacheNames =>
-      Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheName !== CACHE_NAME) {
-            return caches.delete(cacheName);
+    (async () => {
+      const keys = await caches.keys();
+
+      await Promise.all(
+        keys.map(key => {
+          if (key !== CACHE_NAME) {
+            return caches.delete(key);
           }
         })
-      )
-    )
-  );
+      );
 
-  self.clients.claim();
+      await self.clients.claim();
+
+      const clients = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
+      for (const client of clients) {
+        client.postMessage({
+          type: "SW_UPDATED",
+          cacheName: CACHE_NAME
+        });
+      }
+    })()
+  );
 });
 
 self.addEventListener("fetch", event => {
@@ -46,41 +59,104 @@ self.addEventListener("fetch", event => {
 
   if (request.method !== "GET") return;
 
-  const requestUrl = new URL(request.url);
+  const url = new URL(request.url);
 
-  if (requestUrl.origin !== self.location.origin) {
-    return;
-  }
+  if (url.origin !== self.location.origin) return;
 
-  event.respondWith(
-    fetch(request)
-      .then(response => {
-        const responseClone = response.clone();
+  const isNavigation = request.mode === "navigate";
+  const isShellAsset =
+    url.pathname.endsWith("/") ||
+    url.pathname.endsWith("/index.html") ||
+    url.pathname.endsWith("/styles.css") ||
+    url.pathname.endsWith("/app.js") ||
+    url.pathname.endsWith("/manifest.json") ||
+    url.pathname.includes("/Icons/");
 
-        caches.open(CACHE_NAME).then(cache => {
-          cache.put(request, responseClone).catch(error => {
-            console.warn("Could not cache runtime response:", request.url, error);
-          });
-        });
+  const isDataFile =
+    url.pathname.includes("/Data/") &&
+    url.pathname.endsWith(".xml");
 
-        return response;
-      })
-      .catch(() => {
-        return caches.match(request).then(cachedResponse => {
-          if (cachedResponse) {
-            return cachedResponse;
-          }
+  if (isNavigation || isShellAsset) {
+    event.respondWith(
+      (async () => {
+        const cache = await caches.open(CACHE_NAME);
 
-          if (request.mode === "navigate") {
-            return caches.match("./index.html");
-          }
+        try {
+          const fresh = await fetch(request, { cache: "no-store" });
+          cache.put(request, fresh.clone()).catch(() => {});
+          return fresh;
+        } catch (error) {
+          const cached =
+            (await cache.match(request)) ||
+            (isNavigation ? await cache.match("./") : null);
+
+          if (cached) return cached;
 
           return new Response("Offline content not available yet.", {
             status: 503,
             statusText: "Service Unavailable",
             headers: { "Content-Type": "text/plain" }
           });
+        }
+      })()
+    );
+    return;
+  }
+
+  if (isDataFile) {
+    event.respondWith(
+      (async () => {
+        const cache = await caches.open(CACHE_NAME);
+        const cached = await cache.match(request);
+
+        if (cached) {
+          fetch(request, { cache: "no-store" })
+            .then(response => {
+              if (response && response.ok) {
+                cache.put(request, response.clone()).catch(() => {});
+              }
+            })
+            .catch(() => {});
+
+          return cached;
+        }
+
+        try {
+          const fresh = await fetch(request, { cache: "no-store" });
+          if (fresh && fresh.ok) {
+            cache.put(request, fresh.clone()).catch(() => {});
+          }
+          return fresh;
+        } catch (error) {
+          return new Response("Offline data file not available yet.", {
+            status: 503,
+            statusText: "Service Unavailable",
+            headers: { "Content-Type": "text/plain" }
+          });
+        }
+      })()
+    );
+    return;
+  }
+
+  event.respondWith(
+    (async () => {
+      const cache = await caches.open(CACHE_NAME);
+
+      try {
+        const fresh = await fetch(request);
+        cache.put(request, fresh.clone()).catch(() => {});
+        return fresh;
+      } catch (error) {
+        const cached = await cache.match(request);
+        if (cached) return cached;
+
+        return new Response("Offline content not available yet.", {
+          status: 503,
+          statusText: "Service Unavailable",
+          headers: { "Content-Type": "text/plain" }
         });
-      })
+      }
+    })()
   );
 });

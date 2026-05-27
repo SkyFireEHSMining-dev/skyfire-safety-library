@@ -14,9 +14,9 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="192x192" href="Icons/icon-192.png">
   <link rel="apple-touch-icon" href="Icons/icon-192.png">
-  <link rel="stylesheet" href="styles.css?v=solo-homepage-cleanup-2">
+  <link rel="stylesheet" href="styles.css?v=solo-homepage-cleanup-3">
 
-  <script src="app.js?v=library-shell-2-title29-parser" defer></script>
+  <script src="app.js?v=roi-calculator-layout-1" defer></script>
 </head>
 <body>
 
@@ -236,16 +236,116 @@
       </div>
 
       <div class="info-panel">
-        <h3>Purpose</h3>
+        <h3>How to Use</h3>
         <p>
-          This module is reserved for the SkyFire Safety ROI Calculator. It is intended
-          to help communicate the cost of risk, prevention, downtime, controls, and corrective action.
+          Enter reasonable estimates below. The calculator will estimate baseline annual cost,
+          projected annual cost, annual savings, ROI, payback period, and three-year net benefit.
         </p>
+        <p>
+          This is a planning tool only. Results depend on the quality of the assumptions entered.
+        </p>
+      </div>
 
-        <h3>Current Status</h3>
-        <p>
-          Calculator content is already built separately and will be added to this app in a future update.
-        </p>
+      <div class="info-panel">
+        <h3>Incident Costs</h3>
+
+        <label>
+          Lost-time injuries per year
+          <input type="number" id="roiLostTimeInjuries" value="0" min="0" step="1">
+        </label>
+
+        <label>
+          Cost per lost-time injury ($)
+          <input type="number" id="roiCostPerLostTimeInjury" value="0" min="0" step="100">
+        </label>
+
+        <label>
+          Near misses per year
+          <input type="number" id="roiNearMisses" value="0" min="0" step="1">
+        </label>
+
+        <label>
+          Cost per near miss ($)
+          <input type="number" id="roiCostPerNearMiss" value="0" min="0" step="50">
+        </label>
+
+        <label>
+          Property damage events per year
+          <input type="number" id="roiPropertyDamageEvents" value="0" min="0" step="1">
+        </label>
+
+        <label>
+          Cost per property damage event ($)
+          <input type="number" id="roiCostPerPropertyDamage" value="0" min="0" step="100">
+        </label>
+      </div>
+
+      <div class="info-panel">
+        <h3>Downtime</h3>
+
+        <label>
+          Downtime events per year
+          <input type="number" id="roiDowntimeEvents" value="0" min="0" step="1">
+        </label>
+
+        <label>
+          Average hours per downtime event
+          <input type="number" id="roiDowntimeHours" value="0" min="0" step="0.25">
+        </label>
+
+        <label>
+          Cost per downtime hour ($)
+          <input type="number" id="roiCostPerDowntimeHour" value="0" min="0" step="50">
+        </label>
+      </div>
+
+      <div class="info-panel">
+        <h3>Workforce Efficiency</h3>
+
+        <label>
+          Hours lost per employee per week
+          <input type="number" id="roiHoursLostPerWeek" value="0" min="0" step="0.25">
+        </label>
+
+        <label>
+          Employees affected
+          <input type="number" id="roiEmployeesAffected" value="0" min="0" step="1">
+        </label>
+
+        <label>
+          Loaded hourly rate ($)
+          <input type="number" id="roiLoadedHourlyRate" value="0" min="0" step="1">
+        </label>
+      </div>
+
+      <div class="info-panel">
+        <h3>Implementation & Improvement</h3>
+
+        <label>
+          One-time implementation cost ($)
+          <input type="number" id="roiOneTimeCost" value="0" min="0" step="100">
+        </label>
+
+        <label>
+          Annual recurring cost ($)
+          <input type="number" id="roiAnnualRecurringCost" value="0" min="0" step="100">
+        </label>
+
+        <label>
+          Expected cost reduction (%)
+          <input type="number" id="roiReductionPercent" value="0" min="0" max="100" step="1">
+        </label>
+      </div>
+
+      <div class="info-panel">
+        <h3>Calculated Results</h3>
+
+        <p><strong>Baseline Annual Cost:</strong> <span id="roiBaselineAnnualCost">$0</span></p>
+        <p><strong>Projected Annual Cost:</strong> <span id="roiProjectedAnnualCost">$0</span></p>
+        <p><strong>Annual Savings:</strong> <span id="roiAnnualSavings">$0</span></p>
+        <p><strong>ROI:</strong> <span id="roiPercent">0%</span></p>
+        <p><strong>Payback Period:</strong> <span id="roiPaybackPeriod">Not available</span></p>
+        <p><strong>3-Year Net Benefit:</strong> <span id="roiThreeYearNetBenefit">$0</span></p>
       </div>
     </section>
 

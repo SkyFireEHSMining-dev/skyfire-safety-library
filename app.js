@@ -164,14 +164,27 @@ function setHomePlaceholders() {
     day: "numeric"
   });
 
-  if (fatalityStat) fatalityStat.textContent = "Placeholder";
-  if (homeAlertStatus) homeAlertStatus.textContent = "No active alerts";
+  if (fatalityStat) {
+    fatalityStat.textContent = "Offline-ready field reference";
+  }
+
+  if (homeAlertStatus) {
+    homeAlertStatus.textContent =
+      "Risk assessment, regulatory reference, and safety planning";
+  }
+
   if (fatalgramNote) {
     fatalgramNote.textContent =
-      "Offline-ready placeholder. Future fatalgram and quick safety information can live here.";
+      "Verify site-specific requirements before relying on any general safety tool.";
   }
-  if (homeLastUpdated) homeLastUpdated.textContent = dateText;
-  if (alertsList) alertsList.innerHTML = "<p>No active alerts</p>";
+
+  if (homeLastUpdated) {
+    homeLastUpdated.textContent = dateText;
+  }
+
+  if (alertsList) {
+    alertsList.innerHTML = "<p>No active alerts</p>";
+  }
 }
 
 function decodeHtmlEntities(text) {

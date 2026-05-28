@@ -14,18 +14,10 @@
   --steel-blue-deep: #5b7aa3;
   --steel-blue-soft: #eaf2fb;
 
-  --mss-blue: #1f2f67;
-  --mss-blue-soft: #edf1fb;
-  --mss-orange: #dc6f1d;
-  --mss-orange-soft: #fff2e8;
-
-  --lynx-gold: #d6a44a;
-  --lynx-gold-soft: #fff6e8;
-  --lynx-warm: #fffdf8;
-
   --shadow-sm: 0 6px 16px rgba(13, 24, 40, 0.05);
   --shadow-md: 0 12px 30px rgba(13, 24, 40, 0.08);
   --shadow-lg: 0 18px 40px rgba(13, 24, 40, 0.12);
+
   --radius-lg: 18px;
   --radius-md: 14px;
   --radius-sm: 10px;
@@ -47,8 +39,7 @@ body {
 
 header,
 .main-header {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(245, 248, 251, 0.98) 100%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(245, 248, 251, 0.98) 100%);
   border-bottom: 1px solid var(--panel-border);
   padding: 20px 24px;
   position: sticky;
@@ -135,14 +126,13 @@ main {
   position: absolute;
   inset: 0 0 auto 0;
   height: 4px;
-  background: linear-gradient(90deg, var(--steel-blue), var(--lynx-gold), var(--mss-orange));
+  background: linear-gradient(90deg, var(--steel-blue), #d6a44a, #dc6f1d);
   opacity: 0.8;
 }
 
 .quick-info-banner {
   grid-column: span 4;
-  background:
-    linear-gradient(180deg, #fbfcfd 0%, #eef3f8 100%);
+  background: linear-gradient(180deg, #fbfcfd 0%, #eef3f8 100%);
   border: 1px solid #d7dee8;
   border-radius: 14px;
   padding: 16px 18px;
@@ -165,8 +155,7 @@ main {
 }
 
 .quick-info-item {
-  background:
-    linear-gradient(180deg, #fbfdff 0%, #f2f6fb 100%);
+  background: linear-gradient(180deg, #fbfdff 0%, #f2f6fb 100%);
   border: 1px solid #d7e0ec;
   border-radius: 14px;
   padding: 16px;
@@ -212,8 +201,7 @@ main {
 .dashboard-tile {
   position: relative;
   overflow: hidden;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(244, 248, 252, 0.98) 100%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(244, 248, 252, 0.98) 100%);
   border: 1px solid #cad6e4;
   border-radius: 22px;
   min-height: 210px;
@@ -262,6 +250,7 @@ main {
   letter-spacing: 0.15px;
   position: relative;
   z-index: 1;
+  color: #0787f8;
 }
 
 .tile-subtitle {
@@ -273,76 +262,6 @@ main {
   z-index: 1;
 }
 
-.tile-powered {
-  display: inline-block;
-  align-self: flex-start;
-  font-size: 0.84rem;
-  font-weight: 700;
-  border-radius: 999px;
-  padding: 7px 12px;
-  position: relative;
-  z-index: 1;
-}
-
-.placeholder-home-tile {
-  background: linear-gradient(180deg, #fcfcfc 0%, #f6f6f6 100%);
-  border: 1px dashed #c8cdd3;
-  box-shadow: none;
-}
-
-.placeholder-home-tile::before {
-  background: linear-gradient(90deg, #c3c8ce, #e1e4e8);
-}
-
-.placeholder-home-tile:hover {
-  border-color: #adb3bb;
-  box-shadow: 0 10px 24px rgba(30, 38, 50, 0.06);
-}
-
-.lynx-home-tile {
-  background:
-    linear-gradient(180deg, #fffefb 0%, #fff7ea 100%);
-  border-color: #e7c98b;
-  border-width: 2px;
-}
-
-.lynx-home-tile::before {
-  background: linear-gradient(90deg, #d6a44a, #f0d8aa);
-}
-
-.lynx-home-tile:hover {
-  border-color: #c99337;
-  box-shadow: 0 16px 34px rgba(154, 112, 39, 0.16);
-}
-
-.lynx-powered {
-  color: #8c5d18;
-  background: #faecd2;
-  border: 1px solid #e6c27d;
-}
-
-.mss-home-tile {
-  background:
-    linear-gradient(180deg, #fffefd 0%, #fff5ec 100%);
-  border-color: #efb98d;
-  border-width: 2px;
-}
-
-.mss-home-tile::before {
-  background: linear-gradient(90deg, #1f2f67, #dc6f1d);
-}
-
-.mss-home-tile:hover {
-  border-color: #de7a25;
-  box-shadow: 0 16px 34px rgba(222, 122, 37, 0.16);
-}
-
-.mss-powered {
-  color: #d86d16;
-  background: #fff1e5;
-  border: 1px solid #f0bf92;
-}
-
 .osha-home-tile {
   background: linear-gradient(180deg, #fbfcff 0%, #edf4ff 100%);
   border-color: #b8c9f0;
@@ -350,11 +269,6 @@ main {
 
 .osha-home-tile::before {
   background: linear-gradient(90deg, #4d79d8, #9db7ef);
-}
-
-.osha-home-tile:hover {
-  border-color: #4d79d8;
-  box-shadow: 0 16px 34px rgba(77, 121, 216, 0.16);
 }
 
 .module-header {
@@ -412,26 +326,6 @@ main {
   background: linear-gradient(90deg, #4d79d8, #9eb8ef);
 }
 
-.lynx-module-header {
-  border-color: #e6c27d;
-  background:
-    linear-gradient(180deg, #fffefc 0%, #fff7ea 100%);
-}
-
-.lynx-module-header::before {
-  background: linear-gradient(90deg, #d6a44a, #efcf93);
-}
-
-.mss-module-header {
-  border-color: #e7b384;
-  background:
-    linear-gradient(180deg, #fffdfa 0%, #fff4e9 100%);
-}
-
-.mss-module-header::before {
-  background: linear-gradient(90deg, #1f2f67, #dc6f1d);
-}
-
 .module-search-wrap {
   margin-bottom: 18px;
 }
@@ -452,7 +346,8 @@ main {
 #searchBar:focus,
 #oshaSearchBar:focus,
 #newFolderInput:focus,
-#oshaNewFolderInput:focus {
+#oshaNewFolderInput:focus,
+.info-panel input:focus {
   outline: none;
   border-color: #7f9bc1;
   box-shadow: 0 0 0 4px rgba(127, 155, 193, 0.14);
@@ -768,140 +663,70 @@ summary::-webkit-details-marker {
   color: #444;
 }
 
-.mss-tool-card {
-  border-color: #e8bf9c;
-  background:
-    linear-gradient(180deg, #fffdfb 0%, #fff8f3 100%);
-}
-
-.mss-tool-card::before {
-  background: linear-gradient(90deg, #1f2f67, #dc6f1d);
-}
-
-.mss-tool-card:hover {
-  border-color: #d98743;
-  box-shadow: 0 16px 32px rgba(31, 47, 103, 0.12);
-}
-
-.lynx-tool-card {
-  border-color: #ecd7ac;
-  background:
-    linear-gradient(180deg, #fffefb 0%, #fff8ee 100%);
-}
-
-.lynx-tool-card::before {
-  background: linear-gradient(90deg, #d6a44a, #f0d6a4);
-}
-
-.lynx-tool-card:hover {
-  border-color: #d3a04d;
-  box-shadow: 0 16px 32px rgba(166, 122, 44, 0.12);
-}
-
-.mss-hero-panel,
-.lynx-hero-panel {
-  margin-bottom: 22px;
-  position: relative;
-  overflow: hidden;
-}
-
-.mss-hero-panel::before,
-.lynx-hero-panel::before {
-  content: "";
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 6px;
-}
-
-.mss-hero-panel {
-  border-color: #e6b88c;
-  background:
-    linear-gradient(135deg, #fffdfb 0%, #fff6ef 52%, #fffdfb 100%);
-}
-
-.mss-hero-panel::before {
-  background: linear-gradient(90deg, #1f2f67, #dc6f1d);
-}
-
-.lynx-hero-panel {
-  border-color: #e7cd98;
-  background:
-    linear-gradient(135deg, #fffefb 0%, #fff7ea 48%, #fffefc 100%);
-}
-
-.lynx-hero-panel::before {
-  background: linear-gradient(90deg, #d6a44a, #efcf93);
-}
-
-.mss-hero-top,
-.lynx-hero-top {
-  display: flex;
-  gap: 22px;
-  align-items: flex-start;
-}
-
-.mss-logo,
-.lynx-logo {
-  width: 118px;
-  max-width: 100%;
-  height: auto;
-  flex-shrink: 0;
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: 16px;
-  padding: 8px;
-}
-
-.mss-hero-copy,
-.lynx-hero-copy {
-  flex: 1;
-}
-
-.powered-badge {
-  display: inline-block;
-  margin-bottom: 14px;
-  padding: 7px 12px;
-  border-radius: 999px;
-  font-size: 0.82rem;
+/* ROI Calculator fields */
+.info-panel label {
+  display: block;
+  margin: 16px 0 6px 0;
   font-weight: 700;
+  line-height: 1.35;
+  color: var(--text);
 }
 
-.mss-badge {
-  color: #d86d16;
-  background: #fff1e5;
-  border: 1px solid #f0bf92;
+.info-panel input[type="number"],
+.info-panel input[type="text"] {
+  display: block;
+  width: 100%;
+  max-width: 520px;
+  margin-top: 6px;
+  padding: 12px 14px;
+  font-size: 1rem;
+  line-height: 1.3;
+  color: var(--text);
+  background: #ffffff;
+  border: 1px solid #c8d1dc;
+  border-radius: 10px;
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04);
 }
 
-.lynx-badge {
-  color: #8c5d18;
-  background: #faecd2;
-  border: 1px solid #e6c27d;
+.info-panel input[type="number"] {
+  appearance: textfield;
 }
 
-.mss-panel-title,
-.lynx-panel-title {
+.info-panel input[type="number"]::-webkit-outer-spin-button,
+.info-panel input[type="number"]::-webkit-inner-spin-button {
+  margin: 0;
+}
+
+.info-panel h3 {
   margin-top: 0;
-  margin-bottom: 12px;
-  font-size: 1.95rem;
-  line-height: 1.2;
+  margin-bottom: 14px;
 }
 
-.mss-panel-text,
-.lynx-panel-text,
-.partner-note {
-  line-height: 1.7;
-  margin: 0 0 14px 0;
-  color: #444;
-  max-width: 1100px;
+.info-panel p {
+  line-height: 1.65;
 }
 
-.partner-note {
-  margin-bottom: 0;
+.info-panel p strong {
+  font-weight: 800;
+}
+
+#roiCalculatorSection .info-panel {
+  margin-bottom: 18px;
+}
+
+#roiCalculatorSection .info-panel:last-child {
+  background: linear-gradient(180deg, #ffffff 0%, #f6f9fd 100%);
+  border-color: #c8d6e6;
+}
+
+#roiCalculatorSection .info-panel:last-child p {
+  font-size: 1.05rem;
+  margin: 12px 0;
 }
 
 #aboutPanel {
   margin-top: 8px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.93) 0%, rgba(248, 250, 252, 0.93) 100%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.93) 0%, rgba(248, 250, 252, 0.93) 100%);
 }
 
 #aboutPanel h2 {
@@ -993,6 +818,11 @@ mark {
 }
 
 @media (max-width: 700px) {
+  header,
+  .main-header {
+    padding: 16px 18px;
+  }
+
   main {
     padding: 14px;
   }
@@ -1021,6 +851,10 @@ mark {
     font-size: 1.65rem;
   }
 
+  .subtitle {
+    font-size: 0.98rem;
+  }
+
   .module-header {
     flex-direction: column;
     align-items: flex-start;
@@ -1038,13 +872,39 @@ mark {
     width: 100%;
   }
 
-  .mss-hero-top,
-  .lynx-hero-top {
-    flex-direction: column;
+  .quick-info-card,
+  .info-panel {
+    padding: 18px;
   }
 
-  .mss-panel-title,
-  .lynx-panel-title {
-    font-size: 1.45rem;
+  .dashboard-tile {
+    min-height: 190px;
+    padding: 22px;
+  }
+
+  .tile-title {
+    font-size: 1.42rem;
+  }
+
+  .tile-subtitle {
+    font-size: 1rem;
+  }
+
+  .info-panel label {
+    margin-top: 18px;
+    margin-bottom: 8px;
+    font-size: 1rem;
+  }
+
+  .info-panel input[type="number"],
+  .info-panel input[type="text"] {
+    width: 100%;
+    max-width: 100%;
+    min-height: 46px;
+    font-size: 1rem;
+  }
+
+  #roiCalculatorSection .info-panel:last-child p {
+    font-size: 1rem;
   }
 }

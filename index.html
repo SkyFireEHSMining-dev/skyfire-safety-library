@@ -14,9 +14,9 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="192x192" href="Icons/icon-192.png">
   <link rel="apple-touch-icon" href="Icons/icon-192.png">
-  <link rel="stylesheet" href="styles.css?v=solo-homepage-cleanup-3">
+  <link rel="stylesheet" href="styles.css?v=roi-section-structure-1">
 
-  <script src="app.js?v=roi-calculator-layout-1" defer></script>
+  <script src="app.js?v=roi-calculator-logic-1" defer></script>
 </head>
 <body>
 
@@ -117,9 +117,7 @@
         <input type="text" id="searchBar" placeholder="Search MSHA / 30 CFR...">
       </div>
 
-      <div id="statusMessage">
-        Loading CFR data...
-      </div>
+      <div id="statusMessage">Loading CFR data...</div>
 
       <div class="layout">
         <aside id="bookmarkSidebar">
@@ -136,12 +134,7 @@
             <button id="importBookmarksBtn">Import Bookmarks</button>
           </div>
 
-          <input
-            type="file"
-            id="importBookmarksInput"
-            accept=".json,application/json"
-            style="display: none;"
-          >
+          <input type="file" id="importBookmarksInput" accept=".json,application/json" style="display: none;">
 
           <div id="bookmarkFolders">
             <p><em>No bookmarks yet.</em></p>
@@ -166,9 +159,7 @@
         <input type="text" id="oshaSearchBar" placeholder="Search OSHA / 29 CFR...">
       </div>
 
-      <div id="oshaStatusMessage">
-        Loading OSHA data...
-      </div>
+      <div id="oshaStatusMessage">Loading OSHA data...</div>
 
       <div class="layout">
         <aside id="oshaBookmarkSidebar">
@@ -185,12 +176,7 @@
             <button id="oshaImportBookmarksBtn">Import Bookmarks</button>
           </div>
 
-          <input
-            type="file"
-            id="oshaImportBookmarksInput"
-            accept=".json,application/json"
-            style="display: none;"
-          >
+          <input type="file" id="oshaImportBookmarksInput" accept=".json,application/json" style="display: none;">
 
           <div id="oshaBookmarkFolders">
             <p><em>No bookmarks yet.</em></p>
@@ -231,42 +217,45 @@
         <button class="module-home-btn" data-open-section="homeSection">← Home</button>
         <div class="module-header-text">
           <h2>Safety ROI Calculator</h2>
-          <p>Estimate the operational and financial impact of safety decisions.</p>
+          <p>Estimate the operational and financial impact of safety controls.</p>
         </div>
       </div>
 
       <div class="info-panel">
         <h3>How to Use</h3>
         <p>
-          Enter reasonable estimates below. The calculator will estimate baseline annual cost,
-          projected annual cost, annual savings, ROI, payback period, and three-year net benefit.
+          Use this tool to estimate the cost of leaving a hazard uncontrolled, then compare
+          those losses against the cost of a proposed safety control.
         </p>
         <p>
-          This is a planning tool only. Results depend on the quality of the assumptions entered.
+          This is a planning and communication tool only. Results depend on the quality of the assumptions entered.
         </p>
       </div>
 
       <div class="info-panel">
-        <h3>Incident Costs</h3>
+        <h3>1. Hazard Profile</h3>
+        <p>
+          Estimate current annual losses connected to the hazard or problem you want to control.
+        </p>
 
         <label>
-          Lost-time injuries per year
-          <input type="number" id="roiLostTimeInjuries" value="0" min="0" step="1">
+          Incident / injury events per year
+          <input type="number" id="roiIncidentEvents" value="0" min="0" step="1">
         </label>
 
         <label>
-          Cost per lost-time injury ($)
-          <input type="number" id="roiCostPerLostTimeInjury" value="0" min="0" step="100">
+          Average cost per incident / injury event ($)
+          <input type="number" id="roiCostPerIncident" value="0" min="0" step="100">
         </label>
 
         <label>
-          Near misses per year
-          <input type="number" id="roiNearMisses" value="0" min="0" step="1">
+          Near misses or high-potential events per year
+          <input type="number" id="roiNearMissEvents" value="0" min="0" step="1">
         </label>
 
         <label>
-          Cost per near miss ($)
-          <input type="number" id="roiCostPerNearMiss" value="0" min="0" step="50">
+          Average cost per near miss / high-potential event ($)
+          <input type="number" id="roiCostPerNearMissEvent" value="0" min="0" step="50">
         </label>
 
         <label>
@@ -275,51 +264,46 @@
         </label>
 
         <label>
-          Cost per property damage event ($)
-          <input type="number" id="roiCostPerPropertyDamage" value="0" min="0" step="100">
+          Average cost per property damage event ($)
+          <input type="number" id="roiCostPerPropertyDamageEvent" value="0" min="0" step="100">
         </label>
-      </div>
-
-      <div class="info-panel">
-        <h3>Downtime</h3>
 
         <label>
-          Downtime events per year
+          Downtime / disruption events per year
           <input type="number" id="roiDowntimeEvents" value="0" min="0" step="1">
         </label>
 
         <label>
-          Average hours per downtime event
-          <input type="number" id="roiDowntimeHours" value="0" min="0" step="0.25">
+          Average downtime hours per event
+          <input type="number" id="roiDowntimeHoursPerEvent" value="0" min="0" step="0.25">
         </label>
 
         <label>
           Cost per downtime hour ($)
           <input type="number" id="roiCostPerDowntimeHour" value="0" min="0" step="50">
         </label>
-      </div>
-
-      <div class="info-panel">
-        <h3>Workforce Efficiency</h3>
 
         <label>
-          Hours lost per employee per week
-          <input type="number" id="roiHoursLostPerWeek" value="0" min="0" step="0.25">
+          Admin / supervisor hours per year spent managing this problem
+          <input type="number" id="roiAdminHoursPerYear" value="0" min="0" step="0.25">
         </label>
 
         <label>
-          Employees affected
-          <input type="number" id="roiEmployeesAffected" value="0" min="0" step="1">
-        </label>
-
-        <label>
-          Loaded hourly rate ($)
-          <input type="number" id="roiLoadedHourlyRate" value="0" min="0" step="1">
+          Loaded admin / supervisor hourly rate ($)
+          <input type="number" id="roiAdminHourlyRate" value="0" min="0" step="1">
         </label>
       </div>
 
       <div class="info-panel">
-        <h3>Implementation & Improvement</h3>
+        <h3>2. Proposed Control</h3>
+        <p>
+          Enter the cost of the safety improvement and estimate how much of the current loss it may reduce.
+        </p>
+
+        <label>
+          Proposed control / improvement name
+          <input type="text" id="roiControlName" value="" placeholder="Example: warehouse floor tape and traffic lanes">
+        </label>
 
         <label>
           One-time implementation cost ($)
@@ -327,22 +311,23 @@
         </label>
 
         <label>
-          Annual recurring cost ($)
+          Annual recurring / maintenance cost ($)
           <input type="number" id="roiAnnualRecurringCost" value="0" min="0" step="100">
         </label>
 
         <label>
-          Expected cost reduction (%)
+          Estimated reduction in current annual losses (%)
           <input type="number" id="roiReductionPercent" value="0" min="0" max="100" step="1">
         </label>
       </div>
 
       <div class="info-panel">
-        <h3>Calculated Results</h3>
+        <h3>3. Financial Projection</h3>
 
-        <p><strong>Baseline Annual Cost:</strong> <span id="roiBaselineAnnualCost">$0</span></p>
-        <p><strong>Projected Annual Cost:</strong> <span id="roiProjectedAnnualCost">$0</span></p>
-        <p><strong>Annual Savings:</strong> <span id="roiAnnualSavings">$0</span></p>
+        <p><strong>Baseline Annual Losses:</strong> <span id="roiBaselineAnnualCost">$0</span></p>
+        <p><strong>Gross Annual Savings:</strong> <span id="roiGrossAnnualSavings">$0</span></p>
+        <p><strong>Projected Annual Cost After Control:</strong> <span id="roiProjectedAnnualCost">$0</span></p>
+        <p><strong>Net Annual Savings:</strong> <span id="roiAnnualSavings">$0</span></p>
         <p><strong>ROI:</strong> <span id="roiPercent">0%</span></p>
         <p><strong>Payback Period:</strong> <span id="roiPaybackPeriod">Not available</span></p>
         <p><strong>3-Year Net Benefit:</strong> <span id="roiThreeYearNetBenefit">$0</span></p>

@@ -14,9 +14,9 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="192x192" href="Icons/icon-192.png">
   <link rel="apple-touch-icon" href="Icons/icon-192.png">
-  <link rel="stylesheet" href="styles.css?v=risk-matrix-1">
+  <link rel="stylesheet" href="styles.css?v=risk-matrix-table-1">
 
-  <script src="app.js?v=risk-matrix-1" defer></script>
+  <script src="app.js?v=risk-matrix-table-1" defer></script>
 </head>
 <body>
 
@@ -194,18 +194,191 @@
       </div>
 
       <div class="info-panel">
-        <h3>How to Use</h3>
+        <h3>Visual Risk Matrix</h3>
         <p>
-          Select severity, occurrence, and detection ratings. The calculator uses the
-          SkyFire severity-weighted FMEA formula to estimate a Risk Priority Number.
+          This matrix uses the SkyFire severity-weighted FMEA formula:
+          <strong>RPN = [(Severity²) × Occurrence × Detection] / 100</strong>.
         </p>
         <p>
-          Formula: <strong>RPN = [(Severity²) × Occurrence × Detection] / 100</strong>
+          Severity runs across the top. Occurrence runs down the left side. Detection is used as the multiplier shown in the calculator below.
         </p>
+
+        <div class="risk-matrix-scroll">
+          <table class="risk-matrix-table" aria-label="SkyFire Risk Assessment Matrix">
+            <thead>
+              <tr>
+                <th class="matrix-corner">Severity →<br>Occurrence ↓</th>
+                <th>1.0</th>
+                <th>2.0</th>
+                <th>3.0</th>
+                <th>4.0</th>
+                <th>5.0</th>
+                <th>6.0</th>
+                <th>7.0</th>
+                <th>8.0</th>
+                <th>9.0</th>
+                <th>10.0</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>1.0</th>
+                <td class="risk-low">0.01</td>
+                <td class="risk-low">0.08</td>
+                <td class="risk-low">0.27</td>
+                <td class="risk-low">0.64</td>
+                <td class="risk-moderate">1.25</td>
+                <td class="risk-moderate">2.16</td>
+                <td class="risk-moderate">3.43</td>
+                <td class="risk-moderate">5.12</td>
+                <td class="risk-high">7.29</td>
+                <td class="risk-high">10.00</td>
+              </tr>
+              <tr>
+                <th>2.0</th>
+                <td class="risk-low">0.02</td>
+                <td class="risk-low">0.16</td>
+                <td class="risk-low">0.54</td>
+                <td class="risk-moderate">1.28</td>
+                <td class="risk-moderate">2.50</td>
+                <td class="risk-moderate">4.32</td>
+                <td class="risk-high">6.86</td>
+                <td class="risk-high">10.24</td>
+                <td class="risk-high">14.58</td>
+                <td class="risk-high">20.00</td>
+              </tr>
+              <tr>
+                <th>3.0</th>
+                <td class="risk-low">0.03</td>
+                <td class="risk-low">0.24</td>
+                <td class="risk-low">0.81</td>
+                <td class="risk-moderate">1.92</td>
+                <td class="risk-moderate">3.75</td>
+                <td class="risk-high">6.48</td>
+                <td class="risk-high">10.29</td>
+                <td class="risk-high">15.36</td>
+                <td class="risk-high">21.87</td>
+                <td class="risk-high">30.00</td>
+              </tr>
+              <tr>
+                <th>4.0</th>
+                <td class="risk-low">0.04</td>
+                <td class="risk-low">0.32</td>
+                <td class="risk-low">1.08</td>
+                <td class="risk-moderate">2.56</td>
+                <td class="risk-moderate">5.00</td>
+                <td class="risk-high">8.64</td>
+                <td class="risk-high">13.72</td>
+                <td class="risk-high">20.48</td>
+                <td class="risk-high">29.16</td>
+                <td class="risk-high">40.00</td>
+              </tr>
+              <tr>
+                <th>5.0</th>
+                <td class="risk-low">0.05</td>
+                <td class="risk-low">0.40</td>
+                <td class="risk-moderate">1.35</td>
+                <td class="risk-moderate">3.20</td>
+                <td class="risk-high">6.25</td>
+                <td class="risk-high">10.80</td>
+                <td class="risk-high">17.15</td>
+                <td class="risk-high">25.60</td>
+                <td class="risk-high">36.45</td>
+                <td class="risk-high">50.00</td>
+              </tr>
+              <tr>
+                <th>6.0</th>
+                <td class="risk-low">0.06</td>
+                <td class="risk-low">0.48</td>
+                <td class="risk-moderate">1.62</td>
+                <td class="risk-moderate">3.84</td>
+                <td class="risk-high">7.50</td>
+                <td class="risk-high">12.96</td>
+                <td class="risk-high">20.58</td>
+                <td class="risk-high">30.72</td>
+                <td class="risk-high">43.74</td>
+                <td class="risk-high">60.00</td>
+              </tr>
+              <tr>
+                <th>7.0</th>
+                <td class="risk-low">0.07</td>
+                <td class="risk-low">0.56</td>
+                <td class="risk-moderate">1.89</td>
+                <td class="risk-moderate">4.48</td>
+                <td class="risk-high">8.75</td>
+                <td class="risk-high">15.12</td>
+                <td class="risk-high">24.01</td>
+                <td class="risk-high">35.84</td>
+                <td class="risk-high">51.03</td>
+                <td class="risk-high">70.00</td>
+              </tr>
+              <tr>
+                <th>8.0</th>
+                <td class="risk-low">0.08</td>
+                <td class="risk-low">0.64</td>
+                <td class="risk-moderate">2.16</td>
+                <td class="risk-moderate">5.12</td>
+                <td class="risk-high">10.00</td>
+                <td class="risk-high">17.28</td>
+                <td class="risk-high">27.44</td>
+                <td class="risk-high">40.96</td>
+                <td class="risk-high">58.32</td>
+                <td class="risk-high">80.00</td>
+              </tr>
+              <tr>
+                <th>9.0</th>
+                <td class="risk-low">0.09</td>
+                <td class="risk-low">0.72</td>
+                <td class="risk-moderate">2.43</td>
+                <td class="risk-high">5.76</td>
+                <td class="risk-high">11.25</td>
+                <td class="risk-high">19.44</td>
+                <td class="risk-high">30.87</td>
+                <td class="risk-high">46.08</td>
+                <td class="risk-high">65.61</td>
+                <td class="risk-high">90.00</td>
+              </tr>
+              <tr>
+                <th>10.0</th>
+                <td class="risk-low">0.10</td>
+                <td class="risk-low">0.80</td>
+                <td class="risk-moderate">2.70</td>
+                <td class="risk-high">6.40</td>
+                <td class="risk-high">12.50</td>
+                <td class="risk-high">21.60</td>
+                <td class="risk-high">34.30</td>
+                <td class="risk-high">51.20</td>
+                <td class="risk-high">72.90</td>
+                <td class="risk-high">100.00</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <th>Detection →</th>
+                <th>1.0</th>
+                <th>2.0</th>
+                <th>3.0</th>
+                <th>4.0</th>
+                <th>5.0</th>
+                <th>6.0</th>
+                <th>7.0</th>
+                <th>8.0</th>
+                <th>9.0</th>
+                <th>10.0</th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <div class="risk-scale-inline">
+          <p><strong>Low Risk:</strong> 0.00–1.24 — Tolerable with monitoring</p>
+          <p><strong>Moderate Risk:</strong> 1.25–5.49 — Action required in a timely manner</p>
+          <p><strong>High Risk:</strong> 5.50–10.00 — Immediate action required</p>
+        </div>
       </div>
 
       <div class="info-panel">
-        <h3>Risk Rating Inputs</h3>
+        <h3>Risk Rating Calculator</h3>
 
         <label>
           Severity
@@ -322,13 +495,6 @@
         <p><strong>Post-Control RPN:</strong> <span id="postRiskRpnResult">0.01</span></p>
         <p><strong>Post-Control Risk Level:</strong> <span id="postRiskLevelResult">Low Risk</span></p>
         <p><strong>Action Status:</strong> <span id="postRiskActionStatus">Acceptable / Monitor</span></p>
-      </div>
-
-      <div class="info-panel">
-        <h3>Risk Scale</h3>
-        <p><strong>Low Risk:</strong> 0.00–1.24 — Tolerable with monitoring</p>
-        <p><strong>Moderate Risk:</strong> 1.25–5.49 — Action required in a timely manner</p>
-        <p><strong>High Risk:</strong> 5.50–10.00 — Immediate action required</p>
       </div>
     </section>
 

@@ -1,17 +1,19 @@
 (function () {
-  function getSelectNumber(id) {
-    const element = document.getElementById(id);
-    if (!element) return 1;
+  function readNumber(id, fallback) {
+    var element = document.getElementById(id);
+    if (!element) return fallback;
 
-    const value = Number(element.value);
-    return Number.isFinite(value) ? value : 1;
+    var rawValue = element.value;
+    var value = Number(rawValue);
+
+    if (!Number.isFinite(value)) return fallback;
+    return value;
   }
 
   function setText(id, value) {
-    const element = document.getElementById(id);
-    if (element) {
-      element.textContent = value;
-    }
+    var element = document.getElementById(id);
+    if (!element) return;
+    element.textContent = value;
   }
 
   function calculateRpn(severity, occurrence, detection) {
@@ -47,13 +49,13 @@
     return value.toFixed(2);
   }
 
-  function updateRiskRatingCalculator() {
-    const severity = getSelectNumber("riskSeverity");
-    const occurrence = getSelectNumber("riskOccurrence");
-    const detection = getSelectNumber("riskDetection");
+  function updateMainRiskCalculator() {
+    var severity = readNumber("riskSeverity", 1);
+    var occurrence = readNumber("riskOccurrence", 1);
+    var detection = readNumber("riskDetection", 1);
 
-    const rpn = calculateRpn(severity, occurrence, detection);
-    const risk = getRiskLevel(rpn);
+    var rpn = calculateRpn(severity, occurrence, detection);
+    var risk = getRiskLevel(rpn);
 
     setText("riskRpnResult", formatRpn(rpn));
     setText("riskLevelResult", risk.level);
@@ -61,46 +63,64 @@
   }
 
   function updatePostControlRiskCalculator() {
-    const severity = getSelectNumber("postRiskSeverity");
-    const occurrence = getSelectNumber("postRiskOccurrence");
-    const detection = getSelectNumber("postRiskDetection");
+    var severity = readNumber("postRiskSeverity", 1);
+    var occurrence = readNumber("postRiskOccurrence", 1);
+    var detection = readNumber("postRiskDetection", 1);
 
-    const rpn = calculateRpn(severity, occurrence, detection);
-    const risk = getRiskLevel(rpn);
+    var rpn = calculateRpn(severity, occurrence, detection);
+    var risk = getRiskLevel(rpn);
 
     setText("postRiskRpnResult", formatRpn(rpn));
     setText("postRiskLevelResult", risk.level);
     setText("postRiskActionStatus", risk.action);
   }
 
-  function bindSelects(ids, callback) {
-    ids.forEach(id => {
-      const element = document.getElementById(id);
-      if (!element) return;
-
-      element.addEventListener("change", callback);
-      element.addEventListener("input", callback);
-    });
-  }
-
-  function initializeRiskMatrixCalculators() {
-    bindSelects(
-      ["riskSeverity", "riskOccurrence", "riskDetection"],
-      updateRiskRatingCalculator
-    );
-
-    bindSelects(
-      ["postRiskSeverity", "postRiskOccurrence", "postRiskDetection"],
-      updatePostControlRiskCalculator
-    );
-
-    updateRiskRatingCalculator();
+  function updateAllRiskMatrixCalculators() {
+    updateMainRiskCalculator();
     updatePostControlRiskCalculator();
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initializeRiskMatrixCalculators);
-  } else {
-    initializeRiskMatrixCalculators();
+  function isRiskSelect(element) {
+    if (!element || !element.id) return false;
+
+    return [
+      "riskSeverity",
+      "riskOccurrence",
+      "riskDetection",
+      "postRiskSeverity",
+      "postRiskOccurrence",
+      "postRiskDetection"
+    ].indexOf(element.id) !== -1;
   }
+
+  function bindRiskMatrixCalculatorEvents() {
+    document.addEventListener("change", function (event) {
+      if (isRiskSelect(event.target)) {
+        updateAllRiskMatrixCalculators();
+      }
+    });
+
+    document.addEventListener("input", function (event) {
+      if (isRiskSelect(event.target)) {
+        updateAllRiskMatrixCalculators();
+      }
+    });
+
+    updateAllRiskMatrixCalculators();
+
+    // This small delayed refresh helps mobile browsers after hidden sections become visible.
+    window.setTimeout(updateAllRiskMatrixCalculators, 250);
+    window.setTimeout(updateAllRiskMatrixCalculators, 1000);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", bindRiskMatrixCalculatorEvents);
+  } else {
+    bindRiskMatrixCalculatorEvents();
+  }
+
+  window.SkyFireRiskMatrix = {
+    update: updateAllRiskMatrixCalculators,
+    calculateRpn: calculateRpn
+  };
 })();

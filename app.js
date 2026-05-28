@@ -187,6 +187,155 @@ function setHomePlaceholders() {
   }
 }
 
+function getNumberInput(id) {
+  const element = document.getElementById(id);
+  if (!element) return 0;
+
+  const value = parseFloat(element.value);
+  return Number.isFinite(value) ? value : 0;
+}
+
+function setText(id, value) {
+  const element = document.getElementById(id);
+  if (element) {
+    element.textContent = value;
+  }
+}
+
+function formatCurrency(value) {
+  if (!Number.isFinite(value)) return "$0";
+
+  return value.toLocaleString(undefined, {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0
+  });
+}
+
+function formatPercent(value) {
+  if (!Number.isFinite(value)) return "0%";
+
+  return `${value.toLocaleString(undefined, {
+    maximumFractionDigits: 1
+  })}%`;
+}
+
+function formatPayback(months) {
+  if (!Number.isFinite(months) || months <= 0) {
+    return "Not available";
+  }
+
+  if (months < 1) {
+    return "Less than 1 month";
+  }
+
+  if (months < 12) {
+    return `${months.toLocaleString(undefined, { maximumFractionDigits: 1 })} months`;
+  }
+
+  const years = months / 12;
+  return `${years.toLocaleString(undefined, { maximumFractionDigits: 1 })} years`;
+}
+
+function calculateSafetyRoi() {
+  const incidentLoss =
+    getNumberInput("roiIncidentEvents") *
+    getNumberInput("roiCostPerIncident");
+
+  const nearMissLoss =
+    getNumberInput("roiNearMissEvents") *
+    getNumberInput("roiCostPerNearMissEvent");
+
+  const propertyDamageLoss =
+    getNumberInput("roiPropertyDamageEvents") *
+    getNumberInput("roiCostPerPropertyDamageEvent");
+
+  const downtimeLoss =
+    getNumberInput("roiDowntimeEvents") *
+    getNumberInput("roiDowntimeHoursPerEvent") *
+    getNumberInput("roiCostPerDowntimeHour");
+
+  const adminBurdenLoss =
+    getNumberInput("roiAdminHoursPerYear") *
+    getNumberInput("roiAdminHourlyRate");
+
+  const baselineAnnualLosses =
+    incidentLoss +
+    nearMissLoss +
+    propertyDamageLoss +
+    downtimeLoss +
+    adminBurdenLoss;
+
+  const installationLaborCost =
+    getNumberInput("roiInstallLaborHours") *
+    getNumberInput("roiInstallLaborRate");
+
+  const trainingCommunicationCost =
+    getNumberInput("roiTrainingHours") *
+    getNumberInput("roiTrainingRate");
+
+  const implementationDowntimeCost =
+    getNumberInput("roiImplementationDowntimeHours") *
+    getNumberInput("roiImplementationDowntimeRate");
+
+  const oneTimeControlCost =
+    getNumberInput("roiControlMaterialCost") +
+    installationLaborCost +
+    trainingCommunicationCost +
+    implementationDowntimeCost +
+    getNumberInput("roiOtherOneTimeCosts");
+
+  const annualRecurringCost = getNumberInput("roiAnnualRecurringCost");
+
+  const firstYearControlCost = oneTimeControlCost + annualRecurringCost;
+
+  const reductionPercent = Math.min(Math.max(getNumberInput("roiReductionPercent"), 0), 100);
+  const reductionRate = reductionPercent / 100;
+
+  const grossAnnualSavings = baselineAnnualLosses * reductionRate;
+  const projectedAnnualCostAfterControl =
+    baselineAnnualLosses - grossAnnualSavings + annualRecurringCost;
+
+  const netAnnualSavings = grossAnnualSavings - annualRecurringCost;
+
+  const roiPercent =
+    oneTimeControlCost > 0
+      ? (netAnnualSavings / oneTimeControlCost) * 100
+      : 0;
+
+  const monthlyNetSavings = netAnnualSavings / 12;
+  const paybackMonths =
+    oneTimeControlCost > 0 && monthlyNetSavings > 0
+      ? oneTimeControlCost / monthlyNetSavings
+      : 0;
+
+  const threeYearNetBenefit = (netAnnualSavings * 3) - oneTimeControlCost;
+
+  setText("roiOneTimeCostTotal", formatCurrency(oneTimeControlCost));
+  setText("roiFirstYearControlCost", formatCurrency(firstYearControlCost));
+
+  setText("roiBaselineAnnualCost", formatCurrency(baselineAnnualLosses));
+  setText("roiGrossAnnualSavings", formatCurrency(grossAnnualSavings));
+  setText("roiProjectedAnnualCost", formatCurrency(projectedAnnualCostAfterControl));
+  setText("roiAnnualSavings", formatCurrency(netAnnualSavings));
+  setText("roiPercent", formatPercent(roiPercent));
+  setText("roiPaybackPeriod", formatPayback(paybackMonths));
+  setText("roiThreeYearNetBenefit", formatCurrency(threeYearNetBenefit));
+}
+
+function initializeSafetyRoiCalculator() {
+  const calculatorSection = document.getElementById("roiCalculatorSection");
+  if (!calculatorSection) return;
+
+  const inputs = calculatorSection.querySelectorAll("input");
+  inputs.forEach(input => {
+    input.addEventListener("input", calculateSafetyRoi);
+    input.addEventListener("change", calculateSafetyRoi);
+  });
+
+  calculateSafetyRoi();
+}
+
 function decodeHtmlEntities(text) {
   const txt = document.createElement("textarea");
   txt.innerHTML = text;
@@ -1599,6 +1748,7 @@ function initializeLibraries() {
 function initializeApp() {
   bindSectionButtons();
   setHomePlaceholders();
+  initializeSafetyRoiCalculator();
   initializeLibraries();
 }
 

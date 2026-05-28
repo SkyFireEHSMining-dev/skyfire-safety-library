@@ -14,9 +14,9 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="192x192" href="Icons/icon-192.png">
   <link rel="apple-touch-icon" href="Icons/icon-192.png">
-  <link rel="stylesheet" href="styles.css?v=roi-control-cost-2">
+  <link rel="stylesheet" href="styles.css?v=roi-post-control-1">
 
-  <script src="app.js?v=roi-calculator-logic-3" defer></script>
+  <script src="app.js?v=roi-post-control-1" defer></script>
 </head>
 <body>
 
@@ -224,8 +224,8 @@
       <div class="info-panel">
         <h3>How to Use</h3>
         <p>
-          Use this tool to estimate the cost of leaving a hazard uncontrolled, then compare
-          those losses against the cost of a proposed safety control.
+          Use this tool to compare current hazard-related losses against the expected
+          losses after a proposed safety control is implemented.
         </p>
         <p>
           This is a planning and communication tool only. Results depend on the quality of the assumptions entered.
@@ -351,19 +351,41 @@
       </div>
 
       <div class="info-panel">
-        <h3>3. Financial Projection</h3>
+        <h3>3. Expected Post-Control Outcome</h3>
         <p>
-          Estimate how much the proposed control may reduce the hazard-related losses identified above.
+          Estimate what the hazard profile may look like after the proposed control is in place.
+          The calculator will use these post-control estimates to calculate the reduction percentage.
         </p>
 
         <label>
-          Expected reduction in hazard-related losses (%)
-          <input type="number" id="roiReductionPercent" value="0" min="0" max="100" step="1">
+          Expected incident / injury events per year after control
+          <input type="number" id="roiPostIncidentEvents" value="0" min="0" step="1">
+        </label>
+
+        <label>
+          Expected near misses or high-potential events per year after control
+          <input type="number" id="roiPostNearMissEvents" value="0" min="0" step="1">
+        </label>
+
+        <label>
+          Expected property damage events per year after control
+          <input type="number" id="roiPostPropertyDamageEvents" value="0" min="0" step="1">
+        </label>
+
+        <label>
+          Expected downtime / disruption events per year after control
+          <input type="number" id="roiPostDowntimeEvents" value="0" min="0" step="1">
+        </label>
+
+        <label>
+          Expected admin / supervisor hours per year after control
+          <input type="number" id="roiPostAdminHoursPerYear" value="0" min="0" step="0.25">
         </label>
 
         <p><strong>Baseline Annual Losses:</strong> <span id="roiBaselineAnnualCost">$0</span></p>
+        <p><strong>Projected Annual Losses After Control:</strong> <span id="roiProjectedAnnualLosses">$0</span></p>
+        <p><strong>Calculated Reduction in Hazard-Related Losses:</strong> <span id="roiCalculatedReductionPercent">0%</span></p>
         <p><strong>Gross Annual Savings:</strong> <span id="roiGrossAnnualSavings">$0</span></p>
-        <p><strong>Projected Annual Cost After Control:</strong> <span id="roiProjectedAnnualCost">$0</span></p>
         <p><strong>Net Annual Savings:</strong> <span id="roiAnnualSavings">$0</span></p>
         <p><strong>ROI:</strong> <span id="roiPercent">0%</span></p>
         <p><strong>Payback Period:</strong> <span id="roiPaybackPeriod">Not available</span></p>

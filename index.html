@@ -14,9 +14,9 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="192x192" href="Icons/icon-192.png">
   <link rel="apple-touch-icon" href="Icons/icon-192.png">
-  <link rel="stylesheet" href="styles.css?v=roi-post-control-2">
+  <link rel="stylesheet" href="styles.css?v=risk-matrix-1">
 
-  <script src="app.js?v=roi-post-control-2" defer></script>
+  <script src="app.js?v=risk-matrix-1" defer></script>
 </head>
 <body>
 
@@ -194,16 +194,141 @@
       </div>
 
       <div class="info-panel">
-        <h3>Purpose</h3>
+        <h3>How to Use</h3>
         <p>
-          This module is reserved for the SkyFire Risk Assessment Matrix. It is intended
-          to support structured review of severity, occurrence, detection, and post-control risk.
+          Select severity, occurrence, and detection ratings. The calculator uses the
+          SkyFire severity-weighted FMEA formula to estimate a Risk Priority Number.
+        </p>
+        <p>
+          Formula: <strong>RPN = [(Severity²) × Occurrence × Detection] / 100</strong>
+        </p>
+      </div>
+
+      <div class="info-panel">
+        <h3>Risk Rating Inputs</h3>
+
+        <label>
+          Severity
+          <select id="riskSeverity">
+            <option value="1">1 — Negligible</option>
+            <option value="2">2 — Very Minor</option>
+            <option value="3">3 — Minor</option>
+            <option value="4">4 — Moderate</option>
+            <option value="5">5 — Significant</option>
+            <option value="6">6 — Serious</option>
+            <option value="7">7 — Major</option>
+            <option value="8">8 — Critical</option>
+            <option value="9">9 — Catastrophic</option>
+            <option value="10">10 — Extreme</option>
+          </select>
+        </label>
+
+        <label>
+          Occurrence
+          <select id="riskOccurrence">
+            <option value="1">1 — Rare</option>
+            <option value="2">2 — Very Uncommon</option>
+            <option value="3">3 — Uncommon</option>
+            <option value="4">4 — Infrequent</option>
+            <option value="5">5 — Occasional</option>
+            <option value="6">6 — Recurring</option>
+            <option value="7">7 — Frequent</option>
+            <option value="8">8 — Very Frequent</option>
+            <option value="9">9 — Routine</option>
+            <option value="10">10 — Constant</option>
+          </select>
+        </label>
+
+        <label>
+          Detection
+          <select id="riskDetection">
+            <option value="1">1 — Obvious</option>
+            <option value="2">2 — Obviously Visible</option>
+            <option value="3">3 — Clearly Visible</option>
+            <option value="4">4 — Visible</option>
+            <option value="5">5 — Slightly Unnoticeable</option>
+            <option value="6">6 — Unnoticeable</option>
+            <option value="7">7 — Difficult to See</option>
+            <option value="8">8 — Semi-Hidden</option>
+            <option value="9">9 — Hidden</option>
+            <option value="10">10 — Near Invisible</option>
+          </select>
+        </label>
+
+        <p><strong>Calculated RPN:</strong> <span id="riskRpnResult">0.01</span></p>
+        <p><strong>Risk Level:</strong> <span id="riskLevelResult">Low Risk</span></p>
+        <p><strong>Interpretation:</strong> <span id="riskInterpretationResult">Tolerable with monitoring</span></p>
+      </div>
+
+      <div class="info-panel">
+        <h3>Post-Control Risk Review</h3>
+        <p>
+          Use this area to compare the original risk against the expected risk after controls are added.
         </p>
 
-        <h3>Current Status</h3>
-        <p>
-          Matrix content is already built separately and will be added to this app in a future update.
-        </p>
+        <label>
+          Controls Added
+          <textarea id="riskControlsAdded" rows="4" placeholder="Example: floor markings, physical barriers, traffic plan, spotter policy, refresher training"></textarea>
+        </label>
+
+        <label>
+          New Severity Rating
+          <select id="postRiskSeverity">
+            <option value="1">1 — Negligible</option>
+            <option value="2">2 — Very Minor</option>
+            <option value="3">3 — Minor</option>
+            <option value="4">4 — Moderate</option>
+            <option value="5">5 — Significant</option>
+            <option value="6">6 — Serious</option>
+            <option value="7">7 — Major</option>
+            <option value="8">8 — Critical</option>
+            <option value="9">9 — Catastrophic</option>
+            <option value="10">10 — Extreme</option>
+          </select>
+        </label>
+
+        <label>
+          New Occurrence Rating
+          <select id="postRiskOccurrence">
+            <option value="1">1 — Rare</option>
+            <option value="2">2 — Very Uncommon</option>
+            <option value="3">3 — Uncommon</option>
+            <option value="4">4 — Infrequent</option>
+            <option value="5">5 — Occasional</option>
+            <option value="6">6 — Recurring</option>
+            <option value="7">7 — Frequent</option>
+            <option value="8">8 — Very Frequent</option>
+            <option value="9">9 — Routine</option>
+            <option value="10">10 — Constant</option>
+          </select>
+        </label>
+
+        <label>
+          New Detection Rating
+          <select id="postRiskDetection">
+            <option value="1">1 — Obvious</option>
+            <option value="2">2 — Obviously Visible</option>
+            <option value="3">3 — Clearly Visible</option>
+            <option value="4">4 — Visible</option>
+            <option value="5">5 — Slightly Unnoticeable</option>
+            <option value="6">6 — Unnoticeable</option>
+            <option value="7">7 — Difficult to See</option>
+            <option value="8">8 — Semi-Hidden</option>
+            <option value="9">9 — Hidden</option>
+            <option value="10">10 — Near Invisible</option>
+          </select>
+        </label>
+
+        <p><strong>Post-Control RPN:</strong> <span id="postRiskRpnResult">0.01</span></p>
+        <p><strong>Post-Control Risk Level:</strong> <span id="postRiskLevelResult">Low Risk</span></p>
+        <p><strong>Action Status:</strong> <span id="postRiskActionStatus">Acceptable / Monitor</span></p>
+      </div>
+
+      <div class="info-panel">
+        <h3>Risk Scale</h3>
+        <p><strong>Low Risk:</strong> 0.00–1.24 — Tolerable with monitoring</p>
+        <p><strong>Moderate Risk:</strong> 1.25–5.49 — Action required in a timely manner</p>
+        <p><strong>High Risk:</strong> 5.50–10.00 — Immediate action required</p>
       </div>
     </section>
 

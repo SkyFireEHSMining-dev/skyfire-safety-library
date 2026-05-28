@@ -14,9 +14,10 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="192x192" href="Icons/icon-192.png">
   <link rel="apple-touch-icon" href="Icons/icon-192.png">
-  <link rel="stylesheet" href="styles.css?v=risk-matrix-3d-guide-1">
+  <link rel="stylesheet" href="styles.css?v=risk-matrix-v2-guide-1">
 
-  <script src="app.js?v=risk-matrix-3d-guide-1" defer></script>
+  <script src="app.js?v=risk-matrix-v2-guide-1" defer></script>
+  <script src="risk-matrix.js?v=risk-matrix-v2-guide-1" defer></script>
 </head>
 <body>
 
@@ -196,13 +197,20 @@
       <div class="info-panel">
         <h3>Visual Risk Matrix</h3>
         <p>
+          <strong>FMEA</strong> means <strong>Failure Mode and Effects Analysis</strong>.
+          In plain language, it is a structured way to ask what could go wrong, how severe it could be,
+          how often it could happen, and how likely it is to be missed before harm occurs.
+        </p>
+        <p>
+          <strong>RPN</strong> means <strong>Risk Priority Number</strong>.
           Formula: <strong>RPN = [(Severity<sup>2</sup>) &times; Occurrence &times; Detection] / 100</strong>.
           Severity is weighted more heavily because high-consequence hazards deserve extra attention even when
           they are less frequent.
         </p>
         <p>
-          Severity runs across the top. Occurrence runs down the left side. Detection is applied through the
-          formula and calculator below.
+          Read the visual matrix as a field reference. Severity runs across the top and Occurrence runs down the left side.
+          Detection is the third risk dimension. When Severity and Detection are the same number, the chart cell lines up directly.
+          When they are different, use the calculator below to triangulate the final RPN accurately.
         </p>
 
         <div class="risk-matrix-scroll matrix-scroll-wrapper">
@@ -376,6 +384,63 @@
           <p><strong>Low Risk:</strong> 0.00&ndash;1.24 &mdash; Tolerable with monitoring</p>
           <p><strong>Moderate Risk:</strong> 1.25&ndash;5.49 &mdash; Action required in a timely manner</p>
           <p><strong>High Risk:</strong> 5.50&ndash;10.00 &mdash; Immediate action required</p>
+        </div>
+
+        <div class="rating-guide-grid">
+          <section class="rating-guide-card">
+            <h3>Rating Guide</h3>
+            <p>Use these descriptions to keep ratings consistent from one hazard review to the next.</p>
+          </section>
+
+          <section class="rating-guide-card">
+            <h4>Severity</h4>
+            <p><strong>1:</strong> Negligible â No injury, no damage</p>
+            <p><strong>2:</strong> Very Minor â First aid only</p>
+            <p><strong>3:</strong> Minor â Medical, no lost time</p>
+            <p><strong>4:</strong> Moderate â Recordable injury or restricted duty</p>
+            <p><strong>5:</strong> Significant â Lost-time injury</p>
+            <p><strong>6:</strong> Serious â Permanent minor impairment</p>
+            <p><strong>7:</strong> Major â Permanent disability</p>
+            <p><strong>8:</strong> Critical â Life-threatening injury</p>
+            <p><strong>9:</strong> Catastrophic â Fatality possible</p>
+            <p><strong>10:</strong> Extreme â Certain fatality</p>
+          </section>
+
+          <section class="rating-guide-card">
+            <h4>Occurrence</h4>
+            <p><strong>1:</strong> Rare â Random to never</p>
+            <p><strong>2:</strong> Very Uncommon â About once per year</p>
+            <p><strong>3:</strong> Uncommon â Few times per year</p>
+            <p><strong>4:</strong> Infrequent â Several times per year</p>
+            <p><strong>5:</strong> Occasional â About once per month</p>
+            <p><strong>6:</strong> Recurring â Every few weeks</p>
+            <p><strong>7:</strong> Frequent â About once per week</p>
+            <p><strong>8:</strong> Very Frequent â About once a day</p>
+            <p><strong>9:</strong> Routine â Few times a day</p>
+            <p><strong>10:</strong> Constant â Multiple times per shift</p>
+          </section>
+
+          <section class="rating-guide-card">
+            <h4>Detection</h4>
+            <p><strong>1:</strong> Obvious â Noticeable even if distracted</p>
+            <p><strong>2:</strong> Obviously Visible â Almost always noticed</p>
+            <p><strong>3:</strong> Clearly Visible â Usually noticed</p>
+            <p><strong>4:</strong> Visible â Often noticed</p>
+            <p><strong>5:</strong> Slightly Unnoticeable â Overlooked</p>
+            <p><strong>6:</strong> Unnoticeable â Missed if unfocused or unfamiliar</p>
+            <p><strong>7:</strong> Difficult to See â Rarely noticed</p>
+            <p><strong>8:</strong> Semi-Hidden â Partly covered or hidden</p>
+            <p><strong>9:</strong> Hidden â Mostly covered or hiding</p>
+            <p><strong>10:</strong> Near Invisible â Completely covered or darkness</p>
+          </section>
+
+          <section class="rating-guide-card">
+            <h4>Control Types</h4>
+            <p>Elimination / Substitution / Engineering / Administrative / PPE</p>
+
+            <h4>Action Status</h4>
+            <p>Acceptable / Monitor / Improve Further / Unacceptable</p>
+          </section>
         </div>
       </div>
 

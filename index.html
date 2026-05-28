@@ -14,9 +14,9 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="192x192" href="Icons/icon-192.png">
   <link rel="apple-touch-icon" href="Icons/icon-192.png">
-  <link rel="stylesheet" href="styles.css?v=roi-section-structure-1">
+  <link rel="stylesheet" href="styles.css?v=roi-control-cost-1">
 
-  <script src="app.js?v=roi-calculator-logic-1" defer></script>
+  <script src="app.js?v=roi-calculator-logic-2" defer></script>
 </head>
 <body>
 
@@ -295,19 +295,50 @@
       </div>
 
       <div class="info-panel">
-        <h3>2. Proposed Control</h3>
+        <h3>2. Proposed Control Cost</h3>
         <p>
-          Enter the cost of the safety improvement and estimate how much of the current loss it may reduce.
+          Estimate the full cost to implement the safety control, including materials,
+          labor, communication, downtime, and ongoing maintenance.
         </p>
 
         <label>
-          Proposed control / improvement name
-          <input type="text" id="roiControlName" value="" placeholder="Example: warehouse floor tape and traffic lanes">
+          Control / material cost ($)
+          <input type="number" id="roiControlMaterialCost" value="0" min="0" step="100">
         </label>
 
         <label>
-          One-time implementation cost ($)
-          <input type="number" id="roiOneTimeCost" value="0" min="0" step="100">
+          Installation labor hours
+          <input type="number" id="roiInstallLaborHours" value="0" min="0" step="0.25">
+        </label>
+
+        <label>
+          Installation labor hourly rate ($)
+          <input type="number" id="roiInstallLaborRate" value="0" min="0" step="1">
+        </label>
+
+        <label>
+          Training / communication hours
+          <input type="number" id="roiTrainingHours" value="0" min="0" step="0.25">
+        </label>
+
+        <label>
+          Training / communication hourly rate ($)
+          <input type="number" id="roiTrainingRate" value="0" min="0" step="1">
+        </label>
+
+        <label>
+          Downtime hours during implementation
+          <input type="number" id="roiImplementationDowntimeHours" value="0" min="0" step="0.25">
+        </label>
+
+        <label>
+          Cost per implementation downtime hour ($)
+          <input type="number" id="roiImplementationDowntimeRate" value="0" min="0" step="50">
+        </label>
+
+        <label>
+          Other one-time costs ($)
+          <input type="number" id="roiOtherOneTimeCosts" value="0" min="0" step="100">
         </label>
 
         <label>
@@ -315,14 +346,20 @@
           <input type="number" id="roiAnnualRecurringCost" value="0" min="0" step="100">
         </label>
 
-        <label>
-          Estimated reduction in current annual losses (%)
-          <input type="number" id="roiReductionPercent" value="0" min="0" max="100" step="1">
-        </label>
+        <p><strong>Total One-Time Control Cost:</strong> <span id="roiOneTimeCostTotal">$0</span></p>
+        <p><strong>Total First-Year Control Cost:</strong> <span id="roiFirstYearControlCost">$0</span></p>
       </div>
 
       <div class="info-panel">
         <h3>3. Financial Projection</h3>
+        <p>
+          Estimate how much the proposed control may reduce the hazard-related losses identified above.
+        </p>
+
+        <label>
+          Expected reduction in hazard-related losses (%)
+          <input type="number" id="roiReductionPercent" value="0" min="0" max="100" step="1">
+        </label>
 
         <p><strong>Baseline Annual Losses:</strong> <span id="roiBaselineAnnualCost">$0</span></p>
         <p><strong>Gross Annual Savings:</strong> <span id="roiGrossAnnualSavings">$0</span></p>

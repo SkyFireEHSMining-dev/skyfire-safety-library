@@ -104,7 +104,7 @@
 
     <section id="cfrSection" class="app-section hidden">
       <div class="module-header">
-        <button class="module-home-btn" data-open-section="homeSection">â Home</button>
+        <button class="module-home-btn" data-open-section="homeSection">&larr; Home</button>
         <div class="module-header-text">
           <h2>MSHA / 30 CFR Field Reference</h2>
           <p>Browse and search the MSHA module.</p>
@@ -145,7 +145,7 @@
 
     <section id="oshaSection" class="app-section hidden">
       <div class="module-header osha-module-header">
-        <button class="module-home-btn" data-open-section="homeSection">â Home</button>
+        <button class="module-home-btn" data-open-section="homeSection">&larr; Home</button>
         <div class="module-header-text">
           <h2>OSHA / 29 CFR Field Reference</h2>
           <p>Browse and search the OSHA module.</p>
@@ -186,7 +186,7 @@
 
     <section id="riskMatrixSection" class="app-section hidden">
       <div class="module-header">
-        <button class="module-home-btn" data-open-section="homeSection">â Home</button>
+        <button class="module-home-btn" data-open-section="homeSection">&larr; Home</button>
         <div class="module-header-text">
           <h2>Risk Assessment Matrix</h2>
           <p>SkyFire FMEA-style matrix for structured risk review.</p>
@@ -196,7 +196,7 @@
       <div class="info-panel">
         <h3>Visual Risk Matrix</h3>
         <p>
-          Formula: <strong>RPN = [(SeverityÂ²) Ã Occurrence Ã Detection] / 100</strong>.
+          Formula: <strong>RPN = [(Severity<sup>2</sup>) &times; Occurrence &times; Detection] / 100</strong>.
           Severity is weighted more heavily because high-consequence hazards deserve extra attention even when
           they are less frequent.
         </p>
@@ -209,7 +209,7 @@
           <table class="risk-matrix-table" aria-label="SkyFire Risk Assessment Matrix">
             <thead>
               <tr>
-                <th class="matrix-corner">Severity â<br>Occurrence â</th>
+                <th class="matrix-corner">Severity &rarr;<br>Occurrence &darr;</th>
                 <th>1.0</th>
                 <th>2.0</th>
                 <th>3.0</th>
@@ -356,7 +356,7 @@
             </tbody>
             <tfoot>
               <tr>
-                <th>Detection â</th>
+                <th>Detection &rarr;</th>
                 <th>1.0</th>
                 <th>2.0</th>
                 <th>3.0</th>
@@ -373,9 +373,9 @@
         </div>
 
         <div class="risk-scale-inline">
-          <p><strong>Low Risk:</strong> 0.00â1.24 â Tolerable with monitoring</p>
-          <p><strong>Moderate Risk:</strong> 1.25â5.49 â Action required in a timely manner</p>
-          <p><strong>High Risk:</strong> 5.50â10.00 â Immediate action required</p>
+          <p><strong>Low Risk:</strong> 0.00&ndash;1.24 &mdash; Tolerable with monitoring</p>
+          <p><strong>Moderate Risk:</strong> 1.25&ndash;5.49 &mdash; Action required in a timely manner</p>
+          <p><strong>High Risk:</strong> 5.50&ndash;10.00 &mdash; Immediate action required</p>
         </div>
       </div>
 
@@ -385,48 +385,48 @@
         <label>
           Severity
           <select id="riskSeverity">
-            <option value="1">1 â Negligible</option>
-            <option value="2">2 â Very Minor</option>
-            <option value="3">3 â Minor</option>
-            <option value="4">4 â Moderate</option>
-            <option value="5">5 â Significant</option>
-            <option value="6">6 â Serious</option>
-            <option value="7">7 â Major</option>
-            <option value="8">8 â Critical</option>
-            <option value="9">9 â Catastrophic</option>
-            <option value="10">10 â Extreme</option>
+            <option value="1">1 &mdash; Negligible</option>
+            <option value="2">2 &mdash; Very Minor</option>
+            <option value="3">3 &mdash; Minor</option>
+            <option value="4">4 &mdash; Moderate</option>
+            <option value="5">5 &mdash; Significant</option>
+            <option value="6">6 &mdash; Serious</option>
+            <option value="7">7 &mdash; Major</option>
+            <option value="8">8 &mdash; Critical</option>
+            <option value="9">9 &mdash; Catastrophic</option>
+            <option value="10">10 &mdash; Extreme</option>
           </select>
         </label>
 
         <label>
           Occurrence
           <select id="riskOccurrence">
-            <option value="1">1 â Rare</option>
-            <option value="2">2 â Very Uncommon</option>
-            <option value="3">3 â Uncommon</option>
-            <option value="4">4 â Infrequent</option>
-            <option value="5">5 â Occasional</option>
-            <option value="6">6 â Recurring</option>
-            <option value="7">7 â Frequent</option>
-            <option value="8">8 â Very Frequent</option>
-            <option value="9">9 â Routine</option>
-            <option value="10">10 â Constant</option>
+            <option value="1">1 &mdash; Rare</option>
+            <option value="2">2 &mdash; Very Uncommon</option>
+            <option value="3">3 &mdash; Uncommon</option>
+            <option value="4">4 &mdash; Infrequent</option>
+            <option value="5">5 &mdash; Occasional</option>
+            <option value="6">6 &mdash; Recurring</option>
+            <option value="7">7 &mdash; Frequent</option>
+            <option value="8">8 &mdash; Very Frequent</option>
+            <option value="9">9 &mdash; Routine</option>
+            <option value="10">10 &mdash; Constant</option>
           </select>
         </label>
 
         <label>
           Detection
           <select id="riskDetection">
-            <option value="1">1 â Obvious</option>
-            <option value="2">2 â Obviously Visible</option>
-            <option value="3">3 â Clearly Visible</option>
-            <option value="4">4 â Visible</option>
-            <option value="5">5 â Slightly Unnoticeable</option>
-            <option value="6">6 â Unnoticeable</option>
-            <option value="7">7 â Difficult to See</option>
-            <option value="8">8 â Semi-Hidden</option>
-            <option value="9">9 â Hidden</option>
-            <option value="10">10 â Near Invisible</option>
+            <option value="1">1 &mdash; Obvious</option>
+            <option value="2">2 &mdash; Obviously Visible</option>
+            <option value="3">3 &mdash; Clearly Visible</option>
+            <option value="4">4 &mdash; Visible</option>
+            <option value="5">5 &mdash; Slightly Unnoticeable</option>
+            <option value="6">6 &mdash; Unnoticeable</option>
+            <option value="7">7 &mdash; Difficult to See</option>
+            <option value="8">8 &mdash; Semi-Hidden</option>
+            <option value="9">9 &mdash; Hidden</option>
+            <option value="10">10 &mdash; Near Invisible</option>
           </select>
         </label>
 
@@ -449,48 +449,48 @@
         <label>
           New Severity Rating
           <select id="postRiskSeverity">
-            <option value="1">1 â Negligible</option>
-            <option value="2">2 â Very Minor</option>
-            <option value="3">3 â Minor</option>
-            <option value="4">4 â Moderate</option>
-            <option value="5">5 â Significant</option>
-            <option value="6">6 â Serious</option>
-            <option value="7">7 â Major</option>
-            <option value="8">8 â Critical</option>
-            <option value="9">9 â Catastrophic</option>
-            <option value="10">10 â Extreme</option>
+            <option value="1">1 &mdash; Negligible</option>
+            <option value="2">2 &mdash; Very Minor</option>
+            <option value="3">3 &mdash; Minor</option>
+            <option value="4">4 &mdash; Moderate</option>
+            <option value="5">5 &mdash; Significant</option>
+            <option value="6">6 &mdash; Serious</option>
+            <option value="7">7 &mdash; Major</option>
+            <option value="8">8 &mdash; Critical</option>
+            <option value="9">9 &mdash; Catastrophic</option>
+            <option value="10">10 &mdash; Extreme</option>
           </select>
         </label>
 
         <label>
           New Occurrence Rating
           <select id="postRiskOccurrence">
-            <option value="1">1 â Rare</option>
-            <option value="2">2 â Very Uncommon</option>
-            <option value="3">3 â Uncommon</option>
-            <option value="4">4 â Infrequent</option>
-            <option value="5">5 â Occasional</option>
-            <option value="6">6 â Recurring</option>
-            <option value="7">7 â Frequent</option>
-            <option value="8">8 â Very Frequent</option>
-            <option value="9">9 â Routine</option>
-            <option value="10">10 â Constant</option>
+            <option value="1">1 &mdash; Rare</option>
+            <option value="2">2 &mdash; Very Uncommon</option>
+            <option value="3">3 &mdash; Uncommon</option>
+            <option value="4">4 &mdash; Infrequent</option>
+            <option value="5">5 &mdash; Occasional</option>
+            <option value="6">6 &mdash; Recurring</option>
+            <option value="7">7 &mdash; Frequent</option>
+            <option value="8">8 &mdash; Very Frequent</option>
+            <option value="9">9 &mdash; Routine</option>
+            <option value="10">10 &mdash; Constant</option>
           </select>
         </label>
 
         <label>
           New Detection Rating
           <select id="postRiskDetection">
-            <option value="1">1 â Obvious</option>
-            <option value="2">2 â Obviously Visible</option>
-            <option value="3">3 â Clearly Visible</option>
-            <option value="4">4 â Visible</option>
-            <option value="5">5 â Slightly Unnoticeable</option>
-            <option value="6">6 â Unnoticeable</option>
-            <option value="7">7 â Difficult to See</option>
-            <option value="8">8 â Semi-Hidden</option>
-            <option value="9">9 â Hidden</option>
-            <option value="10">10 â Near Invisible</option>
+            <option value="1">1 &mdash; Obvious</option>
+            <option value="2">2 &mdash; Obviously Visible</option>
+            <option value="3">3 &mdash; Clearly Visible</option>
+            <option value="4">4 &mdash; Visible</option>
+            <option value="5">5 &mdash; Slightly Unnoticeable</option>
+            <option value="6">6 &mdash; Unnoticeable</option>
+            <option value="7">7 &mdash; Difficult to See</option>
+            <option value="8">8 &mdash; Semi-Hidden</option>
+            <option value="9">9 &mdash; Hidden</option>
+            <option value="10">10 &mdash; Near Invisible</option>
           </select>
         </label>
 
@@ -502,7 +502,7 @@
 
     <section id="roiCalculatorSection" class="app-section hidden">
       <div class="module-header">
-        <button class="module-home-btn" data-open-section="homeSection">â Home</button>
+        <button class="module-home-btn" data-open-section="homeSection">&larr; Home</button>
         <div class="module-header-text">
           <h2>Safety ROI Calculator</h2>
           <p>Estimate the operational and financial impact of safety controls.</p>
@@ -688,7 +688,7 @@
 
     <section id="docsSection" class="app-section hidden">
       <div class="module-header">
-        <button class="module-home-btn" data-open-section="homeSection">â Home</button>
+        <button class="module-home-btn" data-open-section="homeSection">&larr; Home</button>
         <div class="module-header-text">
           <h2>MSHA Docs</h2>
           <p>Selected MSHA documents and reference material.</p>
@@ -706,7 +706,7 @@
 
     <section id="toolboxTalksSection" class="app-section hidden">
       <div class="module-header">
-        <button class="module-home-btn" data-open-section="homeSection">â Home</button>
+        <button class="module-home-btn" data-open-section="homeSection">&larr; Home</button>
         <div class="module-header-text">
           <h2>Toolbox Talks</h2>
           <p>Short safety meeting prompts and discussion guides.</p>
@@ -730,7 +730,7 @@
 
     <section id="aboutSection" class="app-section hidden">
       <div class="module-header">
-        <button class="module-home-btn" data-open-section="homeSection">â Home</button>
+        <button class="module-home-btn" data-open-section="homeSection">&larr; Home</button>
         <div class="module-header-text">
           <h2>About SkyFire</h2>
           <p>Project information, purpose, disclaimer, and creator details.</p>
@@ -742,7 +742,7 @@
 
         <p>
           Developed by <strong>Nicholas R. Murphy</strong><br>
-          SkyFire Safety â Mine Safety Tools
+          SkyFire Safety &mdash; Mine Safety Tools
         </p>
 
         <p>
@@ -768,7 +768,7 @@
 
   <footer id="siteFooter">
     <div>Developed by Nicholas R. Murphy</div>
-    <div>SkyFire Safety â Mine Safety Tools</div>
+    <div>SkyFire Safety &mdash; Mine Safety Tools</div>
   </footer>
 
   <script>

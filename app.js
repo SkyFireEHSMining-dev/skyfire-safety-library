@@ -1199,7 +1199,7 @@ function renderBookmarkFolders(libraryKey) {
   state.bookmarkFolders.forEach(folder => {
     const details = document.createElement("details");
     details.className = "bookmark-folder";
-    details.open = true;
+    details.open = false;
 
     const summary = document.createElement("summary");
     summary.className = "bookmark-folder-title";

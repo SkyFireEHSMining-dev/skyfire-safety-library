@@ -792,7 +792,7 @@ function renderTree(libraryKey, node, levelIndex, query) {
 
     const { details, content } = createDetails(
       highlightText(key, query),
-      levelIndex === 0,
+      false,
       levelClassName(levelIndex)
     );
 

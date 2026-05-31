@@ -21,28 +21,28 @@
   }
 
   function getRiskLevel(rpn) {
-    if (rpn <= 1.24) {
-      return {
-        level: "Low Risk",
-        interpretation: "Tolerable with monitoring",
-        action: "Acceptable / Monitor"
-      };
-    }
-
-    if (rpn <= 5.49) {
-      return {
-        level: "Moderate Risk",
-        interpretation: "Action required in a timely manner",
-        action: "Improve Further"
-      };
-    }
-
+  if (rpn <= 1.24) {
     return {
-      level: "High Risk",
-      interpretation: "Immediate action required",
-      action: "Unacceptable / Immediate Action Required"
+      level: "Low Risk",
+      interpretation: "Monitor and improve if practical",
+      action: "Acceptable / Monitor"
     };
   }
+
+  if (rpn <= 5.49) {
+    return {
+      level: "Moderate Risk",
+      interpretation: "Action required with planned controls",
+      action: "Improve Further"
+    };
+  }
+
+  return {
+    level: "High Risk",
+    interpretation: "Immediate mitigation and escalation required",
+    action: "Unacceptable / Immediate Action Required"
+  };
+}
 
   function formatRpn(value) {
     if (!Number.isFinite(value)) return "0.00";

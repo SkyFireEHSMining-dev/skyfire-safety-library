@@ -1,4 +1,4 @@
-const APP_VERSION = "library-shell-3-lazy-load";
+const APP_VERSION = "msha-forms-cache-v4";
 const XML_FOLDER_NAME = "Data";
 const MIN_TEXT_SEARCH_LENGTH = 3;
 const MAX_SEARCH_RESULTS = 100;

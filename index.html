@@ -14,10 +14,10 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="192x192" href="Icons/icon-192.png">
   <link rel="apple-touch-icon" href="Icons/icon-192.png">
-  <link rel="stylesheet" href="styles.css?v=risk-matrix-ascii-fix-1">
+  <link rel="stylesheet" href="styles.css?v=msha-forms-cache-v4">
 
-  <script src="app.js?v=risk-matrix-ascii-fix-1" defer></script>
-  <script src="risk-matrix.js?v=risk-matrix-ascii-fix-1" defer></script>
+  <script src="app.js?v=msha-forms-cache-v4" defer></script>
+  <script src="risk-matrix.js?v=msha-forms-cache-v4" defer></script>
 </head>
 <body>
 
@@ -38,7 +38,7 @@
         <div class="quick-info-card">
           <div class="quick-info-banner">
             <span class="quick-banner-title">Field Status Dashboard</span>
-            <span class="quick-banner-subtitle">SkyFire Safety Library v0.9 Beta — actively developed and improving over time.</span>
+            <span class="quick-banner-subtitle">SkyFire Safety Library v0.10 Beta — MSHA forms library expanded and cache refreshed.</span>
           </div>
 
           <div class="quick-info-item">
@@ -55,7 +55,7 @@
 
           <div class="quick-info-item">
             <span class="quick-label">Last Updated</span>
-            <span class="quick-value" id="homeLastUpdated">May 28, 2026</span>
+            <span class="quick-value" id="homeLastUpdated">June 14, 2026</span>
           </div>
         </div>
       </section>
@@ -82,8 +82,8 @@
         </button>
 
         <button class="dashboard-tile" data-open-section="docsSection">
-          <span class="tile-title">MSHA Docs</span>
-          <span class="tile-subtitle">Selected MSHA documents and reference material.</span>
+          <span class="tile-title">MSHA Forms Library</span>
+          <span class="tile-subtitle">Common MSHA forms organized by use and file name.</span>
         </button>
 
         <button class="dashboard-tile" data-open-section="safetyDocsSection">
@@ -749,122 +749,35 @@
     <button class="module-home-btn" data-open-section="homeSection">Back Home</button>
     <div class="module-header-text">
       <h2>MSHA Forms Library</h2>
-      <p>Selected MSHA forms, reporting documents, and printable field resources.</p>
+      <p>Common MSHA forms organized by form number, title, and practical use.</p>
     </div>
   </div>
 
   <div class="info-panel">
     <h3>Document Library</h3>
     <p>
-      Use this section for quick access to selected MSHA forms and SkyFire printable
-      resources. Always verify current MSHA requirements, instructions, and submission
+      Use this section for quick access to selected MSHA forms and printable field resources.
+      The description under each form uses the official or practical form title so the file name
+      is easier to recognize in the field. Always verify current MSHA instructions and submission
       methods before relying on any document.
     </p>
   </div>
 
   <div class="info-panel">
-    <h3>Training & Certification Forms</h3>
+    <h3>Training, Certification & Qualification Forms</h3>
 
     <div class="document-card">
       <h4>MSHA Form 5000-23</h4>
-      <p>Certificate of Training form used to document required miner training.</p>
+      <p><strong>Certificate of Training.</strong> Used to record and certify required miner training.</p>
       <div class="document-actions">
         <a href="docs/MSHA-form-5000-23.pdf" target="_blank" rel="noopener">Open Form</a>
         <a href="docs/MSHA-form-5000-23.pdf" download>Download PDF</a>
       </div>
     </div>
-  </div>
-
-  <div class="info-panel">
-    <h3>Accident, Injury, Illness & Emergency Reporting</h3>
-
-    <div class="document-card">
-      <h4>MSHA Form 7000-1</h4>
-      <p>Mine Accident, Injury, and Illness Report form.</p>
-      <div class="document-actions">
-        <a href="docs/MSHA-form-7000-1.pdf" target="_blank" rel="noopener">Open Form</a>
-        <a href="docs/MSHA-form-7000-1.pdf" download>Download PDF</a>
-      </div>
-    </div>
-
-    <div class="document-card">
-      <h4>MSHA Form 7000-51</h4>
-      <p>MSHA form related to emergency response, rescue, or accident-related reporting support.</p>
-      <div class="document-actions">
-        <a href="docs/MSHA-form-7000-51.pdf" target="_blank" rel="noopener">Open Form</a>
-        <a href="docs/MSHA-form-7000-51.pdf" download>Download PDF</a>
-      </div>
-    </div>
-  </div>
-
-  <div class="info-panel">
-    <h3>Production, Employment & Operator Reporting</h3>
-
-    <div class="document-card">
-      <h4>MSHA Form 7000-2</h4>
-      <p>Quarterly Mine Employment and Coal Production Report form.</p>
-      <div class="document-actions">
-        <a href="docs/MSHA-form-7000-2.pdf" target="_blank" rel="noopener">Open Form</a>
-        <a href="docs/MSHA-form-7000-2.pdf" download>Download PDF</a>
-      </div>
-    </div>
-
-    <div class="document-card">
-      <h4>MSHA Form 2000-7</h4>
-      <p>Legal identity report used to provide mine/operator identifying information to MSHA.</p>
-      <div class="document-actions">
-        <a href="docs/MSHA-form-2000-7.pdf" target="_blank" rel="noopener">Open Form</a>
-        <a href="docs/MSHA-form-2000-7.pdf" download>Download PDF</a>
-      </div>
-    </div>
-
-    <div class="document-card">
-      <h4>MSHA Form 2000-38</h4>
-      <p>MSHA form used for mine identification or operator-related administrative reporting.</p>
-      <div class="document-actions">
-        <a href="docs/MSHA-form-2000-38.pdf" target="_blank" rel="noopener">Open Form</a>
-        <a href="docs/MSHA-form-2000-38.pdf" download>Download PDF</a>
-      </div>
-    </div>
-  </div>
-
-  <div class="info-panel">
-    <h3>Petitions, Complaints, Requests & Administrative Forms</h3>
-
-    <div class="document-card">
-      <h4>MSHA Form 2000-224</h4>
-      <p>MSHA administrative form for selected requests, petitions, or filings.</p>
-      <div class="document-actions">
-        <a href="docs/MSHA-form-2000-224.pdf" target="_blank" rel="noopener">Open Form</a>
-        <a href="docs/MSHA-form-2000-224.pdf" download>Download PDF</a>
-      </div>
-    </div>
-
-    <div class="document-card">
-      <h4>MSHA Form 2000-238</h4>
-      <p>MSHA administrative form for selected filings, requests, or operator-submitted information.</p>
-      <div class="document-actions">
-        <a href="docs/MSHA-form-2000-238.pdf" target="_blank" rel="noopener">Open Form</a>
-        <a href="docs/MSHA-form-2000-238.pdf" download>Download PDF</a>
-      </div>
-    </div>
-
-    <div class="document-card">
-      <h4>MSHA Form 7000-52</h4>
-      <p>Contractor request form used for MSHA contractor identification or related administrative processing.</p>
-      <div class="document-actions">
-        <a href="docs/MSHA-form-7000-52.pdf" target="_blank" rel="noopener">Open Form</a>
-        <a href="docs/MSHA-form-7000-52.pdf" download>Download PDF</a>
-      </div>
-    </div>
-  </div>
-
-  <div class="info-panel">
-    <h3>Health, Medical, Exposure & Technical Forms</h3>
 
     <div class="document-card">
       <h4>MSHA Form 5000-1</h4>
-      <p>MSHA health, medical, or technical reporting form.</p>
+      <p><strong>Certificate of Electrical/Noise Training.</strong> Used for electrical or noise training certification records.</p>
       <div class="document-actions">
         <a href="docs/MSHA-form-5000-1.pdf" target="_blank" rel="noopener">Open Form</a>
         <a href="docs/MSHA-form-5000-1.pdf" download>Download PDF</a>
@@ -872,17 +785,8 @@
     </div>
 
     <div class="document-card">
-      <h4>MSHA Form 5000-3</h4>
-      <p>MSHA health, medical, or technical reporting form.</p>
-      <div class="document-actions">
-        <a href="docs/MSHA-form-5000-3.pdf" target="_blank" rel="noopener">Open Form</a>
-        <a href="docs/MSHA-form-5000-3.pdf" download>Download PDF</a>
-      </div>
-    </div>
-
-    <div class="document-card">
       <h4>MSHA Form 5000-41</h4>
-      <p>MSHA health, medical, or exposure-related reporting form.</p>
+      <p><strong>Health Activity Certification or Hoisting Engineers Qualification Request.</strong> Used for certification or hoisting qualification requests.</p>
       <div class="document-actions">
         <a href="docs/MSHA-form-5000-41.pdf" target="_blank" rel="noopener">Open Form</a>
         <a href="docs/MSHA-form-5000-41.pdf" download>Download PDF</a>
@@ -891,16 +795,109 @@
 
     <div class="document-card">
       <h4>MSHA Form 5000-46</h4>
-      <p>MSHA health, medical, or exposure-related reporting form.</p>
+      <p><strong>Request for MSHA Individual Identification Number (MIIN).</strong> Used to request an MSHA Individual Identification Number.</p>
       <div class="document-actions">
         <a href="docs/MSHA-form-5000-46.pdf" target="_blank" rel="noopener">Open Form</a>
         <a href="docs/MSHA-form-5000-46.pdf" download>Download PDF</a>
       </div>
     </div>
+  </div>
+
+  <div class="info-panel">
+    <h3>Mine, Operator & Contractor Identification</h3>
+
+    <div class="document-card">
+      <h4>MSHA Form 7000-51</h4>
+      <p><strong>Mine ID Request.</strong> Used to request an MSHA mine identification number before beginning mine operations.</p>
+      <div class="document-actions">
+        <a href="docs/MSHA-form-7000-51.pdf" target="_blank" rel="noopener">Open Form</a>
+        <a href="docs/MSHA-form-7000-51.pdf" download>Download PDF</a>
+      </div>
+    </div>
+
+    <div class="document-card">
+      <h4>MSHA Form 2000-7</h4>
+      <p><strong>Legal Identification Report.</strong> Used to report mine operator legal identity information and ownership changes.</p>
+      <div class="document-actions">
+        <a href="docs/MSHA-form-2000-7.pdf" target="_blank" rel="noopener">Open Form</a>
+        <a href="docs/MSHA-form-2000-7.pdf" download>Download PDF</a>
+      </div>
+    </div>
+
+    <div class="document-card">
+      <h4>MSHA Form 7000-52</h4>
+      <p><strong>Contractor ID Request.</strong> Used by independent contractors to request or update an MSHA contractor identification number.</p>
+      <div class="document-actions">
+        <a href="docs/MSHA-form-7000-52.pdf" target="_blank" rel="noopener">Open Form</a>
+        <a href="docs/MSHA-form-7000-52.pdf" download>Download PDF</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-panel">
+    <h3>Accident, Injury, Illness & Production Reporting</h3>
+
+    <div class="document-card">
+      <h4>MSHA Form 7000-1</h4>
+      <p><strong>Mine Accident, Injury, and Illness Report.</strong> Used to report reportable mine accidents, injuries, and illnesses.</p>
+      <div class="document-actions">
+        <a href="docs/MSHA-form-7000-1.pdf" target="_blank" rel="noopener">Open Form</a>
+        <a href="docs/MSHA-form-7000-1.pdf" download>Download PDF</a>
+      </div>
+    </div>
+
+    <div class="document-card">
+      <h4>MSHA Form 7000-2</h4>
+      <p><strong>Quarterly Mine Employment and Coal Production Report.</strong> Used to report employment and production information by quarter.</p>
+      <div class="document-actions">
+        <a href="docs/MSHA-form-7000-2.pdf" target="_blank" rel="noopener">Open Form</a>
+        <a href="docs/MSHA-form-7000-2.pdf" download>Download PDF</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-panel">
+    <h3>Mine Rescue, Representative & Specialized Forms</h3>
+
+    <div class="document-card">
+      <h4>MSHA Form 2000-224</h4>
+      <p><strong>Operator's Annual Certification of Mine Rescue Team Qualifications.</strong> Used for annual mine rescue team qualification certification.</p>
+      <div class="document-actions">
+        <a href="docs/MSHA-form-2000-224.pdf" target="_blank" rel="noopener">Open Form</a>
+        <a href="docs/MSHA-form-2000-224.pdf" download>Download PDF</a>
+      </div>
+    </div>
+
+    <div class="document-card">
+      <h4>MSHA Form 2000-238</h4>
+      <p><strong>Representative of Miners Designation Form.</strong> Used to designate a miners' representative under the Mine Act.</p>
+      <div class="document-actions">
+        <a href="docs/MSHA-form-2000-238.pdf" target="_blank" rel="noopener">Open Form</a>
+        <a href="docs/MSHA-form-2000-238.pdf" download>Download PDF</a>
+      </div>
+    </div>
+
+    <div class="document-card">
+      <h4>MSHA Form 2000-38</h4>
+      <p><strong>Electrically Operated Equipment Field Approval Application (Coal Only).</strong> Used to apply for field approval of certain electrically operated coal mine equipment.</p>
+      <div class="document-actions">
+        <a href="docs/MSHA-form-2000-38.pdf" target="_blank" rel="noopener">Open Form</a>
+        <a href="docs/MSHA-form-2000-38.pdf" download>Download PDF</a>
+      </div>
+    </div>
+
+    <div class="document-card">
+      <h4>MSHA Form 5000-3</h4>
+      <p><strong>Certificate of Physical Qualification for Mine Rescue Work.</strong> Used to document annual physician certification for mine rescue team members.</p>
+      <div class="document-actions">
+        <a href="docs/MSHA-form-5000-3.pdf" target="_blank" rel="noopener">Open Form</a>
+        <a href="docs/MSHA-form-5000-3.pdf" download>Download PDF</a>
+      </div>
+    </div>
 
     <div class="document-card">
       <h4>MSHA Form 4000-9</h4>
-      <p>Specialized MSHA form included for completeness and field reference access.</p>
+      <p><strong>Record of Individual Exposure to Radon Daughters.</strong> Used to record individual exposure to radon daughters.</p>
       <div class="document-actions">
         <a href="docs/MSHA-form-4000-9.pdf" target="_blank" rel="noopener">Open Form</a>
         <a href="docs/MSHA-form-4000-9.pdf" download>Download PDF</a>
@@ -1015,6 +1012,7 @@
           .register("./service-worker.js")
           .then(function (registration) {
             console.log("Service Worker registered:", registration.scope);
+            registration.update();
           })
           .catch(function (error) {
             console.log("Service Worker registration failed:", error);

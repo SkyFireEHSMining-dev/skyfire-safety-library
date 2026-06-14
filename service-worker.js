@@ -1,15 +1,33 @@
-const CACHE_NAME = "skyfire-library-shell-v2";
+const CACHE_NAME = "skyfire-msha-forms-cache-v4";
+const CACHE_VERSION = "msha-forms-cache-v4";
+
 const SHELL_CACHE = [
   "./",
-  "./index.html?v=library-shell-2",
-  "./styles.css?v=library-shell-2",
-  "./app.js?v=library-shell-2",
-  "./manifest.json?v=library-shell-2",
+  `./index.html?v=${CACHE_VERSION}`,
+  `./styles.css?v=${CACHE_VERSION}`,
+  `./app.js?v=${CACHE_VERSION}`,
+  `./risk-matrix.js?v=${CACHE_VERSION}`,
+  `./manifest.json?v=${CACHE_VERSION}`,
   "./Icons/icon-192.png",
   "./Icons/icon-512.png",
   "./Icons/lynx-logo.png",
   "./Icons/mss-logo.png",
-  "./Icons/skyfire-logo.jpg"
+  "./Icons/skyfire-logo.jpg",
+  "./docs/SkyFire-Risk-Matrix.png",
+  "./docs/MSHA-form-2000-7.pdf",
+  "./docs/MSHA-form-2000-38.pdf",
+  "./docs/MSHA-form-2000-224.pdf",
+  "./docs/MSHA-form-2000-238.pdf",
+  "./docs/MSHA-form-4000-9.pdf",
+  "./docs/MSHA-form-5000-1.pdf",
+  "./docs/MSHA-form-5000-3.pdf",
+  "./docs/MSHA-form-5000-23.pdf",
+  "./docs/MSHA-form-5000-41.pdf",
+  "./docs/MSHA-form-5000-46.pdf",
+  "./docs/MSHA-form-7000-1.pdf",
+  "./docs/MSHA-form-7000-2.pdf",
+  "./docs/MSHA-form-7000-51.pdf",
+  "./docs/MSHA-form-7000-52.pdf"
 ];
 
 self.addEventListener("install", event => {
@@ -69,12 +87,17 @@ self.addEventListener("fetch", event => {
     url.pathname.endsWith("/index.html") ||
     url.pathname.endsWith("/styles.css") ||
     url.pathname.endsWith("/app.js") ||
+    url.pathname.endsWith("/risk-matrix.js") ||
     url.pathname.endsWith("/manifest.json") ||
     url.pathname.includes("/Icons/");
 
   const isDataFile =
     url.pathname.includes("/Data/") &&
     url.pathname.endsWith(".xml");
+
+  const isDocumentFile =
+    url.pathname.includes("/docs/") &&
+    (url.pathname.endsWith(".pdf") || url.pathname.endsWith(".png"));
 
   if (isNavigation || isShellAsset) {
     event.respondWith(
@@ -88,6 +111,7 @@ self.addEventListener("fetch", event => {
         } catch (error) {
           const cached =
             (await cache.match(request)) ||
+            (await cache.match(url.pathname, { ignoreSearch: true })) ||
             (isNavigation ? await cache.match("./") : null);
 
           if (cached) return cached;
@@ -103,11 +127,11 @@ self.addEventListener("fetch", event => {
     return;
   }
 
-  if (isDataFile) {
+  if (isDataFile || isDocumentFile) {
     event.respondWith(
       (async () => {
         const cache = await caches.open(CACHE_NAME);
-        const cached = await cache.match(request);
+        const cached = await cache.match(request) || await cache.match(url.pathname, { ignoreSearch: true });
 
         if (cached) {
           fetch(request, { cache: "no-store" })
@@ -128,7 +152,7 @@ self.addEventListener("fetch", event => {
           }
           return fresh;
         } catch (error) {
-          return new Response("Offline data file not available yet.", {
+          return new Response("Offline file not available yet.", {
             status: 503,
             statusText: "Service Unavailable",
             headers: { "Content-Type": "text/plain" }
@@ -148,7 +172,7 @@ self.addEventListener("fetch", event => {
         cache.put(request, fresh.clone()).catch(() => {});
         return fresh;
       } catch (error) {
-        const cached = await cache.match(request);
+        const cached = await cache.match(request) || await cache.match(url.pathname, { ignoreSearch: true });
         if (cached) return cached;
 
         return new Response("Offline content not available yet.", {

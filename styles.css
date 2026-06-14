@@ -480,6 +480,51 @@ mark {
   border-radius: 3px;
 }
 
+
+/* ================================
+   Document library cards
+   ================================ */
+
+.document-card {
+  border-top: 1px solid var(--line-soft);
+  padding: 18px 0 6px;
+}
+
+.document-card:first-of-type {
+  border-top: 0;
+  padding-top: 4px;
+}
+
+.document-card h4 {
+  margin: 0 0 8px;
+}
+
+.document-card p {
+  margin-bottom: 12px;
+}
+
+.document-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.document-actions a {
+  display: inline-block;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  padding: 8px 12px;
+  color: var(--accent);
+  font-weight: 800;
+  text-decoration: none;
+  background: #ffffff;
+}
+
+.document-actions a:hover,
+.document-actions a:focus {
+  background: #e8f1ff;
+}
+
 /* ================================
    Footer
    ================================ */

@@ -1,12 +1,14 @@
-const CACHE_NAME = "skyfire-msha-forms-cache-v4";
-const CACHE_VERSION = "msha-forms-cache-v4";
+const CACHE_NAME = "skyfire-feedback-cache-v1";
+const CACHE_VERSION = "feedback-v1";
 
 const SHELL_CACHE = [
   "./",
   `./index.html?v=${CACHE_VERSION}`,
   `./styles.css?v=${CACHE_VERSION}`,
+  "./feedback.css",
   `./app.js?v=${CACHE_VERSION}`,
   `./risk-matrix.js?v=${CACHE_VERSION}`,
+  "./feedback.js",
   `./manifest.json?v=${CACHE_VERSION}`,
   "./Icons/icon-192.png",
   "./Icons/icon-512.png",

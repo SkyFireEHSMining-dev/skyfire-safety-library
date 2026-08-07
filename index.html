@@ -14,10 +14,12 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="192x192" href="Icons/icon-192.png">
   <link rel="apple-touch-icon" href="Icons/icon-192.png">
-  <link rel="stylesheet" href="styles.css?v=msha-forms-cache-v4">
+  <link rel="stylesheet" href="styles.css?v=feedback-v1">
+  <link rel="stylesheet" href="feedback.css?v=feedback-v1">
 
-  <script src="app.js?v=msha-forms-cache-v4" defer></script>
-  <script src="risk-matrix.js?v=msha-forms-cache-v4" defer></script>
+  <script src="app.js?v=feedback-v1" defer></script>
+  <script src="risk-matrix.js?v=feedback-v1" defer></script>
+  <script src="feedback.js?v=feedback-v1" defer></script>
 </head>
 <body>
 
@@ -38,7 +40,7 @@
         <div class="quick-info-card">
           <div class="quick-info-banner">
             <span class="quick-banner-title">Field Status Dashboard</span>
-            <span class="quick-banner-subtitle">SkyFire Safety Library v0.10 Beta — MSHA forms library expanded and cache refreshed.</span>
+            <span class="quick-banner-subtitle">SkyFire Safety Library v0.11 Beta — Feedback & Suggestions added.</span>
           </div>
 
           <div class="quick-info-item">
@@ -95,6 +97,12 @@
   <span class="tile-title">Toolbox Talks</span>
   <span class="tile-subtitle">Short safety meeting prompts and discussion guides.</span>
 </button>
+
+        <button class="dashboard-tile feedback-home-tile" data-open-section="feedbackSection">
+          <span class="tile-title">Feedback &amp; Suggestions</span>
+          <span class="tile-subtitle">Help improve SkyFire by sharing an idea, reporting a problem, or providing feedback.</span>
+        </button>
+
         <button class="dashboard-tile" data-open-section="aboutSection">
           <span class="tile-title">About SkyFire</span>
           <span class="tile-subtitle">Project information, purpose, disclaimer, and creator details.</span>
@@ -959,6 +967,80 @@
       </div>
     </section>
 
+
+    <section id="feedbackSection" class="app-section hidden">
+      <div class="module-header feedback-module-header">
+        <button class="module-home-btn" data-open-section="homeSection">Back Home</button>
+        <div class="module-header-text">
+          <h2>Feedback &amp; Suggestions</h2>
+          <p>Help shape SkyFire by sharing field feedback, ideas, and problems you encounter.</p>
+        </div>
+      </div>
+
+      <div class="info-panel feedback-intro-panel">
+        <h3>Your Input Helps Guide Development</h3>
+        <p>
+          SkyFire is being developed with input from the people who use it. Ideas, field observations,
+          usability feedback, and problem reports are welcome.
+        </p>
+        <p class="feedback-privacy-note">
+          Please do not include confidential, personal, medical, security-sensitive, or proprietary company information.
+        </p>
+      </div>
+
+      <form id="feedbackForm" class="info-panel feedback-form" novalidate>
+        <h3>Share Feedback</h3>
+
+        <label for="feedbackType">Feedback Type</label>
+        <select id="feedbackType" name="feedbackType">
+          <option value="Suggestion">Suggestion</option>
+          <option value="Feature Idea">Feature Idea</option>
+          <option value="Problem or Bug">Problem or Bug</option>
+          <option value="General Feedback">General Feedback</option>
+        </select>
+        <p id="feedbackTypeGuidance" class="feedback-field-help">What would make SkyFire more useful in the field?</p>
+
+        <label for="feedbackArea">Area of SkyFire</label>
+        <select id="feedbackArea" name="feedbackArea">
+          <option value="Whole App">Whole App</option>
+          <option value="Risk Assessment Matrix">Risk Assessment Matrix</option>
+          <option value="Safety ROI Calculator">Safety ROI Calculator</option>
+          <option value="MSHA / 30 CFR">MSHA / 30 CFR</option>
+          <option value="OSHA / 29 CFR">OSHA / 29 CFR</option>
+          <option value="MSHA Forms Library">MSHA Forms Library</option>
+          <option value="Safety Docs">Safety Docs</option>
+          <option value="Toolbox Talks">Toolbox Talks</option>
+          <option value="Other">Other</option>
+        </select>
+
+        <label for="feedbackMessage">Your Feedback <span class="feedback-required">Required</span></label>
+        <textarea id="feedbackMessage" name="feedbackMessage" rows="7" required placeholder="Tell us what would make SkyFire more useful in the field."></textarea>
+
+        <div class="feedback-optional-grid">
+          <label for="feedbackName">
+            Name <span class="feedback-optional">Optional</span>
+            <input type="text" id="feedbackName" name="feedbackName" autocomplete="name" placeholder="Your name">
+          </label>
+
+          <label for="feedbackEmail">
+            Email <span class="feedback-optional">Optional</span>
+            <input type="email" id="feedbackEmail" name="feedbackEmail" autocomplete="email" placeholder="you@example.com">
+          </label>
+        </div>
+
+        <div class="feedback-actions">
+          <button type="submit" class="feedback-primary-btn">Prepare Feedback Email</button>
+          <button type="button" id="feedbackClearBtn" class="feedback-secondary-btn">Clear Form</button>
+        </div>
+
+        <p class="feedback-submit-note">
+          SkyFire will open your email app with a structured message prepared for you. Review it, then tap Send.
+          Nothing is transmitted until you choose to send the email.
+        </p>
+        <p id="feedbackStatus" class="feedback-status" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
     <section id="aboutSection" class="app-section hidden">
       <div class="module-header">
         <button class="module-home-btn" data-open-section="homeSection">Back Home</button>
@@ -983,12 +1065,10 @@
         </p>
 
         <p>
-          <p>
-  SkyFire tools and references are intended to support hazard awareness, training,
-  and operational planning. Always verify site-specific requirements, applicable
-  MSHA/OSHA regulations, manufacturer guidance, competent-person review, employer
-  requirements, and applicable regulatory obligations before implementation.
-</p>
+          SkyFire tools and references are intended to support hazard awareness, training,
+          and operational planning. Always verify site-specific requirements, applicable
+          MSHA/OSHA regulations, manufacturer guidance, competent-person review, employer
+          requirements, and applicable regulatory obligations before implementation.
         </p>
 
         <p>

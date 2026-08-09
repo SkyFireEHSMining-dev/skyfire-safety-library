@@ -1,5 +1,5 @@
-const CACHE_NAME = "skyfire-about-cache-v2";
-const CACHE_VERSION = "about-v2";
+const CACHE_NAME = "skyfire-5s-cache-v3";
+const CACHE_VERSION = "5s-v3";
 
 const SHELL_CACHE = [
   "./",

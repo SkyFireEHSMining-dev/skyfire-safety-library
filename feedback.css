@@ -15,4 +15,21 @@
 .feedback-primary-btn:focus-visible, .feedback-secondary-btn:focus-visible, .feedback-form input:focus-visible, .feedback-form select:focus-visible, .feedback-form textarea:focus-visible { outline: 3px solid rgba(11,132,255,.25); outline-offset: 2px; }
 .feedback-status { min-height: 1.5em; margin-top: 16px !important; font-weight: 700; color: #166534; }
 .feedback-status-error { color: #b91c1c; }
+
+.about-card { width: 100%; margin-top: 20px; padding: 24px; border: 1px solid var(--line); border-radius: 24px; background: linear-gradient(180deg, #ffffff, #f8fbfe); box-shadow: var(--shadow); }
+.about-card h3 { margin: 0 0 14px; font-size: clamp(1.45rem, 5vw, 2rem); line-height: 1.12; }
+.about-card p { margin: 12px 0 0; color: var(--text); }
+.about-purpose-card { border-top: 6px solid #7898bd; }
+.about-beta-card { border-left: 6px solid #f97316; }
+.about-safety-card { border: 1px solid #fed7aa; border-left: 6px solid #f97316; background: #fff7ed; }
+.about-safety-card h3, .about-safety-card p { color: #7c2d12; }
+.about-card-title-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+.about-card-title-row h3 { margin-bottom: 0; }
+.about-beta-badge { display: inline-flex; align-items: center; min-height: 34px; padding: 6px 12px; border-radius: 999px; background: #fff7ed; border: 1px solid #fdba74; color: #9a3412; font-weight: 800; font-size: .9rem; }
+.about-project-details { margin: 0; }
+.about-project-details > div { padding: 14px 0; border-bottom: 1px solid var(--line-soft); }
+.about-project-details > div:last-child { border-bottom: 0; padding-bottom: 0; }
+.about-project-details dt { color: #64748b; font-size: .84rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; }
+.about-project-details dd { margin: 4px 0 0; color: var(--text); font-weight: 650; }
+
 @media (min-width: 760px) { .feedback-optional-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 18px; } }

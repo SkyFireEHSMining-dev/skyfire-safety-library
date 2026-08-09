@@ -1,5 +1,5 @@
-const CACHE_NAME = "skyfire-feedback-cache-v1";
-const CACHE_VERSION = "feedback-v1";
+const CACHE_NAME = "skyfire-about-cache-v2";
+const CACHE_VERSION = "about-v2";
 
 const SHELL_CACHE = [
   "./",
@@ -88,8 +88,10 @@ self.addEventListener("fetch", event => {
     url.pathname.endsWith("/") ||
     url.pathname.endsWith("/index.html") ||
     url.pathname.endsWith("/styles.css") ||
+    url.pathname.endsWith("/feedback.css") ||
     url.pathname.endsWith("/app.js") ||
     url.pathname.endsWith("/risk-matrix.js") ||
+    url.pathname.endsWith("/feedback.js") ||
     url.pathname.endsWith("/manifest.json") ||
     url.pathname.includes("/Icons/");
 

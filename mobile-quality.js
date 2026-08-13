@@ -1,11 +1,119 @@
 (function () {
   function applyMobileQualityStyles() {
-    if (document.getElementById("skyfireMobileQualityStyles")) return;
+    const old = document.getElementById("skyfireMobileQualityStyles");
+    if (old) old.remove();
 
     const style = document.createElement("style");
     style.id = "skyfireMobileQualityStyles";
     style.textContent = `
-      /* Final sprint quality pass: keep deep CFR/OSHA hierarchy readable on phones. */
+      /*
+       * SkyFire semantic color grammar
+       * Blue = regulation / authoritative regulatory reference
+       * Indigo = official agency guidance
+       * Orange = SkyFire-authored technical guidance
+       * Teal = interactive safety tools
+       * Slate = navigation / neutral field resources / metadata
+       * Red, amber, and green remain reserved for safety and risk meaning.
+       */
+      :root {
+        --sf-regulation: #0b84ff;
+        --sf-regulation-deep: #173f6b;
+        --sf-regulation-chapter: #2b628f;
+        --sf-regulation-subchapter: #4f86b4;
+        --sf-regulation-part: #0b84ff;
+        --sf-regulation-subpart: #76b4e5;
+        --sf-regulation-soft: #f3f8fd;
+        --sf-guidance: #6554c0;
+        --sf-guidance-soft: #f4f1ff;
+        --sf-technical: #f97316;
+        --sf-technical-soft: #fff6ed;
+        --sf-tools: #0f8f83;
+        --sf-tools-soft: #eefaf8;
+        --sf-neutral: #64748b;
+        --sf-neutral-soft: #f4f6f8;
+      }
+
+      /* Apply the semantic system to the main SkyFire hubs. */
+      #homeSection .skyfire-hub-home-tile:not(.regulatory-hub):not(.field-hub) {
+        border-top-color: var(--sf-tools);
+      }
+      #homeSection .skyfire-hub-home-tile:not(.regulatory-hub):not(.field-hub) .tile-title {
+        color: var(--sf-tools);
+      }
+      #homeSection .skyfire-hub-home-tile.regulatory-hub {
+        border-top-color: var(--sf-regulation);
+      }
+      #homeSection .skyfire-hub-home-tile.regulatory-hub .tile-title {
+        color: var(--sf-regulation);
+      }
+      #homeSection .skyfire-hub-home-tile.field-hub {
+        border-top-color: var(--sf-neutral);
+      }
+      #homeSection .skyfire-hub-home-tile.field-hub .tile-title {
+        color: var(--sf-neutral);
+      }
+
+      #safetyToolsHubSection .module-header { border-top-color: var(--sf-tools); }
+      #regulatoryResourcesHubSection .module-header { border-top-color: var(--sf-regulation); }
+      #fieldResourcesHubSection .module-header { border-top-color: var(--sf-neutral); }
+      #mshaGuidanceSection .module-header,
+      .ppm-resource-section .module-header { border-top-color: var(--sf-guidance); }
+      #technicalGuidanceSection .module-header { border-top-color: var(--sf-technical); }
+
+      #safetyToolsHubSection .skyfire-hub-item {
+        border-left: 5px solid var(--sf-tools);
+        background: linear-gradient(90deg, var(--sf-tools-soft), #ffffff 24%);
+      }
+      #safetyToolsHubSection .skyfire-hub-item strong { color: var(--sf-tools); }
+
+      #regulatoryResourcesHubSection .skyfire-hub-item {
+        border-left: 5px solid var(--sf-regulation);
+        background: linear-gradient(90deg, var(--sf-regulation-soft), #ffffff 24%);
+      }
+      #regulatoryResourcesHubSection .skyfire-hub-item strong { color: var(--sf-regulation); }
+      #regulatoryResourcesHubSection .skyfire-hub-item:nth-child(4) {
+        border-left-color: var(--sf-guidance);
+        background: linear-gradient(90deg, var(--sf-guidance-soft), #ffffff 24%);
+      }
+      #regulatoryResourcesHubSection .skyfire-hub-item:nth-child(4) strong { color: var(--sf-guidance); }
+      #regulatoryResourcesHubSection .skyfire-hub-item:nth-child(5) {
+        border-left-color: var(--sf-technical);
+        background: linear-gradient(90deg, var(--sf-technical-soft), #ffffff 24%);
+      }
+      #regulatoryResourcesHubSection .skyfire-hub-item:nth-child(5) strong { color: #c45d0d; }
+
+      #fieldResourcesHubSection .skyfire-hub-item {
+        border-left: 5px solid var(--sf-neutral);
+        background: linear-gradient(90deg, var(--sf-neutral-soft), #ffffff 24%);
+      }
+      #fieldResourcesHubSection .skyfire-hub-item strong { color: var(--sf-neutral); }
+
+      /* Technical Guidance stays orange so SkyFire-authored guidance is visually distinct. */
+      #technicalGuidanceSection .resource-notice,
+      #technicalGuidanceSection .tg-skyfire-note {
+        border-left-color: var(--sf-technical);
+      }
+      #technicalGuidanceSection .tg-guide-folder {
+        border-left: 5px solid var(--sf-technical);
+        background: linear-gradient(90deg, var(--sf-technical-soft), #ffffff 24%);
+      }
+      #technicalGuidanceSection .tg-folder-code,
+      #technicalGuidanceSection .tg-subsection > summary {
+        color: #c45d0d;
+      }
+      #technicalGuidanceSection .resource-status,
+      #technicalGuidanceSection .tg-chip {
+        background: #fff0e2;
+        color: #8f4a16;
+      }
+
+      /* Official MSHA guidance uses indigo rather than regulatory blue. */
+      #mshaGuidanceSection .ppm-notice,
+      .ppm-resource-section .ppm-notice {
+        border-left-color: var(--sf-guidance);
+      }
+
+      /* Shared CFR / OSHA width and readability safeguards. */
       #cfrSection .layout,
       #oshaSection .layout,
       #cfrContainer,
@@ -46,6 +154,52 @@
         font-size: 1rem;
       }
 
+      /*
+       * Regulatory hierarchy: one blue family, different depth cues.
+       * Color is reinforced by weight and border placement so hierarchy does not depend on color alone.
+       */
+      #cfrContainer .level-title > summary,
+      #oshaContainer .level-title > summary {
+        border-left: 6px solid var(--sf-regulation-deep) !important;
+        background: linear-gradient(90deg, rgba(23,63,107,.11), #fbfdff 34%) !important;
+        font-weight: 850;
+      }
+      #cfrContainer .level-subtitle > summary,
+      #oshaContainer .level-subtitle > summary {
+        border-left: 6px solid #214f78 !important;
+        background: linear-gradient(90deg, rgba(33,79,120,.10), #fbfdff 34%) !important;
+      }
+      #cfrContainer .level-chapter > summary,
+      #oshaContainer .level-chapter > summary {
+        border-left: 6px solid var(--sf-regulation-chapter) !important;
+        background: linear-gradient(90deg, rgba(43,98,143,.10), #fbfdff 34%) !important;
+      }
+      #cfrContainer .level-subchapter > summary,
+      #oshaContainer .level-subchapter > summary {
+        border-left: 6px solid var(--sf-regulation-subchapter) !important;
+        background: linear-gradient(90deg, rgba(79,134,180,.11), #fbfdff 34%) !important;
+      }
+      #cfrContainer .level-part > summary,
+      #oshaContainer .level-part > summary {
+        border-left: 6px solid var(--sf-regulation-part) !important;
+        background: linear-gradient(90deg, rgba(11,132,255,.10), #fbfdff 34%) !important;
+      }
+      #cfrContainer .level-subpart > summary,
+      #oshaContainer .level-subpart > summary {
+        border-left: 6px solid var(--sf-regulation-subpart) !important;
+        background: linear-gradient(90deg, rgba(118,180,229,.15), #fbfdff 34%) !important;
+      }
+      #cfrContainer .level-section,
+      #oshaContainer .level-section {
+        border-left: 6px solid var(--sf-regulation) !important;
+        background: #ffffff;
+      }
+      #cfrContainer .level-section > summary,
+      #oshaContainer .level-section > summary {
+        color: var(--text);
+        background: linear-gradient(90deg, rgba(11,132,255,.08), #ffffff 38%);
+      }
+
       @media (max-width: 600px) {
         #cfrSection .layout,
         #oshaSection .layout {
@@ -64,7 +218,7 @@
           width: 100%;
           max-width: 100%;
           min-width: 0;
-          margin: 8px 0;
+          margin: 9px 0;
           padding: 0;
           overflow: hidden;
         }
@@ -81,12 +235,34 @@
           display: block;
           width: 100%;
           padding: 13px 14px;
-          border: 1px solid var(--line-soft);
+          border-top: 1px solid var(--line-soft);
+          border-right: 1px solid var(--line-soft);
+          border-bottom: 1px solid var(--line-soft);
           border-radius: 14px;
-          background: #f8fbfe;
-          font-size: 1.08rem;
+          font-size: 1.06rem;
           line-height: 1.3;
           overflow-wrap: anywhere;
+        }
+
+        /* Stronger type progression makes the level visible even without color. */
+        #cfrContainer .level-title > summary,
+        #oshaContainer .level-title > summary {
+          font-size: 1.12rem;
+          letter-spacing: -.01em;
+        }
+        #cfrContainer .level-chapter > summary,
+        #oshaContainer .level-chapter > summary {
+          font-size: 1.08rem;
+        }
+        #cfrContainer .level-subchapter > summary,
+        #oshaContainer .level-subchapter > summary,
+        #cfrContainer .level-part > summary,
+        #oshaContainer .level-part > summary {
+          font-size: 1.05rem;
+        }
+        #cfrContainer .level-subpart > summary,
+        #oshaContainer .level-subpart > summary {
+          font-size: 1.02rem;
         }
 
         /* Do not add horizontal padding at every CFR hierarchy level. */
@@ -99,7 +275,9 @@
 
         #cfrContainer .level-section,
         #oshaContainer .level-section {
-          border: 1px solid var(--line-soft);
+          border-top: 1px solid var(--line-soft) !important;
+          border-right: 1px solid var(--line-soft) !important;
+          border-bottom: 1px solid var(--line-soft) !important;
           border-radius: 15px;
           background: #fff;
         }
@@ -107,7 +285,7 @@
         #cfrContainer .level-section > summary,
         #oshaContainer .level-section > summary {
           padding: 15px 14px;
-          font-size: 1.12rem;
+          font-size: 1.14rem;
           line-height: 1.32;
           overflow-wrap: anywhere;
         }
@@ -124,16 +302,24 @@
           overflow-wrap: anywhere;
         }
 
+        /* The reader already navigated the hierarchy; keep the repeated path as quiet metadata. */
         #cfrContainer .section-path,
         #oshaContainer .section-path {
-          margin: 2px 0 12px;
-          font-size: 0.92rem;
-          line-height: 1.4;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          overflow: hidden;
+          margin: 3px 0 12px;
+          font-size: 0.82rem;
+          line-height: 1.35;
+          color: #6b7788;
         }
 
         #cfrContainer .bookmark-controls,
         #oshaContainer .bookmark-controls {
           margin-bottom: 20px;
+          padding-bottom: 14px;
+          border-bottom: 1px solid #e5eaf0;
         }
       }
     `;

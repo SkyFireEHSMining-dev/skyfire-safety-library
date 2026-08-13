@@ -128,7 +128,7 @@
 (function loadMobileQualityModule() {
   if (document.querySelector('script[data-skyfire-mobile-quality="true"]')) return;
   var script = document.createElement("script");
-  script.src = "mobile-quality.js?v=quality-v1";
+  script.src = "mobile-quality.js?v=quality-v7";
   script.dataset.skyfireMobileQuality = "true";
   document.head.appendChild(script);
 })();

@@ -1,5 +1,6 @@
-const CACHE_NAME = "skyfire-quality-cache-v7";
-const CACHE_VERSION = "quality-v7";
+const SHELL_CACHE_NAME = "skyfire-quality-cache-v8";
+const DATA_CACHE_NAME = "skyfire-regulatory-data-v1";
+const CACHE_VERSION = "quality-v8";
 
 const SHELL_CACHE = [
   "./",
@@ -39,7 +40,7 @@ const SHELL_CACHE = [
 
 self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(async cache => {
+    caches.open(SHELL_CACHE_NAME).then(async cache => {
       for (const asset of SHELL_CACHE) {
         try {
           await cache.add(asset);
@@ -60,7 +61,7 @@ self.addEventListener("activate", event => {
 
       await Promise.all(
         keys.map(key => {
-          if (key !== CACHE_NAME) {
+          if (key !== SHELL_CACHE_NAME && key !== DATA_CACHE_NAME) {
             return caches.delete(key);
           }
         })
@@ -72,7 +73,7 @@ self.addEventListener("activate", event => {
       for (const client of clients) {
         client.postMessage({
           type: "SW_UPDATED",
-          cacheName: CACHE_NAME
+          cacheName: SHELL_CACHE_NAME
         });
       }
     })()
@@ -116,7 +117,7 @@ self.addEventListener("fetch", event => {
   if (isNavigation || isShellAsset) {
     event.respondWith(
       (async () => {
-        const cache = await caches.open(CACHE_NAME);
+        const cache = await caches.open(SHELL_CACHE_NAME);
 
         try {
           const fresh = await fetch(request, { cache: "no-store" });
@@ -141,10 +142,10 @@ self.addEventListener("fetch", event => {
     return;
   }
 
-  if (isDataFile || isDocumentFile) {
+  if (isDataFile) {
     event.respondWith(
       (async () => {
-        const cache = await caches.open(CACHE_NAME);
+        const cache = await caches.open(DATA_CACHE_NAME);
         const cached = await cache.match(request) || await cache.match(url.pathname, { ignoreSearch: true });
 
         if (cached) {
@@ -166,6 +167,32 @@ self.addEventListener("fetch", event => {
           }
           return fresh;
         } catch (error) {
+          return new Response("Offline regulatory data not available yet.", {
+            status: 503,
+            statusText: "Service Unavailable",
+            headers: { "Content-Type": "text/plain" }
+          });
+        }
+      })()
+    );
+    return;
+  }
+
+  if (isDocumentFile) {
+    event.respondWith(
+      (async () => {
+        const cache = await caches.open(SHELL_CACHE_NAME);
+        const cached = await cache.match(request) || await cache.match(url.pathname, { ignoreSearch: true });
+
+        if (cached) return cached;
+
+        try {
+          const fresh = await fetch(request, { cache: "no-store" });
+          if (fresh && fresh.ok) {
+            cache.put(request, fresh.clone()).catch(() => {});
+          }
+          return fresh;
+        } catch (error) {
           return new Response("Offline file not available yet.", {
             status: 503,
             statusText: "Service Unavailable",
@@ -179,7 +206,7 @@ self.addEventListener("fetch", event => {
 
   event.respondWith(
     (async () => {
-      const cache = await caches.open(CACHE_NAME);
+      const cache = await caches.open(SHELL_CACHE_NAME);
 
       try {
         const fresh = await fetch(request);

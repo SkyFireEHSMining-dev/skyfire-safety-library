@@ -116,7 +116,15 @@
       "PPM Volume IV",
       "Metal and Nonmetal Mines",
       `<div class="info-panel"><h3>Volume IV · Metal and Nonmetal Mines</h3><div class="ppm-meta"><span class="ppm-chip">Program Policy Manual</span><span class="ppm-chip">Metal / Nonmetal</span><span class="ppm-chip">${CHECKED_LABEL}</span></div><p>SkyFire follows MSHA's regulatory organization so additional Volume IV entries can be added without changing the library structure.</p></div>
-       <div class="info-panel"><h3>Subpart M · Machinery and Equipment</h3><p>Reviewed PPM entries currently available in this subpart:</p></div>
+       <div class="info-panel"><h3>Volume IV Sections</h3><p>Select a subpart to see the reviewed PPM entries available inside it.</p><div class="ppm-library-list"><button type="button" class="ppm-folder" data-open-subpart="ppmSubpartMSection"><span class="ppm-folder-code">SUBPART M</span><strong>Machinery and Equipment</strong><span class="resource-status">1 reviewed entry · ${CHECKED_LABEL}</span><span>Safety defects, equipment condition, and related machinery guidance.</span></button></div></div>`
+    );
+
+    const subpartM = buildSection(
+      "ppmSubpartMSection",
+      "Back to Volume IV",
+      "Subpart M",
+      "Machinery and Equipment",
+      `<div class="info-panel"><h3>Subpart M · Machinery and Equipment</h3><div class="ppm-meta"><span class="ppm-chip">Volume IV</span><span class="ppm-chip">Subpart M</span><span class="ppm-chip">1 reviewed entry</span></div><p>Select a reviewed PPM entry below.</p></div>
        <details class="info-panel ppm-entry"><summary><strong>56/57.14100 · Safety Defects: Examination, Correction, and Records</strong><span>PPM clarification for self-propelled equipment used on mine property</span></summary><div class="ppm-entry-body">
          <div class="ppm-meta"><span class="ppm-chip">Source type · PPM</span><span class="ppm-chip">Volume IV</span><span class="ppm-chip">Subpart M</span><span class="ppm-chip">${CHECKED_LABEL}</span></div>
          <h4>What the PPM clarifies</h4>
@@ -145,8 +153,12 @@
     const volumeButton = ppmLibrary.querySelector('[data-open-volume="ppmVolume4Section"]');
     if (volumeButton) volumeButton.addEventListener("click", () => openSection(volume4));
 
+    const subpartButton = volume4.querySelector('[data-open-subpart="ppmSubpartMSection"]');
+    if (subpartButton) subpartButton.addEventListener("click", () => openSection(subpartM));
+
     ppmLibrary.querySelector(".ppm-back").addEventListener("click", () => openSection(guidance));
     volume4.querySelector(".ppm-back").addEventListener("click", () => openSection(ppmLibrary));
+    subpartM.querySelector(".ppm-back").addEventListener("click", () => openSection(volume4));
   }
 
   if (document.readyState === "loading") {

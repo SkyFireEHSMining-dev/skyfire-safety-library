@@ -1,7 +1,18 @@
-.feedback-home-tile { border-top-color: #f97316; }
-.feedback-module-header { border-top-color: #f97316; }
-.feedback-intro-panel { border-left: 6px solid #f97316; }
-.feedback-privacy-note { padding: 14px 16px; border: 1px solid #fed7aa; border-radius: 14px; background: #fff7ed; color: #7c2d12; }
+:root {
+  --skyfire-neutral: #64748b;
+  --skyfire-neutral-dark: #52677f;
+  --skyfire-neutral-soft: #eef2f7;
+  --skyfire-neutral-border: #cbd5e1;
+  --skyfire-action: #0b84ff;
+  --skyfire-safety-tools: #0f9885;
+}
+
+/* Utility / information modules use neutral slate so semantic colors stay meaningful. */
+.feedback-home-tile { border-top-color: var(--skyfire-neutral) !important; }
+.feedback-home-tile .tile-title { color: var(--skyfire-neutral) !important; }
+.feedback-module-header { border-top-color: var(--skyfire-neutral) !important; }
+.feedback-intro-panel { border-left: 6px solid var(--skyfire-neutral) !important; }
+.feedback-privacy-note { padding: 14px 16px; border: 1px solid var(--skyfire-neutral-border); border-radius: 14px; background: #f8fafc; color: var(--text); }
 .feedback-form > label, .feedback-optional-grid label { display: block; margin-top: 20px; font-weight: 750; font-size: clamp(1.05rem, 4vw, 1.25rem); }
 .feedback-form select, .feedback-form textarea, .feedback-form input { display: block; width: 100%; margin-top: 8px; border: 1px solid #c7d2df; border-radius: 12px; background: #fff; color: var(--text); padding: 12px 14px; font-size: 1.05rem; }
 .feedback-form textarea { min-height: 160px; resize: vertical; }
@@ -10,7 +21,7 @@
 .feedback-optional { color: #64748b; font-size: .86rem; font-weight: 600; }
 .feedback-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
 .feedback-primary-btn, .feedback-secondary-btn { min-height: 48px; padding: 12px 18px; border-radius: 14px; font-weight: 750; }
-.feedback-primary-btn { border: 1px solid #c2410c; background: #f97316; color: #fff; }
+.feedback-primary-btn { border: 1px solid #0875df; background: var(--skyfire-action); color: #fff; }
 .feedback-secondary-btn { border: 1px solid #b8c6d4; background: #fff; color: var(--text); }
 .feedback-primary-btn:focus-visible, .feedback-secondary-btn:focus-visible, .feedback-form input:focus-visible, .feedback-form select:focus-visible, .feedback-form textarea:focus-visible { outline: 3px solid rgba(11,132,255,.25); outline-offset: 2px; }
 .feedback-status { min-height: 1.5em; margin-top: 16px !important; font-weight: 700; color: #166534; }
@@ -20,16 +31,27 @@
 .about-card h3 { margin: 0 0 14px; font-size: clamp(1.45rem, 5vw, 2rem); line-height: 1.12; }
 .about-card p { margin: 12px 0 0; color: var(--text); }
 .about-purpose-card { border-top: 6px solid #7898bd; }
-.about-beta-card { border-left: 6px solid #f97316; }
-.about-safety-card { border: 1px solid #fed7aa; border-left: 6px solid #f97316; background: #fff7ed; }
-.about-safety-card h3, .about-safety-card p { color: #7c2d12; }
+.about-beta-card { border-left: 6px solid var(--skyfire-neutral); }
+.about-safety-card { border: 1px solid var(--skyfire-neutral-border); border-left: 6px solid var(--skyfire-neutral); background: #f8fafc; }
+.about-safety-card h3, .about-safety-card p { color: var(--text); }
 .about-card-title-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
 .about-card-title-row h3 { margin-bottom: 0; }
-.about-beta-badge { display: inline-flex; align-items: center; min-height: 34px; padding: 6px 12px; border-radius: 999px; background: #fff7ed; border: 1px solid #fdba74; color: #9a3412; font-weight: 800; font-size: .9rem; }
+.about-beta-badge { display: inline-flex; align-items: center; min-height: 34px; padding: 6px 12px; border-radius: 999px; background: var(--skyfire-neutral-soft); border: 1px solid var(--skyfire-neutral-border); color: var(--skyfire-neutral-dark); font-weight: 800; font-size: .9rem; }
 .about-project-details { margin: 0; }
 .about-project-details > div { padding: 14px 0; border-bottom: 1px solid var(--line-soft); }
 .about-project-details > div:last-child { border-bottom: 0; padding-bottom: 0; }
 .about-project-details dt { color: #64748b; font-size: .84rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; }
 .about-project-details dd { margin: 4px 0 0; color: var(--text); font-weight: 650; }
+
+/* Home-card color grammar: teal = Safety Tools, blue = regulation, purple = agency guidance,
+   orange = SkyFire Technical Guidance, slate = field / utility / general information. */
+#homeSection .skyfire-hub-home-tile.field-hub { border-top-color: var(--skyfire-neutral) !important; }
+#homeSection .skyfire-hub-home-tile.field-hub .tile-title { color: var(--skyfire-neutral) !important; }
+#homeSection [data-open-section="aboutSection"] { border-top-color: var(--skyfire-neutral) !important; }
+#homeSection [data-open-section="aboutSection"] .tile-title { color: var(--skyfire-neutral) !important; }
+.quick-info-card { border-top-color: var(--skyfire-neutral) !important; }
+
+/* Interactive selections within Safety Tools stay in the Safety Tools color family. */
+.five-s-answer-row button.selected { outline-color: var(--skyfire-safety-tools) !important; }
 
 @media (min-width: 760px) { .feedback-optional-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 18px; } }

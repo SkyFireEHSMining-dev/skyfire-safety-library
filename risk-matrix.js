@@ -21,28 +21,28 @@
   }
 
   function getRiskLevel(rpn) {
-  if (rpn <= 1.24) {
+    if (rpn <= 1.24) {
+      return {
+        level: "Low Risk",
+        interpretation: "Monitor and improve if practical",
+        action: "Acceptable / Monitor"
+      };
+    }
+
+    if (rpn <= 5.49) {
+      return {
+        level: "Moderate Risk",
+        interpretation: "Action required with planned controls",
+        action: "Improve Further"
+      };
+    }
+
     return {
-      level: "Low Risk",
-      interpretation: "Monitor and improve if practical",
-      action: "Acceptable / Monitor"
+      level: "High Risk",
+      interpretation: "Immediate mitigation and escalation required",
+      action: "Unacceptable / Immediate Action Required"
     };
   }
-
-  if (rpn <= 5.49) {
-    return {
-      level: "Moderate Risk",
-      interpretation: "Action required with planned controls",
-      action: "Improve Further"
-    };
-  }
-
-  return {
-    level: "High Risk",
-    interpretation: "Immediate mitigation and escalation required",
-    action: "Unacceptable / Immediate Action Required"
-  };
-}
 
   function formatRpn(value) {
     if (!Number.isFinite(value)) return "0.00";
@@ -123,6 +123,14 @@
     update: updateAllRiskMatrixCalculators,
     calculateRpn: calculateRpn
   };
+})();
+
+(function loadMobileQualityModule() {
+  if (document.querySelector('script[data-skyfire-mobile-quality="true"]')) return;
+  var script = document.createElement("script");
+  script.src = "mobile-quality.js?v=quality-v1";
+  script.dataset.skyfireMobileQuality = "true";
+  document.head.appendChild(script);
 })();
 
 (function loadPPMGuidanceModule() {

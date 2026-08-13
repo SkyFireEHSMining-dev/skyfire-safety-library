@@ -96,8 +96,9 @@
 
   function initializeQualityPass(){
     applyMobileQualityStyles();
-    loadScript('script[data-skyfire-navigation="true"]','./navigation.js?v=quality-v4','skyfireNavigation');
-    loadScript('script[data-nested-tree="true"]','./nested-tree.js?v=quality-v4','nestedTree');
+    loadScript('script[data-skyfire-navigation="true"]','./navigation.js?v=quality-v5','skyfireNavigation');
+    loadScript('script[data-nested-tree="true"]','./nested-tree.js?v=quality-v5','nestedTree');
+    loadScript('script[data-home-preview="true"]','./home-preview.js?v=quality-v5','homePreview');
   }
 
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",initializeQualityPass);

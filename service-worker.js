@@ -1,5 +1,5 @@
-const CACHE_NAME = "skyfire-quality-cache-v2";
-const CACHE_VERSION = "quality-v2";
+const CACHE_NAME = "skyfire-quality-cache-v3";
+const CACHE_VERSION = "quality-v3";
 
 const SHELL_CACHE = [
   "./",
@@ -10,7 +10,9 @@ const SHELL_CACHE = [
   `./risk-matrix.js?v=${CACHE_VERSION}`,
   "./feedback.js",
   `./mobile-quality.js?v=${CACHE_VERSION}`,
+  `./navigation.js?v=${CACHE_VERSION}`,
   `./ppm-guidance.js?v=${CACHE_VERSION}`,
+  `./nested-tree.js?v=${CACHE_VERSION}`,
   `./manifest.json?v=${CACHE_VERSION}`,
   "./Icons/icon-192.png",
   "./Icons/icon-512.png",
@@ -95,7 +97,9 @@ self.addEventListener("fetch", event => {
     url.pathname.endsWith("/risk-matrix.js") ||
     url.pathname.endsWith("/feedback.js") ||
     url.pathname.endsWith("/mobile-quality.js") ||
+    url.pathname.endsWith("/navigation.js") ||
     url.pathname.endsWith("/ppm-guidance.js") ||
+    url.pathname.endsWith("/nested-tree.js") ||
     url.pathname.endsWith("/manifest.json") ||
     url.pathname.includes("/Icons/");
 

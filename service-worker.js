@@ -1,5 +1,5 @@
-const CACHE_NAME = "skyfire-5s-cache-v3";
-const CACHE_VERSION = "5s-v3";
+const CACHE_NAME = "skyfire-ppm-cache-v1";
+const CACHE_VERSION = "ppm-v1";
 
 const SHELL_CACHE = [
   "./",
@@ -9,6 +9,7 @@ const SHELL_CACHE = [
   `./app.js?v=${CACHE_VERSION}`,
   `./risk-matrix.js?v=${CACHE_VERSION}`,
   "./feedback.js",
+  `./ppm-guidance.js?v=${CACHE_VERSION}`,
   `./manifest.json?v=${CACHE_VERSION}`,
   "./Icons/icon-192.png",
   "./Icons/icon-512.png",
@@ -92,6 +93,7 @@ self.addEventListener("fetch", event => {
     url.pathname.endsWith("/app.js") ||
     url.pathname.endsWith("/risk-matrix.js") ||
     url.pathname.endsWith("/feedback.js") ||
+    url.pathname.endsWith("/ppm-guidance.js") ||
     url.pathname.endsWith("/manifest.json") ||
     url.pathname.includes("/Icons/");
 

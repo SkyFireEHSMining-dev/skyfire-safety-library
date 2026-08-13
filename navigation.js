@@ -1,4 +1,5 @@
 (function () {
+  const NAV_VERSION = "v1";
   const NAV_TREE = {
     homeSection: { label: "Home", parent: null },
 
@@ -104,16 +105,12 @@
       }
 
       @media (max-width: 480px) {
-        .skyfire-nav-actions {
-          gap: 8px;
-        }
-
+        .skyfire-nav-actions { gap: 8px; }
         .skyfire-nav-btn {
           min-height: 42px;
           padding: 8px 13px;
           font-size: .95rem;
         }
-
         .skyfire-nav-context {
           font-size: .78rem;
           margin-bottom: 16px;
@@ -183,12 +180,20 @@
     const header = section.querySelector(":scope > .module-header");
     if (!header) return;
 
+    if (
+      header.dataset.skyfireNav === NAV_VERSION &&
+      header.querySelector(":scope > .skyfire-nav-actions")
+    ) {
+      return;
+    }
+
     const oldActions = header.querySelector(":scope > .skyfire-nav-actions");
     if (oldActions) oldActions.remove();
     const oldContext = header.querySelector(":scope > .skyfire-nav-context");
     if (oldContext) oldContext.remove();
 
     header.classList.add("skyfire-nav-ready");
+    header.dataset.skyfireNav = NAV_VERSION;
 
     const actions = document.createElement("div");
     actions.className = "skyfire-nav-actions";
@@ -255,7 +260,6 @@
     const observer = new MutationObserver(scheduleDecoration);
     observer.observe(document.body, { childList: true, subtree: true });
 
-    /* Dynamic PPM sections are created just after DOMContentLoaded. */
     window.setTimeout(decorateAll, 100);
     window.setTimeout(decorateAll, 400);
   }

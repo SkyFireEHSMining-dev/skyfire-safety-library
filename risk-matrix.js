@@ -124,3 +124,11 @@
     calculateRpn: calculateRpn
   };
 })();
+
+(function loadPPMGuidanceModule() {
+  if (document.querySelector('script[data-skyfire-ppm="true"]')) return;
+  var script = document.createElement("script");
+  script.src = "ppm-guidance.js?v=ppm-v1";
+  script.dataset.skyfirePpm = "true";
+  document.head.appendChild(script);
+})();

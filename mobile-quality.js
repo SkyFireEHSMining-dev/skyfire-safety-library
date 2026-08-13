@@ -30,11 +30,22 @@
       #homeSection .skyfire-hub-home-tile.regulatory-hub .tile-title{color:var(--sf-regulation)}
       #homeSection .skyfire-hub-home-tile.field-hub{border-top-color:var(--sf-neutral)}
       #homeSection .skyfire-hub-home-tile.field-hub .tile-title{color:var(--sf-neutral)}
+
+      /* Utility/info destinations are neutral rather than borrowing feature colors. */
+      #homeSection .feedback-home-tile,
+      #homeSection [data-open-section="aboutSection"]{border-top-color:var(--sf-neutral)!important}
+      #homeSection .feedback-home-tile .tile-title,
+      #homeSection [data-open-section="aboutSection"] .tile-title{color:var(--sf-neutral)!important}
+      #feedbackSection .module-header,
+      #aboutSection .module-header{border-top-color:var(--sf-neutral)}
+
       #safetyToolsHubSection .module-header{border-top-color:var(--sf-tools)}
       #regulatoryResourcesHubSection .module-header{border-top-color:var(--sf-regulation)}
       #fieldResourcesHubSection .module-header{border-top-color:var(--sf-neutral)}
       #mshaGuidanceSection .module-header,.ppm-resource-section .module-header{border-top-color:var(--sf-guidance)}
       #technicalGuidanceSection .module-header{border-top-color:var(--sf-technical)}
+      #fiveSSection .module-header{border-top-color:var(--sf-tools)}
+
       #safetyToolsHubSection .skyfire-hub-item{border-left:5px solid var(--sf-tools);background:linear-gradient(90deg,var(--sf-tools-soft),#fff 24%)}
       #safetyToolsHubSection .skyfire-hub-item strong{color:var(--sf-tools)}
       #regulatoryResourcesHubSection .skyfire-hub-item{border-left:5px solid var(--sf-regulation);background:linear-gradient(90deg,var(--sf-regulation-soft),#fff 24%)}
@@ -50,6 +61,15 @@
       #technicalGuidanceSection .tg-folder-code,#technicalGuidanceSection .tg-subsection>summary{color:#c45d0d}
       #technicalGuidanceSection .resource-status,#technicalGuidanceSection .tg-chip{background:#fff0e2;color:#8f4a16}
       #mshaGuidanceSection .ppm-notice,.ppm-resource-section .ppm-notice{border-left-color:var(--sf-guidance)}
+
+      /* 5S is an interactive tool: use teal and give bold/regular text breathing room. */
+      #fiveSSection .five-s-answer-row button.selected{outline-color:var(--sf-tools)!important}
+      #fiveSSection .five-s-stage-number{background:var(--sf-tools-soft)}
+      #fiveSSection .five-s-stage summary strong{margin-right:.35rem}
+      #fiveSSection .five-s-stage summary small{display:inline;line-height:1.4}
+      #fiveSSection .five-s-next>span{margin-right:.35rem}
+      #fiveSSection .five-s-ready strong{margin-right:.28rem}
+
       #cfrSection .layout,#oshaSection .layout,#cfrContainer,#oshaContainer,#cfrContainer .section-content,#oshaContainer .section-content{min-width:0;max-width:100%}
       #cfrContainer,#oshaContainer{overflow-x:hidden}
       #cfrContainer .section-path,#oshaContainer .section-path{color:var(--muted);overflow-wrap:anywhere;word-break:normal}
@@ -96,9 +116,9 @@
 
   function initializeQualityPass(){
     applyMobileQualityStyles();
-    loadScript('script[data-skyfire-navigation="true"]','./navigation.js?v=quality-v5','skyfireNavigation');
-    loadScript('script[data-nested-tree="true"]','./nested-tree.js?v=quality-v5','nestedTree');
-    loadScript('script[data-home-preview="true"]','./home-preview.js?v=quality-v5','homePreview');
+    loadScript('script[data-skyfire-navigation="true"]','./navigation.js?v=quality-v6','skyfireNavigation');
+    loadScript('script[data-nested-tree="true"]','./nested-tree.js?v=quality-v6','nestedTree');
+    loadScript('script[data-home-preview="true"]','./home-preview.js?v=quality-v6','homePreview');
   }
 
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",initializeQualityPass);

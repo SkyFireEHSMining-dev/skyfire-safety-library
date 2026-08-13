@@ -1,4 +1,75 @@
 (function () {
+  const fiveSStageContent = {
+    "Sort": `
+      <h4>Purpose</h4>
+      <p>Remove clutter and unnecessary items so the work area contains what is actually needed for the work.</p>
+      <h4>Field actions</h4>
+      <ul>
+        <li>Identify items that are unnecessary, obsolete, damaged, duplicated, or no longer used.</li>
+        <li>Remove, dispose of, return, relocate, or quarantine those items through the appropriate site process.</li>
+        <li>Keep only the tools, materials, supplies, and information needed in or near the work area.</li>
+      </ul>
+      <h4>Ask</h4>
+      <p>Does each item here have a current purpose? If it disappeared today, would the work still be performed safely and effectively?</p>
+      <div class="five-s-ready"><strong>Ready to move on when:</strong> unnecessary items are removed or controlled and the remaining items have a legitimate purpose.</div>
+    `,
+    "Set in Order": `
+      <h4>Purpose</h4>
+      <p>Arrange what remains so people can find, use, and return items with minimal searching, handling, and wasted motion.</p>
+      <h4>Field actions</h4>
+      <ul>
+        <li>Locate frequently used items where they are easy to reach and return.</li>
+        <li>Use defined storage locations, labels, outlines, racks, bins, or other visual controls where useful.</li>
+        <li>Arrange the area around the actual work flow rather than simply making it look neat.</li>
+        <li>Keep access routes, work zones, controls, and emergency equipment clear as required by the site.</li>
+      </ul>
+      <h4>Ask</h4>
+      <p>Can a person unfamiliar with this exact area quickly tell where needed items belong and retrieve them without unnecessary motion or searching?</p>
+      <div class="five-s-ready"><strong>Ready to move on when:</strong> needed items have logical locations that support the work and are easy to return correctly.</div>
+    `,
+    "Shine": `
+      <h4>Purpose</h4>
+      <p>Clean the workplace enough that leaks, damage, wear, contamination, loose material, and other abnormal conditions are easier to recognize.</p>
+      <h4>Field actions</h4>
+      <ul>
+        <li>Clean work surfaces, floors, equipment areas, and storage locations to the condition appropriate for the operation.</li>
+        <li>Look for the source of recurring dirt, debris, leakage, or contamination instead of repeatedly cleaning around it.</li>
+        <li>Use cleaning as an opportunity to identify abnormal conditions that need correction or escalation.</li>
+      </ul>
+      <h4>Ask</h4>
+      <p>Is the area clean enough that a new leak, damaged component, spill, buildup, or other abnormal condition would stand out?</p>
+      <div class="five-s-ready"><strong>Ready to move on when:</strong> the expected clean condition is established and abnormalities are visible rather than hidden by poor housekeeping.</div>
+    `,
+    "Standardize": `
+      <h4>Purpose</h4>
+      <p>Turn the improved condition into a clear, consistent way of working so the first three S's are not dependent on memory or individual preference.</p>
+      <h4>Field actions</h4>
+      <ul>
+        <li>Define what “normal” looks like for the area.</li>
+        <li>Use simple visual standards, labels, photographs, markings, checklists, routines, or other controls where they add value.</li>
+        <li>Clarify who performs recurring organization and cleaning tasks and when they occur.</li>
+        <li>Keep standards as simple as possible while still making the expected condition obvious.</li>
+      </ul>
+      <h4>Ask</h4>
+      <p>Would different people maintain this area in substantially the same condition because the standard is clear?</p>
+      <div class="five-s-ready"><strong>Ready to move on when:</strong> the expected condition and routine are clear enough to be repeated consistently.</div>
+    `,
+    "Sustain": `
+      <h4>Purpose</h4>
+      <p>Make 5S part of normal work so the area does not slowly return to its previous condition.</p>
+      <h4>Field actions</h4>
+      <ul>
+        <li>Build ownership into routine work rather than relying on occasional cleanup campaigns.</li>
+        <li>Use short checks, coaching, visual confirmation, or periodic review to recognize drift.</li>
+        <li>Correct the reason the standard is difficult to maintain instead of repeatedly blaming the user.</li>
+        <li>Update the standard when the work, equipment, or process changes.</li>
+      </ul>
+      <h4>Ask</h4>
+      <p>Is the improved condition still present weeks later, and does the team know how to respond when it begins to drift?</p>
+      <div class="five-s-ready"><strong>System condition:</strong> 5S is sustained when Sort, Set in Order, Shine, and Standardize are maintained as part of everyday work and continuously improved when conditions change.</div>
+    `
+  };
+
   function applyMobileQualityStyles() {
     const old = document.getElementById("skyfireMobileQualityStyles");
     if (old) old.remove();
@@ -31,7 +102,6 @@
       #homeSection .skyfire-hub-home-tile.field-hub{border-top-color:var(--sf-neutral)}
       #homeSection .skyfire-hub-home-tile.field-hub .tile-title{color:var(--sf-neutral)}
 
-      /* Utility/info destinations are neutral rather than borrowing feature colors. */
       #homeSection .feedback-home-tile,
       #homeSection [data-open-section="aboutSection"]{border-top-color:var(--sf-neutral)!important}
       #homeSection .feedback-home-tile .tile-title,
@@ -62,13 +132,18 @@
       #technicalGuidanceSection .resource-status,#technicalGuidanceSection .tg-chip{background:#fff0e2;color:#8f4a16}
       #mshaGuidanceSection .ppm-notice,.ppm-resource-section .ppm-notice{border-left-color:var(--sf-guidance)}
 
-      /* 5S is an interactive tool: use teal and give bold/regular text breathing room. */
       #fiveSSection .five-s-answer-row button.selected{outline-color:var(--sf-tools)!important}
       #fiveSSection .five-s-stage-number{background:var(--sf-tools-soft)}
-      #fiveSSection .five-s-stage summary strong{margin-right:.35rem}
-      #fiveSSection .five-s-stage summary small{display:inline;line-height:1.4}
-      #fiveSSection .five-s-next>span{margin-right:.35rem}
+      #fiveSSection .five-s-stage summary>span:last-child{display:flex;flex-direction:column;gap:4px;min-width:0}
+      #fiveSSection .five-s-stage summary strong{display:block;margin:0!important;line-height:1.25}
+      #fiveSSection .five-s-stage summary small{display:block!important;margin:0!important;line-height:1.35}
+      #fiveSSection .five-s-next>span{display:block;margin:0 0 4px!important}
+      #fiveSSection .five-s-next>strong{display:block;margin:0 0 8px;line-height:1.25}
+      #fiveSSection .five-s-next p{margin-top:0}
       #fiveSSection .five-s-ready strong{margin-right:.28rem}
+      #fiveSSection .five-s-stage h4{margin:18px 0 7px}
+      #fiveSSection .five-s-stage ul{padding-left:22px;line-height:1.5}
+      #fiveSSection .five-s-stage li{margin:7px 0}
 
       #cfrSection .layout,#oshaSection .layout,#cfrContainer,#oshaContainer,#cfrContainer .section-content,#oshaContainer .section-content{min-width:0;max-width:100%}
       #cfrContainer,#oshaContainer{overflow-x:hidden}
@@ -83,6 +158,7 @@
       #cfrContainer .level-subpart>summary,#oshaContainer .level-subpart>summary{border-left:6px solid var(--sf-regulation-subpart)!important;background:linear-gradient(90deg,rgba(118,180,229,.15),#fbfdff 34%)!important}
       #cfrContainer .level-section,#oshaContainer .level-section{border-left:6px solid var(--sf-regulation)!important;background:#fff}
       #cfrContainer .level-section>summary,#oshaContainer .level-section>summary{color:var(--text);background:linear-gradient(90deg,rgba(11,132,255,.08),#fff 38%)}
+
       @media(max-width:600px){
         #cfrSection .layout,#oshaSection .layout{gap:14px}
         #cfrContainer,#oshaContainer{padding:8px;border-radius:16px}
@@ -105,6 +181,23 @@
     document.head.appendChild(style);
   }
 
+  function applyFiveSContentQuality(attempt) {
+    const section = document.getElementById("fiveSSection");
+    if (!section) {
+      if (attempt < 40) window.setTimeout(() => applyFiveSContentQuality(attempt + 1), 100);
+      return;
+    }
+
+    const overview = section.querySelector(".five-s-overview");
+    if (overview) overview.open = false;
+
+    Object.entries(fiveSStageContent).forEach(([stageName, html]) => {
+      const stage = section.querySelector(`.five-s-stage[data-stage="${stageName}"]`);
+      const body = stage ? stage.querySelector(".five-s-detail-body") : null;
+      if (body) body.innerHTML = html;
+    });
+  }
+
   function loadScript(selector,src,dataName){
     if(document.querySelector(selector))return;
     const script=document.createElement("script");
@@ -116,9 +209,10 @@
 
   function initializeQualityPass(){
     applyMobileQualityStyles();
-    loadScript('script[data-skyfire-navigation="true"]','./navigation.js?v=quality-v6','skyfireNavigation');
-    loadScript('script[data-nested-tree="true"]','./nested-tree.js?v=quality-v6','nestedTree');
-    loadScript('script[data-home-preview="true"]','./home-preview.js?v=quality-v6','homePreview');
+    applyFiveSContentQuality(0);
+    loadScript('script[data-skyfire-navigation="true"]','./navigation.js?v=quality-v7','skyfireNavigation');
+    loadScript('script[data-nested-tree="true"]','./nested-tree.js?v=quality-v7','nestedTree');
+    loadScript('script[data-home-preview="true"]','./home-preview.js?v=quality-v7','homePreview');
   }
 
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",initializeQualityPass);

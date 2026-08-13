@@ -1,5 +1,5 @@
-const CACHE_NAME = "skyfire-ppm-cache-v1";
-const CACHE_VERSION = "ppm-v1";
+const CACHE_NAME = "skyfire-quality-cache-v1";
+const CACHE_VERSION = "quality-v1";
 
 const SHELL_CACHE = [
   "./",
@@ -9,6 +9,7 @@ const SHELL_CACHE = [
   `./app.js?v=${CACHE_VERSION}`,
   `./risk-matrix.js?v=${CACHE_VERSION}`,
   "./feedback.js",
+  `./mobile-quality.js?v=${CACHE_VERSION}`,
   `./ppm-guidance.js?v=${CACHE_VERSION}`,
   `./manifest.json?v=${CACHE_VERSION}`,
   "./Icons/icon-192.png",
@@ -43,7 +44,7 @@ self.addEventListener("install", event => {
           console.warn("Install cache skipped:", asset, error);
         }
       }
-    })
+    })()
   );
 
   self.skipWaiting();
@@ -93,6 +94,7 @@ self.addEventListener("fetch", event => {
     url.pathname.endsWith("/app.js") ||
     url.pathname.endsWith("/risk-matrix.js") ||
     url.pathname.endsWith("/feedback.js") ||
+    url.pathname.endsWith("/mobile-quality.js") ||
     url.pathname.endsWith("/ppm-guidance.js") ||
     url.pathname.endsWith("/manifest.json") ||
     url.pathname.includes("/Icons/");

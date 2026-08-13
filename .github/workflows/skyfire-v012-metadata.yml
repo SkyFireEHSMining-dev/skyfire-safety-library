@@ -1,0 +1,76 @@
+name: SkyFire v0.12 metadata update
+
+on:
+  push:
+    paths:
+      - '.github/workflows/skyfire-v012-metadata.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update-release-metadata:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Update SkyFire v0.12 release metadata
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          replacements = {
+              Path('index.html'): [
+                  (
+                      'SkyFire Safety Library v0.11 Beta — Feedback & Suggestions added.',
+                      'SkyFire Safety Library v0.12 Beta — 5S, expanded guidance resources, and mobile navigation/readability improvements.'
+                  ),
+                  ('June 14, 2026', 'August 13, 2026'),
+              ],
+              Path('feedback.js'): [
+                  ('const SKYFIRE_FEEDBACK_VERSION = "v0.11 Beta";', 'const SKYFIRE_FEEDBACK_VERSION = "v0.12 Beta";'),
+              ],
+              Path('service-worker.js'): [
+                  ('skyfire-quality-cache-v8', 'skyfire-quality-cache-v9'),
+                  ('quality-v8', 'quality-v9'),
+              ],
+          }
+
+          for path, pairs in replacements.items():
+              text = path.read_text(encoding='utf-8')
+              original = text
+              for old, new in pairs:
+                  if old not in text:
+                      raise SystemExit(f'Expected release string not found in {path}: {old}')
+                  text = text.replace(old, new)
+              if text == original:
+                  raise SystemExit(f'No change made to {path}')
+              path.write_text(text, encoding='utf-8')
+
+          # Keep any other exact v0.11 Beta references from drifting behind the release.
+          for path in Path('.').rglob('*'):
+              if not path.is_file() or '.git' in path.parts or path == Path('.github/workflows/skyfire-v012-metadata.yml'):
+                  continue
+              if path.suffix.lower() not in {'.js', '.html', '.css', '.json', '.md'}:
+                  continue
+              try:
+                  text = path.read_text(encoding='utf-8')
+              except UnicodeDecodeError:
+                  continue
+              if 'v0.11 Beta' in text:
+                  path.write_text(text.replace('v0.11 Beta', 'v0.12 Beta'), encoding='utf-8')
+          PY
+
+      - name: Remove one-time workflow
+        run: rm .github/workflows/skyfire-v012-metadata.yml
+
+      - name: Commit release metadata
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Release SkyFire v0.12 Beta metadata"
+          git push

@@ -1,7 +1,6 @@
 (function () {
   const CHECKED_LABEL = "Source checked August 2026";
   const PPM_HOME = "https://www.msha.gov/compliance-and-enforcement/compliance-assistance/program-policy-manual";
-  const VOLUME_IV_14100 = "https://arlweb.msha.gov/REGS/COMPLIAN/PPM/PMVOL4D.HTM#56.14100";
 
   function openSection(section) {
     if (!section) return;
@@ -123,7 +122,6 @@
       `<div class="info-panel"><h3>Subpart M · Machinery and Equipment</h3><div class="ppm-meta"><span class="ppm-chip">Volume IV</span><span class="ppm-chip">Subpart M</span><span class="ppm-chip">1 source-checked entry</span></div><p>Select a source-checked PPM entry below.</p></div>
        <details class="info-panel ppm-entry"><summary><strong>56/57.14100 · Safety Defects: Examination, Correction, and Records</strong><span>Official MSHA Program Policy Manual text</span></summary><div class="ppm-entry-body">
          <div class="ppm-meta"><span class="ppm-chip">Source type · PPM</span><span class="ppm-chip">Volume IV</span><span class="ppm-chip">Subpart M</span><span class="ppm-chip">${CHECKED_LABEL}</span></div>
-         <div class="ppm-source-box"><strong>Source fidelity:</strong><p>The policy text below is reproduced from MSHA's published Program Policy Manual. SkyFire does not paraphrase or interpret the agency wording in this library entry.</p></div>
          <h4>Official MSHA PPM text</h4>
          <div class="ppm-official-text">
            <p>This standard applies to all off-road and on-road self-propelled equipment used on mine property, including vehicles such as vans, suburbans, and pick-up trucks that are used at mine sites and remain on mine property. In most instances, it does not apply to vehicles used to transport persons between locations off mine property to mine property; however, if such vehicles transport personnel on mine property (e.g., from the gate to various sites at the mine), then such equipment must be inspected.</p>
@@ -131,8 +129,6 @@
            <p>Standard .14132 shall be used when the equipment has not been equipped with audible warning devices, or when they have been so equipped, and the device is not operational for whatever reason.</p>
            <p>In some cases, mine operators have installed audible reverse alarms on underground equipment because prevailing conditions have dictated the need for a warning device to ensure miner safety. In this instance, Standard .14100 can be considered if the alarm is inoperable or inaudible and the defect can be shown to affect the safety of workers in the area. Surrounding noise levels, confined work areas, and distracting work assignments shall be considered at the time.</p>
          </div>
-         <h4>Official sources</h4>
-         <div class="ppm-source-links"><a href="${VOLUME_IV_14100}" target="_blank" rel="noopener">MSHA PPM Volume IV · 56/57.14100</a><a href="${PPM_HOME}" target="_blank" rel="noopener">MSHA Program Policy Manual home</a></div>
        </div></details>`
     );
 

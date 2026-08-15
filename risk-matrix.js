@@ -140,3 +140,11 @@
   script.dataset.skyfirePpm = "true";
   document.head.appendChild(script);
 })();
+
+(function loadCfrV13Module() {
+  if (document.querySelector('script[data-skyfire-cfr-v13="true"]')) return;
+  var script = document.createElement("script");
+  script.src = "cfr-v13.js?v=cfr-v13-1";
+  script.dataset.skyfireCfrV13 = "true";
+  document.head.appendChild(script);
+})();

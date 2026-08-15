@@ -1,6 +1,6 @@
-const SHELL_CACHE_NAME = "skyfire-quality-cache-v10";
+const SHELL_CACHE_NAME = "skyfire-quality-cache-v11";
 const DATA_CACHE_NAME = "skyfire-regulatory-data-v1";
-const CACHE_VERSION = "quality-v10";
+const CACHE_VERSION = "quality-v11";
 
 const SHELL_CACHE = [
   "./",
@@ -15,6 +15,7 @@ const SHELL_CACHE = [
   `./ppm-guidance.js?v=${CACHE_VERSION}`,
   `./nested-tree.js?v=${CACHE_VERSION}`,
   `./home-preview.js?v=${CACHE_VERSION}`,
+  `./cfr-v13.js?v=${CACHE_VERSION}`,
   `./manifest.json?v=${CACHE_VERSION}`,
   "./Icons/icon-192.png",
   "./Icons/icon-512.png",
@@ -103,6 +104,7 @@ self.addEventListener("fetch", event => {
     url.pathname.endsWith("/ppm-guidance.js") ||
     url.pathname.endsWith("/nested-tree.js") ||
     url.pathname.endsWith("/home-preview.js") ||
+    url.pathname.endsWith("/cfr-v13.js") ||
     url.pathname.endsWith("/manifest.json") ||
     url.pathname.includes("/Icons/");
 

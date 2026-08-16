@@ -148,3 +148,11 @@
   script.dataset.skyfireCfrV13 = "true";
   document.head.appendChild(script);
 })();
+
+(function loadResponsiveV13Module() {
+  if (document.querySelector('script[data-skyfire-responsive-v13="true"]')) return;
+  var script = document.createElement("script");
+  script.src = "responsive-v13.js?v=responsive-v13-1";
+  script.dataset.skyfireResponsiveV13 = "true";
+  document.head.appendChild(script);
+})();

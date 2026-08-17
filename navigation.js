@@ -1,5 +1,6 @@
 (function () {
-  const NAV_VERSION = "v1";
+  const NAV_VERSION = "v2";
+  const HISTORY_KEY = "skyfireNavigation";
   const NAV_TREE = {
     homeSection: { label: "Home", parent: null },
 
@@ -44,6 +45,9 @@
   ]);
 
   let decorationScheduled = false;
+  let historyScheduled = false;
+  let applyingHistoryState = false;
+  let lastSectionId = null;
 
   function addStyles() {
     const old = document.getElementById("skyfireNavigationStyles");
@@ -253,12 +257,107 @@
     }, 0);
   }
 
+  function getVisibleSectionId() {
+    const sections = document.querySelectorAll(".app-section:not(.hidden)");
+    for (const section of sections) {
+      if (section.id && NAV_TREE[section.id]) return section.id;
+    }
+    return null;
+  }
+
+  function historySupported() {
+    return Boolean(
+      window.history &&
+      typeof window.history.pushState === "function" &&
+      typeof window.history.replaceState === "function"
+    );
+  }
+
+  function makeHistoryState(sectionId) {
+    return {
+      [HISTORY_KEY]: true,
+      sectionId
+    };
+  }
+
+  function replaceInitialHistoryState() {
+    const sectionId = getVisibleSectionId() || "homeSection";
+    lastSectionId = sectionId;
+    if (!historySupported()) return;
+
+    try {
+      window.history.replaceState(makeHistoryState(sectionId), document.title, window.location.href);
+    } catch (error) {
+      console.warn("SkyFire history initialization skipped:", error);
+    }
+  }
+
+  function syncHistoryFromVisibleSection() {
+    historyScheduled = false;
+    const sectionId = getVisibleSectionId();
+    if (!sectionId || sectionId === lastSectionId) return;
+
+    if (applyingHistoryState) {
+      lastSectionId = sectionId;
+      return;
+    }
+
+    lastSectionId = sectionId;
+    if (!historySupported()) return;
+
+    try {
+      window.history.pushState(makeHistoryState(sectionId), document.title, window.location.href);
+    } catch (error) {
+      console.warn("SkyFire history update skipped:", error);
+    }
+  }
+
+  function scheduleHistorySync() {
+    if (historyScheduled) return;
+    historyScheduled = true;
+    window.setTimeout(syncHistoryFromVisibleSection, 0);
+  }
+
+  function restoreHistoryState(event) {
+    const state = event && event.state;
+    if (!state || state[HISTORY_KEY] !== true || !NAV_TREE[state.sectionId]) return;
+
+    applyingHistoryState = true;
+    lastSectionId = state.sectionId;
+    navigateTo(state.sectionId);
+
+    window.setTimeout(() => {
+      applyingHistoryState = false;
+      lastSectionId = getVisibleSectionId() || state.sectionId;
+    }, 25);
+  }
+
   function initializeNavigation() {
     addStyles();
     decorateAll();
+    replaceInitialHistoryState();
 
-    const observer = new MutationObserver(scheduleDecoration);
-    observer.observe(document.body, { childList: true, subtree: true });
+    const observer = new MutationObserver(mutations => {
+      let classChanged = false;
+      let childChanged = false;
+
+      mutations.forEach(mutation => {
+        if (mutation.type === "attributes" && mutation.attributeName === "class") classChanged = true;
+        if (mutation.type === "childList") childChanged = true;
+      });
+
+      if (childChanged) scheduleDecoration();
+      if (classChanged || childChanged) scheduleHistorySync();
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["class"]
+    });
+
+    window.addEventListener("popstate", restoreHistoryState);
 
     window.setTimeout(decorateAll, 100);
     window.setTimeout(decorateAll, 400);

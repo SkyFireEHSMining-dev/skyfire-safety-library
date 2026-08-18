@@ -55,8 +55,9 @@
               code: "48.5/48.25",
               title: "Job Site Training",
               text: [
-                "Health and safety training may be conducted at the job site and may involve performance of actual job tasks.",
-                "The above does not apply to experienced miners assigned to work underground or on the surface for the first time. These miners are ‘new miners’ under the training regulations and must receive new miner training. Credit can be given for applicable underground or surface training."
+                "Health and safety training may be conducted at the job site and may involve performance of actual job tasks. Job site training must be completed under close and continuous supervision of an approved instructor, with training, not production, as the primary goal. The training is acceptable if the following conditions are met:",
+                "1. Instructors must follow an outline in which each step of the job is broken down into instructional units. The students must demonstrate safe performance of each job step. Several units may be combined in the same instructional period.",
+                "2. All health and safety standards must be observed."
               ]
             }
           ]
@@ -266,7 +267,7 @@
       window.setTimeout(initializePPMGuidance, 75);
       return;
     }
-    if (guidance.dataset.ppmInitialized === "direct-v2") return;
+    if (guidance.dataset.ppmInitialized === "direct-v3") return;
 
     addStyles();
 
@@ -283,7 +284,7 @@
       ${renderProgramManual()}
     `);
 
-    guidance.dataset.ppmInitialized = "direct-v2";
+    guidance.dataset.ppmInitialized = "direct-v3";
   }
 
   if (document.readyState === "loading") {

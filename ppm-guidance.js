@@ -38,17 +38,6 @@
     }
   ];
 
-  function openSection(section) {
-    if (!section) return;
-    if (typeof window.openDynamicSection === "function") {
-      window.openDynamicSection(section);
-      return;
-    }
-    document.querySelectorAll(".app-section").forEach(item => item.classList.add("hidden"));
-    section.classList.remove("hidden");
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-
   function countEntries(node) {
     if (Array.isArray(node.entries)) return node.entries.length;
     if (Array.isArray(node.groups)) return node.groups.reduce((sum, group) => sum + countEntries(group), 0);
@@ -63,14 +52,12 @@
     style.id = "ppmGuidanceStyles";
     style.textContent = `
       .ppm-notice{border-left:5px solid var(--sf-guidance,#6554c0)}
-      .ppm-library-list{display:grid;gap:16px;margin-top:18px}
-      .ppm-folder{width:100%;text-align:left;background:linear-gradient(90deg,var(--sf-guidance-soft,#f4f1ff),#fff 24%);border:1px solid var(--line);border-left:5px solid var(--sf-guidance,#6554c0);border-radius:20px;padding:22px;box-shadow:var(--shadow);cursor:pointer}
-      .ppm-folder-code{display:block;color:var(--sf-guidance,#6554c0);font-weight:800;font-size:.9rem;letter-spacing:.03em;margin-bottom:7px}
-      .ppm-folder strong{display:block;color:var(--text);font-size:1.25rem;line-height:1.2}
-      .ppm-folder span:not(.ppm-folder-code):not(.resource-status){display:block;color:var(--muted);margin-top:9px;line-height:1.45}
-      .ppm-resource-section .resource-status,#mshaGuidanceSection .resource-status{background:#eeeafd;color:#584b91}
-
-      .ppm-reader-panel{padding:16px;overflow:hidden}
+      .ppm-program-panel{padding:16px;overflow:hidden}
+      .ppm-program-heading{padding:6px 4px 14px}
+      .ppm-program-label{display:block;color:var(--sf-guidance,#6554c0);font-size:.82rem;font-weight:850;letter-spacing:.05em;margin-bottom:5px}
+      .ppm-program-heading h3{margin:0 0 7px;font-size:1.45rem}
+      .ppm-program-heading p{margin:0;color:var(--muted);line-height:1.45}
+      .ppm-program-status{display:inline-block;margin-top:10px;padding:5px 10px;border-radius:999px;background:#eeeafd;color:#584b91;font-weight:750;font-size:.8rem}
       .ppm-reader{display:grid;gap:10px;width:100%;max-width:100%;min-width:0}
       .ppm-tree-level{width:100%;max-width:100%;min-width:0;margin:8px 0;padding:0;border:0;background:transparent;box-shadow:none;overflow:visible}
       .ppm-tree-level>summary{display:block;width:100%;box-sizing:border-box;cursor:pointer;list-style:none;padding:15px 16px;border-top:1px solid var(--line-soft,var(--line));border-right:1px solid var(--line-soft,var(--line));border-bottom:1px solid var(--line-soft,var(--line));border-radius:15px;line-height:1.3;overflow-wrap:anywhere}
@@ -84,7 +71,6 @@
       .ppm-tree-title{display:block;margin:6px 0 0 25px;color:var(--text);font-size:1.08rem;font-weight:800;line-height:1.3}
       .ppm-tree-status{display:block;margin:8px 0 0 25px;color:#65589c;font-size:.79rem;font-weight:700}
       .ppm-tree-body{width:100%;max-width:100%;min-width:0;padding:0;margin:0}
-
       .ppm-entry{width:100%;max-width:100%;min-width:0;margin:10px 0 0;padding:0;border-top:1px solid var(--line-soft,var(--line));border-right:1px solid var(--line-soft,var(--line));border-bottom:1px solid var(--line-soft,var(--line));border-left:6px solid #9788df;border-radius:15px;background:#fff;box-shadow:none;overflow:hidden}
       .ppm-entry>summary{cursor:pointer;list-style:none;width:100%;box-sizing:border-box;padding:16px 17px;background:linear-gradient(90deg,rgba(151,136,223,.13),#fff 38%)}
       .ppm-entry>summary::-webkit-details-marker{display:none}
@@ -99,9 +85,10 @@
       .ppm-source-box{margin-top:18px;padding:14px 16px;border-left:4px solid var(--sf-guidance,#6554c0);background:var(--sf-guidance-soft,#f4f1ff)}
       .ppm-source-links{display:grid;gap:9px;margin-top:12px}
       .ppm-source-links a{overflow-wrap:anywhere;color:var(--sf-guidance,#6554c0)}
-
       @media(max-width:600px){
-        .ppm-reader-panel{padding:10px}
+        .ppm-program-panel{padding:10px}
+        .ppm-program-heading{padding:7px 4px 12px}
+        .ppm-program-heading h3{font-size:1.32rem}
         .ppm-tree-level>summary{padding:14px 13px;font-size:1.02rem}
         .ppm-tree-title{font-size:1.02rem;margin-left:24px}
         .ppm-tree-status{margin-left:24px}
@@ -111,25 +98,6 @@
       }
     `;
     document.head.appendChild(style);
-  }
-
-  function buildSection(id, backLabel, title, subtitle, body) {
-    const existing = document.getElementById(id);
-    if (existing) existing.remove();
-
-    const section = document.createElement("section");
-    section.id = id;
-    section.className = "app-section hidden skyfire-resource-section ppm-resource-section";
-    section.innerHTML = `
-      <div class="module-header">
-        <button class="module-home-btn ppm-back" type="button">${backLabel}</button>
-        <div class="module-header-text"><h2>${title}</h2><p>${subtitle}</p></div>
-      </div>
-      ${body}
-    `;
-    const home = document.getElementById("homeSection");
-    if (home && home.parentNode) home.parentNode.insertBefore(section, home.nextSibling);
-    return section;
   }
 
   function renderEntry(entry, volume, group) {
@@ -191,9 +159,16 @@
     `;
   }
 
-  function renderReader() {
+  function renderProgramManual() {
+    const total = PPM_DATA.reduce((sum, volume) => sum + countEntries(volume), 0);
     return `
-      <div class="info-panel ppm-reader-panel">
+      <div class="info-panel ppm-program-panel">
+        <div class="ppm-program-heading">
+          <span class="ppm-program-label">PROGRAM POLICY MANUAL</span>
+          <h3>MSHA Program Policy Manual</h3>
+          <p>Select a source-checked volume below, then drill down to the official MSHA text.</p>
+          <span class="ppm-program-status">${total} source-checked ${total === 1 ? "entry" : "entries"} · ${CHECKED_LABEL}</span>
+        </div>
         <div class="ppm-reader">
           ${PPM_DATA.map(renderVolume).join("")}
         </div>
@@ -211,10 +186,12 @@
       window.setTimeout(initializePPMGuidance, 75);
       return;
     }
-    if (guidance.dataset.ppmInitialized === "true") return;
-    guidance.dataset.ppmInitialized = "true";
+    if (guidance.dataset.ppmInitialized === "direct-v1") return;
 
     addStyles();
+
+    const obsolete = document.getElementById("ppmLibrarySection");
+    if (obsolete) obsolete.remove();
 
     Array.from(guidance.children).slice(1).forEach(child => child.remove());
     guidance.insertAdjacentHTML("beforeend", `
@@ -223,32 +200,10 @@
         <p>The Program Policy Manual is an MSHA guidance source and is presented separately from regulatory text in 30 CFR.</p>
         <p><strong>SkyFire reproduces source-checked PPM entries using MSHA's published wording rather than paraphrasing or interpreting the agency's policy.</strong></p>
       </div>
-      <div class="info-panel">
-        <h3>MSHA Guidance Library</h3>
-        <p>Only source-checked guidance is shown here.</p>
-        <div class="ppm-library-list">
-          <button type="button" class="ppm-folder" data-open-ppm="ppmLibrarySection">
-            <span class="ppm-folder-code">PROGRAM POLICY MANUAL</span>
-            <strong>MSHA Program Policy Manual</strong>
-            <span class="resource-status">2 source-checked entries · ${CHECKED_LABEL}</span>
-            <span>Open the PPM once, then drill down through the source-checked hierarchy to the official MSHA text.</span>
-          </button>
-        </div>
-      </div>
+      ${renderProgramManual()}
     `);
 
-    const ppmLibrary = buildSection(
-      "ppmLibrarySection",
-      "Back to MSHA Guidance",
-      "MSHA Program Policy Manual",
-      "Source-checked PPM material organized in one inline reader.",
-      renderReader()
-    );
-    ppmLibrary.dataset.ppmInlineReader = "true";
-
-    const guideButton = guidance.querySelector('[data-open-ppm="ppmLibrarySection"]');
-    if (guideButton) guideButton.addEventListener("click", () => openSection(ppmLibrary));
-    ppmLibrary.querySelector(".ppm-back").addEventListener("click", () => openSection(guidance));
+    guidance.dataset.ppmInitialized = "direct-v1";
   }
 
   if (document.readyState === "loading") {

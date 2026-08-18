@@ -107,8 +107,6 @@
     });
 
     updateAllRiskMatrixCalculators();
-
-    // This small delayed refresh helps mobile browsers after hidden sections become visible.
     window.setTimeout(updateAllRiskMatrixCalculators, 250);
     window.setTimeout(updateAllRiskMatrixCalculators, 1000);
   }
@@ -136,7 +134,7 @@
 (function loadPPMGuidanceModule() {
   if (document.querySelector('script[data-skyfire-ppm="true"]')) return;
   var script = document.createElement("script");
-  script.src = "ppm-guidance.js?v=ppm-v5";
+  script.src = "ppm-guidance.js?v=ppm-v6";
   script.dataset.skyfirePpm = "true";
   document.head.appendChild(script);
 })();

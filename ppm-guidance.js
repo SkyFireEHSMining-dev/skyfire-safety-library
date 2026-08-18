@@ -4,6 +4,66 @@
 
   const PPM_DATA = [
     {
+      code: "VOLUME I",
+      title: "Enforcement of the 1977 Act",
+      groups: [
+        {
+          code: "SECTION 4",
+          title: "Mines Subject to the Act",
+          entries: [
+            {
+              code: "I.4-3",
+              title: "Jurisdiction Over Borrow Pits",
+              text: [
+                "If earth is being extracted from a pit and is used as fill material in basically the same form as it is extracted, the operation is considered to be a ‘borrow pit.’ For example, if a landowner has a loader and uses bank run material to fill potholes in a road, low places in the yard, etc., and no milling or processing is involved, except for the use of a scalping screen, the operation is a borrow pit.",
+                "The scalping screen can be either portable or stationary and is used to remove large rocks, wood or trash. In addition, whether the scalping is located where the material is dug, or whether the user of the material from the pit is the owner of the pit or a purchaser of the material from the pit, does not change the character of the operation, as long as it meets the other criteria."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      code: "VOLUME II",
+      title: "Testing and Evaluation",
+      groups: [
+        {
+          code: "PART 18",
+          title: "Electric Motor-Driven Mine Equipment and Accessories",
+          entries: [
+            {
+              code: "18.20(a)-(b)",
+              title: "Quality of Material, Workmanship, and Design",
+              text: [
+                "Paragraph 18.20(a) of Part 18, 30 CFR, requires equipment to be designed to facilitate inspection and maintenance.",
+                "Paragraph 18.20(b) of 30 CFR Part 18 requires equipment to be safe for its intended use."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      code: "VOLUME III",
+      title: "30 CFR Parts 40 Through 50 and Parts 62 and 100",
+      groups: [
+        {
+          code: "PART 48",
+          title: "Training and Retraining of Miners",
+          entries: [
+            {
+              code: "48.5/48.25",
+              title: "Job Site Training",
+              text: [
+                "Health and safety training may be conducted at the job site and may involve performance of actual job tasks.",
+                "The above does not apply to experienced miners assigned to work underground or on the surface for the first time. These miners are ‘new miners’ under the training regulations and must receive new miner training. Credit can be given for applicable underground or surface training."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
       code: "VOLUME IV",
       title: "Metal and Nonmetal Mines",
       groups: [
@@ -30,6 +90,26 @@
                 "Standard 56/57.14101(a)(2) should be cited if the parking brakes are not capable of holding the equipment with its typical load on the maximum grade it travels.",
                 "Standard 56/57.14101(a)(3) should be cited if a component or portion of any braking system on the equipment is not maintained in functional condition even though the braking system is in compliance with (1) and/or (2) above. It is important to note that if a component or portion of either system renders the equipment incapable of stopping or holding itself with its typical load on the maximum grade it travels, the appropriate standard, 56/57.14101(a)(1) or (2), should be cited.",
                 "Separate citations or orders should be issued if violations of 56/57.14101(a)(1) and 56/57.14101(a)(2) are found on the same piece of equipment."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      code: "VOLUME V",
+      title: "Coal Mines",
+      groups: [
+        {
+          code: "PART 77 · SUBPART E",
+          title: "Safeguards for Mechanical Equipment",
+          entries: [
+            {
+              code: "77.410",
+              title: "Mobile Equipment; Automatic Warning Devices",
+              text: [
+                "The warning device required by this Section need not be provided for automobiles, jeeps, pickup trucks, and similar vehicles where the operator's view directly behind the vehicle is not obstructed.",
+                "Service vehicles making visits to surface mines or surface work areas of underground mines are not required to be equipped with such warning devices."
               ]
             }
           ]
@@ -186,7 +266,7 @@
       window.setTimeout(initializePPMGuidance, 75);
       return;
     }
-    if (guidance.dataset.ppmInitialized === "direct-v1") return;
+    if (guidance.dataset.ppmInitialized === "direct-v2") return;
 
     addStyles();
 
@@ -203,7 +283,7 @@
       ${renderProgramManual()}
     `);
 
-    guidance.dataset.ppmInitialized = "direct-v1";
+    guidance.dataset.ppmInitialized = "direct-v2";
   }
 
   if (document.readyState === "loading") {

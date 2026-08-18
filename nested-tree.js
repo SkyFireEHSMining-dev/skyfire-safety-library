@@ -70,7 +70,7 @@
         padding:0;margin:0;
       }
 
-      /* Final PPM entry is the lightest guidance shade, again full width. */
+      /* Final PPM entries are the lightest guidance shade, again full width. */
       .nested-tree .nt-body>.ppm-entry{
         width:100%;max-width:100%;min-width:0;
         margin:10px 0 0;padding:0;
@@ -142,22 +142,24 @@
     const b=document.getElementById('ppmVolume4Section');
     const c=document.getElementById('ppmSubpartMSection');
     if(!a||!b||!c)return false;
-    if(a.dataset.nestedTree==='2')return true;
+    if(a.dataset.nestedTree==='3')return true;
 
     const x=a.querySelector('[data-open-volume]');
     const y=b.querySelector('[data-open-subpart]');
-    const z=c.querySelector('.ppm-entry');
+    const entries=Array.from(c.querySelectorAll('.ppm-entry'));
     const h=a.querySelector(':scope > .module-header');
-    if(!x||!y||!z||!h)return false;
+    if(!x||!y||!entries.length||!h)return false;
 
     const src=a.querySelector('.ppm-source-box');
     const srcCopy=src?src.cloneNode(true):null;
-    const item=z.cloneNode(true);
-    item.open=false;
 
     const l1=level(parts(x),'nt-volume');
     const l2=level(parts(y),'nt-subpart');
-    l2.body.appendChild(item);
+    entries.forEach(sourceEntry=>{
+      const item=sourceEntry.cloneNode(true);
+      item.open=false;
+      l2.body.appendChild(item);
+    });
     l1.body.appendChild(l2.details);
 
     Array.from(a.children).forEach(n=>{if(n!==h)n.remove();});
@@ -173,7 +175,7 @@
 
     b.remove();
     c.remove();
-    a.dataset.nestedTree='2';
+    a.dataset.nestedTree='3';
     css();
     return true;
   }

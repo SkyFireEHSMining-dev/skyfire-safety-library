@@ -134,7 +134,7 @@
 (function loadPPMGuidanceModule() {
   if (document.querySelector('script[data-skyfire-ppm="true"]')) return;
   var script = document.createElement("script");
-  script.src = "ppm-guidance.js?v=ppm-v6";
+  script.src = "ppm-guidance.js?v=ppm-v7";
   script.dataset.skyfirePpm = "true";
   document.head.appendChild(script);
 })();

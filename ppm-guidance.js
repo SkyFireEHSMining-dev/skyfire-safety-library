@@ -102,7 +102,7 @@
       "Back to MSHA Guidance",
       "MSHA Program Policy Manual",
       "Source-checked PPM material organized by MSHA volume.",
-      `<div class="info-panel"><h3>Program Policy Manual</h3><p>SkyFire is building this library one source-checked entry at a time. Volumes appear here when they contain verified material.</p><div class="ppm-library-list"><button type="button" class="ppm-folder" data-open-volume="ppmVolume4Section"><span class="ppm-folder-code">VOLUME IV</span><strong>Metal and Nonmetal Mines</strong><span class="resource-status">1 source-checked entry · ${CHECKED_LABEL}</span><span>Current SkyFire coverage begins with Subpart M — Machinery and Equipment.</span></button></div><div class="ppm-source-box"><strong>Official MSHA source:</strong><div class="ppm-source-links"><a href="${PPM_HOME}" target="_blank" rel="noopener">MSHA Program Policy Manual</a></div></div></div>`
+      `<div class="info-panel"><h3>Program Policy Manual</h3><p>SkyFire is building this library one source-checked entry at a time. Volumes appear here when they contain verified material.</p><div class="ppm-library-list"><button type="button" class="ppm-folder" data-open-volume="ppmVolume4Section"><span class="ppm-folder-code">VOLUME IV</span><strong>Metal and Nonmetal Mines</strong><span class="resource-status">2 source-checked entries · ${CHECKED_LABEL}</span><span>Current SkyFire coverage begins with Subpart M — Machinery and Equipment.</span></button></div><div class="ppm-source-box"><strong>Official MSHA source:</strong><div class="ppm-source-links"><a href="${PPM_HOME}" target="_blank" rel="noopener">MSHA Program Policy Manual</a></div></div></div>`
     );
 
     const volume4 = buildSection(
@@ -111,7 +111,7 @@
       "PPM Volume IV",
       "Metal and Nonmetal Mines",
       `<div class="info-panel"><h3>Volume IV · Metal and Nonmetal Mines</h3><div class="ppm-meta"><span class="ppm-chip">Program Policy Manual</span><span class="ppm-chip">Metal / Nonmetal</span><span class="ppm-chip">${CHECKED_LABEL}</span></div><p>SkyFire follows MSHA's regulatory organization so additional Volume IV entries can be added without changing the library structure.</p></div>
-       <div class="info-panel"><h3>Volume IV Sections</h3><p>Select a subpart to see the source-checked PPM entries available inside it.</p><div class="ppm-library-list"><button type="button" class="ppm-folder" data-open-subpart="ppmSubpartMSection"><span class="ppm-folder-code">SUBPART M</span><strong>Machinery and Equipment</strong><span class="resource-status">1 source-checked entry · ${CHECKED_LABEL}</span><span>Safety defects, equipment condition, and related machinery guidance.</span></button></div></div>`
+       <div class="info-panel"><h3>Volume IV Sections</h3><p>Select a subpart to see the source-checked PPM entries available inside it.</p><div class="ppm-library-list"><button type="button" class="ppm-folder" data-open-subpart="ppmSubpartMSection"><span class="ppm-folder-code">SUBPART M</span><strong>Machinery and Equipment</strong><span class="resource-status">2 source-checked entries · ${CHECKED_LABEL}</span><span>Safety defects, braking systems, equipment condition, and related machinery guidance.</span></button></div></div>`
     );
 
     const subpartM = buildSection(
@@ -119,7 +119,7 @@
       "Back to Volume IV",
       "Subpart M",
       "Machinery and Equipment",
-      `<div class="info-panel"><h3>Subpart M · Machinery and Equipment</h3><div class="ppm-meta"><span class="ppm-chip">Volume IV</span><span class="ppm-chip">Subpart M</span><span class="ppm-chip">1 source-checked entry</span></div><p>Select a source-checked PPM entry below.</p></div>
+      `<div class="info-panel"><h3>Subpart M · Machinery and Equipment</h3><div class="ppm-meta"><span class="ppm-chip">Volume IV</span><span class="ppm-chip">Subpart M</span><span class="ppm-chip">2 source-checked entries</span></div><p>Select a source-checked PPM entry below.</p></div>
        <details class="info-panel ppm-entry"><summary><strong>56/57.14100 · Safety Defects: Examination, Correction, and Records</strong><span>Official MSHA Program Policy Manual text</span></summary><div class="ppm-entry-body">
          <div class="ppm-meta"><span class="ppm-chip">Source type · PPM</span><span class="ppm-chip">Volume IV</span><span class="ppm-chip">Subpart M</span><span class="ppm-chip">${CHECKED_LABEL}</span></div>
          <h4>Official MSHA PPM text</h4>
@@ -128,6 +128,17 @@
            <p>This standard will not be cited when an audible warning device has been installed on heavy duty mobile equipment at surface mines and surface operations of underground mines, but is inoperative because of electrical or mechanical defect.</p>
            <p>Standard .14132 shall be used when the equipment has not been equipped with audible warning devices, or when they have been so equipped, and the device is not operational for whatever reason.</p>
            <p>In some cases, mine operators have installed audible reverse alarms on underground equipment because prevailing conditions have dictated the need for a warning device to ensure miner safety. In this instance, Standard .14100 can be considered if the alarm is inoperable or inaudible and the defect can be shown to affect the safety of workers in the area. Surrounding noise levels, confined work areas, and distracting work assignments shall be considered at the time.</p>
+         </div>
+       </div></details>
+       <details class="info-panel ppm-entry"><summary><strong>56/57.14101(a) · Brakes/Minimum Requirements</strong><span>Official MSHA Program Policy Manual text</span></summary><div class="ppm-entry-body">
+         <div class="ppm-meta"><span class="ppm-chip">Source type · PPM</span><span class="ppm-chip">Volume IV</span><span class="ppm-chip">Subpart M</span><span class="ppm-chip">${CHECKED_LABEL}</span></div>
+         <h4>Official MSHA PPM text</h4>
+         <div class="ppm-official-text">
+           <p>Subsection (a) is divided into three parts. Part (1) of this subsection sets a minimum performance standard for service brake systems on self-propelled mobile equipment. Part (2) sets a minimum performance standard for parking brakes on self-propelled mobile equipment. Part (3) sets a maintenance standard for all braking systems on self-propelled mobile equipment.</p>
+           <p>Standard 56/57.14101(a)(1) should be cited if a service brake system is not capable of stopping and holding the equipment with its typical load on the maximum grade it travels.</p>
+           <p>Standard 56/57.14101(a)(2) should be cited if the parking brakes are not capable of holding the equipment with its typical load on the maximum grade it travels.</p>
+           <p>Standard 56/57.14101(a)(3) should be cited if a component or portion of any braking system on the equipment is not maintained in functional condition even though the braking system is in compliance with (1) and/or (2) above. It is important to note that if a component or portion of either system renders the equipment incapable of stopping or holding itself with its typical load on the maximum grade it travels, the appropriate standard, 56/57.14101(a)(1) or (2), should be cited.</p>
+           <p>Separate citations or orders should be issued if violations of 56/57.14101(a)(1) and 56/57.14101(a)(2) are found on the same piece of equipment.</p>
          </div>
        </div></details>`
     );

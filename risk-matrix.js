@@ -154,3 +154,11 @@
   script.dataset.skyfireResponsiveV13 = "true";
   document.head.appendChild(script);
 })();
+
+(function loadEnforcementResourcesModule() {
+  if (document.querySelector('script[data-skyfire-enforcement="true"]')) return;
+  var script = document.createElement("script");
+  script.src = "enforcement-resources.js?v=enforcement-v1";
+  script.dataset.skyfireEnforcement = "true";
+  document.head.appendChild(script);
+})();

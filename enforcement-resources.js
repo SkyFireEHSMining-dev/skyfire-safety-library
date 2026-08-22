@@ -1,6 +1,6 @@
 (function () {
   const SOURCE_CHECKED = "Source checked August 2026";
-  const HANDBOOK_URL = "https://www.msha.gov/sites/default/files/Directive%20%26%20Guidance/Handbooks/PH25-I-1-Citation-and-Order-Writing-Handbook-1_18_25.pdf";
+  const HANDBOOK_URL = "https://www.msha.gov/sites/default/files/Directive%20%26%20Guidance/PH25-I-1-Citation_and_Order_Writing_Handbook-1_18_2025.pdf";
   const VIOLATIONS_URL = "https://arlweb.msha.gov/OpenGovernmentData/OGIMSHA.asp";
 
   let tries = 0;
@@ -20,6 +20,8 @@
       #regulatoryResourcesHubSection .skyfire-hub-item.enforcement-hub-item strong{color:var(--sf-enforcement)!important}
       #mshaEnforcementSection .module-header{border-top-color:var(--sf-enforcement)}
       #mshaEnforcementSection .enforcement-notice{border-left:5px solid var(--sf-enforcement)}
+      .enforcement-nav-actions{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}
+      .enforcement-nav-actions .module-home-btn{margin-bottom:0}
       .enforcement-grid{display:grid;gap:16px}
       .enforcement-resource{padding:0;overflow:hidden;border-left:5px solid var(--sf-enforcement)}
       .enforcement-resource>summary{cursor:pointer;list-style:none;padding:19px 20px;background:linear-gradient(90deg,var(--sf-enforcement-soft),#fff 30%)}
@@ -42,7 +44,10 @@
   function sectionMarkup() {
     return `
       <div class="module-header">
-        <button class="module-home-btn enforcement-back" type="button">Back to Regulatory Resources</button>
+        <div class="enforcement-nav-actions">
+          <button class="module-home-btn enforcement-back" type="button">← Back</button>
+          <button class="module-home-btn enforcement-home" type="button">⌂ Home</button>
+        </div>
         <div class="module-header-text">
           <h2>MSHA Enforcement &amp; Inspector Resources</h2>
           <p>Public MSHA materials for understanding how citations, orders, and enforcement records are documented.</p>
@@ -121,10 +126,21 @@
     `;
   }
 
+  function show(section) {
+    if (!section) return;
+    if (typeof window.openDynamicSection === "function") {
+      window.openDynamicSection(section);
+      return;
+    }
+    document.querySelectorAll(".app-section").forEach(item => item.classList.add("hidden"));
+    section.classList.remove("hidden");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
   function addPreviewItem() {
     const home = document.getElementById("homeSection");
     if (!home) return;
-    const tile = Array.from(home.querySelectorAll(".skyfire-hub-home-tile.regulatory-hub"))[0];
+    const tile = home.querySelector(".skyfire-hub-home-tile.regulatory-hub");
     const grid = tile?.querySelector(".home-hub-preview-grid");
     if (!grid) return;
     const exists = Array.from(grid.querySelectorAll(".home-hub-preview-item")).some(item => item.textContent.trim() === "MSHA Enforcement & Inspector Resources");
@@ -160,23 +176,9 @@
     section.innerHTML = sectionMarkup();
     home.parentNode.insertBefore(section, home.nextSibling);
 
-    button.addEventListener("click", () => {
-      if (typeof window.openDynamicSection === "function") window.openDynamicSection(section);
-      else {
-        document.querySelectorAll(".app-section").forEach(item => item.classList.add("hidden"));
-        section.classList.remove("hidden");
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }
-    });
-
-    section.querySelector(".enforcement-back").addEventListener("click", () => {
-      if (typeof window.openDynamicSection === "function") window.openDynamicSection(hub);
-      else {
-        document.querySelectorAll(".app-section").forEach(item => item.classList.add("hidden"));
-        hub.classList.remove("hidden");
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }
-    });
+    button.addEventListener("click", () => show(section));
+    section.querySelector(".enforcement-back").addEventListener("click", () => show(hub));
+    section.querySelector(".enforcement-home").addEventListener("click", () => show(home));
 
     addPreviewItem();
     window.setTimeout(addPreviewItem, 250);

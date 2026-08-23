@@ -1,7 +1,7 @@
 (function () {
   const SOURCE_CHECKED = "Source checked August 2026";
   const HANDBOOK_URL = "https://www.msha.gov/sites/default/files/Directive%20%26%20Guidance/PH25-I-1-Citation_and_Order_Writing_Handbook-1_18_2025.pdf";
-  const VIOLATIONS_URL = "https://arlweb.msha.gov/OpenGovernmentData/OGIMSHA.asp";
+  const MDRS_URL = "https://www.msha.gov/mdrs";
 
   let tries = 0;
 
@@ -35,7 +35,7 @@
       .enforcement-links{display:grid;gap:9px;margin-top:14px}
       .enforcement-links a{color:var(--sf-enforcement);font-weight:750;overflow-wrap:anywhere}
       .enforcement-caution{margin-top:15px;padding:12px 14px;border-left:4px solid #7b8794;background:#f7f8fa;line-height:1.5}
-      @media(min-width:900px){.enforcement-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.enforcement-resource:last-child:nth-child(odd){grid-column:1/-1}}
+      @media(min-width:900px){.enforcement-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
       @media(max-width:600px){.enforcement-resource>summary{padding:16px 14px}.enforcement-body{padding:0 14px 18px}.enforcement-body p,.enforcement-body li{font-size:1.04rem}}
     `;
     document.head.appendChild(style);
@@ -57,68 +57,50 @@
       <div class="info-panel enforcement-notice">
         <h3>Enforcement Resource Notice</h3>
         <p><strong>These are MSHA enforcement and inspector resources, not operator filing forms.</strong> They are provided so mine personnel can better understand the documents and public information MSHA uses or produces during enforcement activity.</p>
-        <p>SkyFire does not currently host a blank Form 7000-3 because a current public blank template has not been verified from MSHA. Where MSHA publishes official guidance or public data instead, SkyFire links to that authoritative source.</p>
+        <p>SkyFire does not currently host a blank Form 7000-3 because a current public blank template has not been verified from MSHA. Where MSHA publishes official guidance or public reporting tools instead, SkyFire links to that authoritative source.</p>
       </div>
 
       <div class="enforcement-grid">
         <details class="info-panel enforcement-resource">
           <summary>
-            <strong>MSHA Forms 7000-3 &amp; 7000-3a</strong>
-            <span>Mine Citation/Order and Mine Citation/Order Continuation</span>
+            <strong>Citation &amp; Order Forms / Writing Handbook</strong>
+            <span>Forms 7000-3 &amp; 7000-3a · Handbook PH25-I-1 · January 2025</span>
           </summary>
           <div class="enforcement-body">
             <div class="enforcement-meta">
-              <span class="enforcement-chip">Source type · MSHA enforcement forms</span>
-              <span class="enforcement-chip">Intended user · MSHA Authorized Representative</span>
+              <span class="enforcement-chip">Source type · MSHA handbook + enforcement forms</span>
+              <span class="enforcement-chip">Audience · Enforcement personnel</span>
               <span class="enforcement-chip">Not an operator filing form</span>
+              <span class="enforcement-chip">PH25-I-1</span>
               <span class="enforcement-chip">${SOURCE_CHECKED}</span>
             </div>
-            <p>MSHA's current Citation and Order Writing Handbook identifies Form 7000-3 as the <strong>Mine Citation/Order</strong> and Form 7000-3a as the <strong>Mine Citation/Order Continuation</strong>. The handbook explains how enforcement personnel complete these forms through MSHA's Inspection Application System and how subsequent actions are documented.</p>
-            <p>For mine personnel, the value is understanding the structure and terminology of the enforcement document that may be served to the operator. The form is issued by MSHA; it is not something a mine operator completes and submits as an operator filing.</p>
+            <p>MSHA's current <strong>Citation and Order Writing Handbook</strong> identifies Form 7000-3 as the <strong>Mine Citation/Order</strong> and Form 7000-3a as the <strong>Mine Citation/Order Continuation</strong>. The handbook explains how enforcement personnel document citations, orders, gravity and negligence evaluations, modifications, extensions, terminations, and related enforcement actions.</p>
+            <p>For mine personnel, this resource helps explain the structure and terminology of enforcement documents that may be served to an operator and how MSHA instructs its enforcement personnel to support those actions. The forms are issued by MSHA; they are not forms a mine operator completes and submits as an operator filing.</p>
+            <p>The handbook is guidance for MSHA enforcement personnel. It does not replace the Mine Act, 30 CFR, Commission decisions, or other controlling authority.</p>
             <div class="enforcement-caution"><strong>SkyFire source rule:</strong> no blank 7000-3 is displayed here unless a current public MSHA template can be verified.</div>
             <div class="enforcement-links">
-              <a href="${HANDBOOK_URL}" target="_blank" rel="noopener">Official MSHA Citation and Order Writing Handbook</a>
+              <a href="${HANDBOOK_URL}" target="_blank" rel="noopener">Open official MSHA Citation and Order Writing Handbook</a>
             </div>
           </div>
         </details>
 
         <details class="info-panel enforcement-resource">
           <summary>
-            <strong>Citation and Order Writing Handbook</strong>
-            <span>Handbook PH25-I-1 · January 2025</span>
+            <strong>Search MSHA Violations by Mine</strong>
+            <span>Browser-based Mine Data Retrieval System (MDRS)</span>
           </summary>
           <div class="enforcement-body">
             <div class="enforcement-meta">
-              <span class="enforcement-chip">Source type · MSHA handbook</span>
-              <span class="enforcement-chip">Audience · Enforcement personnel</span>
-              <span class="enforcement-chip">PH25-I-1</span>
-              <span class="enforcement-chip">January 2025</span>
+              <span class="enforcement-chip">Source type · MSHA public reporting tool</span>
+              <span class="enforcement-chip">Mine-level reports</span>
+              <span class="enforcement-chip">Violations + inspections + related mine data</span>
               <span class="enforcement-chip">${SOURCE_CHECKED}</span>
             </div>
-            <p>This is MSHA's current public handbook for citation and order writing. It provides enforcement personnel with instructions for documenting citations, orders of withdrawal, gravity and negligence evaluations, health violations, modifications, extensions, terminations, and other enforcement actions.</p>
-            <p>Reading the handbook can help mine operators and safety personnel understand how MSHA instructs its enforcement personnel to document and support enforcement actions. It does not replace the Mine Act, 30 CFR, Commission decisions, or other controlling authority.</p>
+            <p>MSHA's <strong>Mine Data Retrieval System (MDRS)</strong> generates public reports on individual mines, including violations, inspections, accidents, ownership, VPID, POV, and health-sample history. This browser-based system is the better field-facing path for reviewing mine enforcement history.</p>
+            <p>MSHA separately publishes bulk flat-file datasets for analysts and database users. Those raw files can download as ZIP archives and are not the primary SkyFire link because they are cumbersome on phones and require additional software or data-processing steps.</p>
+            <div class="enforcement-caution"><strong>Online resource:</strong> MDRS requires an internet connection and is maintained by MSHA. Availability and interface behavior are controlled by the agency.</div>
             <div class="enforcement-links">
-              <a href="${HANDBOOK_URL}" target="_blank" rel="noopener">Open official MSHA handbook PDF</a>
-            </div>
-          </div>
-        </details>
-
-        <details class="info-panel enforcement-resource">
-          <summary>
-            <strong>MSHA Public Violations Data</strong>
-            <span>Public citation/order data captured from Form 7000-3</span>
-          </summary>
-          <div class="enforcement-body">
-            <div class="enforcement-meta">
-              <span class="enforcement-chip">Source type · MSHA public data</span>
-              <span class="enforcement-chip">Form 7000-3-derived</span>
-              <span class="enforcement-chip">Violations since 2000</span>
-              <span class="enforcement-chip">${SOURCE_CHECKED}</span>
-            </div>
-            <p>MSHA's Open Government data portal states that its Violations Data Set contains violations issued as a result of MSHA inspections beginning January 1, 2000. The dataset includes citation/order/safeguard details such as the Mine Act section, relevant dates, and the condition or practice associated with the enforcement action.</p>
-            <p>MSHA states that the violations data is captured from <strong>Form 7000-3</strong>. This gives mine personnel a public way to study real enforcement records without SkyFire reproducing or inventing a blank citation form.</p>
-            <div class="enforcement-links">
-              <a href="${VIOLATIONS_URL}" target="_blank" rel="noopener">Open MSHA Open Government Data portal</a>
+              <a href="${MDRS_URL}" target="_blank" rel="noopener">Open MSHA Mine Data Retrieval System</a>
             </div>
           </div>
         </details>
@@ -167,7 +149,7 @@
     const button = document.createElement("button");
     button.type = "button";
     button.className = "skyfire-hub-item enforcement-hub-item";
-    button.innerHTML = `<strong>MSHA Enforcement &amp; Inspector Resources</strong><span>Public citation/order forms, inspector guidance, and enforcement data.</span>`;
+    button.innerHTML = `<strong>MSHA Enforcement &amp; Inspector Resources</strong><span>Public citation/order guidance and mine-level enforcement reporting.</span>`;
     list.appendChild(button);
 
     const section = document.createElement("section");

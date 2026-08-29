@@ -1,6 +1,7 @@
 (function () {
   const SOURCE_CHECKED = "Source checked August 2026";
   const HANDBOOK_URL = "https://www.msha.gov/sites/default/files/Directive%20%26%20Guidance/PH25-I-1-Citation_and_Order_Writing_Handbook-1_18_2025.pdf";
+  const GENERAL_INSPECTION_URL = "https://arlweb.msha.gov/READROOM/HANDBOOK/PH19-IV.pdf";
   const MDRS_URL = "https://www.msha.gov/mdrs";
 
   let tries = 0;
@@ -50,17 +51,40 @@
         </div>
         <div class="module-header-text">
           <h2>MSHA Enforcement &amp; Inspector Resources</h2>
-          <p>Public MSHA materials for understanding how citations, orders, and enforcement records are documented.</p>
+          <p>Public MSHA materials for understanding inspection procedures, citations, orders, and enforcement records.</p>
         </div>
       </div>
 
       <div class="info-panel enforcement-notice">
         <h3>Enforcement Resource Notice</h3>
-        <p><strong>These are MSHA enforcement and inspector resources, not operator filing forms.</strong> They are provided so mine personnel can better understand the documents and public information MSHA uses or produces during enforcement activity.</p>
-        <p>SkyFire does not currently host a blank Form 7000-3 because a current public blank template has not been verified from MSHA. Where MSHA publishes official guidance or public reporting tools instead, SkyFire links to that authoritative source.</p>
+        <p><strong>These are MSHA enforcement and inspector resources, not operator filing forms or controlling regulations.</strong> They are provided so mine personnel can better understand the procedures, documents, and public information MSHA uses or produces during inspection and enforcement activity.</p>
+        <p>The Mine Act and applicable 30 CFR requirements remain the controlling authorities. SkyFire links to authoritative MSHA materials here for practical reference.</p>
       </div>
 
       <div class="enforcement-grid">
+        <details class="info-panel enforcement-resource">
+          <summary>
+            <strong>General Inspection Procedures</strong>
+            <span>MSHA Handbook PH19-IV/V-1 · Coal + Metal/Nonmetal · December 2019</span>
+          </summary>
+          <div class="enforcement-body">
+            <div class="enforcement-meta">
+              <span class="enforcement-chip">Source type · MSHA handbook</span>
+              <span class="enforcement-chip">Audience · MSHA inspection personnel</span>
+              <span class="enforcement-chip">Coal + Metal/Nonmetal</span>
+              <span class="enforcement-chip">PH19-IV/V-1</span>
+              <span class="enforcement-chip">${SOURCE_CHECKED}</span>
+            </div>
+            <p>MSHA's <strong>General Inspection Procedures Handbook</strong> sets out procedures for MSHA personnel conducting inspections of underground and surface mines and mine facilities. It is the combined general-inspection handbook for Coal and Metal/Nonmetal inspection activity.</p>
+            <p><strong>Why this is useful:</strong> mine operators and Safety Managers can use the handbook to better understand the general inspection process and the areas, records, conditions, work practices, and enforcement-related activities MSHA personnel may address during an inspection.</p>
+            <p>This handbook is agency procedure and guidance for MSHA personnel. It does not replace the Mine Act, applicable 30 CFR requirements, Commission decisions, or other controlling authority.</p>
+            <div class="enforcement-caution"><strong>SkyFire authority note:</strong> use this resource to understand MSHA inspection procedure—not as a substitute for determining the requirement that applies to a mine or condition.</div>
+            <div class="enforcement-links">
+              <a href="${GENERAL_INSPECTION_URL}" target="_blank" rel="noopener">Open official MSHA General Inspection Procedures Handbook</a>
+            </div>
+          </div>
+        </details>
+
         <details class="info-panel enforcement-resource">
           <summary>
             <strong>Citation &amp; Order Forms / Writing Handbook</strong>
@@ -149,7 +173,7 @@
     const button = document.createElement("button");
     button.type = "button";
     button.className = "skyfire-hub-item enforcement-hub-item";
-    button.innerHTML = `<strong>MSHA Enforcement &amp; Inspector Resources</strong><span>Public citation/order guidance and mine-level enforcement reporting.</span>`;
+    button.innerHTML = `<strong>MSHA Enforcement &amp; Inspector Resources</strong><span>Public inspection, citation/order, and mine-level enforcement resources.</span>`;
     list.appendChild(button);
 
     const section = document.createElement("section");

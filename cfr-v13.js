@@ -242,11 +242,66 @@
     };
   }
 
+  function installBookmarkPositionPatch() {
+    if (
+      typeof window.addBookmarkToFolder !== "function" ||
+      typeof window.renderBookmarkFolders !== "function" ||
+      typeof window.sortBookmarkFolders !== "function" ||
+      typeof window.saveBookmarkFolders !== "function"
+    ) {
+      window.setTimeout(installBookmarkPositionPatch, 50);
+      return;
+    }
+
+    if (window.addBookmarkToFolder.__skyfireV14PreservePosition === true) return;
+
+    const replacementAddBookmarkToFolder = function (libraryKey, folderId, section) {
+      const state = libraryStates[libraryKey];
+      const folder = state && state.bookmarkFolders.find(function (item) {
+        return item.id === folderId;
+      });
+
+      if (!folder) {
+        alert("That folder could not be found.");
+        return;
+      }
+
+      const alreadyExists = folder.items.some(function (item) {
+        return item.sectionNumber === section.sectionNumber;
+      });
+      if (alreadyExists) {
+        alert("That bookmark is already in this folder.");
+        return;
+      }
+
+      folder.items.push({
+        sectionNumber: section.sectionNumber,
+        heading: section.heading
+      });
+
+      window.sortBookmarkFolders(libraryKey);
+      window.saveBookmarkFolders(state.config.bookmarksKey, state.bookmarkFolders);
+
+      /* Only refresh the bookmark-folder sidebar. Re-rendering the CFR reader
+         destroys the reader DOM and can change accordion, search-result, and
+         scroll position. Keeping the reader untouched preserves exact context. */
+      window.renderBookmarkFolders(libraryKey);
+      alert(`Bookmark saved to "${folder.name}".`);
+    };
+
+    replacementAddBookmarkToFolder.__skyfireV14PreservePosition = true;
+    window.addBookmarkToFolder = replacementAddBookmarkToFolder;
+  }
+
   applyResponsiveStyles();
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", installPerformancePatch);
+    document.addEventListener("DOMContentLoaded", function () {
+      installPerformancePatch();
+      installBookmarkPositionPatch();
+    });
   } else {
     installPerformancePatch();
+    installBookmarkPositionPatch();
   }
 })();

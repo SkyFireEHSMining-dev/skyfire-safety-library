@@ -557,6 +557,20 @@ mark {
     align-items: start;
   }
 
+  /* Advanced CFR-reader navigation for tablet/desktop only. Keeping the
+     existing bookmark sidebar in view lets experienced users jump between
+     saved sections while reading long regulatory text. Phone intentionally
+     remains unchanged because screen space is more valuable there. */
+  #bookmarkSidebar,
+  #oshaBookmarkSidebar {
+    position: sticky;
+    top: 144px;
+    max-height: calc(100vh - 164px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+  }
+
   .info-panel,
   .module-header,
   .quick-info-card {

@@ -1,7 +1,7 @@
 (function () {
   const STYLE_ID = "skyfireCfrV13Styles";
   let installTries = 0;
-  let focusOverlay = null;
+  let fullScreenOverlay = null;
 
   function applyResponsiveStyles() {
     const old = document.getElementById(STYLE_ID);
@@ -10,9 +10,6 @@
     const style = document.createElement("style");
     style.id = STYLE_ID;
     style.textContent = `
-      /* v0.13 CFR reader parity: use the same flat hierarchy philosophy on
-         phone, tablet, and desktop. Structural nesting should communicate
-         hierarchy through rails/color, not progressively narrower cards. */
       #cfrSection .layout,
       #oshaSection .layout,
       #cfrContainer,
@@ -24,9 +21,7 @@
       }
 
       #cfrContainer,
-      #oshaContainer {
-        overflow-x: hidden;
-      }
+      #oshaContainer { overflow-x: hidden; }
 
       #cfrContainer details,
       #oshaContainer details {
@@ -115,15 +110,11 @@
         word-break: normal;
       }
 
-      .skyfire-focus-btn {
-        display: none;
-      }
+      .skyfire-full-screen-btn { display: none; }
 
       @media (min-width: 760px) {
         #cfrContainer details:not(.level-section) > summary,
-        #oshaContainer details:not(.level-section) > summary {
-          padding: 15px 18px;
-        }
+        #oshaContainer details:not(.level-section) > summary { padding: 15px 18px; }
 
         #cfrContainer .level-section > summary,
         #oshaContainer .level-section > summary {
@@ -132,11 +123,9 @@
         }
 
         #cfrContainer .level-section > .section-content,
-        #oshaContainer .level-section > .section-content {
-          padding: 0 18px 20px;
-        }
+        #oshaContainer .level-section > .section-content { padding: 0 18px 20px; }
 
-        .skyfire-focus-btn {
+        .skyfire-full-screen-btn {
           display: inline-flex;
           align-items: center;
           justify-content: center;
@@ -151,12 +140,10 @@
           font-weight: 750;
         }
 
-        .skyfire-legacy-full-view {
-          display: none !important;
-        }
+        .skyfire-legacy-full-view { display: none !important; }
       }
 
-      .skyfire-focus-overlay {
+      .skyfire-full-screen-overlay {
         position: fixed;
         inset: 0;
         z-index: 1000;
@@ -166,14 +153,14 @@
         -webkit-overflow-scrolling: touch;
       }
 
-      .skyfire-focus-shell {
+      .skyfire-full-screen-shell {
         width: min(100%, 980px);
         min-height: 100%;
         margin: 0 auto;
         padding: 24px 30px 54px;
       }
 
-      .skyfire-focus-toolbar {
+      .skyfire-full-screen-toolbar {
         position: sticky;
         top: 0;
         z-index: 2;
@@ -188,11 +175,9 @@
         backdrop-filter: blur(10px);
       }
 
-      .skyfire-focus-toolbar strong {
-        font-size: 1.05rem;
-      }
+      .skyfire-full-screen-toolbar strong { font-size: 1.05rem; }
 
-      .skyfire-focus-return {
+      .skyfire-full-screen-return {
         min-height: 44px;
         padding: 9px 14px;
         border: 1px solid var(--line, #cbd5e1);
@@ -202,7 +187,7 @@
         font-weight: 800;
       }
 
-      .skyfire-focus-card {
+      .skyfire-full-screen-card {
         background: #fff;
         border: 1px solid var(--line, #cbd5e1);
         border-left: 7px solid var(--sf-regulation, #0b84ff);
@@ -211,80 +196,135 @@
         box-shadow: var(--shadow, 0 10px 28px rgba(15, 23, 42, 0.08));
       }
 
-      .skyfire-focus-card h2 {
+      .skyfire-full-screen-card h2 {
         margin: 0 0 12px;
         font-size: clamp(1.65rem, 3vw, 2.35rem);
         line-height: 1.18;
       }
 
-      .skyfire-focus-card .section-path {
+      .skyfire-full-screen-card .section-path {
         margin: 0 0 18px;
         color: var(--muted, #4b5563);
       }
 
-      .skyfire-focus-card .bookmark-controls {
+      .skyfire-full-screen-card .bookmark-controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
         margin: 0 0 24px;
       }
 
-      .skyfire-focus-text {
+      .skyfire-full-screen-card .bookmark-controls select,
+      .skyfire-full-screen-card .bookmark-controls button {
+        min-height: 42px;
+      }
+
+      .skyfire-full-screen-text {
         border-top: 1px solid var(--line-soft, #d8e2ec);
         padding-top: 18px;
       }
 
-      .skyfire-focus-text p {
+      .skyfire-full-screen-text p {
         font-size: 1.16rem;
         line-height: 1.68;
         overflow-wrap: anywhere;
       }
 
       @media (max-width: 759px) {
-        .skyfire-focus-overlay {
-          display: none !important;
-        }
+        .skyfire-full-screen-overlay { display: none !important; }
       }
     `;
     document.head.appendChild(style);
   }
 
-  function closeFocusView() {
-    if (!focusOverlay) return;
-    focusOverlay.remove();
-    focusOverlay = null;
+  function getLiveBookmarkFolders(libraryKey) {
+    const state = libraryStates[libraryKey];
+    if (!state) return [];
+
+    let folders = Array.isArray(state.bookmarkFolders) ? state.bookmarkFolders : [];
+
+    if (typeof window.loadBookmarkFolders === "function") {
+      const stored = window.loadBookmarkFolders(state.config.bookmarksKey);
+      if (Array.isArray(stored) && stored.length > folders.length) {
+        state.bookmarkFolders = stored;
+        folders = stored;
+      }
+    }
+
+    return folders;
+  }
+
+  function createLiveBookmarkControls(libraryKey, section) {
+    const controls = document.createElement("div");
+    controls.className = "bookmark-controls";
+    const folders = getLiveBookmarkFolders(libraryKey);
+
+    if (!folders.length) {
+      const note = document.createElement("span");
+      note.className = "inline-note";
+      note.textContent = "Create a folder to save bookmarks.";
+      controls.appendChild(note);
+      return controls;
+    }
+
+    const select = document.createElement("select");
+    folders.forEach(function (folder) {
+      const option = document.createElement("option");
+      option.value = folder.id;
+      option.textContent = folder.name;
+      select.appendChild(option);
+    });
+
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = "Add Bookmark";
+    button.addEventListener("click", function () {
+      window.addBookmarkToFolder(libraryKey, select.value, section);
+    });
+
+    controls.appendChild(select);
+    controls.appendChild(button);
+    return controls;
+  }
+
+  function closeFullScreenView() {
+    if (!fullScreenOverlay) return;
+    fullScreenOverlay.remove();
+    fullScreenOverlay = null;
     document.body.style.overflow = "";
   }
 
-  function openFocusView(libraryKey, section) {
-    if (!window.matchMedia("(min-width: 760px)").matches) return;
-    if (!section) return;
-
-    closeFocusView();
+  function openFullScreenView(libraryKey, section) {
+    if (!window.matchMedia("(min-width: 760px)").matches || !section) return;
+    closeFullScreenView();
 
     const overlay = document.createElement("div");
-    overlay.className = "skyfire-focus-overlay";
+    overlay.className = "skyfire-full-screen-overlay";
     overlay.setAttribute("role", "dialog");
     overlay.setAttribute("aria-modal", "true");
-    overlay.setAttribute("aria-label", `Focused regulatory reading view for ${section.sectionNumber || section.heading}`);
+    overlay.setAttribute("aria-label", `Full screen regulatory reading view for ${section.sectionNumber || section.heading}`);
 
     const shell = document.createElement("div");
-    shell.className = "skyfire-focus-shell";
+    shell.className = "skyfire-full-screen-shell";
 
     const toolbar = document.createElement("div");
-    toolbar.className = "skyfire-focus-toolbar";
+    toolbar.className = "skyfire-full-screen-toolbar";
 
     const label = document.createElement("strong");
-    label.textContent = "Focused Regulatory Reading";
+    label.textContent = "Full Screen Regulatory Reading";
 
     const returnBtn = document.createElement("button");
     returnBtn.type = "button";
-    returnBtn.className = "skyfire-focus-return";
+    returnBtn.className = "skyfire-full-screen-return";
     returnBtn.textContent = "← Return to CFR";
-    returnBtn.addEventListener("click", closeFocusView);
+    returnBtn.addEventListener("click", closeFullScreenView);
 
     toolbar.appendChild(label);
     toolbar.appendChild(returnBtn);
 
     const card = document.createElement("article");
-    card.className = "skyfire-focus-card";
+    card.className = "skyfire-full-screen-card";
 
     const heading = document.createElement("h2");
     heading.textContent = section.heading || section.sectionNumber || "Regulatory Section";
@@ -295,10 +335,10 @@
     path.textContent = window.buildSectionPath(section);
     card.appendChild(path);
 
-    card.appendChild(window.createBookmarkControls(libraryKey, section));
+    card.appendChild(createLiveBookmarkControls(libraryKey, section));
 
     const textWrap = document.createElement("div");
-    textWrap.className = "skyfire-focus-text";
+    textWrap.className = "skyfire-full-screen-text";
     const paragraphs = section.paragraphs && section.paragraphs.length
       ? section.paragraphs
       : ["No paragraph text was parsed for this section."];
@@ -308,14 +348,14 @@
       p.textContent = paragraph;
       textWrap.appendChild(p);
     });
-    card.appendChild(textWrap);
 
+    card.appendChild(textWrap);
     shell.appendChild(toolbar);
     shell.appendChild(card);
     overlay.appendChild(shell);
     document.body.appendChild(overlay);
     document.body.style.overflow = "hidden";
-    focusOverlay = overlay;
+    fullScreenOverlay = overlay;
     returnBtn.focus();
   }
 
@@ -325,39 +365,27 @@
       typeof window.createDetails !== "function" ||
       typeof window.highlightText !== "function" ||
       typeof window.buildSectionPath !== "function" ||
-      typeof window.createBookmarkControls !== "function"
+      typeof window.addBookmarkToFolder !== "function"
     ) {
       installTries += 1;
       if (installTries < 80) window.setTimeout(installPerformancePatch, 50);
       return;
     }
 
-    if (window.createSectionBlock.__skyfireV14Focus === true) return;
+    if (window.createSectionBlock.__skyfireV14FullScreen === true) return;
 
-    /* The service worker already stores regulatory XML in Cache Storage.
-       Title 29 is ~29 MB, so duplicating that same raw XML into synchronous
-       localStorage adds work and commonly exceeds browser storage quotas. */
     if (typeof window.saveXmlCache === "function" && !window.saveXmlCache.__skyfireV13NoLargeXml) {
       const originalSaveXmlCache = window.saveXmlCache;
       const replacementSaveXmlCache = function (cacheKey, xmlText) {
-        if (/^skyfire_xml_cache_title(?:29|30)_/i.test(String(cacheKey || ""))) {
-          return;
-        }
+        if (/^skyfire_xml_cache_title(?:29|30)_/i.test(String(cacheKey || ""))) return;
         return originalSaveXmlCache(cacheKey, xmlText);
       };
       replacementSaveXmlCache.__skyfireV13NoLargeXml = true;
       window.saveXmlCache = replacementSaveXmlCache;
     }
 
-    const focusedCreateSectionBlock = function (libraryKey, section, query, options) {
-      const opts = Object.assign(
-        {
-          showFullViewButton: false,
-          openByDefault: false
-        },
-        options || {}
-      );
-
+    const fullScreenCreateSectionBlock = function (libraryKey, section, query, options) {
+      const opts = Object.assign({ showFullViewButton: false, openByDefault: false }, options || {});
       const pair = window.createDetails(
         window.highlightText(section.heading, query || ""),
         opts.openByDefault,
@@ -379,20 +407,18 @@
         path.textContent = window.buildSectionPath(section);
         content.appendChild(path);
 
-        content.appendChild(window.createBookmarkControls(libraryKey, section));
+        content.appendChild(createLiveBookmarkControls(libraryKey, section));
 
-        const focusBtn = document.createElement("button");
-        focusBtn.type = "button";
-        focusBtn.className = "skyfire-focus-btn";
-        focusBtn.textContent = "⛶ Focus View";
-        focusBtn.setAttribute("aria-label", `Open ${section.sectionNumber || "this section"} in focused reading view`);
-        focusBtn.addEventListener("click", function () {
-          openFocusView(libraryKey, section);
+        const fullScreenBtn = document.createElement("button");
+        fullScreenBtn.type = "button";
+        fullScreenBtn.className = "skyfire-full-screen-btn";
+        fullScreenBtn.textContent = "⛶ Full Screen View";
+        fullScreenBtn.setAttribute("aria-label", `Open ${section.sectionNumber || "this section"} in full screen view`);
+        fullScreenBtn.addEventListener("click", function () {
+          openFullScreenView(libraryKey, section);
         });
-        content.appendChild(focusBtn);
+        content.appendChild(fullScreenBtn);
 
-        /* Preserve the existing phone search-result behavior. On tablet and
-           desktop, Focus View replaces this legacy rerender-based action. */
         if (opts.showFullViewButton && typeof window.openSectionInFullView === "function") {
           const openBtn = document.createElement("button");
           openBtn.type = "button";
@@ -430,15 +456,16 @@
       return details;
     };
 
-    focusedCreateSectionBlock.__skyfireV13Lazy = true;
-    focusedCreateSectionBlock.__skyfireV14Focus = true;
-    window.createSectionBlock = focusedCreateSectionBlock;
+    fullScreenCreateSectionBlock.__skyfireV13Lazy = true;
+    fullScreenCreateSectionBlock.__skyfireV14FullScreen = true;
+    window.createSectionBlock = fullScreenCreateSectionBlock;
 
     window.SkyFireCfrV13 = {
       lazySectionBodies: true,
       largeXmlLocalStorageDisabled: true,
       responsiveParity: true,
-      focusedReadingView: true
+      fullScreenReadingView: true,
+      liveBookmarkControls: true
     };
   }
 
@@ -457,9 +484,8 @@
 
     const replacementAddBookmarkToFolder = function (libraryKey, folderId, section) {
       const state = libraryStates[libraryKey];
-      const folder = state && state.bookmarkFolders.find(function (item) {
-        return item.id === folderId;
-      });
+      const folders = getLiveBookmarkFolders(libraryKey);
+      const folder = folders.find(function (item) { return item.id === folderId; });
 
       if (!folder) {
         alert("That folder could not be found.");
@@ -474,17 +500,10 @@
         return;
       }
 
-      folder.items.push({
-        sectionNumber: section.sectionNumber,
-        heading: section.heading
-      });
-
+      folder.items.push({ sectionNumber: section.sectionNumber, heading: section.heading });
+      state.bookmarkFolders = folders;
       window.sortBookmarkFolders(libraryKey);
       window.saveBookmarkFolders(state.config.bookmarksKey, state.bookmarkFolders);
-
-      /* Only refresh the bookmark-folder sidebar. Re-rendering the CFR reader
-         destroys the reader DOM and can change accordion, search-result, and
-         scroll position. Keeping the reader untouched preserves exact context. */
       window.renderBookmarkFolders(libraryKey);
       alert(`Bookmark saved to "${folder.name}".`);
     };
@@ -494,7 +513,7 @@
   }
 
   document.addEventListener("keydown", function (event) {
-    if (event.key === "Escape" && focusOverlay) closeFocusView();
+    if (event.key === "Escape" && fullScreenOverlay) closeFullScreenView();
   });
 
   applyResponsiveStyles();

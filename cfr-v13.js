@@ -1,6 +1,7 @@
 (function () {
   const STYLE_ID = "skyfireCfrV13Styles";
   let installTries = 0;
+  let focusOverlay = null;
 
   function applyResponsiveStyles() {
     const old = document.getElementById(STYLE_ID);
@@ -114,6 +115,10 @@
         word-break: normal;
       }
 
+      .skyfire-focus-btn {
+        display: none;
+      }
+
       @media (min-width: 760px) {
         #cfrContainer details:not(.level-section) > summary,
         #oshaContainer details:not(.level-section) > summary {
@@ -130,9 +135,188 @@
         #oshaContainer .level-section > .section-content {
           padding: 0 18px 20px;
         }
+
+        .skyfire-focus-btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          min-height: 42px;
+          margin: 0 0 14px 10px;
+          padding: 8px 13px;
+          border: 1px solid var(--line, #cbd5e1);
+          border-radius: 10px;
+          background: #eef4fa;
+          color: var(--accent-dark, #1f4e79);
+          font-weight: 750;
+        }
+
+        .skyfire-legacy-full-view {
+          display: none !important;
+        }
+      }
+
+      .skyfire-focus-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        overflow-y: auto;
+        background: var(--bg, #eef3f7);
+        color: var(--text, #111827);
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .skyfire-focus-shell {
+        width: min(100%, 980px);
+        min-height: 100%;
+        margin: 0 auto;
+        padding: 24px 30px 54px;
+      }
+
+      .skyfire-focus-toolbar {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin: -24px -30px 24px;
+        padding: 18px 30px;
+        background: rgba(248, 251, 254, 0.97);
+        border-bottom: 1px solid var(--line-soft, #d8e2ec);
+        backdrop-filter: blur(10px);
+      }
+
+      .skyfire-focus-toolbar strong {
+        font-size: 1.05rem;
+      }
+
+      .skyfire-focus-return {
+        min-height: 44px;
+        padding: 9px 14px;
+        border: 1px solid var(--line, #cbd5e1);
+        border-radius: 11px;
+        background: #fff;
+        color: var(--accent-dark, #1f4e79);
+        font-weight: 800;
+      }
+
+      .skyfire-focus-card {
+        background: #fff;
+        border: 1px solid var(--line, #cbd5e1);
+        border-left: 7px solid var(--sf-regulation, #0b84ff);
+        border-radius: 18px;
+        padding: 26px 28px 34px;
+        box-shadow: var(--shadow, 0 10px 28px rgba(15, 23, 42, 0.08));
+      }
+
+      .skyfire-focus-card h2 {
+        margin: 0 0 12px;
+        font-size: clamp(1.65rem, 3vw, 2.35rem);
+        line-height: 1.18;
+      }
+
+      .skyfire-focus-card .section-path {
+        margin: 0 0 18px;
+        color: var(--muted, #4b5563);
+      }
+
+      .skyfire-focus-card .bookmark-controls {
+        margin: 0 0 24px;
+      }
+
+      .skyfire-focus-text {
+        border-top: 1px solid var(--line-soft, #d8e2ec);
+        padding-top: 18px;
+      }
+
+      .skyfire-focus-text p {
+        font-size: 1.16rem;
+        line-height: 1.68;
+        overflow-wrap: anywhere;
+      }
+
+      @media (max-width: 759px) {
+        .skyfire-focus-overlay {
+          display: none !important;
+        }
       }
     `;
     document.head.appendChild(style);
+  }
+
+  function closeFocusView() {
+    if (!focusOverlay) return;
+    focusOverlay.remove();
+    focusOverlay = null;
+    document.body.style.overflow = "";
+  }
+
+  function openFocusView(libraryKey, section) {
+    if (!window.matchMedia("(min-width: 760px)").matches) return;
+    if (!section) return;
+
+    closeFocusView();
+
+    const overlay = document.createElement("div");
+    overlay.className = "skyfire-focus-overlay";
+    overlay.setAttribute("role", "dialog");
+    overlay.setAttribute("aria-modal", "true");
+    overlay.setAttribute("aria-label", `Focused regulatory reading view for ${section.sectionNumber || section.heading}`);
+
+    const shell = document.createElement("div");
+    shell.className = "skyfire-focus-shell";
+
+    const toolbar = document.createElement("div");
+    toolbar.className = "skyfire-focus-toolbar";
+
+    const label = document.createElement("strong");
+    label.textContent = "Focused Regulatory Reading";
+
+    const returnBtn = document.createElement("button");
+    returnBtn.type = "button";
+    returnBtn.className = "skyfire-focus-return";
+    returnBtn.textContent = "← Return to CFR";
+    returnBtn.addEventListener("click", closeFocusView);
+
+    toolbar.appendChild(label);
+    toolbar.appendChild(returnBtn);
+
+    const card = document.createElement("article");
+    card.className = "skyfire-focus-card";
+
+    const heading = document.createElement("h2");
+    heading.textContent = section.heading || section.sectionNumber || "Regulatory Section";
+    card.appendChild(heading);
+
+    const path = document.createElement("p");
+    path.className = "section-path";
+    path.textContent = window.buildSectionPath(section);
+    card.appendChild(path);
+
+    card.appendChild(window.createBookmarkControls(libraryKey, section));
+
+    const textWrap = document.createElement("div");
+    textWrap.className = "skyfire-focus-text";
+    const paragraphs = section.paragraphs && section.paragraphs.length
+      ? section.paragraphs
+      : ["No paragraph text was parsed for this section."];
+
+    paragraphs.forEach(function (paragraph) {
+      const p = document.createElement("p");
+      p.textContent = paragraph;
+      textWrap.appendChild(p);
+    });
+    card.appendChild(textWrap);
+
+    shell.appendChild(toolbar);
+    shell.appendChild(card);
+    overlay.appendChild(shell);
+    document.body.appendChild(overlay);
+    document.body.style.overflow = "hidden";
+    focusOverlay = overlay;
+    returnBtn.focus();
   }
 
   function installPerformancePatch() {
@@ -148,7 +332,7 @@
       return;
     }
 
-    if (window.createSectionBlock.__skyfireV13Lazy === true) return;
+    if (window.createSectionBlock.__skyfireV14Focus === true) return;
 
     /* The service worker already stores regulatory XML in Cache Storage.
        Title 29 is ~29 MB, so duplicating that same raw XML into synchronous
@@ -165,7 +349,7 @@
       window.saveXmlCache = replacementSaveXmlCache;
     }
 
-    const lazyCreateSectionBlock = function (libraryKey, section, query, options) {
+    const focusedCreateSectionBlock = function (libraryKey, section, query, options) {
       const opts = Object.assign(
         {
           showFullViewButton: false,
@@ -197,8 +381,22 @@
 
         content.appendChild(window.createBookmarkControls(libraryKey, section));
 
+        const focusBtn = document.createElement("button");
+        focusBtn.type = "button";
+        focusBtn.className = "skyfire-focus-btn";
+        focusBtn.textContent = "⛶ Focus View";
+        focusBtn.setAttribute("aria-label", `Open ${section.sectionNumber || "this section"} in focused reading view`);
+        focusBtn.addEventListener("click", function () {
+          openFocusView(libraryKey, section);
+        });
+        content.appendChild(focusBtn);
+
+        /* Preserve the existing phone search-result behavior. On tablet and
+           desktop, Focus View replaces this legacy rerender-based action. */
         if (opts.showFullViewButton && typeof window.openSectionInFullView === "function") {
           const openBtn = document.createElement("button");
+          openBtn.type = "button";
+          openBtn.className = "skyfire-legacy-full-view";
           openBtn.textContent = "Open in Full View";
           openBtn.style.marginBottom = "14px";
           openBtn.addEventListener("click", function () {
@@ -232,13 +430,15 @@
       return details;
     };
 
-    lazyCreateSectionBlock.__skyfireV13Lazy = true;
-    window.createSectionBlock = lazyCreateSectionBlock;
+    focusedCreateSectionBlock.__skyfireV13Lazy = true;
+    focusedCreateSectionBlock.__skyfireV14Focus = true;
+    window.createSectionBlock = focusedCreateSectionBlock;
 
     window.SkyFireCfrV13 = {
       lazySectionBodies: true,
       largeXmlLocalStorageDisabled: true,
-      responsiveParity: true
+      responsiveParity: true,
+      focusedReadingView: true
     };
   }
 
@@ -292,6 +492,10 @@
     replacementAddBookmarkToFolder.__skyfireV14PreservePosition = true;
     window.addBookmarkToFolder = replacementAddBookmarkToFolder;
   }
+
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape" && focusOverlay) closeFocusView();
+  });
 
   applyResponsiveStyles();
 

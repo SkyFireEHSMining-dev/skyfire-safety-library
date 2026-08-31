@@ -92,6 +92,15 @@
                 "Standard 56/57.14101(a)(3) should be cited if a component or portion of any braking system on the equipment is not maintained in functional condition even though the braking system is in compliance with (1) and/or (2) above. It is important to note that if a component or portion of either system renders the equipment incapable of stopping or holding itself with its typical load on the maximum grade it travels, the appropriate standard, 56/57.14101(a)(1) or (2), should be cited.",
                 "Separate citations or orders should be issued if violations of 56/57.14101(a)(1) and 56/57.14101(a)(2) are found on the same piece of equipment."
               ]
+            },
+            {
+              code: "56/57.14107",
+              title: "Moving Machine Parts",
+              text: [
+                "All moving parts identified under this standard are to be guarded with adequately constructed, installed and maintained guards to provide the required protection. The use of chains to rail off walkways and travelways near moving machine parts, with or without the posting of warning signs in lieu of guards, is not in compliance with this standard.",
+                "Conveyor belt rollers are not to be construed as ‘similar exposed moving machine parts’ under the standard and cannot be cited for the absence of guards and violation of this standard where skirt boards exist along the belt. However, inspectors should recognize the accident potential, bring the hazard to the attention of the mine operators, and recommend appropriate safeguards to prevent injuries.",
+                "This standard is to be cited when a guard at conveyor locations does not extend a distance sufficient to prevent any parts of a person from accidentally getting behind the guard and becoming caught, or in those instances when there is no guard at the conveyor-drive, conveyor-head, conveyor-tail, or conveyor take-up pulleys."
+              ]
             }
           ]
         }
@@ -267,7 +276,7 @@
       window.setTimeout(initializePPMGuidance, 75);
       return;
     }
-    if (guidance.dataset.ppmInitialized === "direct-v3") return;
+    if (guidance.dataset.ppmInitialized === "direct-v4") return;
 
     addStyles();
 
@@ -284,7 +293,7 @@
       ${renderProgramManual()}
     `);
 
-    guidance.dataset.ppmInitialized = "direct-v3";
+    guidance.dataset.ppmInitialized = "direct-v4";
   }
 
   if (document.readyState === "loading") {

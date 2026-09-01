@@ -16,5 +16,5 @@
 
   loadOnce('script[data-surface-mobile-guidance="true"]', './surface-mobile-guidance.js?v=v0.14-sme-1', 'surfaceMobileGuidance');
   loadOnce('script[data-tg001-section12="true"]', './tg001-section12.js?v=v0.14-tg001-12-1', 'tg001Section12');
-  loadOnce('script[data-tg-reader-v14="true"]', './tg-reader-v14.js?v=v0.14-tg-reader-1', 'tgReaderV14');
+  loadOnce('script[data-tg-reader-v14="true"]', './tg-reader-v14.js?v=v0.14-tg-reader-2', 'tgReaderV14');
 })();

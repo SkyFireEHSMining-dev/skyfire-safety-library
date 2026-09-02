@@ -24,25 +24,26 @@
     document.head.appendChild(style);
   }
 
-  function updateGuidance(root) {
-    if (!root || typeof root.querySelectorAll !== 'function') return;
-
-    root.querySelectorAll('.bookmark-controls .inline-note').forEach(function (note) {
-      if ((note.textContent || '').trim() !== OLD_MESSAGE) return;
-      note.textContent = NEW_MESSAGE;
-      note.classList.add('skyfire-bookmark-folder-guidance');
-      note.setAttribute('role', 'note');
-    });
+  function applyMessage(note) {
+    if (!note || (note.textContent || '').trim() !== OLD_MESSAGE) return;
+    note.textContent = NEW_MESSAGE;
+    note.classList.add('skyfire-bookmark-folder-guidance');
+    note.setAttribute('role', 'note');
   }
 
-  function inspectNode(node) {
-    if (!(node instanceof Element)) return;
+  function updateGuidance(root) {
+    if (!root || !(root instanceof Element || root instanceof Document)) return;
 
-    if (node.matches('.bookmark-controls, .bookmark-controls .inline-note')) {
-      updateGuidance(node.matches('.bookmark-controls') ? node : node.parentElement);
+    if (root instanceof Element && root.matches('.bookmark-controls .inline-note')) {
+      applyMessage(root);
     }
 
-    updateGuidance(node);
+    if (root instanceof Element && root.matches('.bookmark-controls')) {
+      root.querySelectorAll('.inline-note').forEach(applyMessage);
+      return;
+    }
+
+    root.querySelectorAll('.bookmark-controls .inline-note').forEach(applyMessage);
   }
 
   addStyles();
@@ -50,7 +51,9 @@
 
   const observer = new MutationObserver(function (mutations) {
     mutations.forEach(function (mutation) {
-      mutation.addedNodes.forEach(inspectNode);
+      mutation.addedNodes.forEach(function (node) {
+        if (node instanceof Element) updateGuidance(node);
+      });
     });
   });
 

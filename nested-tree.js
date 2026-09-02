@@ -2,7 +2,8 @@
 // The PPM reader is now rendered directly inside the MSHA Guidance section by ppm-guidance.js.
 // This file remains because older cached SkyFire shells still request it, and it also loads
 // v0.14 rule-specific guidance, reviewed Technical Guidance additions, stretch PPM content,
-// source-fidelity corrections, PPM audit corrections, and CFR full-screen reading polish.
+// source-fidelity corrections, PPM audit corrections, CFR full-screen reading polish,
+// and v0.15 bookmark onboarding guidance.
 (function () {
   window.SkyFireLegacyNestedTreeRetired = true;
 
@@ -22,4 +23,5 @@
   loadOnce('script[data-ppm-source-fidelity-v14="true"]', './ppm-source-fidelity-v14.js?v=v0.14-ppm-fidelity-1', 'ppmSourceFidelityV14');
   loadOnce('script[data-ppm-audit-v14="true"]', './ppm-audit-v14.js?v=v0.14-ppm-audit-1', 'ppmAuditV14');
   loadOnce('script[data-cfr-fullscreen-polish-v14="true"]', './cfr-fullscreen-polish-v14.js?v=v0.14-cfr-fullscreen-1', 'cfrFullscreenPolishV14');
+  loadOnce('script[data-bookmark-onboarding-v15="true"]', './bookmark-onboarding-v15.js?v=v0.15-bookmark-onboarding-1', 'bookmarkOnboardingV15');
 })();

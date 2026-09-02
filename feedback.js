@@ -1,5 +1,5 @@
 const SKYFIRE_FEEDBACK_EMAIL = "skyfire.ehs.mining@gmail.com";
-const SKYFIRE_FEEDBACK_VERSION = "v0.13 Beta";
+const SKYFIRE_FEEDBACK_VERSION = "v0.14 Beta";
 
 function initializeFeedbackModule() {
   const form = document.getElementById("feedbackForm");

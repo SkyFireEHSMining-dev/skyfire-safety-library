@@ -1,6 +1,6 @@
-const SHELL_CACHE_NAME = "skyfire-quality-cache-v19";
+const SHELL_CACHE_NAME = "skyfire-quality-cache-v20";
 const DATA_CACHE_NAME = "skyfire-regulatory-data-v1";
-const CACHE_VERSION = "quality-v19";
+const CACHE_VERSION = "quality-v20";
 
 const SHELL_CACHE = [
   "./",
@@ -15,6 +15,8 @@ const SHELL_CACHE = [
   `./ppm-guidance.js?v=${CACHE_VERSION}`,
   `./ppm-14109-stretch.js?v=${CACHE_VERSION}`,
   `./ppm-source-fidelity-v14.js?v=${CACHE_VERSION}`,
+  `./ppm-audit-v14.js?v=${CACHE_VERSION}`,
+  `./cfr-fullscreen-polish-v14.js?v=${CACHE_VERSION}`,
   `./nested-tree.js?v=${CACHE_VERSION}`,
   `./home-preview.js?v=${CACHE_VERSION}`,
   `./cfr-v13.js?v=${CACHE_VERSION}`,
@@ -108,6 +110,8 @@ self.addEventListener("fetch", event => {
     url.pathname.endsWith("/ppm-guidance.js") ||
     url.pathname.endsWith("/ppm-14109-stretch.js") ||
     url.pathname.endsWith("/ppm-source-fidelity-v14.js") ||
+    url.pathname.endsWith("/ppm-audit-v14.js") ||
+    url.pathname.endsWith("/cfr-fullscreen-polish-v14.js") ||
     url.pathname.endsWith("/nested-tree.js") ||
     url.pathname.endsWith("/home-preview.js") ||
     url.pathname.endsWith("/cfr-v13.js") ||

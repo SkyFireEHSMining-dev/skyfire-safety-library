@@ -3,7 +3,7 @@
 // This file remains because older cached SkyFire shells still request it, and it also loads
 // v0.14 rule-specific guidance, reviewed Technical Guidance additions, stretch PPM content,
 // source-fidelity corrections, PPM audit corrections, CFR full-screen reading polish,
-// and v0.15 bookmark onboarding guidance.
+// and v0.15 bookmark onboarding/state-preservation improvements.
 (function () {
   window.SkyFireLegacyNestedTreeRetired = true;
 
@@ -24,4 +24,5 @@
   loadOnce('script[data-ppm-audit-v14="true"]', './ppm-audit-v14.js?v=v0.14-ppm-audit-1', 'ppmAuditV14');
   loadOnce('script[data-cfr-fullscreen-polish-v14="true"]', './cfr-fullscreen-polish-v14.js?v=v0.14-cfr-fullscreen-1', 'cfrFullscreenPolishV14');
   loadOnce('script[data-bookmark-onboarding-v15="true"]', './bookmark-onboarding-v15.js?v=v0.15-bookmark-onboarding-1', 'bookmarkOnboardingV15');
+  loadOnce('script[data-bookmark-remove-state-v15="true"]', './bookmark-remove-state-v15.js?v=v0.15-bookmark-remove-state-1', 'bookmarkRemoveStateV15');
 })();

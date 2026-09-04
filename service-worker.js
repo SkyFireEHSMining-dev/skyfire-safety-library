@@ -1,6 +1,6 @@
-const SHELL_CACHE_NAME = "skyfire-quality-cache-v21";
+const SHELL_CACHE_NAME = "skyfire-quality-cache-v22";
 const DATA_CACHE_NAME = "skyfire-regulatory-data-v1";
-const CACHE_VERSION = "quality-v21";
+const CACHE_VERSION = "quality-v22";
 
 const SHELL_CACHE = [
   "./",
@@ -18,6 +18,9 @@ const SHELL_CACHE = [
   `./ppm-audit-v14.js?v=${CACHE_VERSION}`,
   `./cfr-fullscreen-polish-v14.js?v=${CACHE_VERSION}`,
   `./nested-tree.js?v=${CACHE_VERSION}`,
+  `./bookmark-onboarding-v15.js?v=${CACHE_VERSION}`,
+  `./bookmark-remove-state-v15.js?v=${CACHE_VERSION}`,
+  `./bookmark-folder-state-v15.js?v=${CACHE_VERSION}`,
   `./home-preview.js?v=${CACHE_VERSION}`,
   `./cfr-v13.js?v=${CACHE_VERSION}`,
   `./responsive-v13.js?v=${CACHE_VERSION}`,
@@ -113,6 +116,9 @@ self.addEventListener("fetch", event => {
     url.pathname.endsWith("/ppm-audit-v14.js") ||
     url.pathname.endsWith("/cfr-fullscreen-polish-v14.js") ||
     url.pathname.endsWith("/nested-tree.js") ||
+    url.pathname.endsWith("/bookmark-onboarding-v15.js") ||
+    url.pathname.endsWith("/bookmark-remove-state-v15.js") ||
+    url.pathname.endsWith("/bookmark-folder-state-v15.js") ||
     url.pathname.endsWith("/home-preview.js") ||
     url.pathname.endsWith("/cfr-v13.js") ||
     url.pathname.endsWith("/responsive-v13.js") ||

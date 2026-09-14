@@ -3,7 +3,7 @@
 // This file remains because older cached SkyFire shells still request it, and it also loads
 // v0.14 rule-specific guidance, reviewed Technical Guidance additions, stretch PPM content,
 // source-fidelity corrections, PPM audit corrections, CFR full-screen reading polish,
-// v0.15 bookmark onboarding/state-preservation improvements, and the v0.16 MSHA Ready foundation.
+// v0.15 bookmark onboarding/state-preservation improvements, and v0.16 MSHA Ready modules.
 (function () {
   window.SkyFireLegacyNestedTreeRetired = true;
 
@@ -27,4 +27,5 @@
   loadOnce('script[data-bookmark-remove-state-v15="true"]', './bookmark-remove-state-v15.js?v=v0.15-bookmark-remove-state-1', 'bookmarkRemoveStateV15');
   loadOnce('script[data-bookmark-folder-state-v15="true"]', './bookmark-folder-state-v15.js?v=v0.15-bookmark-folder-state-1', 'bookmarkFolderStateV15');
   loadOnce('script[data-msha-ready-v16="true"]', './msha-ready-v16.js?v=v0.16-msha-ready-3', 'mshaReadyV16');
+  loadOnce('script[data-mine-act-v16="true"]', './mine-act-v16.js?v=v0.16-mine-act-1', 'mineActV16');
 })();

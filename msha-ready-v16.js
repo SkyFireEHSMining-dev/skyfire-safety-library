@@ -6,7 +6,7 @@
     if (document.querySelector('link[data-msha-ready-v16="true"]')) return;
     const link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "./msha-ready-v16.css?v=v0.16-msha-ready-2";
+    link.href = "./msha-ready-v16.css?v=v0.16-msha-ready-3";
     link.dataset.mshaReadyV16 = "true";
     document.head.appendChild(link);
   }
@@ -46,16 +46,29 @@
 
   function authorityKeyMarkup() {
     return `
-      <div class="regulatory-authority-key" aria-label="Regulatory authority color key">
+      <div class="regulatory-authority-key" aria-label="SkyFire regulatory and workflow color key">
         <div class="regulatory-authority-key-heading">
-          <strong>Authority colors</strong>
-          <span>Know what kind of source you are opening.</span>
+          <strong>SkyFire color guide</strong>
+          <span>Source colors tell you where information comes from. Workflow/status colors tell you how the app is helping you use it.</span>
         </div>
-        <div class="regulatory-authority-key-grid">
-          <span class="authority-key-chip authority-law"><b>Blue</b> · Law / Regulation</span>
-          <span class="authority-key-chip authority-msha"><b>Purple</b> · Official MSHA Resource / Guidance</span>
-          <span class="authority-key-chip authority-skyfire"><b>Orange</b> · SkyFire Guidance</span>
-          <span class="authority-key-chip authority-professional"><b>Gray</b> · Professional Reference</span>
+
+        <div class="regulatory-key-section">
+          <div class="regulatory-key-section-title">Source / authority colors</div>
+          <div class="regulatory-authority-key-grid">
+            <span class="authority-key-chip authority-law"><b>Blue</b> · Law / Regulation</span>
+            <span class="authority-key-chip authority-msha"><b>Purple</b> · Official MSHA Resource / Guidance</span>
+            <span class="authority-key-chip authority-skyfire"><b>Orange</b> · SkyFire Guidance</span>
+            <span class="authority-key-chip authority-professional"><b>Gray</b> · Professional Reference</span>
+          </div>
+        </div>
+
+        <div class="regulatory-key-section workflow-key-section">
+          <div class="regulatory-key-section-title">Workflow / status colors</div>
+          <div class="regulatory-authority-key-grid workflow-status-key-grid">
+            <span class="authority-key-chip authority-workflow"><b>Teal</b> · SkyFire Guided Workflow</span>
+            <span class="authority-key-chip authority-urgent"><b>Red</b> · Urgent / Emergency Action</span>
+            <span class="authority-key-chip authority-caution"><b>Amber</b> · Caution / Attention</span>
+          </div>
         </div>
       </div>
     `;
@@ -88,9 +101,9 @@
           <span class="msha-ready-status">Stage 1 · v0.16</span>
         </button>
         <button class="msha-ready-card incident-ready-card" type="button" data-msha-ready-target="incidentReadySection">
-          <strong>Something Happened at the Mine</strong>
+          <strong>Incident Ready</strong>
           <span>Part 50 incident decision support for reporting, scene preservation, investigation, and Form 7000-1.</span>
-          <span class="msha-ready-status">Incident Ready · v0.16</span>
+          <span class="msha-ready-status">Part 50 · v0.16</span>
         </button>
       </div>
 

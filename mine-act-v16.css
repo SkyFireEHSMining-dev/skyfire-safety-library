@@ -30,4 +30,33 @@
 .mine-act-context-btn{border:1px solid #9bd9d6;border-left:4px solid var(--sf-msha-ready);border-radius:12px;background:var(--sf-msha-ready-soft);color:#087977;padding:10px 12px;font-weight:800;cursor:pointer}
 .mine-act-caution{border-left:5px solid var(--sf-amber,#d97706)}
 @media(min-width:760px){.mine-act-provision-list{grid-template-columns:repeat(2,minmax(0,1fr))}.mine-act-provision[open]{grid-column:1/-1}}
-@media(max-width:600px){.mine-act-provision>summary{padding:14px}.mine-act-provision-body{padding:15px}.mine-act-section-number{min-width:48px}.mine-act-actions{display:grid}.mine-act-official-link,.mine-act-context-btn{width:100%;box-sizing:border-box}.mine-act-heading-row{display:block}.mine-act-heading-row .resource-status{margin-top:10px}}
+@media(max-width:600px){
+  /* Match the CFR/OSHA mobile reader: use the available width and express
+     hierarchy with left rules/dividers instead of nesting card inside card. */
+  #mineActSection .mine-act-key-panel{padding:16px 0 18px;overflow:visible}
+  #mineActSection .mine-act-heading-row{display:block;padding:0 16px}
+  #mineActSection .mine-act-heading-row .resource-status{margin-top:10px}
+  #mineActSection .mine-act-provision-list{gap:10px;margin-top:16px}
+  #mineActSection .mine-act-provision{width:100%;max-width:100%;min-width:0;margin:0;border-radius:15px}
+  #mineActSection .mine-act-provision>summary{align-items:flex-start;width:100%;box-sizing:border-box;padding:14px 13px;gap:11px}
+  #mineActSection .mine-act-section-number{min-width:48px;padding:8px 9px;flex:0 0 auto}
+  #mineActSection .mine-act-summary-text{flex:1 1 auto}
+  #mineActSection .mine-act-provision-body{width:100%;max-width:100%;min-width:0;box-sizing:border-box;padding:14px 13px 16px;border-top:1px solid var(--line)}
+  #mineActSection .mine-act-provision-body h4{margin:16px 0 6px}
+  #mineActSection .mine-act-provision-body ul{padding-left:20px}
+  #mineActSection .mine-act-actions{display:grid}
+  #mineActSection .mine-act-official-link,#mineActSection .mine-act-context-btn{width:100%;box-sizing:border-box}
+
+  /* The deeper offline guide is a reader tier, not another centered card. */
+  #mineActSection .mine-act-offline-depth{margin:16px 0 2px;padding:0 0 0 11px;border:0;border-left:5px solid #9ecbf6;border-radius:0;background:transparent}
+  #mineActSection .mine-act-offline-depth h4{margin:0 0 5px!important}
+  #mineActSection .mine-act-offline-depth>p{margin:0 0 8px!important}
+  #mineActSection .mine-act-depth-list{display:block}
+  #mineActSection .mine-act-depth-item{margin:0;padding:12px 2px 12px 11px;border:0;border-top:1px solid #d8e6f5;border-radius:0;background:transparent}
+  #mineActSection .mine-act-depth-item:first-child{border-top:0}
+  #mineActSection .mine-act-depth-item strong{line-height:1.3}
+  #mineActSection .mine-act-depth-item span{margin-top:4px;line-height:1.5}
+  #mineActSection .mine-act-depth-note{margin:10px 0 0;padding:10px 10px;border-left:4px solid var(--sf-skyfire-guidance);border-radius:0}
+
+  #mineActSection .mine-act-source-note{margin-top:14px;padding:10px 11px}
+}

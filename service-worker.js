@@ -1,6 +1,6 @@
-const SHELL_CACHE_NAME = "skyfire-quality-cache-v24";
+const SHELL_CACHE_NAME = "skyfire-quality-cache-v25";
 const DATA_CACHE_NAME = "skyfire-regulatory-data-v1";
-const CACHE_VERSION = "quality-v24";
+const CACHE_VERSION = "quality-v25";
 
 const SHELL_CACHE = [
   "./",
@@ -23,6 +23,8 @@ const SHELL_CACHE = [
   `./bookmark-folder-state-v15.js?v=${CACHE_VERSION}`,
   `./msha-ready-v16.js?v=${CACHE_VERSION}`,
   `./msha-ready-v16.css?v=${CACHE_VERSION}`,
+  `./mine-act-v16.js?v=${CACHE_VERSION}`,
+  `./mine-act-v16.css?v=${CACHE_VERSION}`,
   `./home-preview.js?v=${CACHE_VERSION}`,
   `./cfr-v13.js?v=${CACHE_VERSION}`,
   `./responsive-v13.js?v=${CACHE_VERSION}`,
@@ -123,6 +125,8 @@ self.addEventListener("fetch", event => {
     url.pathname.endsWith("/bookmark-folder-state-v15.js") ||
     url.pathname.endsWith("/msha-ready-v16.js") ||
     url.pathname.endsWith("/msha-ready-v16.css") ||
+    url.pathname.endsWith("/mine-act-v16.js") ||
+    url.pathname.endsWith("/mine-act-v16.css") ||
     url.pathname.endsWith("/home-preview.js") ||
     url.pathname.endsWith("/cfr-v13.js") ||
     url.pathname.endsWith("/responsive-v13.js") ||

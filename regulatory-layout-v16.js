@@ -62,8 +62,7 @@
   let attempts = 0;
   function start() {
     if (normalize()) {
-      window.setTimeout(normalize, 250);
-      window.setTimeout(normalize, 800);
+      [250, 800, 1500, 2500].forEach(delay => window.setTimeout(normalize, delay));
       return;
     }
     attempts += 1;

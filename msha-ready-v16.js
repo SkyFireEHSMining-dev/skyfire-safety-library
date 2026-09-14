@@ -159,8 +159,7 @@
       button.type = "button";
       button.className = "skyfire-hub-item msha-ready-hub-item";
       button.innerHTML = `<strong>MSHA Ready</strong><span>Inspection readiness, Mine Act authority, Part 50 incident response, and enforcement context.</span>`;
-      const insertBefore = list.children[1] || null;
-      list.insertBefore(button, insertBefore);
+      list.appendChild(button);
     }
 
     const ready = makeSection("mshaReadySection", readyMarkup(), home);

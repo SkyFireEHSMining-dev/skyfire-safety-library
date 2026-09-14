@@ -28,4 +28,6 @@
   loadOnce('script[data-bookmark-folder-state-v15="true"]', './bookmark-folder-state-v15.js?v=v0.15-bookmark-folder-state-1', 'bookmarkFolderStateV15');
   loadOnce('script[data-msha-ready-v16="true"]', './msha-ready-v16.js?v=v0.16-msha-ready-3', 'mshaReadyV16');
   loadOnce('script[data-mine-act-v16="true"]', './mine-act-v16.js?v=v0.16-mine-act-1', 'mineActV16');
+  loadOnce('script[data-mine-act-offline-depth-v16="true"]', './mine-act-offline-depth-v16.js?v=v0.16-mine-act-depth-1', 'mineActOfflineDepthV16');
+  loadOnce('script[data-regulatory-layout-v16="true"]', './regulatory-layout-v16.js?v=v0.16-reg-layout-1', 'regulatoryLayoutV16');
 })();

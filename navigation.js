@@ -22,6 +22,7 @@
     inspectionReadySection: { label: "Inspection Ready", parent: "mshaReadySection" },
     incidentReadySection: { label: "Incident Ready", parent: "mshaReadySection" },
     mineActSection: { label: "Mine Act", parent: "mshaReadySection" },
+    mshaEnforcementSection: { label: "Enforcement & Inspector Resources", parent: "mshaReadySection" },
 
     ppmLibrarySection: { label: "Program Policy Manual", parent: "mshaGuidanceSection" },
     ppmVolume4Section: { label: "Volume IV", parent: "ppmLibrarySection" },
@@ -47,6 +48,7 @@
     "inspectionReadySection",
     "incidentReadySection",
     "mineActSection",
+    "mshaEnforcementSection",
     "ppmLibrarySection",
     "ppmVolume4Section",
     "ppmSubpartMSection",

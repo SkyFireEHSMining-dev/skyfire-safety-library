@@ -1,0 +1,88 @@
+:root{
+  --sf-msha-ready:#234f7d;
+  --sf-msha-ready-soft:#eef5fb;
+  --sf-law:#0b84ff;
+  --sf-law-soft:#eef6ff;
+  --sf-msha-procedure:#6554c0;
+  --sf-msha-procedure-soft:#f4f1ff;
+  --sf-professional:#64748b;
+  --sf-professional-soft:#f4f6f8;
+  --sf-skyfire-guidance:#f97316;
+  --sf-skyfire-guidance-soft:#fff6ed;
+}
+
+#regulatoryResourcesHubSection .skyfire-hub-item.msha-ready-hub-item{
+  border-left:5px solid var(--sf-msha-ready)!important;
+  background:linear-gradient(90deg,var(--sf-msha-ready-soft),#fff 26%)!important;
+}
+#regulatoryResourcesHubSection .skyfire-hub-item.msha-ready-hub-item strong{color:var(--sf-msha-ready)!important}
+
+#mshaReadySection .module-header,
+#inspectionReadySection .module-header,
+#incidentReadySection .module-header,
+#mineActSection .module-header{border-top-color:var(--sf-msha-ready)}
+
+.msha-ready-intro{border-left:5px solid var(--sf-msha-ready)}
+.msha-ready-intro h3{margin-bottom:6px}
+.msha-ready-kicker{font-weight:800;color:var(--sf-msha-ready);letter-spacing:.02em;text-transform:uppercase;font-size:.82rem}
+
+.msha-ready-grid{display:grid;gap:16px;margin:18px 0}
+.msha-ready-card{
+  width:100%;
+  text-align:left;
+  border:1px solid var(--line);
+  border-left:5px solid var(--sf-msha-ready);
+  border-radius:18px;
+  background:linear-gradient(90deg,var(--sf-msha-ready-soft),#fff 28%);
+  padding:19px 20px;
+  box-shadow:var(--shadow);
+  cursor:pointer;
+}
+.msha-ready-card strong{display:block;color:var(--sf-msha-ready);font-size:1.2rem;line-height:1.25}
+.msha-ready-card span{display:block;color:var(--muted);margin-top:7px;line-height:1.45}
+.msha-ready-card.incident-ready-card{border-left-color:#b42318;background:linear-gradient(90deg,#fff1f0,#fff 28%)}
+.msha-ready-card.incident-ready-card strong{color:#9f1c14}
+.msha-ready-card.enforcement-ready-card{border-left-color:#465f78;background:linear-gradient(90deg,#f1f5f8,#fff 28%)}
+.msha-ready-card.enforcement-ready-card strong{color:#465f78}
+
+.msha-ready-status{display:inline-block;margin-top:10px;padding:5px 9px;border-radius:999px;background:#e8eef3;color:#40566b;font-size:.78rem;font-weight:800}
+
+.msha-source-grid{display:grid;gap:12px;margin-top:14px}
+.msha-source-card{border:1px solid var(--line);border-left:5px solid;border-radius:14px;padding:14px 15px;background:#fff}
+.msha-source-card strong{display:block;margin-bottom:4px}
+.msha-source-card p{margin:0;color:var(--muted);line-height:1.45}
+.msha-source-card.source-law{border-left-color:var(--sf-law);background:linear-gradient(90deg,var(--sf-law-soft),#fff 30%)}
+.msha-source-card.source-law strong{color:#075ca8}
+.msha-source-card.source-msha{border-left-color:var(--sf-msha-procedure);background:linear-gradient(90deg,var(--sf-msha-procedure-soft),#fff 30%)}
+.msha-source-card.source-msha strong{color:#5445a7}
+.msha-source-card.source-professional{border-left-color:var(--sf-professional);background:linear-gradient(90deg,var(--sf-professional-soft),#fff 30%)}
+.msha-source-card.source-professional strong{color:#526071}
+.msha-source-card.source-skyfire{border-left-color:var(--sf-skyfire-guidance);background:linear-gradient(90deg,var(--sf-skyfire-guidance-soft),#fff 30%)}
+.msha-source-card.source-skyfire strong{color:#b9530b}
+
+.msha-source-chip{display:inline-flex;align-items:center;padding:5px 9px;border-radius:999px;font-size:.76rem;font-weight:850;letter-spacing:.02em}
+.msha-source-chip.source-law{background:var(--sf-law-soft);color:#075ca8}
+.msha-source-chip.source-msha{background:var(--sf-msha-procedure-soft);color:#5445a7}
+.msha-source-chip.source-professional{background:var(--sf-professional-soft);color:#526071}
+.msha-source-chip.source-skyfire{background:var(--sf-skyfire-guidance-soft);color:#b9530b}
+
+.msha-review-meta{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0}
+.msha-reviewed-date{display:inline-flex;align-items:center;padding:5px 9px;border-radius:999px;background:#eef2f6;color:#536273;font-size:.76rem;font-weight:750}
+
+.msha-ready-placeholder{border-left:5px solid var(--sf-msha-ready)}
+.msha-ready-placeholder h3{margin-bottom:6px}
+.msha-ready-placeholder p{line-height:1.55}
+.msha-ready-placeholder .msha-review-meta{margin-top:14px}
+
+.msha-ready-note{margin-top:14px;padding:12px 14px;border-left:4px solid #7b8794;background:#f7f8fa;line-height:1.5}
+
+@media(min-width:800px){
+  .msha-ready-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .msha-source-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+@media(max-width:600px){
+  .msha-ready-card{padding:16px 14px}
+  .msha-ready-card strong{font-size:1.12rem}
+  .msha-ready-intro p,.msha-ready-placeholder p{font-size:1.03rem}
+}

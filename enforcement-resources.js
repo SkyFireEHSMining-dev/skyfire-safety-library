@@ -13,12 +13,12 @@
     const style = document.createElement("style");
     style.id = "skyfireEnforcementStyles";
     style.textContent = `
-      :root{--sf-enforcement:#465f78;--sf-enforcement-soft:#f1f5f8}
+      :root{--sf-enforcement:#6554c0;--sf-enforcement-soft:#f4f1ff}
       #regulatoryResourcesHubSection .skyfire-hub-item.enforcement-hub-item{
         border-left:5px solid var(--sf-enforcement)!important;
         background:linear-gradient(90deg,var(--sf-enforcement-soft),#fff 24%)!important;
       }
-      #regulatoryResourcesHubSection .skyfire-hub-item.enforcement-hub-item strong{color:var(--sf-enforcement)!important}
+      #regulatoryResourcesHubSection .skyfire-hub-item.enforcement-hub-item strong{color:#5a49b6!important}
       #mshaEnforcementSection .module-header{border-top-color:var(--sf-enforcement)}
       #mshaEnforcementSection .enforcement-notice{border-left:5px solid var(--sf-enforcement)}
       .enforcement-nav-actions{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}
@@ -27,14 +27,14 @@
       .enforcement-resource{padding:0;overflow:hidden;border-left:5px solid var(--sf-enforcement)}
       .enforcement-resource>summary{cursor:pointer;list-style:none;padding:19px 20px;background:linear-gradient(90deg,var(--sf-enforcement-soft),#fff 30%)}
       .enforcement-resource>summary::-webkit-details-marker{display:none}
-      .enforcement-resource>summary strong{display:block;color:var(--sf-enforcement);font-size:1.18rem;line-height:1.3}
+      .enforcement-resource>summary strong{display:block;color:#5a49b6;font-size:1.18rem;line-height:1.3}
       .enforcement-resource>summary span{display:block;color:var(--muted);margin-top:6px;line-height:1.4}
       .enforcement-body{padding:0 20px 20px}
       .enforcement-meta{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0}
-      .enforcement-chip{display:inline-block;padding:5px 9px;border-radius:999px;background:#e8eef3;color:#40566b;font-weight:750;font-size:.78rem}
+      .enforcement-chip{display:inline-block;padding:5px 9px;border-radius:999px;background:#eeeafe;color:#5445a7;font-weight:750;font-size:.78rem}
       .enforcement-body p,.enforcement-body li{line-height:1.58}
       .enforcement-links{display:grid;gap:9px;margin-top:14px}
-      .enforcement-links a{color:var(--sf-enforcement);font-weight:750;overflow-wrap:anywhere}
+      .enforcement-links a{color:#5445a7;font-weight:750;overflow-wrap:anywhere}
       .enforcement-caution{margin-top:15px;padding:12px 14px;border-left:4px solid #7b8794;background:#f7f8fa;line-height:1.5}
       @media(min-width:900px){.enforcement-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
       @media(max-width:600px){.enforcement-resource>summary{padding:16px 14px}.enforcement-body{padding:0 14px 18px}.enforcement-body p,.enforcement-body li{font-size:1.04rem}}
@@ -51,13 +51,13 @@
         </div>
         <div class="module-header-text">
           <h2>MSHA Enforcement &amp; Inspector Resources</h2>
-          <p>Public MSHA materials for understanding inspection procedures, citations, orders, and enforcement records.</p>
+          <p>Official MSHA materials for understanding inspection procedures, citations, orders, and enforcement records.</p>
         </div>
       </div>
 
       <div class="info-panel enforcement-notice">
-        <h3>Enforcement Resource Notice</h3>
-        <p><strong>These are MSHA enforcement and inspector resources, not operator filing forms or controlling regulations.</strong> They are provided so mine personnel can better understand the procedures, documents, and public information MSHA uses or produces during inspection and enforcement activity.</p>
+        <h3>Official MSHA Resource Notice</h3>
+        <p><strong>These are official MSHA enforcement and inspector resources, not operator filing forms or controlling regulations.</strong> They are provided so mine personnel can better understand the procedures, documents, and public information MSHA uses or produces during inspection and enforcement activity.</p>
         <p>The Mine Act and applicable 30 CFR requirements remain the controlling authorities. SkyFire links to authoritative MSHA materials here for practical reference.</p>
       </div>
 
@@ -69,6 +69,7 @@
           </summary>
           <div class="enforcement-body">
             <div class="enforcement-meta">
+              <span class="enforcement-chip">Official MSHA resource</span>
               <span class="enforcement-chip">Source type · MSHA handbook</span>
               <span class="enforcement-chip">Audience · MSHA inspection personnel</span>
               <span class="enforcement-chip">Coal + Metal/Nonmetal</span>
@@ -92,6 +93,7 @@
           </summary>
           <div class="enforcement-body">
             <div class="enforcement-meta">
+              <span class="enforcement-chip">Official MSHA resource</span>
               <span class="enforcement-chip">Source type · MSHA handbook + enforcement forms</span>
               <span class="enforcement-chip">Audience · Enforcement personnel</span>
               <span class="enforcement-chip">Not an operator filing form</span>
@@ -115,6 +117,7 @@
           </summary>
           <div class="enforcement-body">
             <div class="enforcement-meta">
+              <span class="enforcement-chip">Official MSHA resource</span>
               <span class="enforcement-chip">Source type · MSHA public reporting tool</span>
               <span class="enforcement-chip">Mine-level reports</span>
               <span class="enforcement-chip">Violations + inspections + related mine data</span>
@@ -165,6 +168,7 @@
 
     if (document.getElementById("mshaEnforcementSection")) {
       addPreviewItem();
+      window.SkyFireMSHAReady?.normalizeRegulatoryHub?.();
       return true;
     }
 
@@ -172,8 +176,8 @@
 
     const button = document.createElement("button");
     button.type = "button";
-    button.className = "skyfire-hub-item enforcement-hub-item";
-    button.innerHTML = `<strong>MSHA Enforcement &amp; Inspector Resources</strong><span>Public inspection, citation/order, and mine-level enforcement resources.</span>`;
+    button.className = "skyfire-hub-item enforcement-hub-item msha-official-hub-item";
+    button.innerHTML = `<strong>MSHA Enforcement &amp; Inspector Resources</strong><span>Official MSHA inspection, citation/order, and mine-level enforcement resources.</span>`;
     list.appendChild(button);
 
     const section = document.createElement("section");
@@ -188,6 +192,7 @@
 
     addPreviewItem();
     window.setTimeout(addPreviewItem, 250);
+    window.setTimeout(() => window.SkyFireMSHAReady?.normalizeRegulatoryHub?.(), 50);
     return true;
   }
 

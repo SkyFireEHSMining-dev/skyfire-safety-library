@@ -1,5 +1,5 @@
 (function () {
-  const NAV_VERSION = "v3";
+  const NAV_VERSION = "v4";
   const HISTORY_KEY = "skyfireNavigation";
   const NAV_TREE = {
     homeSection: { label: "Home", parent: null },
@@ -17,12 +17,12 @@
     docsSection: { label: "MSHA Forms", parent: "regulatoryResourcesHubSection" },
     mshaGuidanceSection: { label: "MSHA Guidance", parent: "regulatoryResourcesHubSection" },
     technicalGuidanceSection: { label: "Technical Guidance", parent: "regulatoryResourcesHubSection" },
+    mineActSection: { label: "Mine Act", parent: "regulatoryResourcesHubSection" },
+    mshaEnforcementSection: { label: "Enforcement & Inspector Resources", parent: "regulatoryResourcesHubSection" },
 
     mshaReadySection: { label: "MSHA Ready", parent: "regulatoryResourcesHubSection" },
     inspectionReadySection: { label: "Inspection Ready", parent: "mshaReadySection" },
     incidentReadySection: { label: "Incident Ready", parent: "mshaReadySection" },
-    mineActSection: { label: "Mine Act", parent: "mshaReadySection" },
-    mshaEnforcementSection: { label: "Enforcement & Inspector Resources", parent: "mshaReadySection" },
 
     ppmLibrarySection: { label: "Program Policy Manual", parent: "mshaGuidanceSection" },
     ppmVolume4Section: { label: "Volume IV", parent: "ppmLibrarySection" },

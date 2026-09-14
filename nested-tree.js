@@ -26,5 +26,5 @@
   loadOnce('script[data-bookmark-onboarding-v15="true"]', './bookmark-onboarding-v15.js?v=v0.15-bookmark-onboarding-1', 'bookmarkOnboardingV15');
   loadOnce('script[data-bookmark-remove-state-v15="true"]', './bookmark-remove-state-v15.js?v=v0.15-bookmark-remove-state-1', 'bookmarkRemoveStateV15');
   loadOnce('script[data-bookmark-folder-state-v15="true"]', './bookmark-folder-state-v15.js?v=v0.15-bookmark-folder-state-1', 'bookmarkFolderStateV15');
-  loadOnce('script[data-msha-ready-v16="true"]', './msha-ready-v16.js?v=v0.16-msha-ready-2', 'mshaReadyV16');
+  loadOnce('script[data-msha-ready-v16="true"]', './msha-ready-v16.js?v=v0.16-msha-ready-3', 'mshaReadyV16');
 })();

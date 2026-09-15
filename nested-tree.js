@@ -30,5 +30,7 @@
   loadOnce('script[data-mine-act-v16="true"]', './mine-act-v16.js?v=v0.16-mine-act-1', 'mineActV16');
   loadOnce('script[data-mine-act-offline-depth-v16="true"]', './mine-act-offline-depth-v16.js?v=v0.16-mine-act-depth-1', 'mineActOfflineDepthV16');
   loadOnce('script[data-mine-act-crosswalk-v16="true"]', './mine-act-crosswalk-v16.js?v=v0.16-mine-act-crosswalk-1', 'mineActCrosswalkV16');
+  loadOnce('script[data-mine-act-verbatim-v16="true"]', './mine-act-verbatim-v16.js?v=v0.16-mine-act-verbatim-1', 'mineActVerbatimV16');
+  loadOnce('script[data-mine-act-verbatim-fidelity-v16="true"]', './mine-act-verbatim-fidelity-v16.js?v=v0.16-mine-act-verbatim-fidelity-1', 'mineActVerbatimFidelityV16');
   loadOnce('script[data-regulatory-layout-v16="true"]', './regulatory-layout-v16.js?v=v0.16-reg-layout-1', 'regulatoryLayoutV16');
 })();

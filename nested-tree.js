@@ -24,13 +24,12 @@
   loadOnce('script[data-ppm-audit-v14="true"]', './ppm-audit-v14.js?v=v0.14-ppm-audit-1', 'ppmAuditV14');
   loadOnce('script[data-cfr-fullscreen-polish-v14="true"]', './cfr-fullscreen-polish-v14.js?v=v0.14-cfr-fullscreen-1', 'cfrFullscreenPolishV14');
   loadOnce('script[data-bookmark-onboarding-v15="true"]', './bookmark-onboarding-v15.js?v=v0.15-bookmark-onboarding-1', 'bookmarkOnboardingV15');
-  loadOnce('script[data-bookmark-remove-state-v15="true"]', './bookmark-remove-state-v15.js?v=v0.15-bookmark-remove-state-1', 'bookmarkRemoveStateV15');
-  loadOnce('script[data-bookmark-folder-state-v15="true"]', './bookmark-folder-state-v15.js?v=v0.15-bookmark-folder-state-1', 'bookmarkFolderStateV15');
+  loadOnce('script[data-bookmark-remove-state-v15="true"]', './bookmark-remove-state-v15.js?v=v0.15-bookmark-remove-1', 'bookmarkRemoveStateV15');
+  loadOnce('script[data-bookmark-folder-state-v15="true"]', './bookmark-folder-state-v15.js?v=v0.15-bookmark-folder-1', 'bookmarkFolderStateV15');
   loadOnce('script[data-msha-ready-v16="true"]', './msha-ready-v16.js?v=v0.16-msha-ready-3', 'mshaReadyV16');
   loadOnce('script[data-mine-act-v16="true"]', './mine-act-v16.js?v=v0.16-mine-act-1', 'mineActV16');
   loadOnce('script[data-mine-act-offline-depth-v16="true"]', './mine-act-offline-depth-v16.js?v=v0.16-mine-act-depth-1', 'mineActOfflineDepthV16');
   loadOnce('script[data-mine-act-crosswalk-v16="true"]', './mine-act-crosswalk-v16.js?v=v0.16-mine-act-crosswalk-1', 'mineActCrosswalkV16');
-  loadOnce('script[data-mine-act-verbatim-v16="true"]', './mine-act-verbatim-v16.js?v=v0.16-mine-act-verbatim-1', 'mineActVerbatimV16');
-  loadOnce('script[data-mine-act-verbatim-fidelity-v16="true"]', './mine-act-verbatim-fidelity-v16.js?v=v0.16-mine-act-verbatim-fidelity-1', 'mineActVerbatimFidelityV16');
+  loadOnce('script[data-mine-act-verbatim-v16="true"]', './mine-act-verbatim-v16.js?v=v0.16-mine-act-verbatim-2', 'mineActVerbatimV16');
   loadOnce('script[data-regulatory-layout-v16="true"]', './regulatory-layout-v16.js?v=v0.16-reg-layout-1', 'regulatoryLayoutV16');
 })();

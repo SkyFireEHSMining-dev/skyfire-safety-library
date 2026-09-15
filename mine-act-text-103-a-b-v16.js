@@ -1,2 +1,0 @@
-(function(){const s=window.SkyFireMineActVerbatimData?.["§103"];if(!s)return;s.blocks.push(
-{label:"(a) Purposes; advance notice; frequency; guidelines; right of access",paras:[`Authorized representatives of the Secretary or the Secretary of Health and Human Services shall make frequent inspections and investigations in coal or other mines each year for the purpose of (1) obtaining, utilizing, and disseminating information relating to health and safety conditions, the causes of accidents, and the causes

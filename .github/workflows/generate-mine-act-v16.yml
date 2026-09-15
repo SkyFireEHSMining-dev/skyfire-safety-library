@@ -1,5 +1,7 @@
 name: Generate Mine Act v0.16 text
 
+# Temporary v0.16 source-generation workflow. Remove before merge after the
+# pinned OLRC output has been verified and committed.
 on:
   push:
     branches: [v0.16-mine-act-verbatim]

@@ -67,7 +67,7 @@
 
   function install() {
     const data = window.SkyFireMineActVerbatimData;
-    if (!data || !REQUIRED.every(key => data[key])) return false;
+    if (!data || !REQUIRED.every(key => data[key]?.complete === true)) return false;
     const section = document.getElementById("mineActSection");
     if (!section || !section.querySelector(".mine-act-provision")) return false;
     ensureStyle();

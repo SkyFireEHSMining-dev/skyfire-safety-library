@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import hashlib, html, io, json, re, shutil, urllib.request, zipfile
+import hashlib, io, json, re, shutil, urllib.request, zipfile
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
@@ -19,8 +19,11 @@ def clean(value):
 def inline_text(el):
     parts = [el.text or ""]
     for child in el:
+        tag = local(child.tag)
         cls = child.attrib.get("class", "").lower()
-        if local(child.tag) not in {"noteRef", "footnoteRef"} and "footnote" not in cls:
+        # Keep the statutory wording only. OLRC editorial notes/footnotes are
+        # source metadata, not part of the enacted/codified provision text.
+        if tag not in {"note", "noteRef", "footnote", "footnoteRef", "notes"} and "footnote" not in cls:
             parts.append(inline_text(child))
         parts.append(child.tail or "")
     return "".join(parts)
@@ -37,7 +40,7 @@ def render_unit(el):
     lines, number, used = [], direct_num(el), False
     for child in el:
         tag = local(child.tag)
-        if tag in {"num", "heading", "sourceCredit", "notes"}:
+        if tag in {"num", "heading", "sourceCredit", "notes", "note", "footnote"}:
             continue
         if tag in {"content", "chapeau"}:
             text = clean(inline_text(child))

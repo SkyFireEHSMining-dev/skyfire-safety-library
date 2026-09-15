@@ -1,6 +1,6 @@
-const SHELL_CACHE_NAME = "skyfire-quality-cache-v27";
+const SHELL_CACHE_NAME = "skyfire-quality-cache-v29";
 const DATA_CACHE_NAME = "skyfire-regulatory-data-v1";
-const CACHE_VERSION = "quality-v27";
+const CACHE_VERSION = "quality-v29";
 
 const SHELL_CACHE = [
   "./",
@@ -27,12 +27,20 @@ const SHELL_CACHE = [
   `./mine-act-v16.css?v=${CACHE_VERSION}`,
   `./mine-act-offline-depth-v16.js?v=${CACHE_VERSION}`,
   `./mine-act-crosswalk-v16.js?v=${CACHE_VERSION}`,
+  `./mine-act-verbatim-v16.js?v=${CACHE_VERSION}`,
   `./regulatory-layout-v16.js?v=${CACHE_VERSION}`,
   `./home-preview.js?v=${CACHE_VERSION}`,
   `./cfr-v13.js?v=${CACHE_VERSION}`,
   `./responsive-v13.js?v=${CACHE_VERSION}`,
   `./enforcement-resources.js?v=${CACHE_VERSION}`,
   `./manifest.json?v=${CACHE_VERSION}`,
+  "./Data/mine-act/802.txt",
+  "./Data/mine-act/813.txt",
+  "./Data/mine-act/814.txt",
+  "./Data/mine-act/815.txt",
+  "./Data/mine-act/817.txt",
+  "./Data/mine-act/820.txt",
+  "./Data/mine-act/source-meta.json",
   "./Icons/icon-192.png",
   "./Icons/icon-512.png",
   "./Icons/lynx-logo.png",
@@ -132,6 +140,7 @@ self.addEventListener("fetch", event => {
     url.pathname.endsWith("/mine-act-v16.css") ||
     url.pathname.endsWith("/mine-act-offline-depth-v16.js") ||
     url.pathname.endsWith("/mine-act-crosswalk-v16.js") ||
+    url.pathname.endsWith("/mine-act-verbatim-v16.js") ||
     url.pathname.endsWith("/regulatory-layout-v16.js") ||
     url.pathname.endsWith("/home-preview.js") ||
     url.pathname.endsWith("/cfr-v13.js") ||

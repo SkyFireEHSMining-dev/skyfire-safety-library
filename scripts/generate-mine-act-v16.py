@@ -7,6 +7,16 @@ PINNED = "https://uscode.house.gov/download/releasepoints/us/pl/119/103/xml_usc3
 TARGETS = {"802","813","814","815","817","820"}
 OUT = Path("Data/mine-act")
 
+# OLRC's XML release includes three editorial footnote callouts inline with
+# these provisions when flattened to plain text. They are not statutory words.
+# Preserve the unusual statutory wording itself and remove only the editorial
+# callout text so the shipped reader can truthfully label the result verbatim.
+EDITORIAL_CALLOUTS = {
+    "813": [("repersentative 1 So in original. Probably should be “representative”. of", "repersentative of")],
+    "815": [("his 1 So in original. Probably should be “this”. paragraph", "his paragraph")],
+    "820": [("$$5,000 1 So in original. for", "$$5,000 for")],
+}
+
 
 def local(tag):
     return tag.rsplit("}", 1)[-1]
@@ -65,6 +75,14 @@ def section_number(section):
     return re.sub(r"\D", "", direct_num(section))
 
 
+def statutory_only(num, text):
+    for source_text, statutory_text in EDITORIAL_CALLOUTS.get(num, []):
+        if source_text not in text:
+            raise RuntimeError(f"Expected OLRC editorial callout not found in section {num}: {source_text!r}")
+        text = text.replace(source_text, statutory_text)
+    return text
+
+
 def main():
     req = urllib.request.Request(PINNED, headers={"User-Agent":"SkyFire-source-refresh/0.16"})
     raw = urllib.request.urlopen(req, timeout=60).read()
@@ -79,7 +97,7 @@ def main():
         num = section_number(el)
         if num in TARGETS:
             text = "\n\n".join(render_unit(el)).strip() + "\n"
-            found[num] = text
+            found[num] = statutory_only(num, text)
 
     missing = TARGETS - found.keys()
     if missing:

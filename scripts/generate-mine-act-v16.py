@@ -7,16 +7,6 @@ PINNED = "https://uscode.house.gov/download/releasepoints/us/pl/119/103/xml_usc3
 TARGETS = {"802","813","814","815","817","820"}
 OUT = Path("Data/mine-act")
 
-# OLRC's XML release includes three editorial footnote callouts inline with
-# these provisions when flattened to plain text. They are not statutory words.
-# Preserve the unusual statutory wording itself and remove only the editorial
-# callout text so the shipped reader can truthfully label the result verbatim.
-EDITORIAL_CALLOUTS = {
-    "813": [("repersentative 1 So in original. Probably should be “representative”. of", "repersentative of")],
-    "815": [("his 1 So in original. Probably should be “this”. paragraph", "his paragraph")],
-    "820": [("$$5,000 1 So in original. for", "$$5,000 for")],
-}
-
 
 def local(tag):
     return tag.rsplit("}", 1)[-1]
@@ -31,8 +21,8 @@ def inline_text(el):
     for child in el:
         tag = local(child.tag)
         cls = child.attrib.get("class", "").lower()
-        # Keep the statutory wording only. OLRC editorial notes/footnotes are
-        # source metadata, not part of the enacted/codified provision text.
+        # Keep statutory wording only. OLRC editorial notes and footnotes are
+        # source metadata and must not appear inside the verbatim law display.
         if tag not in {"note", "noteRef", "footnote", "footnoteRef", "notes"} and "footnote" not in cls:
             parts.append(inline_text(child))
         parts.append(child.tail or "")
@@ -75,12 +65,19 @@ def section_number(section):
     return re.sub(r"\D", "", direct_num(section))
 
 
-def statutory_only(num, text):
-    for source_text, statutory_text in EDITORIAL_CALLOUTS.get(num, []):
-        if source_text not in text:
-            raise RuntimeError(f"Expected OLRC editorial callout not found in section {num}: {source_text!r}")
-        text = text.replace(source_text, statutory_text)
-    return text
+def validate_source_fidelity(found):
+    joined = "\n".join(found.values())
+    if "Probably should" in joined or "So in original" in joined:
+        raise RuntimeError("Editorial footnote text leaked into statutory output")
+
+    required_literals = {
+        "813": "Whenever a repersentative of the miners",
+        "815": "pursuant to his paragraph.",
+        "820": "not more than $$5,000 for each day",
+    }
+    for num, literal in required_literals.items():
+        if literal not in found[num]:
+            raise RuntimeError(f"Expected source-fidelity wording missing from section {num}: {literal!r}")
 
 
 def main():
@@ -96,12 +93,13 @@ def main():
             continue
         num = section_number(el)
         if num in TARGETS:
-            text = "\n\n".join(render_unit(el)).strip() + "\n"
-            found[num] = statutory_only(num, text)
+            found[num] = "\n\n".join(render_unit(el)).strip() + "\n"
 
     missing = TARGETS - found.keys()
     if missing:
         raise RuntimeError(f"Missing U.S. Code sections: {sorted(missing)}")
+
+    validate_source_fidelity(found)
 
     if OUT.exists():
         shutil.rmtree(OUT)

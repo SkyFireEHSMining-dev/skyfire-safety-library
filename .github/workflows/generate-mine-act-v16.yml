@@ -1,0 +1,35 @@
+name: Generate Mine Act v0.16 text
+
+on:
+  push:
+    branches: [v0.16-mine-act-verbatim]
+    paths:
+      - scripts/generate-mine-act-v16.py
+      - .github/workflows/generate-mine-act-v16.yml
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v0.16-mine-act-verbatim
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Generate pinned U.S. Code text
+        run: python scripts/generate-mine-act-v16.py
+      - name: Commit generated source text
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A Data/mine-act
+          if git diff --cached --quiet; then
+            echo "No generated changes"
+          else
+            git commit -m "Generate pinned Mine Act statutory text"
+            git push origin HEAD:v0.16-mine-act-verbatim
+          fi

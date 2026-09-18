@@ -1,6 +1,6 @@
-const SHELL_CACHE_NAME = "skyfire-quality-cache-v32";
+const SHELL_CACHE_NAME = "skyfire-quality-cache-v33";
 const DATA_CACHE_NAME = "skyfire-regulatory-data-v1";
-const CACHE_VERSION = "quality-v32";
+const CACHE_VERSION = "quality-v33";
 
 const SHELL_CACHE = [
   "./",
@@ -27,6 +27,7 @@ const SHELL_CACHE = [
   `./inspection-ready-v16.css?v=${CACHE_VERSION}`,
   `./inspection-ready-depth-v16.js?v=${CACHE_VERSION}`,
   `./inspection-ready-types-v16.js?v=${CACHE_VERSION}`,
+  `./inspection-ready-lifecycle-depth-v16.js?v=${CACHE_VERSION}`,
   `./mine-act-v16.js?v=${CACHE_VERSION}`,
   `./mine-act-v16.css?v=${CACHE_VERSION}`,
   `./mine-act-offline-depth-v16.js?v=${CACHE_VERSION}`,
@@ -144,6 +145,7 @@ self.addEventListener("fetch", event => {
     url.pathname.endsWith("/inspection-ready-v16.css") ||
     url.pathname.endsWith("/inspection-ready-depth-v16.js") ||
     url.pathname.endsWith("/inspection-ready-types-v16.js") ||
+    url.pathname.endsWith("/inspection-ready-lifecycle-depth-v16.js") ||
     url.pathname.endsWith("/mine-act-v16.js") ||
     url.pathname.endsWith("/mine-act-v16.css") ||
     url.pathname.endsWith("/mine-act-offline-depth-v16.js") ||

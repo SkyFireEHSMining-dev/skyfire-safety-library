@@ -26,7 +26,7 @@
       trigger: "Excessive methane or other explosive-gas liberation; a qualifying gas ignition/explosion with death or serious injury during the prior 5 years; or other especially hazardous conditions.",
       scope: "All or part of the mine, focused on the reason the mine is in §103(i) status. This is not simply a smaller E01.",
       frequency: "Methane/explosive-gas status can produce 5-, 10-, or 15-working-day schedules. Current MSHA guidance uses >1,000,000 ft³/24 hr for 5-day status, >500,000 but <1,000,000 for 10-day, and >200,000 but <500,000 for 15-day. Ignition/explosion and especially hazardous-condition status use the 5-working-day schedule.",
-      operator: "The word “gassy” is useful shorthand, but incomplete. The key question is why the mine is in §103(i) status and what specific hazard the spot inspection is meant to address."
+      operator: "Confirm why the mine is in §103(i) status and what hazard or condition defines the spot-inspection scope. The triggering basis controls the inspection focus and required frequency."
     },
     {
       code: "E03 / E04",
@@ -71,24 +71,186 @@
   ];
 
   const specialty = [
-    ["E05", "§108 Injunctive Action / Other Special Investigation", "Mine Act §108", "Special investigation activity involving injunctive action or another special-investigation purpose."],
-    ["E10", "Petition for Modification Investigation", "Mine Act §101(c)/(d); 30 CFR Part 44", "Investigation supporting a petition to modify the application of a mandatory safety standard."],
-    ["E11", "Discrimination Investigation", "Mine Act §105(c)", "Investigation of alleged discrimination or interference with protected miner rights."],
-    ["E12", "Knowing / Willful Violation Investigation", "Mine Act §110(c)/(d)", "This is the “110 investigation” many safety professionals refer to. It is a special investigation into possible knowing or willful conduct—not a routine inspection category."],
-    ["E13", "Re-opening Inspection — Coal only", "MSHA event-code taxonomy", "Non-penalty inspection of an entire coal mine after abandonment or inactive status."],
-    ["E14", "Compliance Assistance Visit — M/NM only", "MSHA event-code taxonomy", "Visit to a new/reopening M/NM mine, new facility, or new equipment installation to identify potential violations without proposed monetary civil penalties."],
-    ["E17", "Special Emphasis Program", "MSHA event-code taxonomy", "Specialized agency, coal, or M/NM activity with a defined emphasis. The program purpose controls the scope."],
-    ["E18", "Shaft, Slope, or Major Construction Spot Inspection", "Mine Act §103 / applicable standards", "Focused construction inspection for imminent danger, standards, plans, and previously issued violations."],
-    ["E19", "Electrical Technical Investigation", "Applicable 30 CFR electrical standards", "Specialist investigation of electrical components, systems, surveys, protection, grounding, or other electrical compliance issues."],
-    ["E20", "Roof Control Technical Investigation", "Applicable roof/ground-control requirements", "Engineering or in-depth investigation of roof-control problems or potential problems."],
-    ["E21", "Ventilation Technical Investigation", "Applicable ventilation requirements", "Detailed investigation of ventilation systems, problems, surveys, or related technical questions."],
-    ["E22", "Health Technical Investigation", "Applicable health standards", "Investigation of toxic substances or harmful physical agents; can include sampling and operator sampling programs."],
-    ["E23", "Impoundment Spot Inspection", "Applicable impoundment standards / approved plans", "Inspection of an impoundment for imminent danger and compliance with approved plans and safety/health standards."],
-    ["E24", "Other Technical Compliance Investigation", "Applicable Mine Act / 30 CFR authority", "Technical investigation that does not fit another technical event code."],
-    ["E25", "Part 50 Audit", "30 CFR Part 50", "Audit of accident, injury, illness, employment, and related Part 50 records."],
-    ["E26", "Other Contacts", "Administrative event code", "Industry/technical assistance and other contacts. MSHA’s current handbook expressly says this is not a mine inspection or investigation."],
-    ["E27", "Attempted Inspection — Denial of Entry", "Mine Act §103(a) right of entry", "Mine visit intended for enforcement activity that did not occur because entry was directly or indirectly denied."],
-    ["E28", "Mine Idle Activity", "Administrative event code", "Mine visit intended for enforcement activity that did not occur because the mine was not operating/available for the intended activity."]
+    {
+      code: "E05",
+      title: "§108 Injunctive Action / Other Special Investigation",
+      authority: "Mine Act §108",
+      plain: "Special-investigation activity conducted under §108 involving injunctive action or another special-investigation purpose.",
+      trigger: "Facts indicate that court-ordered relief or another §108-related enforcement response may be necessary, or the matter has been assigned as another special investigation.",
+      scope: "The conduct, records, statements, and conditions relevant to the alleged interference, prohibited conduct, or other basis for the special investigation.",
+      frequency: "Case-driven.",
+      operator: "Preserve relevant records and facts, avoid altering or reconstructing evidence, and involve appropriate management/legal support because the matter can extend beyond routine field compliance."
+    },
+    {
+      code: "E10",
+      title: "Petition for Modification Investigation",
+      authority: "Mine Act §101(c)/(d); 30 CFR Part 44",
+      plain: "Investigation supporting a petition to modify how a mandatory safety standard applies at a mine.",
+      trigger: "A petition for modification requests an alternative method or other relief allowed by the Mine Act and Part 44.",
+      scope: "Mine conditions, equipment, mining methods, proposed alternatives, engineering or technical support, and the protection provided to affected miners.",
+      frequency: "Case-driven by a petition for modification.",
+      operator: "Be prepared to explain the existing condition, the requested modification, the alternative method, and the basis for concluding that miner protection is maintained as required."
+    },
+    {
+      code: "E11",
+      title: "Section 105(c) Discrimination Investigation",
+      authority: "Mine Act §105(c)",
+      plain: "Investigation of alleged discrimination or interference involving protected miner activity.",
+      trigger: "A miner, representative, or applicant alleges retaliation, discrimination, or interference connected to rights protected by §105(c).",
+      scope: "Protected activity, employment or other adverse action, timing, communications, personnel records, witness accounts, and related facts.",
+      frequency: "Complaint/case-driven.",
+      operator: "Preserve relevant employment and communication records, avoid retaliation or interference, and involve appropriate management/legal support while allowing the investigation to proceed."
+    },
+    {
+      code: "E12",
+      title: "Sections 110(c)/(d) Knowing or Willful Violation Investigation",
+      authority: "Mine Act §110(c)/(d)",
+      plain: "Special investigation into possible knowing or willful conduct associated with Mine Act violations, citations, or orders.",
+      trigger: "MSHA identifies facts suggesting that individual knowledge, authorization, ordering, or willful conduct may require investigation under §110(c) or §110(d).",
+      scope: "The underlying violation plus evidence of who knew what, when they knew it, what authority they exercised, what actions they directed or carried out, and the records or statements supporting those facts.",
+      frequency: "Case-driven; separate from routine E01 inspection scheduling.",
+      operator: "Preserve records and facts carefully, avoid speculation or coordinated witness scripting, and involve appropriate management/legal support because individual conduct may be examined."
+    },
+    {
+      code: "E13",
+      title: "Re-opening Inspection — Coal only",
+      authority: "MSHA E13 event code; applicable Mine Act and 30 CFR requirements",
+      plain: "Non-penalty inspection of an entire coal mine after abandonment or inactive status when the mine is reopening.",
+      trigger: "A coal mine returns to operation after an abandonment or inactive period covered by the reopening process.",
+      scope: "The mine as a whole, with attention to conditions, systems, plans, equipment, records, and other requirements relevant to safe resumption of operations.",
+      frequency: "Event-driven when a qualifying coal mine reopens.",
+      operator: "Treat reopening as a full operational-readiness event: verify mine status, required plans/notifications, training, examinations, equipment, and field conditions before production resumes."
+    },
+    {
+      code: "E14",
+      title: "Compliance Assistance Visit — M/NM only",
+      authority: "MSHA E14 event code; applicable Mine Act and 30 CFR requirements",
+      plain: "Compliance-assistance visit for a new or reopening metal/nonmetal mine, new facility, or new equipment installation.",
+      trigger: "A qualifying M/NM operation, facility, or installation is entering service and MSHA conducts an assistance-oriented visit.",
+      scope: "Potential compliance issues associated with the new/reopening operation, facility, or equipment installation.",
+      frequency: "Event-driven.",
+      operator: "Use the visit to identify and correct gaps early. Keep the assistance purpose distinct from later enforcement activity and document corrective actions taken."
+    },
+    {
+      code: "E17",
+      title: "Special Emphasis Program",
+      authority: "Mine Act §103 and program-specific authority",
+      plain: "Inspection or investigation activity conducted under a defined MSHA special-emphasis initiative.",
+      trigger: "MSHA establishes an agency, program-area, district, or mine-type emphasis on a particular hazard, condition, equipment class, practice, or compliance concern.",
+      scope: "Defined by the special-emphasis program; it may focus on a particular hazard while other violations observed under lawful authority can still be addressed.",
+      frequency: "Program-driven.",
+      operator: "Identify the program focus, review the standards and controls that govern that hazard, and ensure field practices and records align before the inspection reaches the affected work."
+    },
+    {
+      code: "E18",
+      title: "Shaft, Slope, or Major Construction Spot Inspection",
+      authority: "Mine Act §103; applicable 30 CFR standards and approved plans",
+      plain: "Focused inspection of shaft, slope, or other major mine-construction activity.",
+      trigger: "Major construction work requires focused inspection for hazards, compliance, plan requirements, or previously identified conditions.",
+      scope: "Construction area, work methods, ground/roof conditions, equipment, electrical and hoisting systems, plans, and other requirements applicable to the project.",
+      frequency: "As needed during qualifying construction activity.",
+      operator: "Keep the controlling plans, contractor responsibilities, examinations, task training, equipment controls, and construction-specific hazards aligned with field conditions."
+    },
+    {
+      code: "E19",
+      title: "Electrical Technical Investigation",
+      authority: "Mine Act §103; applicable 30 CFR electrical standards",
+      plain: "Specialist technical investigation of electrical systems or electrical compliance issues.",
+      trigger: "An electrical condition, system, survey, incident, or technical question requires specialist review.",
+      scope: "Power systems, protection, grounding, circuit components, installations, testing/survey information, maintenance records, and related work practices as applicable.",
+      frequency: "Need-driven.",
+      operator: "Have knowledgeable electrical personnel and relevant diagrams, test results, maintenance information, and procedures available; distinguish verified measurements from assumptions."
+    },
+    {
+      code: "E20",
+      title: "Roof Control Technical Investigation",
+      authority: "Mine Act §103; applicable roof/ground-control standards and plans",
+      plain: "Engineering or in-depth investigation of roof- or ground-control conditions and systems.",
+      trigger: "A roof/ground-control problem, plan issue, changing condition, incident, or technical concern requires focused review.",
+      scope: "Geologic conditions, support systems, examinations, installed controls, plan provisions, measurements, prior conditions, and related work practices.",
+      frequency: "Need-driven.",
+      operator: "Provide the controlling plan and field history, involve personnel who understand the ground-control system, and make sure current field conditions match the assumptions and controls in the plan."
+    },
+    {
+      code: "E21",
+      title: "Ventilation Technical Investigation",
+      authority: "Mine Act §103; applicable ventilation standards and approved plans",
+      plain: "Detailed technical investigation of mine ventilation systems, conditions, or compliance questions.",
+      trigger: "A ventilation problem, plan issue, survey result, incident, or technical concern requires focused review.",
+      scope: "Air quantities and direction, controls, fans, examinations, gas or contaminant conditions, surveys, approved plan provisions, and related records as applicable.",
+      frequency: "Need-driven.",
+      operator: "Have current ventilation information, measurements, plans, examination records, and knowledgeable personnel available; verify current conditions rather than relying on historical assumptions."
+    },
+    {
+      code: "E22",
+      title: "Health Technical Investigation",
+      authority: "Mine Act §103; applicable MSHA health standards",
+      plain: "Technical investigation of toxic substances, harmful physical agents, exposure conditions, or operator health programs.",
+      trigger: "Sampling results, complaints, observed conditions, health trends, or other technical concerns require focused health investigation.",
+      scope: "Exposure sources, sampling, controls, respiratory protection, medical surveillance where applicable, records, work practices, and operator sampling/evaluation programs.",
+      frequency: "Need-driven.",
+      operator: "Know the exposure source, who may be exposed, current sampling/evaluation data, controls, records, and follow-up actions. Health compliance often depends on evidence that is not visible during a walkthrough."
+    },
+    {
+      code: "E23",
+      title: "Impoundment Spot Inspection",
+      authority: "Mine Act §103; applicable impoundment standards and approved plans",
+      plain: "Focused inspection of an impoundment and the controls intended to keep it safe.",
+      trigger: "Routine or condition-driven need to evaluate an impoundment, its performance, or compliance with applicable plans and standards.",
+      scope: "Impoundment condition, instrumentation/observations, examinations, construction/maintenance, water levels, drainage, emergency considerations, records, and approved plans as applicable.",
+      frequency: "As required or condition-driven.",
+      operator: "Keep inspection/examination records, current plan information, monitoring data, corrective actions, and knowledgeable personnel available; escalating conditions should be treated as operational hazards, not paperwork issues."
+    },
+    {
+      code: "E24",
+      title: "Other Technical Compliance Investigation",
+      authority: "Mine Act §103; applicable Mine Act / 30 CFR authority",
+      plain: "Technical compliance investigation that does not fit one of MSHA’s more specific technical event codes.",
+      trigger: "A specialized technical issue requires investigation and no more specific technical activity code applies.",
+      scope: "Defined by the technical issue, applicable standards, evidence, records, and conditions being evaluated.",
+      frequency: "Need-driven.",
+      operator: "Clarify the technical subject and applicable standards, identify the people and records that can accurately explain the system, and avoid treating a specialist investigation as a routine paperwork review."
+    },
+    {
+      code: "E25",
+      title: "Part 50 Audit",
+      authority: "30 CFR Part 50; Mine Act §103",
+      plain: "Audit of accident, injury, illness, employment, production, and related Part 50 reporting/recordkeeping information.",
+      trigger: "MSHA audits Part 50 records and supporting information for accuracy, completeness, and proper classification/reporting.",
+      scope: "Forms 7000-1 and 7000-2, accident/injury/illness records, employment and production information, and other supporting records needed to verify Part 50 reporting.",
+      frequency: "Audit/selection-driven.",
+      operator: "Make sure filed Part 50 information can be reconciled to supporting records and that reportability/classification decisions are documented consistently."
+    },
+    {
+      code: "E26",
+      title: "Other Contacts",
+      authority: "Administrative MSHA event code",
+      plain: "Industry or technical-assistance contact that MSHA records separately from a mine inspection or investigation.",
+      trigger: "A contact or assistance activity occurs that does not qualify as an inspection/investigation event.",
+      scope: "Defined by the purpose of the contact.",
+      frequency: "As needed.",
+      operator: "Clarify the purpose of the contact and document any follow-up commitment or separate enforcement activity if one is opened."
+    },
+    {
+      code: "E27",
+      title: "Attempted Inspection — Denial of Entry",
+      authority: "Mine Act §103(a) right of entry; §108 remedies may become relevant",
+      plain: "MSHA intended to conduct enforcement activity but did not complete the intended inspection because entry was directly or indirectly denied.",
+      trigger: "The inspector concludes that access needed for the intended enforcement activity has been denied or obstructed.",
+      scope: "The attempted entry, communications, circumstances of the denial, and the intended inspection activity.",
+      frequency: "Event-driven.",
+      operator: "Do not obstruct lawful MSHA access. If an access dispute arises, elevate it immediately through management/legal channels while accurately documenting what was requested, what occurred, and why."
+    },
+    {
+      code: "E28",
+      title: "Mine Idle Activity",
+      authority: "Administrative MSHA event code",
+      plain: "MSHA intended enforcement activity but the mine was not operating or otherwise available for the intended activity.",
+      trigger: "The mine is idle when MSHA arrives for planned enforcement activity.",
+      scope: "Administrative documentation of the attempted activity and mine status.",
+      frequency: "Event-driven.",
+      operator: "Keep mine operating-status information accurate and address any required notification or reopening steps before operations resume."
+    }
   ];
 
   const links = [
@@ -239,12 +401,12 @@
     const body = document.createElement("div");
     body.className = "ir-types-body";
     body.innerHTML =
-      '<p class="ir-types-intro"><strong>Start here if “MSHA is at the gate” is still too vague.</strong> The first skill is identifying what kind of MSHA activity is actually occurring, because a full E01 inspection, a §103(i) spot inspection, a hazard complaint, an accident investigation, a follow-up, and a §110 special investigation are not the same event.</p>' +
-      '<div class="ir-types-note"><strong>Important terminology:</strong> “inspection” is often used casually for any MSHA visit. MSHA itself uses a broader event-code system covering inspections, investigations, emergency operations, audits, assistance visits, and other contacts. Learning the difference prevents bad assumptions about purpose and scope.</div>';
+      '<p class="ir-types-intro"><strong>MSHA activities differ in purpose, scope, and authority.</strong> A full E01 inspection, a §103(i) spot inspection, a hazard complaint, an accident investigation, a compliance follow-up, and a §110 special investigation are distinct activities and should be recognized as such.</p>' +
+      '<div class="ir-types-note"><strong>MSHA event terminology:</strong> MSHA’s event-code system distinguishes inspections, investigations, emergency operations, audits, assistance visits, and other contacts. The event type helps define the purpose and expected scope of the activity.</div>';
 
     const core = document.createElement("section");
     core.className = "ir-types-section";
-    core.innerHTML = "<h4>The six inspection/investigation families to know first</h4>";
+    core.innerHTML = "<h4>Primary inspection and investigation families</h4>";
     coreTypes.forEach(function(item) {
       const card = document.createElement("details");
       card.className = "ir-type-card";
@@ -254,14 +416,14 @@
       const c = document.createElement("div");
       c.className = "ir-type-content";
       c.innerHTML =
-        "<p><strong>Plain English:</strong> " + item.plain + "</p>" +
+        "<p><strong>What it is:</strong> " + item.plain + "</p>" +
         '<div class="ir-type-grid">' +
         '<div class="ir-type-fact"><strong>Authority:</strong> ' + item.authority + "</div>" +
-        '<div class="ir-type-fact"><strong>Why it happens:</strong> ' + item.trigger + "</div>" +
+        '<div class="ir-type-fact"><strong>Trigger / purpose:</strong> ' + item.trigger + "</div>" +
         '<div class="ir-type-fact"><strong>Typical scope:</strong> ' + item.scope + "</div>" +
         '<div class="ir-type-fact"><strong>Frequency:</strong> ' + item.frequency + "</div>" +
         "</div>" +
-        "<p><strong>Operator learning point:</strong> " + item.operator + "</p>";
+        "<p><strong>Operator considerations:</strong> " + item.operator + "</p>";
       card.appendChild(c);
       core.appendChild(card);
     });
@@ -269,7 +431,7 @@
 
     const firstMinute = document.createElement("section");
     firstMinute.className = "ir-types-section";
-    firstMinute.innerHTML = "<h4>Your first 60 seconds: identify the event without interfering</h4>";
+    firstMinute.innerHTML = "<h4>Initial response: identify the event without interfering</h4>";
     const ul = document.createElement("ul");
     ul.className = "ir-arrival-list";
     [
@@ -278,7 +440,7 @@
       "Record the inspector name(s), event number if provided, stated purpose, start time, and operator/miner-representative participation.",
       "If the event is a complaint, accident, follow-up, or technical investigation, do not assume the stated focus prevents MSHA from acting on other conditions observed under lawful authority.",
       "If you do not know an answer, verify it. Do not guess, improvise records, coach miners to give a script, or delay lawful inspection activity.",
-      "Treat a §110(c)/(d) special investigation differently from a routine E01: preserve records and facts carefully and involve appropriate management/legal support because individual knowledge/conduct may be under investigation."
+      "If the activity is a §110(c)/(d) special investigation, preserve relevant records and facts and involve appropriate management/legal support; individual knowledge or conduct may be examined."
     ].forEach(function(text) {
       const li = document.createElement("li");
       li.textContent = text;
@@ -289,14 +451,28 @@
 
     const special = document.createElement("section");
     special.className = "ir-types-section";
-    special.innerHTML = "<h4>Less-common and specialist MSHA activities you should still recognize</h4><p class=\"ir-types-intro\">You do not need to memorize every event code on day one. The goal is to recognize the category and know where to look next.</p>";
+    special.innerHTML = "<h4>Special investigations, technical investigations, audits, and other MSHA activities</h4><p class=\"ir-types-intro\">These event codes cover activities outside the primary inspection families. Expand an item for its authority, trigger, scope, frequency, and operator considerations.</p>";
     const grid = document.createElement("div");
     grid.className = "ir-special-grid";
-    specialty.forEach(function(row) {
-      const div = document.createElement("div");
-      div.className = "ir-special";
-      div.innerHTML = "<strong>" + row[0] + " · " + row[1] + "</strong><span>" + row[2] + "</span><p>" + row[3] + "</p>";
-      grid.appendChild(div);
+    specialty.forEach(function(item) {
+      const card = document.createElement("details");
+      card.className = "ir-type-card ir-special-card";
+      const s = document.createElement("summary");
+      s.innerHTML = '<span class="ir-type-code">' + item.code + '</span>' + item.title;
+      card.appendChild(s);
+      const c = document.createElement("div");
+      c.className = "ir-type-content";
+      c.innerHTML =
+        "<p><strong>What it is:</strong> " + item.plain + "</p>" +
+        '<div class="ir-type-grid">' +
+        '<div class="ir-type-fact"><strong>Authority:</strong> ' + item.authority + "</div>" +
+        '<div class="ir-type-fact"><strong>Trigger / purpose:</strong> ' + item.trigger + "</div>" +
+        '<div class="ir-type-fact"><strong>Typical scope:</strong> ' + item.scope + "</div>" +
+        '<div class="ir-type-fact"><strong>Frequency:</strong> ' + item.frequency + "</div>" +
+        "</div>" +
+        "<p><strong>Operator considerations:</strong> " + item.operator + "</p>";
+      card.appendChild(c);
+      grid.appendChild(card);
     });
     special.appendChild(grid);
     body.appendChild(special);
@@ -304,10 +480,10 @@
     const clarification = document.createElement("section");
     clarification.className = "ir-types-section";
     clarification.innerHTML =
-      "<h4>Three distinctions that prevent common beginner mistakes</h4>" +
-      '<div class="ir-type-fact"><strong>§103(i) is not just “the gassy-mine inspection.”</strong> Gas liberation is one path, but qualifying ignition/explosion history and other especially hazardous conditions can also put a mine into the 5-working-day spot-inspection regime.</div>' +
-      '<div class="ir-type-fact"><strong>A §110 investigation is real—but it is better called a special investigation, not a normal “110 inspection.”</strong> MSHA’s current E12 code covers possible knowing or willful violations under §110(c)/(d).</div>' +
-      '<div class="ir-type-fact"><strong>“Impact inspection” describes an enhanced enforcement strategy, not a separate numbered Mine Act inspection section.</strong> The underlying inspection/investigation authority and event coding still matter.</div>';
+      "<h4>Key distinctions in MSHA event terminology</h4>" +
+      '<div class="ir-type-fact"><strong>Section 103(i) spot inspections can arise from several statutory triggers.</strong> Methane or other explosive-gas liberation is one basis; qualifying gas ignition/explosion history and other especially hazardous conditions can also place a mine in the §103(i) spot-inspection regime.</div>' +
+      '<div class="ir-type-fact"><strong>E12 is the event code for §110(c)/(d) knowing or willful violation investigations.</strong> It is a special-investigation activity distinct from a routine E01 safety and health inspection.</div>' +
+      '<div class="ir-type-fact"><strong>Impact inspections are an enhanced-enforcement strategy rather than a separate numbered Mine Act inspection section.</strong> The underlying statutory authority, inspection/investigation type, and event coding still control the activity.</div>';
     body.appendChild(clarification);
 
     const related = document.createElement("section");

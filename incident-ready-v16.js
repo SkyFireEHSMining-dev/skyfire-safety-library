@@ -107,8 +107,16 @@
   function addSafetyDoc(){
     const section=document.getElementById("safetyDocsSection");if(!section)return false;
     if(section.querySelector("#part50DecisionTreeCard"))return true;
-    const panels=[...section.querySelectorAll(".info-panel")];
-    let target=panels[panels.length-1]||section;
+    let target=section.querySelector("#incidentFieldResourcesPanel");
+    if(!target){
+      target=document.createElement("div");
+      target.id="incidentFieldResourcesPanel";
+      target.className="info-panel";
+      target.innerHTML="<h3>Emergency / Incident Resources</h3><p>Printable SkyFire field references for time-sensitive mine incident decisions. Use the interactive workflow for current source-linked guidance.</p>";
+      const panels=[...section.querySelectorAll(".info-panel")];
+      const anchor=panels[panels.length-1]||null;
+      if(anchor)anchor.insertAdjacentElement("afterend",target);else section.appendChild(target);
+    }
     const card=document.createElement("div");card.id="part50DecisionTreeCard";card.className="document-card part50-doc-card";
     card.innerHTML='<h4>SkyFire MSHA Part 50 Decision Tree</h4><p>Printable whole-picture guide for immediate notification, scene preservation, operator investigation, injury/illness reporting, and Form 7000-1 decisions.</p><div class="part50-doc-preview"><iframe title="Part 50 decision tree field resource preview" loading="lazy" src="'+POSTER_URL+'?embed=1"></iframe></div><div class="document-actions"><a href="'+POSTER_URL+'" target="_blank" rel="noopener">Open / Print Visual</a><button type="button" data-open-incident-from-doc>Open Incident Ready</button></div><p class="part50-doc-meta">Source checked '+SOURCE_CHECKED+' · offline-cached field reference.</p>';
     target.appendChild(card);

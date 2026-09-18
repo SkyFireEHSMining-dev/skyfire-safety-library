@@ -1,6 +1,6 @@
 (function () {
   const STYLE_ID = "inspectionReadyDepthV16Styles";
-  const SOURCE_CHECKED = "September 16, 2026";
+  const SOURCE_CHECKED = "September 18, 2026";
 
   const deepDive = {
     tracks: [
@@ -37,7 +37,7 @@
       {
         title: "7. Documentation that can support enforcement decisions",
         body: "Inspectors document what they observe and may gather photographs, measurements, statements, records, sampling information, and other facts. If enforcement follows, those facts can become important to the alleged violation and later gravity, negligence, or order analysis.",
-        why: "SkyFire should help you recognize which facts matter without pretending to predict an enforcement classification. Capture accurate facts; do not manufacture a legal conclusion from a checklist."
+        why: "Accurate factual documentation matters to later enforcement analysis. SkyFire explains the process and relevant facts without predicting an enforcement classification."
       }
     ],
     playbook: [
@@ -205,7 +205,7 @@
 
     const body = document.createElement("div");
     body.className = "ir-deep-body";
-    body.innerHTML = `<p class="ir-deep-intro"><strong>This layer is for learning, not just reminding.</strong> Use it when you want to understand what the inspector may be connecting across field conditions, records, miner knowledge, equipment, health exposures, and enforcement documentation.</p>`;
+    body.innerHTML = `<p class="ir-deep-intro"><strong>Field inspections connect multiple evidence streams.</strong> Inspectors may compare physical conditions, records, miner knowledge, equipment, health exposures, and enforcement documentation as parts of the same compliance picture.</p>`;
 
     const tracksSection = document.createElement("section");
     tracksSection.className = "ir-deep-section";
@@ -220,13 +220,13 @@
 
     const playbookSection = document.createElement("section");
     playbookSection.className = "ir-deep-section";
-    playbookSection.innerHTML = `<h4>Operator playbook during the field inspection</h4>`;
+    playbookSection.innerHTML = `<h4>Operator practices during the field inspection</h4>`;
     playbookSection.appendChild(makeList(deepDive.playbook));
     body.appendChild(playbookSection);
 
     const weakSection = document.createElement("section");
     weakSection.className = "ir-deep-section";
-    weakSection.innerHTML = `<h4>Common disconnects worth catching before MSHA does</h4>`;
+    weakSection.innerHTML = `<h4>Common record-to-field disconnects</h4>`;
     weakSection.appendChild(makeList(deepDive.weakPoints));
     body.appendChild(weakSection);
 

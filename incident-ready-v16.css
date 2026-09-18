@@ -124,3 +124,10 @@
   #incidentReadySection .deep-dive>summary{padding:13px 11px}
   #incidentReadySection .deep-body{padding:14px 11px}
 }
+#safetyDocsSection .part50-doc-card .document-actions{display:flex;flex-wrap:wrap;gap:9px}
+#safetyDocsSection .part50-doc-card .document-actions button{
+  border:1px solid #b9c8d7;border-radius:9px;background:#fff;color:#52677f;
+  padding:9px 12px;font:inherit;font-weight:800;cursor:pointer
+}
+#safetyDocsSection .part50-doc-card .document-actions button:hover,
+#safetyDocsSection .part50-doc-card .document-actions button:focus-visible{outline:3px solid rgba(82,103,127,.14);outline-offset:1px}

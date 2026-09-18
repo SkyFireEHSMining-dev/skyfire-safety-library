@@ -131,3 +131,24 @@
 }
 #safetyDocsSection .part50-doc-card .document-actions button:hover,
 #safetyDocsSection .part50-doc-card .document-actions button:focus-visible{outline:3px solid rgba(82,103,127,.14);outline-offset:1px}
+
+#incidentReadySection .time-threshold-block{
+  margin-top:18px;padding:14px;border:1px solid #d9e2ea;border-radius:13px;background:#f9fbfd
+}
+#incidentReadySection .time-threshold-block h4{margin:0 0 7px;font-size:1.05rem;color:#8f2c22}
+#incidentReadySection .time-threshold-block>p{margin:0 0 12px;line-height:1.5;color:#506071}
+#incidentReadySection .incident-stage-links{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 4px}
+#incidentReadySection .incident-stage-links button,
+#incidentReadySection .incident-stage-links a{
+  appearance:none;border:1px solid #b7cae0;border-left:4px solid var(--incident-blue);border-radius:10px;background:#fff;
+  color:#0b5f9f;padding:9px 11px;font:inherit;font-size:.88rem;font-weight:900;line-height:1.2;cursor:pointer;text-decoration:none
+}
+#incidentReadySection .incident-stage-links button:hover,
+#incidentReadySection .incident-stage-links button:focus-visible,
+#incidentReadySection .incident-stage-links a:hover,
+#incidentReadySection .incident-stage-links a:focus-visible{outline:3px solid rgba(11,105,183,.14);outline-offset:1px}
+@media(max-width:680px){
+  #incidentReadySection .time-threshold-block{margin-left:-2px;margin-right:-2px;padding:12px}
+  #incidentReadySection .incident-stage-links{display:grid;grid-template-columns:1fr}
+  #incidentReadySection .incident-stage-links button,#incidentReadySection .incident-stage-links a{width:100%;text-align:left}
+}

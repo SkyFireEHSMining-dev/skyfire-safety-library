@@ -4,7 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>SkyFire MSHA Part 50 Decision Tree</title>
-<script>if(new URLSearchParams(location.search).get("embed")==="1")document.documentElement.classList.add("embed");</script>
+<script>
+const qs=new URLSearchParams(location.search);
+if(qs.get("embed")==="1")document.documentElement.classList.add("embed");
+function backToSkyFire(){
+  if(window.opener&&!window.opener.closed){window.close();return;}
+  if(history.length>1){history.back();return;}
+  window.location.href="../";
+}
+</script>
 <style>
   :root{
     --bg:#071019;--panel:#0d1824;--line:#29445e;--blue:#3d8cff;--blue2:#142c54;
@@ -97,7 +105,7 @@
 </style>
 </head>
 <body>
-<div class="toolbar"><button onclick="window.print()">Print / Save as PDF</button></div>
+<div class="toolbar"><button class="back" onclick="backToSkyFire()">← Back to SkyFire</button><button onclick="window.print()">Print / Save as PDF</button></div>
 <main class="poster" aria-label="SkyFire MSHA Part 50 decision tree">
   <header class="brand">
     <img src="../Icons/skyfire-logo.jpg" alt="SkyFire Safety logo">

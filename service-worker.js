@@ -1,6 +1,6 @@
-const SHELL_CACHE_NAME = "skyfire-quality-cache-v35";
+const SHELL_CACHE_NAME = "skyfire-quality-cache-v36";
 const DATA_CACHE_NAME = "skyfire-regulatory-data-v1";
-const CACHE_VERSION = "quality-v35";
+const CACHE_VERSION = "quality-v36";
 
 const SHELL_CACHE = [
   "./",
@@ -55,6 +55,7 @@ const SHELL_CACHE = [
   "./Icons/skyfire-logo.jpg",
   "./docs/SkyFire-Risk-Matrix.png",
   "./docs/SkyFire-Part-50-Decision-Tree-v0.16.html",
+  "./assets/SkyFire-Part-50-Decision-Tree-approved.jpeg",
   "./docs/MSHA-form-2000-7.pdf",
   "./docs/MSHA-form-2000-38.pdf",
   "./docs/MSHA-form-2000-224.pdf",
@@ -152,6 +153,7 @@ self.addEventListener("fetch", event => {
     url.pathname.endsWith("/incident-ready-v16.js") ||
     url.pathname.endsWith("/incident-ready-v16.css") ||
     url.pathname.endsWith("/docs/SkyFire-Part-50-Decision-Tree-v0.16.html") ||
+    url.pathname.endsWith("/assets/SkyFire-Part-50-Decision-Tree-approved.jpeg") ||
     url.pathname.endsWith("/mine-act-v16.js") ||
     url.pathname.endsWith("/mine-act-v16.css") ||
     url.pathname.endsWith("/mine-act-offline-depth-v16.js") ||

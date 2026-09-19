@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>SkyFire MSHA Part 50 Decision Tree</title>
 <script>
 const qs=new URLSearchParams(location.search);
@@ -14,201 +14,47 @@ function backToSkyFire(){
 }
 </script>
 <style>
-  :root{
-    --bg:#071019;--panel:#0d1824;--line:#29445e;--blue:#3d8cff;--blue2:#142c54;
-    --red:#e33b27;--red2:#441510;--gold:#f1b233;--gold2:#4a3510;--green:#2ca76f;--green2:#113b2c;
-    --text:#f7fbff;--muted:#c5d0dc;--white:#fff;--orange:#ff8a2c;
-  }
   *{box-sizing:border-box}
-  html,body{margin:0;background:#02060a;color:var(--text);font-family:Arial,Helvetica,sans-serif}
-  body{padding:18px}
-  .embed .toolbar{display:none}.embed body{padding:0}.embed .poster{border:0;box-shadow:none}\n  .toolbar{max-width:1120px;margin:0 auto 12px;display:flex;gap:10px;justify-content:flex-end}
-  .toolbar button{border:1px solid #7f93a7;background:#fff;color:#0b1620;padding:10px 14px;border-radius:10px;font-weight:800;cursor:pointer}
-  .poster{
-    width:min(1120px,100%);margin:auto;background:
-      radial-gradient(circle at 20% 12%,rgba(255,138,44,.12),transparent 24%),
-      linear-gradient(180deg,#08111a 0%,#03070b 100%);
-    border:1px solid #25384b;box-shadow:0 18px 60px rgba(0,0,0,.45);
-    padding:20px 24px 24px;min-height:1400px;
+  html,body{margin:0;background:#0b1016;color:#fff;font-family:Arial,Helvetica,sans-serif}
+  body{min-height:100vh;padding:16px}
+  .toolbar{
+    width:min(1122px,100%);margin:0 auto 12px;display:flex;gap:10px;
+    align-items:center;justify-content:space-between
   }
-  .brand{display:grid;grid-template-columns:180px 1fr;align-items:center;gap:18px;border-bottom:1px solid #26394c;padding-bottom:12px}
-  .brand img{width:170px;max-height:150px;object-fit:contain;filter:drop-shadow(0 5px 14px rgba(0,0,0,.45))}
-  .brand h1{margin:0;font-size:54px;letter-spacing:2px;line-height:.98;text-transform:uppercase}
-  .brand h1 span{display:block;color:var(--gold);font-size:66px}
-  .brand p{margin:8px 0 0;text-transform:uppercase;font-size:18px;letter-spacing:2.5px;color:#dce6f0;font-weight:800}
-  .emergency{margin:14px 0 16px;background:linear-gradient(90deg,#7f1812,#a7271c 50%,#73110e);border:1px solid #db4c37;border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:16px}
-  .emergency .icon{font-size:34px}
-  .emergency strong{font-size:24px;display:block;letter-spacing:.3px}
-  .emergency span{display:block;color:#ffe7df;margin-top:2px}
-  .main-grid{display:grid;grid-template-columns:1.75fr .72fr;gap:16px}
-  .flow{display:flex;flex-direction:column;gap:12px}
-  .start{align-self:center;background:linear-gradient(180deg,#13294a,#091629);border:1px solid #4a82c7;border-radius:12px;padding:12px 28px;font-size:20px;font-weight:900;text-align:center}
-  .decision{align-self:center;background:linear-gradient(180deg,#163466,#0b1730);border:1px solid #588de0;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);width:360px;min-height:150px;display:flex;align-items:center;justify-content:center;text-align:center;padding:36px 62px;font-weight:900;font-size:20px;line-height:1.25}
-  .branch-labels{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  .label{justify-self:center;padding:7px 18px;border-radius:6px;font-weight:900}
-  .yes{background:#ad281b;border:1px solid #ed543e}
-  .no{background:#173f79;border:1px solid #4b88db}
-  .flow-split{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  .panel{border:1px solid #42658b;border-radius:12px;background:linear-gradient(180deg,#0d1723,#081019);padding:14px}
-  .panel h2,.panel h3{margin:0 0 10px}
-  .urgent{border-color:#bd3c2b;background:linear-gradient(180deg,#431510,#200c0a)}
-  .urgent h2{color:#fff;text-align:center}
-  .step{display:grid;grid-template-columns:36px 1fr;gap:10px;border-top:1px solid rgba(255,255,255,.12);padding:10px 0}
-  .step:first-of-type{border-top:0}
-  .num{width:32px;height:32px;border-radius:50%;background:#c53625;display:flex;align-items:center;justify-content:center;font-weight:900}
-  .step strong{display:block;font-size:16px}
-  .step span{display:block;color:#e5e9ee;font-size:13px;line-height:1.35;margin-top:2px}
-  .injury{border-color:#3b76c5;background:linear-gradient(180deg,#0e1e35,#09111c)}
-  .injury h3{text-align:center}
-  .injury ul{margin:6px 0 0;padding-left:22px;color:#e8f0f8;line-height:1.4}
-  .result{padding:12px;border-radius:10px;text-align:center;font-weight:900}
-  .result.report{background:#70560d;border:1px solid #c79b22;color:#fff4bd}
-  .result.firstaid{background:#173d2c;border:1px solid #3e9e72;color:#dff8e9}
-  .result.internal{background:#12372b;border:1px solid #2b8b67;color:#e2fff2}
-  .accidents{border:1px solid #aa7b23;background:linear-gradient(180deg,#19140a,#090b0e);border-radius:12px;padding:14px}
-  .accidents h2{font-size:18px;text-align:center;color:var(--gold);margin:0 0 10px}
-  .accidents ol{margin:0;padding-left:22px;display:grid;gap:7px;font-size:13px;line-height:1.28}
-  .accidents li::marker{color:var(--gold);font-weight:900}
-  .accidents .call{margin-top:10px;color:#ffd85a;font-weight:900;text-align:center;font-size:13px}
-  .bottom-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:14px}
-  .bottom{border:1px solid #395575;background:#07111c;border-radius:12px;padding:13px}
-  .bottom h3{margin:0 0 8px;font-size:16px;color:#fff}
-  .bottom ul{margin:0;padding-left:20px;color:#dce7f1;font-size:13px;line-height:1.45}
-  .bottom li{margin:5px 0}
-  .time-row{display:grid;grid-template-columns:74px 1fr;gap:8px;margin:7px 0;font-size:13px}
-  .time-row strong{color:#fff}
-  .footer{display:grid;grid-template-columns:1.1fr 1fr;gap:14px;border-top:1px solid #31465d;margin-top:14px;padding-top:12px;align-items:start}
-  .motto{font-size:17px;letter-spacing:1.1px;font-weight:900;text-transform:uppercase}
-  .motto span{display:block;color:#9eacba;font-size:12px;margin-top:6px}
-  .sources{color:#b6c4d2;font-size:11px;line-height:1.45}
-  .source-checked{color:#f1b233;font-weight:800}
-  @media(max-width:760px){
-    body{padding:0}
-    .toolbar{padding:8px 10px;margin:0;background:#eef4f8;position:sticky;top:0;z-index:5}
-    .poster{border:0;padding:12px;min-height:0}
-    .brand{grid-template-columns:110px 1fr}
-    .brand img{width:105px}
-    .brand h1{font-size:28px}.brand h1 span{font-size:36px}.brand p{font-size:11px}
-    .emergency strong{font-size:17px}
-    .main-grid{grid-template-columns:1fr}
-    .flow-split{grid-template-columns:1fr}
-    .decision{width:300px;min-height:130px;font-size:17px}
-    .bottom-grid{grid-template-columns:1fr}
-    .footer{grid-template-columns:1fr}
+  .toolbar button{
+    appearance:none;border:1px solid #8193a5;background:#fff;color:#111b25;
+    padding:10px 14px;border-radius:10px;font:inherit;font-weight:800;cursor:pointer
+  }
+  .viewer{width:min(1122px,100%);margin:0 auto}
+  .viewer img{
+    display:block;width:100%;height:auto;margin:0 auto;background:#05080c;
+    box-shadow:0 14px 50px rgba(0,0,0,.42)
+  }
+  .embed body{padding:0;background:#05080c}
+  .embed .toolbar{display:none}
+  .embed .viewer{width:100%;max-width:none}
+  .embed .viewer img{box-shadow:none}
+  @media(max-width:680px){
+    body{padding:8px}
+    .toolbar{position:sticky;top:0;z-index:10;background:rgba(11,16,22,.94);padding:8px 0;margin-bottom:8px}
+    .toolbar button{padding:10px 11px;font-size:.92rem}
   }
   @media print{
-    @page{size:letter portrait;margin:.2in}
-    body{padding:0;background:#fff}
+    @page{size:letter portrait;margin:.25in}
+    html,body{width:8in;height:10.5in;background:#fff;padding:0;margin:0}
     .toolbar{display:none!important}
-    .poster{width:100%;box-shadow:none;border:0;min-height:0;transform:scale(.93);transform-origin:top left}
+    .viewer{width:8in;height:10.5in;margin:0 auto;display:flex;align-items:flex-start;justify-content:center}
+    .viewer img{width:8in;height:auto;max-height:10.5in;object-fit:contain;box-shadow:none;margin:0}
   }
 </style>
 </head>
 <body>
-<div class="toolbar"><button class="back" onclick="backToSkyFire()">← Back to SkyFire</button><button onclick="window.print()">Print / Save as PDF</button></div>
-<main class="poster" aria-label="SkyFire MSHA Part 50 decision tree">
-  <header class="brand">
-    <img src="../Icons/skyfire-logo.jpg" alt="SkyFire Safety logo">
-    <div>
-      <h1>MSHA Part 50<span>Decision Tree</span></h1>
-      <p>Quick guide for mine supervisors</p>
-    </div>
-  </header>
-
-  <section class="emergency">
-    <div class="icon">⚠ ☎</div>
-    <div><strong>MSHA EMERGENCY REPORTING: 1-800-746-1553</strong><span>If a Part 50 “accident” occurs, contact MSHA at once without delay and within 15 minutes once the operator knows or should know.</span></div>
-  </section>
-
-  <div class="main-grid">
-    <section class="flow">
-      <div class="start">⛑ SOMETHING HAPPENED AT THE MINE</div>
-      <div class="decision">IS IT AN “ACCIDENT” UNDER 30 CFR §50.2(h)?</div>
-      <div class="branch-labels"><div class="label yes">YES</div><div class="label no">NO</div></div>
-
-      <div class="flow-split">
-        <section class="panel urgent">
-          <h2>THIS IS A PART 50 ACCIDENT</h2>
-          <div class="step"><div class="num">1</div><div><strong>CALL MSHA NOW — 1-800-746-1553</strong><span>At once, without delay, and within 15 minutes once the operator knows or should know.</span></div></div>
-          <div class="step"><div class="num">2</div><div><strong>PROTECT PEOPLE / CONTROL IMMINENT HAZARDS</strong><span>Rescue, stabilize, and secure the area.</span></div></div>
-          <div class="step"><div class="num">3</div><div><strong>PRESERVE THE SCENE — §50.12</strong><span>Do not alter the accident site except as permitted for rescue/recovery, eliminating imminent danger, or preventing destruction of mining equipment unless the District Manager grants permission.</span></div></div>
-          <div class="step"><div class="num">4</div><div><strong>INVESTIGATE — §50.11</strong><span>The operator must investigate each accident and develop the required investigation report.</span></div></div>
-          <div class="step"><div class="num">5</div><div><strong>FILE FORM 7000-1 — §50.20</strong><span>Report each Part 50 accident within 10 working days, even when no occupational injury occurred.</span></div></div>
-        </section>
-
-        <section class="panel injury">
-          <h3>WAS ANYONE INJURED OR POTENTIALLY MADE ILL BY WORK?</h3>
-          <p><strong>Occupational injury — §50.2(e)</strong></p>
-          <ul>
-            <li>Medical treatment administered</li>
-            <li>Death or loss of consciousness</li>
-            <li>Unable to perform all job duties on any day after injury</li>
-            <li>Temporary assignment to other duties</li>
-            <li>Transfer to another job</li>
-          </ul>
-          <p><strong>Occupational illness — §50.2(f)</strong><br>Illness or disease that may have resulted from work at a mine, or for which compensation is awarded.</p>
-          <div class="result report">YES → FORM 7000-1 WITHIN 10 WORKING DAYS</div>
-          <div style="height:8px"></div>
-          <div class="result firstaid">FIRST AID ONLY / NO OCCUPATIONAL INJURY → NO 7000-1 FOR THAT MINOR INJURY</div>
-          <div style="height:8px"></div>
-          <div class="result internal">USE THE MINE’S INTERNAL INCIDENT / NEAR-MISS PROCESS AS APPROPRIATE</div>
-        </section>
-      </div>
-    </section>
-
-    <aside class="accidents">
-      <h2>THE 12 PART 50 “ACCIDENTS” — 30 CFR §50.2(h)</h2>
-      <ol>
-        <li>Death of an individual at a mine.</li>
-        <li>Injury to an individual at a mine with reasonable potential to cause death.</li>
-        <li>Entrapment for more than 30 minutes or with reasonable potential to cause death.</li>
-        <li>Unplanned inundation of a mine by a liquid or gas.</li>
-        <li>Unplanned ignition or explosion of gas or dust.</li>
-        <li>Unplanned fire not extinguished within 10 minutes underground, or 30 minutes at a surface mine/surface area.</li>
-        <li>Unplanned ignition or explosion of a blasting agent or explosive.</li>
-        <li>Qualifying unplanned roof or rib fall in active workings.</li>
-        <li>Coal or rock outburst causing withdrawal of miners or disrupting regular mining activity for more than one hour.</li>
-        <li>Qualifying unstable condition or failure of an impoundment, refuse pile, or culm bank.</li>
-        <li>Damage to shaft/slope hoisting equipment that endangers an individual or interferes with use for more than 30 minutes.</li>
-        <li>Mine event causing death or bodily injury to an individual not at the mine when the event occurs.</li>
-      </ol>
-      <div class="call">IF ANY OF THESE OCCUR, §50.10 IMMEDIATE NOTIFICATION APPLIES.</div>
-    </aside>
-  </div>
-
-  <div class="bottom-grid">
-    <section class="bottom">
-      <h3>WHEN THE 15-MINUTE DECISION IS UNCLEAR</h3>
-      <ul>
-        <li>Evaluate promptly against the exact §50.2(h) definition.</li>
-        <li>For “reasonable potential to cause death,” use the circumstances known or reasonably knowable at the time; do not wait for a final diagnosis merely to classify the event.</li>
-        <li>The 15-minute period is tied to when the operator knows or should know that an accident has occurred.</li>
-      </ul>
-    </section>
-    <section class="bottom">
-      <h3>TIME-BASED ACCIDENT THRESHOLDS</h3>
-      <div class="time-row"><strong>10 MIN</strong><span>Underground unplanned fire not extinguished.</span></div>
-      <div class="time-row"><strong>30 MIN</strong><span>Surface/surface-area unplanned fire not extinguished.</span></div>
-      <div class="time-row"><strong>&gt;30 MIN</strong><span>Entrapment independently qualifies; RPTCD can qualify sooner.</span></div>
-      <div class="time-row"><strong>&gt;30 MIN</strong><span>Hoisting-equipment interference independently qualifies; endangerment can qualify sooner.</span></div>
-      <div class="time-row"><strong>&gt;1 HR</strong><span>Coal/rock outburst disruption; withdrawal of miners independently qualifies.</span></div>
-    </section>
-    <section class="bottom">
-      <h3>KEY POINTS</h3>
-      <ul>
-        <li>Every Part 50 accident requires Form 7000-1.</li>
-        <li>Every Part 50 occupational injury or occupational illness requires Form 7000-1.</li>
-        <li>The emergency phone call and the 7000-1 filing are separate duties.</li>
-        <li>First aid by itself is not an occupational injury under Part 50; use §50.20-3 for treatment criteria.</li>
-        <li>The operator investigation report is separate from Form 7000-1 except for the limited small-mine exception in §50.11(b).</li>
-      </ul>
-    </section>
-  </div>
-
-  <footer class="footer">
-    <div class="motto">PROTECT PEOPLE. PRESERVE EVIDENCE. FOLLOW THE LAW.<span>SAFE MINES. STRONG TEAMS. SKYFIRE.</span></div>
-    <div class="sources"><strong>Primary references:</strong> 30 CFR §§50.2, 50.10, 50.11, 50.12, 50.20, 50.20-1, 50.20-3; Mine Act §103(j)/(k); current MSHA Form 7000-1 instructions. <span class="source-checked">Source checked September 18, 2026.</span><br>SkyFire field reference only — verify current controlling requirements and site-specific procedures.</div>
-  </footer>
+<div class="toolbar">
+  <button type="button" onclick="backToSkyFire()">← Back to SkyFire</button>
+  <button type="button" onclick="window.print()">Print / Save as PDF</button>
+</div>
+<main class="viewer" aria-label="Approved SkyFire MSHA Part 50 Decision Tree">
+  <img src="../assets/SkyFire-Part-50-Decision-Tree-approved.jpeg" alt="SkyFire MSHA Part 50 Decision Tree — approved field reference">
 </main>
 </body>
 </html>

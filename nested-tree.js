@@ -32,7 +32,7 @@
   loadOnce('script[data-inspection-ready-depth-v16="true"]', './inspection-ready-depth-v16.js?v=v0.16-inspection-ready-depth-2', 'inspectionReadyDepthV16');
   loadOnce('script[data-inspection-ready-types-v16="true"]', './inspection-ready-types-v16.js?v=v0.16-inspection-ready-types-2', 'inspectionReadyTypesV16');
   loadOnce('script[data-inspection-ready-lifecycle-depth-v16="true"]', './inspection-ready-lifecycle-depth-v16.js?v=v0.16-inspection-ready-lifecycle-depth-1', 'inspectionReadyLifecycleDepthV16');
-  loadOnce('script[data-incident-ready-v16="true"]', './incident-ready-v16.js?v=v0.16-incident-ready-2', 'incidentReadyV16');
+  loadOnce('script[data-incident-ready-v16="true"]', './incident-ready-v16.js?v=v0.16-incident-ready-3', 'incidentReadyV16');
   loadOnce('script[data-mine-act-v16="true"]', './mine-act-v16.js?v=v0.16-mine-act-1', 'mineActV16');
   loadOnce('script[data-mine-act-offline-depth-v16="true"]', './mine-act-offline-depth-v16.js?v=v0.16-mine-act-depth-1', 'mineActOfflineDepthV16');
   loadOnce('script[data-mine-act-crosswalk-v16="true"]', './mine-act-crosswalk-v16.js?v=v0.16-mine-act-crosswalk-1', 'mineActCrosswalkV16');

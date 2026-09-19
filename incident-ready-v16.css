@@ -11,7 +11,7 @@
   --incident-green-soft:#eef9f3;
   --incident-line:#d6e0e8;
 }
-#incidentReadySection{max-width:980px;margin:0 auto}
+#incidentReadySection{max-width:1120px;margin:0 auto}
 #incidentReadySection .incident-kicker{font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;font-weight:900;color:var(--incident-teal);margin-bottom:5px}
 #incidentReadySection .incident-intro{border-top:5px solid var(--incident-teal)}
 #incidentReadySection .incident-emergency{
@@ -31,9 +31,9 @@
   border:1px solid var(--incident-line);border-left:5px solid #6d7f94;border-radius:15px;background:#fff;padding:14px;margin:18px 0
 }
 #incidentReadySection .incident-visual-preview{
-  width:100%;aspect-ratio:1120/1400;border:1px solid #26384a;border-radius:12px;background:#071019;overflow:hidden;margin:10px 0
+  width:100%;aspect-ratio:1122/1402;border:1px solid #26384a;border-radius:12px;background:#071019;overflow:hidden;margin:10px 0
 }
-#incidentReadySection .incident-visual-preview iframe{width:100%;height:100%;border:0;pointer-events:none;transform-origin:top left}
+#incidentReadySection .incident-visual-preview img{display:block;width:100%;height:auto;border:0}
 #incidentReadySection .incident-action-row{display:flex;flex-wrap:wrap;gap:9px;margin-top:10px}
 #incidentReadySection .incident-action-btn{
   appearance:none;border:1px solid #b9c8d7;border-left:4px solid var(--incident-blue);background:#fff;color:#0b5b9b;
@@ -109,14 +109,14 @@
 #incidentReadySection .incident-source-card p{margin:0 0 7px;color:var(--muted);line-height:1.45}
 #incidentReadySection .incident-source-card a{font-weight:800}
 #safetyDocsSection .part50-doc-card{border-left:5px solid #6d7f94}
-#safetyDocsSection .part50-doc-preview{width:100%;aspect-ratio:1120/1400;overflow:hidden;border:1px solid #26384a;border-radius:10px;background:#071019;margin:10px 0}
-#safetyDocsSection .part50-doc-preview iframe{width:100%;height:100%;border:0;pointer-events:none}
+#safetyDocsSection .part50-doc-preview{width:100%;aspect-ratio:1122/1402;overflow:hidden;border:1px solid #26384a;border-radius:10px;background:#071019;margin:10px 0}
+#safetyDocsSection .part50-doc-preview img{display:block;width:100%;height:auto;border:0}
 #safetyDocsSection .part50-doc-meta{font-size:.82rem;color:var(--muted);margin-top:7px}
 @media(max-width:680px){
   #incidentReadySection .accident-grid,#incidentReadySection .time-grid{grid-template-columns:1fr}
   #incidentReadySection .incident-action-row{flex-direction:column}
   #incidentReadySection .incident-action-btn{width:100%}
-  #incidentReadySection .incident-visual-preview{aspect-ratio:4/5}
+  #incidentReadySection .incident-visual-preview{aspect-ratio:1122/1402}
   #incidentReadySection .incident-stage{border-right:0;border-radius:0}
   #incidentReadySection .incident-stage>summary{padding:13px 11px}
   #incidentReadySection .incident-stage-body{padding:14px 11px}
@@ -151,4 +151,9 @@
   #incidentReadySection .time-threshold-block{margin-left:-2px;margin-right:-2px;padding:12px}
   #incidentReadySection .incident-stage-links{display:grid;grid-template-columns:1fr}
   #incidentReadySection .incident-stage-links button,#incidentReadySection .incident-stage-links a{width:100%;text-align:left}
+}
+
+@media(min-width:1100px){
+  #incidentReadySection .incident-visual-card{padding:18px}
+  #incidentReadySection .incident-visual-preview{max-width:1122px;margin:12px auto}
 }

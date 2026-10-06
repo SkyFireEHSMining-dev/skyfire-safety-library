@@ -1,0 +1,104 @@
+name: v0.17 MSHA forms binary audit
+
+on:
+  push:
+    branches:
+      - v0.17/forms-audit-57
+    paths:
+      - ".github/workflows/forms-audit-fetch.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v0.17/forms-audit-57
+          fetch-depth: 0
+
+      - name: Install PDF text tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq poppler-utils
+
+      - name: Fetch and compare authoritative MSHA PDFs
+        shell: bash
+        run: |
+          set -u
+          mkdir -p /tmp/msha-current
+          REPORT="docs/MSHA_FORMS_BINARY_COMPARE_v0.17.md"
+          {
+            echo "# MSHA Forms Binary Comparison — v0.17"
+            echo
+            echo "**Generated:** $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            echo
+            echo "This report compares SkyFire's local PDF bytes against the official MSHA PDF URL used for the v0.17 source audit. A DIFFERENT result means the local file must be reviewed; it does not by itself prove the local form is obsolete unless the source review also establishes that prior editions are obsolete."
+            echo
+            echo "| Form | Local SHA-256 | Official SHA-256 | Result | Official PDF revision text |"
+            echo "|---|---|---|---|---|"
+          } > "$REPORT"
+
+          audit_one () {
+            FORM="$1"
+            URL="$2"
+            LOCAL="docs/MSHA-form-$FORM.pdf"
+            OUT="/tmp/msha-current/MSHA-form-$FORM.pdf"
+
+            if ! curl --fail --location --retry 3 --retry-delay 2 \
+              --user-agent "Mozilla/5.0 (compatible; SkyFire source-integrity audit)" \
+              "$URL" -o "$OUT"; then
+              echo "| $FORM | — | — | FETCH FAILED | $URL |" >> "$REPORT"
+              return 0
+            fi
+
+            if [ "$(head -c 4 "$OUT")" != "%PDF" ]; then
+              echo "| $FORM | — | — | NOT PDF | $URL |" >> "$REPORT"
+              return 0
+            fi
+
+            LOCAL_SHA="$(sha256sum "$LOCAL" | awk '{print $1}')"
+            OFFICIAL_SHA="$(sha256sum "$OUT" | awk '{print $1}')"
+            if [ "$LOCAL_SHA" = "$OFFICIAL_SHA" ]; then RESULT="MATCH"; else RESULT="DIFFERENT"; fi
+
+            REV="$(pdftotext -layout "$OUT" - 2>/dev/null | grep -E -i 'MSHA Form|\(Rev\.\)|Revised|Previous editions' | tail -n 4 | tr '\n' ' ' | sed 's/|/\\|/g' | sed 's/[[:space:]]\+/ /g' | cut -c1-220)"
+            [ -n "$REV" ] || REV="Text extraction unavailable / XFA"
+
+            echo "| $FORM | \`$LOCAL_SHA\` | \`$OFFICIAL_SHA\` | **$RESULT** | $REV |" >> "$REPORT"
+          }
+
+          audit_one "5000-23" "https://www.msha.gov/sites/default/files/Support_Resources/Forms/2025/MSHA_5000-23.pdf"
+          audit_one "2000-7" "https://www.msha.gov/sites/default/files/Support_Resources/Forms/2025/MSHA_2000-7.pdf"
+          audit_one "2000-238" "https://www.msha.gov/sites/default/files/Support_Resources/Forms/2025/MSHA_2000-238.pdf"
+          audit_one "7000-51" "https://www.msha.gov/sites/default/files/Support_Resources/Forms/2025/MSHA_7000-51.pdf"
+          audit_one "7000-2" "https://www.msha.gov/sites/default/files/Support_Resources/Forms/MSHA_7000-2.pdf"
+          audit_one "7000-1" "https://www.msha.gov/sites/default/files/Support_Resources/Forms/7000-1.pdf"
+          audit_one "2000-224" "https://www.msha.gov/sites/default/files/Support_Resources/Forms/2025/MSHA_2000-224.pdf"
+          audit_one "5000-3" "https://www.msha.gov/sites/default/files/Support_Resources/Forms/2025/MSHA_5000-3.pdf"
+          audit_one "5000-46" "https://www.msha.gov/sites/default/files/Support_Resources/Forms/2025/MSHA_5000-46.pdf"
+          audit_one "5000-41" "https://www.msha.gov/sites/default/files/Support_Resources/Forms/5000-41.pdf"
+          audit_one "4000-9" "https://www.msha.gov/sites/default/files/Support_Resources/Forms/4000-9.pdf"
+          audit_one "2000-38" "https://www.msha.gov/sites/default/files/Support_Resources/Forms/2000-38.pdf"
+
+          {
+            echo
+            echo "## Not included in direct PDF comparison"
+            echo
+            echo "- **7000-52** — current MSHA process is presented as an online Contractor ID Request; the status of SkyFire's legacy printable PDF is being handled as a filing-path/product decision rather than assuming a direct current PDF exists."
+            echo "- **5000-1** — current OMB/MSHA title and program status are verified, but the current instrument is exposed through the MSHA forms/online-filing path rather than a stable direct PDF URL in this audit pass."
+          } >> "$REPORT"
+
+      - name: Commit audit report
+        run: |
+          if git diff --quiet -- docs/MSHA_FORMS_BINARY_COMPARE_v0.17.md; then
+            echo "No report change."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/MSHA_FORMS_BINARY_COMPARE_v0.17.md
+          git commit -m "Record MSHA forms binary comparison"
+          git push origin HEAD:v0.17/forms-audit-57

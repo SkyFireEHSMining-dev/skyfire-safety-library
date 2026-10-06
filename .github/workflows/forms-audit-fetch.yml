@@ -31,6 +31,23 @@ jobs:
           set -u
           mkdir -p /tmp/msha-current
           REPORT="docs/MSHA_FORMS_BINARY_COMPARE_v0.17.md"
+          LOCAL_REPORT="docs/MSHA_FORMS_LOCAL_REVISIONS_v0.17.md"
+          {
+            echo "# MSHA Forms Local Revision Inventory — v0.17"
+            echo
+            echo "**Generated:** $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            echo
+            echo "| Form | Local SHA-256 | Extracted local revision / OMB text |"
+            echo "|---|---|---|"
+            for LOCAL in docs/MSHA-form-*.pdf; do
+              FORM="$(basename "$LOCAL" .pdf | sed 's/^MSHA-form-//')"
+              SHA="$(sha256sum "$LOCAL" | awk '{print $1}')"
+              TXT="$(pdftotext -layout "$LOCAL" - 2>/dev/null | grep -E -i 'MSHA Form|\(Rev\.\)|Revised|Previous editions|OMB Control|OMB Number|Approval Expires|Expiration' | tail -n 6 | tr '\n' ' ' | sed 's/|/\\|/g' | sed 's/[[:space:]]\+/ /g' | cut -c1-320 || true)"
+              [ -n "$TXT" ] || TXT="Text extraction unavailable / XFA"
+              echo "| $FORM | \`$SHA\` | $TXT |"
+            done
+          } > "$LOCAL_REPORT"
+
           {
             echo "# MSHA Forms Binary Comparison — v0.17"
             echo
@@ -102,12 +119,12 @@ jobs:
 
       - name: Commit audit report
         run: |
-          if [ -z "$(git status --porcelain -- docs/MSHA_FORMS_BINARY_COMPARE_v0.17.md)" ]; then
+          if [ -z "$(git status --porcelain -- docs/MSHA_FORMS_BINARY_COMPARE_v0.17.md docs/MSHA_FORMS_LOCAL_REVISIONS_v0.17.md)" ]; then
             echo "No report change."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/MSHA_FORMS_BINARY_COMPARE_v0.17.md
+          git add docs/MSHA_FORMS_BINARY_COMPARE_v0.17.md docs/MSHA_FORMS_LOCAL_REVISIONS_v0.17.md
           git commit -m "Record MSHA forms binary comparison"
           git push origin HEAD:v0.17/forms-audit-57

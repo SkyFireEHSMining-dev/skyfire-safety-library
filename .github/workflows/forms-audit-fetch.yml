@@ -72,7 +72,7 @@ jobs:
             OFFICIAL_SHA="$(sha256sum "$OUT" | awk '{print $1}')"
             if [ "$LOCAL_SHA" = "$OFFICIAL_SHA" ]; then RESULT="MATCH"; else RESULT="DIFFERENT"; fi
 
-            REV="$(pdftotext -layout "$OUT" - 2>/dev/null | grep -E -i 'MSHA Form|\(Rev\.\)|Revised|Previous editions' | tail -n 4 | tr '\n' ' ' | sed 's/|/\\|/g' | sed 's/[[:space:]]\+/ /g' | cut -c1-220)"
+            REV="$(pdftotext -layout "$OUT" - 2>/dev/null | grep -E -i 'MSHA Form|\(Rev\.\)|Revised|Previous editions' | tail -n 4 | tr '\n' ' ' | sed 's/|/\\|/g' | sed 's/[[:space:]]\+/ /g' | cut -c1-220 || true)"
             [ -n "$REV" ] || REV="Text extraction unavailable / XFA"
 
             echo "| $FORM | $SOURCE | \`$LOCAL_SHA\` | \`$OFFICIAL_SHA\` | **$RESULT** | $REV |" >> "$REPORT"

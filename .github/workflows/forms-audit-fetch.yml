@@ -93,7 +93,7 @@ jobs:
 
       - name: Commit audit report
         run: |
-          if git diff --quiet -- docs/MSHA_FORMS_BINARY_COMPARE_v0.17.md; then
+          if [ -z "$(git status --porcelain -- docs/MSHA_FORMS_BINARY_COMPARE_v0.17.md)" ]; then
             echo "No report change."
             exit 0
           fi

@@ -1,6 +1,6 @@
 # MSHA Forms Binary Comparison — v0.17
 
-**Generated:** 2026-10-06T23:07:29Z
+**Generated:** 2026-10-06T23:09:42Z
 
 This report compares SkyFire's local PDF bytes against the official MSHA PDF URL used for the v0.17 source audit. A DIFFERENT result means the local file must be reviewed; it does not by itself prove the local form is obsolete unless the source review also establishes that prior editions are obsolete.
 

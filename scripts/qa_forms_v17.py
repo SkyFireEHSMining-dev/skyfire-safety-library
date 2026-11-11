@@ -40,6 +40,11 @@ for item in forms:
     link = f'docs/MSHA-form-{n}.pdf'
     assert_true(HTML.count(f'href="{link}"') == 2, f"{n}: expected open and download links")
     assert_true(f'./{link}' in SW, f"{n}: no explicit offline shell entry")
+    card_anchor = f'<h4>MSHA Form {n}</h4>'
+    assert_true(HTML.count(card_anchor) == 1, f"{n}: missing/duplicate card")
+    card = HTML.split(card_anchor, 1)[1].split('</div>', 1)[0]
+    assert_true('https://www.msha.gov/' in card,
+                f"{n}: official agency source or filing instructions missing from card")
     subprocess.run(["pdfinfo", str(path)], check=True, capture_output=True)
     if n in KNOWN_SHA256:
         assert_true(hashlib.sha256(data).hexdigest() == KNOWN_SHA256[n],

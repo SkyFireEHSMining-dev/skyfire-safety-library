@@ -1,4 +1,4 @@
-# SkyFire v0.17 — MSHA Forms Library Source Audit
+> **November 10, 2026 recovery update (supersedes Phase 1 outstanding-form status below):** Four local PDF blanks have been updated on the draft branch with SHA-guarded federal instrument sources: 5000-23 (February 2025), 7000-51 (February 2025), 2000-38 (April 2013 source instrument), and 4000-9 (August 2015 revision with newer OMB instrument metadata). The old/new checksums and source URLs are preserved in `MSHA_FORMS_BINARY_REPLACEMENTS_v0.17.md` and `MSHA_FORMS_BINARY_REPLACEMENTS_FOLLOWUP_v0.17.md`. The previous Phase 1 findings below are retained as historical audit evidence, not the current draft branch disposition. **Open:** current-source/revision confidence for remaining form variants, XFA/browser rendering, manual Safari/iPad/device QA, official-filing route review, and release acceptance. The v0.17 scope was reduced to #57; issues #75 and #76 remain deferred. No merge or release is implied.\n\n# SkyFire v0.17 — MSHA Forms Library Source Audit
 
 **Issue:** #57  
 **Audit started:** October 6, 2026  

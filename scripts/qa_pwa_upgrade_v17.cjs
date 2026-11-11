@@ -16,8 +16,7 @@ const path = require("node:path");
     const ks = await caches.keys();
     const versions = {};
     for (const name of ks) {
-      const cache = await caches.open(name);
-      const response = await cache.match("./docs/MSHA-form-5000-23.pdf");
+      const response = await caches.match("./docs/MSHA-form-5000-23.pdf",{cacheName:name});
       if (response) {
         const digest = await crypto.subtle.digest("SHA-256",await response.arrayBuffer());
         versions[name] = Array.from(new Uint8Array(digest)).map(x=>x.toString(16).padStart(2,"0")).join("");
@@ -49,6 +48,11 @@ const path = require("node:path");
       const sha=Array.from(new Uint8Array(d)).map(x=>x.toString(16).padStart(2,"0")).join("");
       return sha===expected;
     },oldSha,{timeout:90000});
+    await page.waitForFunction(async()=>{
+      const reg=await navigator.serviceWorker.getRegistration();
+      return reg?.active?.state==="activated" && !reg.installing && !reg.waiting;
+    },null,{timeout:30000});
+    await page.waitForTimeout(800);
     let s=await dump();
     console.log("PRE-UPGRADE",JSON.stringify(s));
     if(s.versions["skyfire-quality-cache-v36"] !== oldSha) throw new Error("Old installed cached form hash mismatch: "+JSON.stringify(s.versions));
@@ -60,13 +64,22 @@ const path = require("node:path");
     await page.waitForFunction(async expected => {
       const ks=await caches.keys();
       if(!ks.includes("skyfire-quality-cache-v39")) return false;
-      const newCache=await caches.open("skyfire-quality-cache-v39");
-      const cached=await newCache.match("./docs/MSHA-form-5000-23.pdf");
+      const cached=await caches.match("./docs/MSHA-form-5000-23.pdf",{cacheName:"skyfire-quality-cache-v39"});
       if(!cached) return false;
       const d=await crypto.subtle.digest("SHA-256",await cached.arrayBuffer());
       const h=Array.from(new Uint8Array(d)).map(x=>x.toString(16).padStart(2,"0")).join("");
       return h===expected;
     },newSha,{timeout:90000});
+    await page.waitForFunction(async(expected)=>{
+      const regs=await navigator.serviceWorker.getRegistration();
+      if(regs?.active?.state!=="activated" || regs.installing || regs.waiting)return false;
+      const cached=await caches.match("./docs/MSHA-form-5000-23.pdf",{cacheName:"skyfire-quality-cache-v39"});
+      if(!cached)return false;
+      const digest=await crypto.subtle.digest("SHA-256",await cached.arrayBuffer());
+      const sha=Array.from(new Uint8Array(digest)).map(x=>x.toString(16).padStart(2,"0")).join("");
+      return sha===expected;
+    },newSha,{timeout:60000});
+    await page.waitForTimeout(800);
     s=await dump();
     console.log("POST-UPGRADE",JSON.stringify(s));
     if(s.versions["skyfire-quality-cache-v39"]!==newSha)

@@ -6,6 +6,7 @@ on:
       - .github/workflows/qa-browser-v17.yml
       - scripts/qa_forms_browser_v17.cjs
       - scripts/qa_forms_webkit_v17.cjs
+      - scripts/qa_regression_v17.cjs
       - index.html
       - service-worker.js
       - "docs/MSHA-form-*.pdf"
@@ -27,3 +28,4 @@ jobs:
           sleep 3
           node scripts/qa_forms_browser_v17.cjs
           node scripts/qa_forms_webkit_v17.cjs
+          node scripts/qa_regression_v17.cjs

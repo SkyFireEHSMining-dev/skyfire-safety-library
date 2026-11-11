@@ -79,6 +79,15 @@ const path = require("node:path");
       const sha=Array.from(new Uint8Array(digest)).map(x=>x.toString(16).padStart(2,"0")).join("");
       return sha===expected;
     },newSha,{timeout:60000});
+    // The new shell cache may be populated before its service worker activates.
+    // Do not interpret a populated v39 cache as proof the old controller has retired.
+    await page.waitForFunction(async()=>{
+      const keys=await caches.keys();
+      const reg=await navigator.serviceWorker.getRegistration();
+      return keys.includes("skyfire-quality-cache-v39") &&
+        !keys.includes("skyfire-quality-cache-v36") &&
+        reg?.active?.state==="activated" && !reg.installing && !reg.waiting;
+    },null,{timeout:90000});
     await page.waitForTimeout(800);
     s=await dump();
     console.log("POST-UPGRADE",JSON.stringify(s));

@@ -14,14 +14,17 @@ const path = require("node:path");
   const newLink = path.resolve(process.cwd(),"live-next");
   const dump = async () => page.evaluate(async () => {
     const ks = await caches.keys();
-    const response = await caches.match("/docs/MSHA-form-5000-23.pdf");
-    let sha = null;
-    if (response) {
-      const data = await response.arrayBuffer();
-      const digest = await crypto.subtle.digest("SHA-256",data);
-      sha = Array.from(new Uint8Array(digest)).map(x=>x.toString(16).padStart(2,"0")).join("");
+    const versions = {};
+    for (const name of ks) {
+      const cache = await caches.open(name);
+      const response = await cache.match("./docs/MSHA-form-5000-23.pdf");
+      if (response) {
+        const digest = await crypto.subtle.digest("SHA-256",await response.arrayBuffer());
+        versions[name] = Array.from(new Uint8Array(digest)).map(x=>x.toString(16).padStart(2,"0")).join("");
+      } else versions[name]=null;
     }
-    return {keys:ks,sha,sw:(await navigator.serviceWorker.getRegistration())?.active?.scriptURL};
+    return {keys:ks,versions,controller:navigator.serviceWorker.controller?.scriptURL,
+      sw:(await navigator.serviceWorker.getRegistration())?.active?.scriptURL};
   });
   try {
     await page.goto(base,{waitUntil:"domcontentloaded",timeout:45000});
@@ -48,7 +51,7 @@ const path = require("node:path");
     },oldSha,{timeout:90000});
     let s=await dump();
     console.log("PRE-UPGRADE",JSON.stringify(s));
-    if(s.sha !== oldSha) throw new Error("Old installed cached form hash mismatch: "+s.sha);
+    if(s.versions["skyfire-quality-cache-v36"] !== oldSha) throw new Error("Old installed cached form hash mismatch: "+JSON.stringify(s.versions));
     // Keep the same origin and browser profile; atomically update the served directory.
     if(fs.existsSync(newLink)) fs.unlinkSync(newLink);
     fs.symlinkSync("draft",newLink);
@@ -56,8 +59,9 @@ const path = require("node:path");
     await page.evaluate(async () => (await navigator.serviceWorker.getRegistration()).update());
     await page.waitForFunction(async expected => {
       const ks=await caches.keys();
-      if(!ks.includes("skyfire-quality-cache-v39") || ks.includes("skyfire-quality-cache-v36")) return false;
-      const cached=await caches.match("/docs/MSHA-form-5000-23.pdf");
+      if(!ks.includes("skyfire-quality-cache-v39")) return false;
+      const newCache=await caches.open("skyfire-quality-cache-v39");
+      const cached=await newCache.match("./docs/MSHA-form-5000-23.pdf");
       if(!cached) return false;
       const d=await crypto.subtle.digest("SHA-256",await cached.arrayBuffer());
       const h=Array.from(new Uint8Array(d)).map(x=>x.toString(16).padStart(2,"0")).join("");
@@ -65,7 +69,8 @@ const path = require("node:path");
     },newSha,{timeout:90000});
     s=await dump();
     console.log("POST-UPGRADE",JSON.stringify(s));
-    if(s.sha!==newSha)throw new Error("New cached PDF checksum not installed");
+    if(s.versions["skyfire-quality-cache-v39"]!==newSha)
+      throw new Error("New named cache has wrong PDF checksum: "+JSON.stringify(s.versions));
     await page.reload({waitUntil:"domcontentloaded",timeout:30000});
     await page.locator("button.skyfire-hub-home-tile.regulatory-hub").click({timeout:20000});
     await page.locator("#regulatoryResourcesHubSection button.skyfire-hub-item").filter({hasText:"MSHA Forms Library"}).click();
@@ -82,6 +87,14 @@ const path = require("node:path");
       return results;
     });
     if(offline.some(x=>x.status!==200 || x.bytes<10000))throw Error("Offline corrected files absent "+JSON.stringify(offline));
+    const offlineHash=await page.evaluate(async()=>{
+      const r=await fetch("docs/MSHA-form-5000-23.pdf");
+      const d=await crypto.subtle.digest("SHA-256",await r.arrayBuffer());
+      return Array.from(new Uint8Array(d)).map(x=>x.toString(16).padStart(2,"0")).join("");
+    });
+    if(offlineHash!==newSha)throw Error("Actual OFFLINE fetch returned stale 5000-23: "+offlineHash);
+    const finalState=await dump();
+    console.log("FINAL-CACHE",JSON.stringify(finalState));
     console.log("PASS v0.16 -> v0.17 cache upgrade and offline availability",JSON.stringify(offline));
   } finally {await browser.close();}
 })().catch(err=>{console.error("FAIL PWA upgrade test",err.stack||err);process.exit(1)});

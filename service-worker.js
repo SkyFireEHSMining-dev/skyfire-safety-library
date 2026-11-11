@@ -85,10 +85,10 @@ self.addEventListener("install", event => {
           console.warn("Install cache skipped:", asset, error);
         }
       }
+      // Activate only after the corrected cache is fully populated.
+      await self.skipWaiting();
     })()
   );
-
-  self.skipWaiting();
 });
 
 self.addEventListener("activate", event => {

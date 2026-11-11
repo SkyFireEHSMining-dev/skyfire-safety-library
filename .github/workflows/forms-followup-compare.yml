@@ -1,0 +1,37 @@
+name: Temporary v0.17 form source comparison
+on:
+  push:
+    branches: [v0.17/forms-audit-57]
+    paths:
+      - .github/workflows/forms-followup-compare.yml
+permissions:
+  contents: read
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inspect differing government instrument PDFs
+        shell: bash
+        run: |
+          set -u
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq poppler-utils
+          mkdir -p /tmp/forms-check
+          check_form () {
+            local FORM="$1" URL="$2" DEST="/tmp/forms-check/$1.pdf" LOCAL="docs/MSHA-form-$1.pdf"
+            echo "===== FORM $FORM ====="
+            echo "LOCAL_SHA $(sha256sum "$LOCAL" | cut -d' ' -f1)"
+            echo "LOCAL_REV $(pdftotext -layout "$LOCAL" - 2>/dev/null | grep -E -i 'MSHA Form|revised|Rev.|OMB|Expires' | tail -n 7 | tr '\\n' ' ' | cut -c1-600)"
+            if curl -L --fail --retry 2 --retry-delay 1 --max-time 30 --user-agent 'Mozilla/5.0' "$URL" -o "$DEST" >/dev/null 2>&1 && [ "$(head -c4 "$DEST")" = "%PDF" ]; then
+              echo "OFFICIAL_SHA $(sha256sum "$DEST" | cut -d' ' -f1)"
+              echo "OFFICIAL_REV $(pdftotext -layout "$DEST" - 2>/dev/null | grep -E -i 'MSHA Form|revised|Rev.|OMB|Expires' | tail -n 7 | tr '\\n' ' ' | cut -c1-600)"
+              echo "OFFICIAL_PDF $(pdfinfo "$DEST" 2>/dev/null | grep -E 'Pages:|Page size:|Form:|PDF version:' | tr '\\n' ' ')"
+            else
+              echo "OFFICIAL_FETCH_BLOCKED"
+            fi
+          }
+          check_form 5000-1 'https://www.reginfo.gov/public/do/DownloadDocument?objectID=157047401'
+          check_form 2000-38 'https://www.reginfo.gov/public/do/DownloadDocument?objectID=143355601'
+          check_form 4000-9 'https://www.reginfo.gov/public/do/DownloadDocument?objectID=130233001'
+          check_form 2000-224 'https://www.reginfo.gov/public/do/DownloadDocument?objectID=95631301'

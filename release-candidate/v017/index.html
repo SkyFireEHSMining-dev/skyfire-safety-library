@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="robots" content="noindex, nofollow">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>SkyFire v0.17 — QA Preview (Not Live)</title>
+  <meta name="theme-color" content="#0b0b0b">
+  <meta
+    name="description"
+    content="SkyFire Safety Library - Field Safety Hub for CFR access, mine safety reference, risk assessment, and offline-ready use."
+  >
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="Icons/icon-192.png">
+  <link rel="apple-touch-icon" href="Icons/icon-192.png">
+  <link rel="stylesheet" href="styles.css?v=feedback-v1">
+  <link rel="stylesheet" href="feedback.css?v=feedback-v1">
+
+  <script src="app.js?v=feedback-v1" defer></script>
+  <script src="risk-matrix.js?v=feedback-v1" defer></script>
+  <script src="feedback.js?v=feedback-v1" defer></script>
+</head>
+<body>
+  <div id="skyfire-v017-test-banner" role="note" style="box-sizing:border-box;background:#fff3d6;color:#5d3500;border-bottom:2px solid #b97412;padding:9px 14px;text-align:center;font:600 13px/1.45 system-ui,-apple-system,sans-serif;position:relative;z-index:99999">SkyFire v0.17 TEST PREVIEW — Not the live app. Do not use cached forms as proof of current MSHA filing requirements.</div>
+
+  <header class="main-header">
+    <div class="brand-row">
+      <img src="Icons/icon-192.png" alt="SkyFire logo" class="brand-logo">
+      <div class="brand-text">
+        <h1>SkyFire Safety Library</h1>
+        <p class="subtitle">Field Safety Hub</p>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <section id="homeSection" class="app-section">
+      <section class="home-info-strip">
+        <div class="quick-info-card">
+          <div class="quick-info-banner">
+            <span class="quick-banner-title">Field Status Dashboard</span>
+            <span class="quick-banner-subtitle">SkyFire Safety Library v0.16 Beta — MSHA Ready adds the Mine Act, Inspection Ready, and Part 50 Incident Ready decision support.</span>
+          </div>
+
+          <div class="quick-info-item">
+            <span class="quick-label">Tool Status</span>
+            <span class="quick-value" id="fatalityStat">Active - online and offline-ready</span>
+          </div>
+
+          <div class="quick-info-item quick-info-wide">
+            <span class="quick-label">Quick Safety Note</span>
+            <span class="quick-value" id="fatalgramNote">
+              Verify site-specific requirements before relying on any general safety tool.
+            </span>
+          </div>
+
+          <div class="quick-info-item">
+            <span class="quick-label">Last Updated</span>
+            <span class="quick-value" id="homeLastUpdated">September 22, 2026</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="dashboard-grid">
+        <button class="dashboard-tile" data-open-section="riskMatrixSection">
+          <span class="tile-title">Risk Assessment Matrix</span>
+          <span class="tile-subtitle">Use the SkyFire FMEA-style matrix to evaluate severity, occurrence, detection, and post-control risk.</span>
+        </button>
+
+        <button class="dashboard-tile" data-open-section="roiCalculatorSection">
+          <span class="tile-title">Safety ROI Calculator</span>
+          <span class="tile-subtitle">Estimate the operational and financial impact of safety decisions.</span>
+        </button>
+
+        <button class="dashboard-tile" data-open-section="cfrSection">
+          <span class="tile-title">MSHA / 30 CFR</span>
+          <span class="tile-subtitle">Browse the offline MSHA field reference.</span>
+        </button>
+
+        <button class="dashboard-tile osha-home-tile" data-open-section="oshaSection">
+          <span class="tile-title">OSHA / 29 CFR</span>
+          <span class="tile-subtitle">Browse the offline OSHA field reference.</span>
+        </button>
+
+        <button class="dashboard-tile" data-open-section="docsSection">
+          <span class="tile-title">MSHA Forms Library</span>
+          <span class="tile-subtitle">Common MSHA forms organized by use and file name.</span>
+        </button>
+
+        <button class="dashboard-tile" data-open-section="safetyDocsSection">
+  <span class="tile-title">Safety Docs</span>
+  <span class="tile-subtitle">Printable SkyFire safety resources and field documents.</span>
+</button>
+
+<button class="dashboard-tile" data-open-section="toolboxTalksSection">
+  <span class="tile-title">Toolbox Talks</span>
+  <span class="tile-subtitle">Short safety meeting prompts and discussion guides.</span>
+</button>
+
+        <button class="dashboard-tile feedback-home-tile" data-open-section="feedbackSection">
+          <span class="tile-title">Feedback &amp; Suggestions</span>
+          <span class="tile-subtitle">Help improve SkyFire by sharing an idea, reporting a problem, or providing feedback.</span>
+        </button>
+
+        <button class="dashboard-tile" data-open-section="aboutSection">
+          <span class="tile-title">About SkyFire</span>
+          <span class="tile-subtitle">Project information, purpose, disclaimer, and creator details.</span>
+        </button>
+      </section>
+    </section>
+
+    <section id="cfrSection" class="app-section hidden">
+      <div class="module-header">
+        <button class="module-home-btn" data-open-section="homeSection">Back Home</button>
+        <div class="module-header-text">
+          <h2>MSHA / 30 CFR Field Reference</h2>
+          <p>Browse and search the MSHA module.</p>
+        </div>
+      </div>
+
+      <div class="module-search-wrap">
+        <input type="text" id="searchBar" placeholder="Search MSHA / 30 CFR...">
+      </div>
+
+      <div id="statusMessage">Loading CFR data...</div>
+
+      <div class="layout">
+        <aside id="bookmarkSidebar">
+          <h2>Bookmarks</h2>
+          <p>Save important sections here for quick access.</p>
+
+          <div class="folder-create-row">
+            <input type="text" id="newFolderInput" placeholder="New folder name">
+            <button id="createFolderBtn">Create</button>
+          </div>
+
+          <div class="bookmark-button-row sidebar-button-row">
+            <button id="exportBookmarksBtn">Export Bookmarks</button>
+            <button id="importBookmarksBtn">Import Bookmarks</button>
+          </div>
+
+          <input type="file" id="importBookmarksInput" accept=".json,application/json" style="display: none;">
+
+          <div id="bookmarkFolders">
+            <p><em>No bookmarks yet.</em></p>
+          </div>
+        </aside>
+
+        <section id="cfrContainer"></section>
+      </div>
+    </section>
+
+    <section id="oshaSection" class="app-section hidden">
+      <div class="module-header osha-module-header">
+        <button class="module-home-btn" data-open-section="homeSection">Back Home</button>
+        <div class="module-header-text">
+          <h2>OSHA / 29 CFR Field Reference</h2>
+          <p>Browse and search the OSHA module.</p>
+        </div>
+      </div>
+
+      <div class="module-search-wrap">
+        <input type="text" id="oshaSearchBar" placeholder="Search OSHA / 29 CFR...">
+      </div>
+
+      <div id="oshaStatusMessage">Loading OSHA data...</div>
+
+      <div class="layout">
+        <aside id="oshaBookmarkSidebar">
+          <h2>Bookmarks</h2>
+          <p>Save important sections here for quick access.</p>
+
+          <div class="folder-create-row">
+            <input type="text" id="oshaNewFolderInput" placeholder="New folder name">
+            <button id="oshaCreateFolderBtn">Create</button>
+          </div>
+
+          <div class="bookmark-button-row sidebar-button-row">
+            <button id="oshaExportBookmarksBtn">Export Bookmarks</button>
+            <button id="oshaImportBookmarksBtn">Import Bookmarks</button>
+          </div>
+
+          <input type="file" id="oshaImportBookmarksInput" accept=".json,application/json" style="display: none;">
+
+          <div id="oshaBookmarkFolders">
+            <p><em>No bookmarks yet.</em></p>
+          </div>
+        </aside>
+
+        <section id="oshaContainer"></section>
+      </div>
+    </section>
+
+    <section id="riskMatrixSection" class="app-section hidden">
+      <div class="module-header">
+        <button class="module-home-btn" data-open-section="homeSection">Back Home</button>
+        <div class="module-header-text">
+          <h2>Risk Assessment Matrix</h2>
+          <p>SkyFire FMEA-style matrix for structured risk review.</p>
+        </div>
+      </div>
+
+      <div class="info-panel">
+        <h3>Visual Risk Matrix</h3>
+        <p>
+          <strong>RPN</strong> means <strong>Risk Priority Number</strong>.
+          Formula: <strong>RPN = [(Severity<sup>2</sup>) x Occurrence x Detection] / 100</strong>.
+          Severity is weighted more heavily because high-consequence hazards deserve extra attention even when
+          they are less frequent.
+        </p>
+        <p>
+          Read the visual matrix as a field reference. Severity runs across the top and Occurrence runs down the left side.
+          Detection is the third risk dimension. When Severity and Detection are the same number, the chart cell lines up directly.
+          When they are different, use the calculator below to triangulate the final RPN accurately.
+        </p>
+
+        <div class="risk-matrix-scroll matrix-scroll-wrapper">
+          <table class="risk-matrix-table" aria-label="SkyFire Risk Assessment Matrix">
+            <thead>
+              <tr>
+                <th class="matrix-corner">Severity &rarr;<br>Occurrence &darr;</th>
+                <th>1.0</th>
+                <th>2.0</th>
+                <th>3.0</th>
+                <th>4.0</th>
+                <th>5.0</th>
+                <th>6.0</th>
+                <th>7.0</th>
+                <th>8.0</th>
+                <th>9.0</th>
+                <th>10.0</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>1.0</th>
+                <td class="risk-low">0.01</td>
+                <td class="risk-low">0.08</td>
+                <td class="risk-low">0.27</td>
+                <td class="risk-low">0.64</td>
+                <td class="risk-moderate">1.25</td>
+                <td class="risk-moderate">2.16</td>
+                <td class="risk-moderate">3.43</td>
+                <td class="risk-moderate">5.12</td>
+                <td class="risk-high">7.29</td>
+                <td class="risk-high">10.00</td>
+              </tr>
+              <tr>
+                <th>2.0</th>
+                <td class="risk-low">0.02</td>
+                <td class="risk-low">0.16</td>
+                <td class="risk-low">0.54</td>
+                <td class="risk-moderate">1.28</td>
+                <td class="risk-moderate">2.50</td>
+                <td class="risk-moderate">4.32</td>
+                <td class="risk-high">6.86</td>
+                <td class="risk-high">10.24</td>
+                <td class="risk-high">14.58</td>
+                <td class="risk-high">20.00</td>
+              </tr>
+              <tr>
+                <th>3.0</th>
+                <td class="risk-low">0.03</td>
+                <td class="risk-low">0.24</td>
+                <td class="risk-low">0.81</td>
+                <td class="risk-moderate">1.92</td>
+                <td class="risk-moderate">3.75</td>
+                <td class="risk-high">6.48</td>
+                <td class="risk-high">10.29</td>
+                <td class="risk-high">15.36</td>
+                <td class="risk-high">21.87</td>
+                <td class="risk-high">30.00</td>
+              </tr>
+              <tr>
+                <th>4.0</th>
+                <td class="risk-low">0.04</td>
+                <td class="risk-low">0.32</td>
+                <td class="risk-low">1.08</td>
+                <td class="risk-moderate">2.56</td>
+                <td class="risk-moderate">5.00</td>
+                <td class="risk-high">8.64</td>
+                <td class="risk-high">13.72</td>
+                <td class="risk-high">20.48</td>
+                <td class="risk-high">29.16</td>
+                <td class="risk-high">40.00</td>
+              </tr>
+              <tr>
+                <th>5.0</th>
+                <td class="risk-low">0.05</td>
+                <td class="risk-low">0.40</td>
+                <td class="risk-moderate">1.35</td>
+                <td class="risk-moderate">3.20</td>
+                <td class="risk-high">6.25</td>
+                <td class="risk-high">10.80</td>
+                <td class="risk-high">17.15</td>
+                <td class="risk-high">25.60</td>
+                <td class="risk-high">36.45</td>
+                <td class="risk-high">50.00</td>
+              </tr>
+              <tr>
+                <th>6.0</th>
+                <td class="risk-low">0.06</td>
+                <td class="risk-low">0.48</td>
+                <td class="risk-moderate">1.62</td>
+                <td class="risk-moderate">3.84</td>
+                <td class="risk-high">7.50</td>
+                <td class="risk-high">12.96</td>
+                <td class="risk-high">20.58</td>
+                <td class="risk-high">30.72</td>
+                <td class="risk-high">43.74</td>
+                <td class="risk-high">60.00</td>
+              </tr>
+              <tr>
+                <th>7.0</th>
+                <td class="risk-low">0.07</td>
+                <td class="risk-low">0.56</td>
+                <td class="risk-moderate">1.89</td>
+                <td class="risk-moderate">4.48</td>
+                <td class="risk-high">8.75</td>
+                <td class="risk-high">15.12</td>
+                <td class="risk-high">24.01</td>
+                <td class="risk-high">35.84</td>
+                <td class="risk-high">51.03</td>
+                <td class="risk-high">70.00</td>
+              </tr>
+              <tr>
+                <th>8.0</th>
+                <td class="risk-low">0.08</td>
+                <td class="risk-low">0.64</td>
+                <td class="risk-moderate">2.16</td>
+                <td class="risk-moderate">5.12</td>
+                <td class="risk-high">10.00</td>
+                <td class="risk-high">17.28</td>
+                <td class="risk-high">27.44</td>
+                <td class="risk-high">40.96</td>
+                <td class="risk-high">58.32</td>
+                <td class="risk-high">80.00</td>
+              </tr>
+              <tr>
+                <th>9.0</th>
+                <td class="risk-low">0.09</td>
+                <td class="risk-low">0.72</td>
+                <td class="risk-moderate">2.43</td>
+                <td class="risk-high">5.76</td>
+                <td class="risk-high">11.25</td>
+                <td class="risk-high">19.44</td>
+                <td class="risk-high">30.87</td>
+                <td class="risk-high">46.08</td>
+                <td class="risk-high">65.61</td>
+                <td class="risk-high">90.00</td>
+              </tr>
+              <tr>
+                <th>10.0</th>
+                <td class="risk-low">0.10</td>
+                <td class="risk-low">0.80</td>
+                <td class="risk-moderate">2.70</td>
+                <td class="risk-high">6.40</td>
+                <td class="risk-high">12.50</td>
+                <td class="risk-high">21.60</td>
+                <td class="risk-high">34.30</td>
+                <td class="risk-high">51.20</td>
+                <td class="risk-high">72.90</td>
+                <td class="risk-high">100.00</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <th>Detection &rarr;</th>
+                <th>1.0</th>
+                <th>2.0</th>
+                <th>3.0</th>
+                <th>4.0</th>
+                <th>5.0</th>
+                <th>6.0</th>
+                <th>7.0</th>
+                <th>8.0</th>
+                <th>9.0</th>
+                <th>10.0</th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+   <div class="risk-scale-inline">
+  <p><strong>Low Risk:</strong> 0.00-1.24 - Monitor and improve if practical</p>
+  <p><strong>Moderate Risk:</strong> 1.25-5.49 - Action required with planned controls</p>
+  <p><strong>High Risk:</strong> 5.50-10.00 - Immediate mitigation and escalation required</p>
+</div>
+
+<div class="rating-guide-grid">
+  <section class="rating-guide-card">
+    <h3>Rating Guide</h3>
+    <p>Use these descriptions to keep ratings consistent from one hazard review to the next.</p>
+  </section>
+
+  <section class="rating-guide-card">
+    <h4>Severity</h4>
+    <p>Long-term effects scored to the likely possibility.</p>
+    <p><strong>1:</strong> Negligible — No injury, no damage</p>
+    <p><strong>2:</strong> Very Minor — First aid only</p>
+    <p><strong>3:</strong> Minor — Medical, no lost time</p>
+    <p><strong>4:</strong> Moderate — Recordable injury, restricted duty</p>
+    <p><strong>5:</strong> Significant — Lost-time injury</p>
+    <p><strong>6:</strong> Serious — Permanent minor impairment</p>
+    <p><strong>7:</strong> Major — Permanent disability</p>
+    <p><strong>8:</strong> Critical — Life-threatening injury</p>
+    <p><strong>9:</strong> Catastrophic — Fatality possible</p>
+    <p><strong>10:</strong> Extreme — Certain fatality</p>
+  </section>
+
+  <section class="rating-guide-card">
+    <h4>Occurrence</h4>
+    <p>A score of 1 is reserved for unexpected instances.</p>
+    <p><strong>1:</strong> Rare — Random or unexpected</p>
+    <p><strong>2:</strong> Very Uncommon — Unusual possibility</p>
+    <p><strong>3:</strong> Uncommon — Reasonably possible</p>
+    <p><strong>4:</strong> Infrequent — Wide interval exposure</p>
+    <p><strong>5:</strong> Occasional — Often exposed</p>
+    <p><strong>6:</strong> Recurring — Repeated often exposure</p>
+    <p><strong>7:</strong> Frequent — High exposure time</p>
+    <p><strong>8:</strong> Very Frequent — Extensive exposure time</p>
+    <p><strong>9:</strong> Nearly Constant — Constant exposure</p>
+    <p><strong>10:</strong> Constant — Continuously and unavoidable</p>
+  </section>
+
+  <section class="rating-guide-card">
+    <h4>Detection</h4>
+    <p>How the hazard would appear to an unsuspecting individual.</p>
+    <p><strong>1:</strong> Obvious — Noticeable even if distracted</p>
+    <p><strong>2:</strong> Obviously Visible — Almost always noticed</p>
+    <p><strong>3:</strong> Clearly Visible — Usually noticed</p>
+    <p><strong>4:</strong> Visible — Often noticed</p>
+    <p><strong>5:</strong> Slightly Unnoticeable — Overlooked</p>
+    <p><strong>6:</strong> Unnoticeable — Missed if unfocused or unfamiliar</p>
+    <p><strong>7:</strong> Difficult to See — Rarely noticed</p>
+    <p><strong>8:</strong> Semi-Hidden — Partly covered or hidden</p>
+    <p><strong>9:</strong> Hidden — Mostly covered or hiding</p>
+    <p><strong>10:</strong> Near Invisible — Completely covered or darkness</p>
+  </section>
+
+  <section class="rating-guide-card">
+    <h4>Control Types</h4>
+    <p>Elimination / Substitution / Engineering / Administrative / PPE</p>
+
+    <h4>Action Status</h4>
+    <p>Acceptable / Monitor / Improve Further / Unacceptable</p>
+  </section>
+</div>
+        <h3>Risk Rating Calculator</h3>
+
+        <label>
+          Severity
+          <select id="riskSeverity">
+            <option value="1">1 - Negligible</option>
+            <option value="2">2 - Very Minor</option>
+            <option value="3">3 - Minor</option>
+            <option value="4">4 - Moderate</option>
+            <option value="5">5 - Significant</option>
+            <option value="6">6 - Serious</option>
+            <option value="7">7 - Major</option>
+            <option value="8">8 - Critical</option>
+            <option value="9">9 - Catastrophic</option>
+            <option value="10">10 - Extreme</option>
+          </select>
+        </label>
+
+        <label>
+          Occurrence
+          <select id="riskOccurrence">
+            <option value="1">1 - Rare</option>
+            <option value="2">2 - Very Uncommon</option>
+            <option value="3">3 - Uncommon</option>
+            <option value="4">4 - Infrequent</option>
+            <option value="5">5 - Occasional</option>
+            <option value="6">6 - Recurring</option>
+            <option value="7">7 - Frequent</option>
+            <option value="8">8 - Very Frequent</option>
+            <option value="9">9 - Routine</option>
+            <option value="10">10 - Constant</option>
+          </select>
+        </label>
+
+        <label>
+          Detection
+          <select id="riskDetection">
+            <option value="1">1 - Obvious</option>
+            <option value="2">2 - Obviously Visible</option>
+            <option value="3">3 - Clearly Visible</option>
+            <option value="4">4 - Visible</option>
+            <option value="5">5 - Slightly Unnoticeable</option>
+            <option value="6">6 - Unnoticeable</option>
+            <option value="7">7 - Difficult to See</option>
+            <option value="8">8 - Semi-Hidden</option>
+            <option value="9">9 - Hidden</option>
+            <option value="10">10 - Near Invisible</option>
+          </select>
+        </label>
+
+        <p><strong>Calculated RPN:</strong> <span id="riskRpnResult">0.01</span></p>
+        <p><strong>Risk Level:</strong> <span id="riskLevelResult">Low Risk</span></p>
+        <p><strong>Interpretation:</strong> <span id="riskInterpretationResult">Tolerable with monitoring</span></p>
+      </div>
+
+      <div class="info-panel">
+        <h3>Post-Control Risk Review</h3>
+        <p>
+          Use this area to compare the original risk against the expected risk after controls are added.
+        </p>
+
+        <label>
+          Controls Added
+          <textarea id="riskControlsAdded" rows="4" placeholder="Example: floor markings, physical barriers, traffic plan, spotter policy, refresher training"></textarea>
+        </label>
+
+        <label>
+          New Severity Rating
+          <select id="postRiskSeverity">
+            <option value="1">1 - Negligible</option>
+            <option value="2">2 - Very Minor</option>
+            <option value="3">3 - Minor</option>
+            <option value="4">4 - Moderate</option>
+            <option value="5">5 - Significant</option>
+            <option value="6">6 - Serious</option>
+            <option value="7">7 - Major</option>
+            <option value="8">8 - Critical</option>
+            <option value="9">9 - Catastrophic</option>
+            <option value="10">10 - Extreme</option>
+          </select>
+        </label>
+
+        <label>
+          New Occurrence Rating
+          <select id="postRiskOccurrence">
+            <option value="1">1 - Rare</option>
+            <option value="2">2 - Very Uncommon</option>
+            <option value="3">3 - Uncommon</option>
+            <option value="4">4 - Infrequent</option>
+            <option value="5">5 - Occasional</option>
+            <option value="6">6 - Recurring</option>
+            <option value="7">7 - Frequent</option>
+            <option value="8">8 - Very Frequent</option>
+            <option value="9">9 - Routine</option>
+            <option value="10">10 - Constant</option>
+          </select>
+        </label>
+
+        <label>
+          New Detection Rating
+          <select id="postRiskDetection">
+            <option value="1">1 - Obvious</option>
+            <option value="2">2 - Obviously Visible</option>
+            <option value="3">3 - Clearly Visible</option>
+            <option value="4">4 - Visible</option>
+            <option value="5">5 - Slightly Unnoticeable</option>
+            <option value="6">6 - Unnoticeable</option>
+            <option value="7">7 - Difficult to See</option>
+            <option value="8">8 - Semi-Hidden</option>
+            <option value="9">9 - Hidden</option>
+            <option value="10">10 - Near Invisible</option>
+          </select>
+        </label>
+
+        <p><strong>Post-Control RPN:</strong> <span id="postRiskRpnResult">0.01</span></p>
+        <p><strong>Post-Control Risk Level:</strong> <span id="postRiskLevelResult">Low Risk</span></p>
+        <p><strong>Action Status:</strong> <span id="postRiskActionStatus">Acceptable / Monitor</span></p>
+      </div>
+    </section>
+
+    <section id="roiCalculatorSection" class="app-section hidden">
+      <div class="module-header">
+        <button class="module-home-btn" data-open-section="homeSection">Back Home</button>
+        <div class="module-header-text">
+          <h2>Safety ROI Calculator</h2>
+          <p>Estimate the operational and financial impact of safety controls.</p>
+        </div>
+      </div>
+
+      <div class="info-panel">
+        <h3>How to Use</h3>
+        <p>
+          Use this tool to compare current hazard-related losses against the expected
+          losses after a proposed safety control is implemented.
+        </p>
+        <p>
+          This is a planning and communication tool only. Results depend on the quality of the assumptions entered.
+        </p>
+      </div>
+
+      <div class="info-panel">
+        <h3>1. Hazard Profile</h3>
+        <p>
+          Estimate current annual losses connected to the hazard or problem you want to control.
+        </p>
+
+        <label>
+          Incident / injury events per year
+          <input type="number" id="roiIncidentEvents" value="0" min="0" step="1">
+        </label>
+
+        <label>
+          Average cost per incident / injury event ($)
+          <input type="number" id="roiCostPerIncident" value="0" min="0" step="100">
+        </label>
+
+        <label>
+          Near misses or high-potential events per year
+          <input type="number" id="roiNearMissEvents" value="0" min="0" step="1">
+        </label>
+
+        <label>
+          Average cost per near miss / high-potential event ($)
+          <input type="number" id="roiCostPerNearMissEvent" value="0" min="0" step="50">
+        </label>
+
+        <label>
+          Property damage events per year
+          <input type="number" id="roiPropertyDamageEvents" value="0" min="0" step="1">
+        </label>
+
+        <label>
+          Average cost per property damage event ($)
+          <input type="number" id="roiCostPerPropertyDamageEvent" value="0" min="0" step="100">
+        </label>
+
+        <label>
+          Downtime / disruption events per year
+          <input type="number" id="roiDowntimeEvents" value="0" min="0" step="1">
+        </label>
+
+        <label>
+          Average downtime hours per event
+          <input type="number" id="roiDowntimeHoursPerEvent" value="0" min="0" step="0.25">
+        </label>
+
+        <label>
+          Cost per downtime hour ($)
+          <input type="number" id="roiCostPerDowntimeHour" value="0" min="0" step="50">
+        </label>
+
+        <label>
+          Admin / supervisor hours per year spent managing this problem
+          <input type="number" id="roiAdminHoursPerYear" value="0" min="0" step="0.25">
+        </label>
+
+        <label>
+          Loaded admin / supervisor hourly rate ($)
+          <input type="number" id="roiAdminHourlyRate" value="0" min="0" step="1">
+        </label>
+      </div>
+
+      <div class="info-panel">
+        <h3>2. Proposed Control Cost</h3>
+        <p>
+          Estimate the full cost to implement the safety control, including materials,
+          labor, training time, communication, downtime, and ongoing maintenance.
+        </p>
+
+        <label>
+          Control / material cost ($)
+          <input type="number" id="roiControlMaterialCost" value="0" min="0" step="100">
+        </label>
+
+        <label>
+          Installation labor hours
+          <input type="number" id="roiInstallLaborHours" value="0" min="0" step="0.25">
+        </label>
+
+        <label>
+          Installation labor hourly rate ($)
+          <input type="number" id="roiInstallLaborRate" value="0" min="0" step="1">
+        </label>
+
+        <label>
+          Total training / communication hours
+          <input type="number" id="roiTrainingHours" value="0" min="0" step="0.25">
+        </label>
+
+        <label>
+          Average loaded training hourly rate ($)
+          <input type="number" id="roiTrainingRate" value="0" min="0" step="1">
+        </label>
+
+        <label>
+          Downtime hours during implementation
+          <input type="number" id="roiImplementationDowntimeHours" value="0" min="0" step="0.25">
+        </label>
+
+        <label>
+          Cost per implementation downtime hour ($)
+          <input type="number" id="roiImplementationDowntimeRate" value="0" min="0" step="50">
+        </label>
+
+        <label>
+          Other one-time costs ($)
+          <input type="number" id="roiOtherOneTimeCosts" value="0" min="0" step="100">
+        </label>
+
+        <label>
+          Annual recurring / maintenance cost ($)
+          <input type="number" id="roiAnnualRecurringCost" value="0" min="0" step="100">
+        </label>
+
+        <p><strong>Total One-Time Control Cost:</strong> <span id="roiOneTimeCostTotal">$0</span></p>
+        <p><strong>Total First-Year Control Cost:</strong> <span id="roiFirstYearControlCost">$0</span></p>
+      </div>
+
+      <div class="info-panel">
+        <h3>3. Expected Post-Control Outcome</h3>
+        <p>
+          Estimate what the hazard profile may look like after the proposed control is in place.
+          The calculator will use these post-control estimates to calculate the reduction percentage.
+        </p>
+        <p>
+          <strong>Note:</strong> Post-control outcomes are still estimates. Use recent incident history,
+          near-miss trends, supervisor judgment, vendor information, pilot results, or comparable work-area data
+          when possible. These estimates are meant to be more defensible than guessing a reduction percentage.
+        </p>
+
+        <label>
+          Expected incident / injury events per year after control
+          <input type="number" id="roiPostIncidentEvents" value="0" min="0" step="1">
+        </label>
+
+        <label>
+          Expected near misses or high-potential events per year after control
+          <input type="number" id="roiPostNearMissEvents" value="0" min="0" step="1">
+        </label>
+
+        <label>
+          Expected property damage events per year after control
+          <input type="number" id="roiPostPropertyDamageEvents" value="0" min="0" step="1">
+        </label>
+
+        <label>
+          Expected downtime / disruption events per year after control
+          <input type="number" id="roiPostDowntimeEvents" value="0" min="0" step="1">
+        </label>
+
+        <label>
+          Expected admin / supervisor hours per year after control
+          <input type="number" id="roiPostAdminHoursPerYear" value="0" min="0" step="0.25">
+        </label>
+
+        <p><strong>Baseline Annual Losses:</strong> <span id="roiBaselineAnnualCost">$0</span></p>
+        <p><strong>Projected Annual Losses After Control:</strong> <span id="roiProjectedAnnualLosses">$0</span></p>
+        <p><strong>Calculated Reduction in Hazard-Related Losses:</strong> <span id="roiCalculatedReductionPercent">0%</span></p>
+        <p><strong>Gross Annual Savings:</strong> <span id="roiGrossAnnualSavings">$0</span></p>
+        <p><strong>Net Annual Savings:</strong> <span id="roiAnnualSavings">$0</span></p>
+        <p><strong>ROI:</strong> <span id="roiPercent">0%</span></p>
+        <p><strong>Payback Period:</strong> <span id="roiPaybackPeriod">Not available</span></p>
+        <p><strong>3-Year Net Benefit:</strong> <span id="roiThreeYearNetBenefit">$0</span></p>
+      </div>
+    </section>
+<section id="docsSection" class="app-section hidden">
+  <div class="module-header">
+    <button class="module-home-btn" data-open-section="homeSection">Back Home</button>
+    <div class="module-header-text">
+      <h2>MSHA Forms Library</h2>
+      <p>Common MSHA forms organized by form number, title, and practical use.</p>
+    </div>
+  </div>
+
+  <div class="info-panel">
+    <h3>Document Library</h3>
+    <p>
+      Use this section for quick access to selected MSHA forms and printable field resources.
+      The description under each form uses the official or practical form title so the file name
+      is easier to recognize in the field. Blank PDFs are cached as offline references, but MSHA may offer
+      a newer instrument or require a different filing method. Follow each official agency link before
+      submitting a form. Some interactive XFA PDFs require a compatible PDF reader, and a printed OMB
+      expiration date alone does not establish that an edition is obsolete.
+    </p>
+  </div>
+
+  <div class="info-panel">
+    <h3>Training, Certification & Qualification Forms</h3>
+
+    <div class="document-card">
+      <h4>MSHA Form 5000-23</h4>
+      <p><strong>Certificate of Training.</strong> Used to record and certify required miner training. <small>Blank form revision: February 2025 (previous editions obsolete). <a href="https://www.msha.gov/sites/default/files/Support_Resources/Forms/2025/MSHA_5000-23.pdf" target="_blank" rel="noopener noreferrer">Official MSHA source</a>.</small></p>
+      <div class="document-actions">
+        <a href="docs/MSHA-form-5000-23.pdf" target="_blank" rel="noopener">Open Form</a>
+        <a href="docs/MSHA-form-5000-23.pdf" download>Download PDF</a>
+      </div>
+    </div>
+
+    <div class="document-card">
+      <h4>MSHA Form 5000-1</h4>
+      <p><strong>Certificate of Electrical Training.</strong> Used to document and report qualifying coal-mine electrical training to MSHA. <small>MSHA Form 5000-1 is included in a federally approved information collection through December 2028. The cached PDF is a reference copy; confirm the current instrument and method on the <a href="https://www.msha.gov/support-resources/forms-online-filing/2015/04/15/certificate-electricalnoise-training" target="_blank" rel="noopener noreferrer">MSHA filing page</a>. Some versions use XFA and may require a compatible PDF viewer.</small></p>
+      <div class="document-actions">
+        <a href="docs/MSHA-form-5000-1.pdf" target="_blank" rel="noopener">Open Form</a>
+        <a href="docs/MSHA-form-5000-1.pdf" download>Download PDF</a>
+      </div>
+    </div>
+
+    <div class="document-card">
+      <h4>MSHA Form 5000-41</h4>
+      <p><strong>Safety and Health Activity Certification or Hoisting Engineers Qualification Request.</strong> Used for applicable MSHA certification or hoisting-engineer qualification requests. <small>Check the <a href="https://www.msha.gov/support-resources/forms-online-filing/2018/05/23/health-activity-certification-or-hoisting-engineers" target="_blank" rel="noopener noreferrer">MSHA agency source</a> for current submission instructions before using the cached blank.</small></p>
+      <div class="document-actions">
+        <a href="docs/MSHA-form-5000-41.pdf" target="_blank" rel="noopener">Open Form</a>
+        <a href="docs/MSHA-form-5000-41.pdf" download>Download PDF</a>
+      </div>
+    </div>
+
+    <div class="document-card">
+      <h4>MSHA Form 5000-46</h4>
+      <p><strong>Request for MSHA Individual Identification Number (MIIN).</strong> Used to request an MSHA Individual Identification Number. <small>Use the <a href="https://www.msha.gov/support-resources/forms-online-filing/2018/05/23/request-msha-individual-identification-number-miin" target="_blank" rel="noopener noreferrer">official MSHA instructions</a> to confirm the current filing method. This form requests personal identifiers; submit only through the approved agency process.</small></p>
+      <div class="document-actions">
+        <a href="docs/MSHA-form-5000-46.pdf" target="_blank" rel="noopener">Open Form</a>
+        <a href="docs/MSHA-form-5000-46.pdf" download>Download PDF</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-panel">
+    <h3>Mine, Operator & Contractor Identification</h3>
+
+    <div class="document-card">
+      <h4>MSHA Form 7000-51</h4>
+      <p><strong>Mine Operator Identification Request.</strong> Used to request an MSHA mine identification number before beginning mine operations. <small>Blank form revision: February 2025 (previous editions obsolete). <a href="https://www.msha.gov/sites/default/files/Support_Resources/Forms/2025/MSHA_7000-51.pdf" target="_blank" rel="noopener noreferrer">Official MSHA source</a>.</small></p>
+      <div class="document-actions">
+        <a href="docs/MSHA-form-7000-51.pdf" target="_blank" rel="noopener">Open Form</a>
+        <a href="docs/MSHA-form-7000-51.pdf" download>Download PDF</a>
+      </div>
+    </div>
+
+    <div class="document-card">
+      <h4>MSHA Form 2000-7</h4>
+      <p><strong>Legal Identity Report.</strong> Used to report mine operator legal identity information and ownership changes. <small>Local PDF matched the February 2025 federal instrument in the October 2026 audit; verify the <a href="https://www.msha.gov/sites/default/files/Support_Resources/Forms/2025/MSHA_2000-7.pdf" target="_blank" rel="noopener noreferrer">official MSHA source</a> and current filing procedure before submission.</small></p>
+      <div class="document-actions">
+        <a href="docs/MSHA-form-2000-7.pdf" target="_blank" rel="noopener">Open Form</a>
+        <a href="docs/MSHA-form-2000-7.pdf" download>Download PDF</a>
+      </div>
+    </div>
+
+    <div class="document-card">
+      <h4>MSHA Form 7000-52</h4>
+      <p><strong>Contractor Identification (ID) Request.</strong> Used by independent contractors to request or update an MSHA contractor identification number. <small>The downloadable PDF is a legacy printable reference; for current submissions, verify the <a href="https://www.msha.gov/support-resources/forms-online-filing/2015/04/15/contractor-id-request" target="_blank" rel="noopener noreferrer">official MSHA online filing path</a>.</small></p>
+      <div class="document-actions">
+        <a href="docs/MSHA-form-7000-52.pdf" target="_blank" rel="noopener">Open Form</a>
+        <a href="docs/MSHA-form-7000-52.pdf" download>Download PDF</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-panel">
+    <h3>Accident, Injury, Illness & Production Reporting</h3>
+
+    <div class="document-card">
+      <h4>MSHA Form 7000-1</h4>
+      <p><strong>Mine Accident, Injury, and Illness Report.</strong> Used to report reportable mine accidents, injuries, and illnesses. <small>This blank form is not a substitute for applicable immediate-notification duties or deadlines. Verify the <a href="https://www.msha.gov/sites/default/files/Support_Resources/Forms/7000-1.pdf" target="_blank" rel="noopener noreferrer">official MSHA form and instructions</a>.</small></p>
+      <div class="document-actions">
+        <a href="docs/MSHA-form-7000-1.pdf" target="_blank" rel="noopener">Open Form</a>
+        <a href="docs/MSHA-form-7000-1.pdf" download>Download PDF</a>
+      </div>
+    </div>
+
+    <div class="document-card">
+      <h4>MSHA Form 7000-2</h4>
+      <p><strong>Quarterly Mine Employment and Coal Production Report.</strong> Used to report employment and production information by quarter. <small>Local revision recorded as September 2024; confirm the <a href="https://www.msha.gov/sites/default/files/Support_Resources/Forms/MSHA_7000-2.pdf" target="_blank" rel="noopener noreferrer">current official form</a> and filing method.</small></p>
+      <div class="document-actions">
+        <a href="docs/MSHA-form-7000-2.pdf" target="_blank" rel="noopener">Open Form</a>
+        <a href="docs/MSHA-form-7000-2.pdf" download>Download PDF</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-panel">
+    <h3>Mine Rescue, Representative & Specialized Forms</h3>
+
+    <div class="document-card">
+      <h4>MSHA Form 2000-224</h4>
+      <p><strong>Operator's Annual Certification of Mine Rescue Team Qualifications.</strong> Used for annual mine rescue team qualification certification. <small>MSHA lists a 2025-hosted instrument, but its PDF revision has not been matched to this cached copy. <a href="https://www.msha.gov/sites/default/files/Support_Resources/Forms/2025/MSHA_2000-224.pdf" target="_blank" rel="noopener noreferrer">Check the official MSHA version</a> before use.</small></p>
+      <div class="document-actions">
+        <a href="docs/MSHA-form-2000-224.pdf" target="_blank" rel="noopener">Open Form</a>
+        <a href="docs/MSHA-form-2000-224.pdf" download>Download PDF</a>
+      </div>
+    </div>
+
+    <div class="document-card">
+      <h4>MSHA Form 2000-238</h4>
+      <p><strong>Representative of Miners Designation Form.</strong> Used to designate a miners' representative under the Mine Act. <small>Local PDF matched the February 2025 federal instrument in the October 2026 audit; verify the <a href="https://www.msha.gov/sites/default/files/Support_Resources/Forms/2025/MSHA_2000-238.pdf" target="_blank" rel="noopener noreferrer">current MSHA source</a> before filing.</small></p>
+      <div class="document-actions">
+        <a href="docs/MSHA-form-2000-238.pdf" target="_blank" rel="noopener">Open Form</a>
+        <a href="docs/MSHA-form-2000-238.pdf" download>Download PDF</a>
+      </div>
+    </div>
+
+    <div class="document-card">
+      <h4>MSHA Form 2000-38</h4>
+      <p><strong>Electrically Operated Equipment Field Approval Application (Coal Only).</strong> Used to apply for field approval of certain electrically operated coal mine equipment. <small>The updated local PDF uses an XFA form structure that some built-in browser viewers do not support. Download it and use a compatible PDF viewer if needed. <a href="https://www.msha.gov/support-resources/forms-online-filing/2015/04/15/electrically-operated-equipment-field-approval" target="_blank" rel="noopener noreferrer">Check official MSHA form and filing guidance</a>.</small></p>
+      <div class="document-actions">
+        <a href="docs/MSHA-form-2000-38.pdf" target="_blank" rel="noopener">Open Form</a>
+        <a href="docs/MSHA-form-2000-38.pdf" download>Download PDF</a>
+      </div>
+    </div>
+
+    <div class="document-card">
+      <h4>MSHA Form 5000-3</h4>
+      <p><strong>Certificate of Physical Qualification for Mine Rescue Work.</strong> Used to document annual physician certification for mine rescue team members. <small>The agency lists a 2025-hosted form; an April 2013 revision appears in federal records. Confirm the <a href="https://www.msha.gov/sites/default/files/Support_Resources/Forms/2025/MSHA_5000-3.pdf" target="_blank" rel="noopener noreferrer">official MSHA form</a>. Interactive versions may require a compatible PDF viewer.</small></p>
+      <div class="document-actions">
+        <a href="docs/MSHA-form-5000-3.pdf" target="_blank" rel="noopener">Open Form</a>
+        <a href="docs/MSHA-form-5000-3.pdf" download>Download PDF</a>
+      </div>
+    </div>
+
+    <div class="document-card">
+      <h4>MSHA Form 4000-9</h4>
+      <p><strong>Record of Individual Exposure to Radon Daughters.</strong> Used to record individual exposure to radon daughters. <small>Local blank instrument updated from a federal source; check the <a href="https://www.msha.gov/sites/default/files/Support_Resources/Forms/4000-9.pdf" target="_blank" rel="noopener noreferrer">official MSHA form</a> and applicable instructions before use.</small></p>
+      <div class="document-actions">
+        <a href="docs/MSHA-form-4000-9.pdf" target="_blank" rel="noopener">Open Form</a>
+        <a href="docs/MSHA-form-4000-9.pdf" download>Download PDF</a>
+      </div>
+    </div>
+  </div>
+</section>
+    <section id="safetyDocsSection" class="app-section hidden">
+  <div class="module-header">
+    <button class="module-home-btn" data-open-section="homeSection">Back Home</button>
+    <div class="module-header-text">
+      <h2>Safety Docs</h2>
+      <p>Printable SkyFire safety resources and field documents.</p>
+    </div>
+  </div>
+
+  <div class="info-panel">
+    <h3>SkyFire Printable Resources</h3>
+    <p>
+      Use these documents as practical field references and printable support tools.
+      Always verify site-specific requirements before relying on any general safety document.
+    </p>
+  </div>
+
+  <div class="info-panel">
+    <h3>Risk Assessment Tools</h3>
+
+    <div class="document-card">
+      <h4>SkyFire Risk Matrix</h4>
+      <p>Printable severity-weighted risk matrix for structured hazard review.</p>
+      <div class="document-actions">
+        <a href="docs/SkyFire-Risk-Matrix.png" target="_blank" rel="noopener">Open Image</a>
+        <a href="docs/SkyFire-Risk-Matrix.png" download>Download Image</a>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="toolboxTalksSection" class="app-section hidden">
+      <div class="module-header">
+        <button class="module-home-btn" data-open-section="homeSection">Back Home</button>
+        <div class="module-header-text">
+          <h2>Toolbox Talks</h2>
+          <p>Short safety meeting prompts and discussion guides.</p>
+        </div>
+      </div>
+
+      <div class="info-panel">
+        <h3>Purpose</h3>
+        <p>
+          This module is reserved for short, practical toolbox talks that can be built
+          over time and used for field safety meetings.
+        </p>
+
+        <h3>Build Plan</h3>
+        <p>
+          New talks can be added gradually, one topic at a time, so the library grows
+          without becoming overwhelming or unfinished.
+        </p>
+      </div>
+    </section>
+
+
+    <section id="feedbackSection" class="app-section hidden">
+      <div class="module-header feedback-module-header">
+        <button class="module-home-btn" data-open-section="homeSection">Back Home</button>
+        <div class="module-header-text">
+          <h2>Feedback &amp; Suggestions</h2>
+          <p>Help shape SkyFire by sharing field feedback, ideas, and problems you encounter.</p>
+        </div>
+      </div>
+
+      <div class="info-panel feedback-intro-panel">
+        <h3>Your Input Helps Guide Development</h3>
+        <p>
+          SkyFire is being developed with input from the people who use it. Ideas, field observations,
+          usability feedback, and problem reports are welcome.
+        </p>
+        <p class="feedback-privacy-note">
+          Please do not include confidential, personal, medical, security-sensitive, or proprietary company information.
+        </p>
+      </div>
+
+      <form id="feedbackForm" class="info-panel feedback-form" novalidate>
+        <h3>Share Feedback</h3>
+
+        <label for="feedbackType">Feedback Type</label>
+        <select id="feedbackType" name="feedbackType">
+          <option value="Suggestion">Suggestion</option>
+          <option value="Feature Idea">Feature Idea</option>
+          <option value="Problem or Bug">Problem or Bug</option>
+          <option value="General Feedback">General Feedback</option>
+        </select>
+        <p id="feedbackTypeGuidance" class="feedback-field-help">What would make SkyFire more useful in the field?</p>
+
+        <label for="feedbackArea">Area of SkyFire</label>
+        <select id="feedbackArea" name="feedbackArea">
+          <option value="Whole App">Whole App</option>
+          <option value="Risk Assessment Matrix">Risk Assessment Matrix</option>
+          <option value="Safety ROI Calculator">Safety ROI Calculator</option>
+          <option value="MSHA / 30 CFR">MSHA / 30 CFR</option>
+          <option value="OSHA / 29 CFR">OSHA / 29 CFR</option>
+          <option value="MSHA Forms Library">MSHA Forms Library</option>
+          <option value="Safety Docs">Safety Docs</option>
+          <option value="Toolbox Talks">Toolbox Talks</option>
+          <option value="Other">Other</option>
+        </select>
+
+        <label for="feedbackMessage">Your Feedback <span class="feedback-required">Required</span></label>
+        <textarea id="feedbackMessage" name="feedbackMessage" rows="7" required placeholder="Tell us what would make SkyFire more useful in the field."></textarea>
+
+        <div class="feedback-optional-grid">
+          <label for="feedbackName">
+            Name <span class="feedback-optional">Optional</span>
+            <input type="text" id="feedbackName" name="feedbackName" autocomplete="name" placeholder="Your name">
+          </label>
+
+          <label for="feedbackEmail">
+            Email <span class="feedback-optional">Optional</span>
+            <input type="email" id="feedbackEmail" name="feedbackEmail" autocomplete="email" placeholder="you@example.com">
+          </label>
+        </div>
+
+        <div class="feedback-actions">
+          <button type="submit" class="feedback-primary-btn">Prepare Feedback Email</button>
+          <button type="button" id="feedbackClearBtn" class="feedback-secondary-btn">Clear Form</button>
+        </div>
+
+        <p class="feedback-submit-note">
+          SkyFire will open your email app with a structured message prepared for you. Review it, then tap Send.
+          Nothing is transmitted until you choose to send the email.
+        </p>
+        <p id="feedbackStatus" class="feedback-status" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <section id="aboutSection" class="app-section hidden">
+      <div class="module-header">
+        <button class="module-home-btn" data-open-section="homeSection">Back Home</button>
+        <div class="module-header-text">
+          <h2>About SkyFire</h2>
+          <p>Project information, purpose, disclaimer, and creator details.</p>
+        </div>
+      </div>
+
+      <div class="info-panel">
+        <h3>SkyFire Safety Library</h3>
+
+        <p>
+          Developed by <strong>Nicholas R. Murphy</strong><br>
+          SkyFire Safety - Mine Safety Tools
+        </p>
+
+        <p>
+          This tool is designed to improve field access to regulatory, risk assessment,
+          and safety reference content for mine safety and health work, including
+          offline-ready use.
+        </p>
+
+        <p>
+          SkyFire tools and references are intended to support hazard awareness, training,
+          and operational planning. Always verify site-specific requirements, applicable
+          MSHA/OSHA regulations, manufacturer guidance, competent-person review, employer
+          requirements, and applicable regulatory obligations before implementation.
+        </p>
+
+        <p>
+          Licensed under <strong>CC BY-NC 4.0</strong><br>
+          Attribution required. Non-commercial use only.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer id="siteFooter">
+    <div>Developed by Nicholas R. Murphy</div>
+    <div>SkyFire Safety - Mine Safety Tools</div>
+  </footer>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function () {
+        navigator.serviceWorker
+          .register("./service-worker.js")
+          .then(function (registration) {
+            console.log("Service Worker registered:", registration.scope);
+            registration.update();
+          })
+          .catch(function (error) {
+            console.log("Service Worker registration failed:", error);
+          });
+      });
+    }
+  </script>
+
+</body>
+</html>

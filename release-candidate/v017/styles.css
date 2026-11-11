@@ -1,0 +1,630 @@
+:root {
+  --bg: #eef3f7;
+  --card: #ffffff;
+  --card-soft: #f7fafc;
+  --text: #111827;
+  --muted: #4b5563;
+  --line: #cbd5e1;
+  --line-soft: #d8e2ec;
+  --accent: #0b84ff;
+  --accent-dark: #1f4e79;
+  --shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
+
+  --risk-low: #c6efce;
+  --risk-moderate: #ffeb9c;
+  --risk-high: #ffc7ce;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.95), rgba(238, 243, 247, 0.92) 42%, rgba(226, 234, 241, 0.98));
+  color: var(--text);
+  line-height: 1.45;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ================================
+   Header
+   ================================ */
+
+.main-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  padding: 30px 28px 26px;
+  background: rgba(248, 251, 254, 0.96);
+  border-bottom: 1px solid var(--line-soft);
+  backdrop-filter: blur(10px);
+}
+
+.brand-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.brand-logo {
+  width: 70px;
+  height: 70px;
+  border-radius: 18px;
+  object-fit: cover;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.14);
+  flex: 0 0 auto;
+}
+
+.brand-text h1 {
+  margin: 0;
+  font-size: clamp(2rem, 7vw, 3.2rem);
+  line-height: 1.02;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.subtitle {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: clamp(1.25rem, 4vw, 1.75rem);
+}
+
+/* ================================
+   Main layout
+   ================================ */
+
+main {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 28px;
+}
+
+.app-section {
+  width: 100%;
+}
+
+.home-info-strip,
+.dashboard-grid,
+.module-header,
+.info-panel,
+.layout {
+  width: 100%;
+}
+
+/* ================================
+   Dashboard
+   ================================ */
+
+.home-info-strip {
+  margin-bottom: 28px;
+}
+
+.quick-info-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-top: 6px solid #f97316;
+  border-radius: 28px;
+  padding: 24px;
+  box-shadow: var(--shadow);
+}
+
+.quick-info-banner {
+  background: linear-gradient(180deg, #ffffff, #f1f6fb);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 18px;
+  margin-bottom: 20px;
+}
+
+.quick-banner-title {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.quick-banner-subtitle {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
+.quick-info-item {
+  background: linear-gradient(180deg, #ffffff, #f5f9fd);
+  border: 1px solid var(--line);
+  border-left: 7px solid #bfdbfe;
+  border-radius: 18px;
+  padding: 16px;
+  margin-top: 16px;
+}
+
+.quick-label {
+  display: block;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.88rem;
+  margin-bottom: 6px;
+}
+
+.quick-value {
+  display: block;
+  font-weight: 750;
+  font-size: 1.12rem;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.dashboard-tile {
+  width: 100%;
+  min-height: 190px;
+  text-align: left;
+  background: linear-gradient(180deg, #ffffff, #f3f8fd);
+  border: 1px solid var(--line);
+  border-top: 6px solid #7898bd;
+  border-radius: 28px;
+  padding: 28px;
+  box-shadow: var(--shadow);
+}
+
+.dashboard-tile:hover,
+.dashboard-tile:focus-visible {
+  outline: 3px solid rgba(11, 132, 255, 0.2);
+}
+
+.osha-home-tile {
+  border-top-color: #4f83ff;
+}
+
+.tile-title {
+  display: block;
+  color: var(--accent);
+  font-weight: 800;
+  font-size: clamp(1.65rem, 6vw, 2.4rem);
+  line-height: 1.05;
+}
+
+.tile-subtitle {
+  display: block;
+  margin-top: 70px;
+  color: var(--muted);
+  font-size: clamp(1.05rem, 4vw, 1.35rem);
+}
+
+/* ================================
+   Module headers and panels
+   ================================ */
+
+.module-header {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-top: 6px solid #9bb3cc;
+  border-radius: 28px;
+  padding: 24px;
+  margin-bottom: 26px;
+  box-shadow: var(--shadow);
+}
+
+.module-home-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 10px 18px;
+  color: var(--accent);
+  background: #ffffff;
+  border: 1px solid #b8c6d4;
+  border-radius: 14px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.module-header h2 {
+  margin: 0;
+  font-size: clamp(1.8rem, 7vw, 3rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.module-header p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: clamp(1.05rem, 4vw, 1.35rem);
+}
+
+.info-panel {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 24px;
+  margin: 22px 0;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.info-panel h3 {
+  margin: 0 0 18px;
+  font-size: clamp(1.45rem, 5vw, 2rem);
+  line-height: 1.15;
+}
+
+.info-panel h4 {
+  margin: 26px 0 10px;
+  font-size: 1.18rem;
+}
+
+.info-panel p {
+  margin: 0 0 18px;
+  font-size: clamp(1.05rem, 4vw, 1.35rem);
+}
+
+.info-panel p:last-child {
+  margin-bottom: 0;
+}
+
+.info-panel label {
+  display: block;
+  margin: 20px 0;
+  font-size: clamp(1.05rem, 4vw, 1.25rem);
+  font-weight: 750;
+}
+
+.info-panel input,
+.info-panel select,
+.info-panel textarea {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  border: 1px solid #c7d2df;
+  border-radius: 12px;
+  background: #ffffff;
+  color: var(--text);
+  padding: 12px 14px;
+  font-size: 1.05rem;
+}
+
+.info-panel textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.info-panel select {
+  max-width: 100%;
+}
+
+/* ================================
+   Risk matrix module
+   ================================ */
+
+.matrix-scroll-wrapper,
+.risk-matrix-scroll {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #ffffff;
+  padding: 10px;
+  margin: 18px 0 22px;
+}
+
+.risk-matrix-table {
+  min-width: 900px;
+  width: 900px;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 0.9rem;
+  line-height: 1.2;
+  color: #111827;
+}
+
+.risk-matrix-table th,
+.risk-matrix-table td {
+  border: 1px solid #cbd5e1;
+  padding: 7px 8px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.risk-matrix-table th {
+  background: #ffffff;
+  font-weight: 800;
+}
+
+.risk-matrix-table .matrix-corner {
+  width: 120px;
+  white-space: normal;
+}
+
+.risk-low {
+  background: var(--risk-low);
+}
+
+.risk-moderate {
+  background: var(--risk-moderate);
+}
+
+.risk-high {
+  background: var(--risk-high);
+}
+
+.risk-matrix-table tfoot th {
+  border-top: 3px solid #111827;
+}
+
+.matrix-note {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin-top: 10px;
+}
+
+/* ================================
+   CFR / OSHA layout
+   ================================ */
+
+.module-search-wrap {
+  margin: 0 0 18px;
+}
+
+.module-search-wrap input {
+  width: 100%;
+  min-height: 50px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px 14px;
+  font-size: 1.05rem;
+}
+
+#statusMessage,
+#oshaStatusMessage {
+  margin: 14px 0 18px;
+  color: var(--muted);
+  font-weight: 650;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+#bookmarkSidebar,
+#oshaBookmarkSidebar,
+#cfrContainer,
+#oshaContainer {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 18px;
+  box-shadow: var(--shadow);
+}
+
+.folder-create-row,
+.bookmark-button-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 12px 0;
+}
+
+.folder-create-row input {
+  flex: 1 1 180px;
+  min-height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 8px 10px;
+}
+
+.folder-create-row button,
+.bookmark-button-row button {
+  min-height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #e9eef5;
+  padding: 8px 12px;
+}
+
+/* Common dynamic CFR button/card styling */
+.part-card,
+.section-card,
+.cfr-card,
+.cfr-node,
+details {
+  background: #ffffff;
+  border: 1px solid var(--line-soft);
+  border-radius: 16px;
+  margin: 12px 0;
+  padding: 12px;
+}
+
+summary {
+  font-weight: 800;
+  cursor: pointer;
+}
+
+mark {
+  background: #ffeb9c;
+  padding: 0 2px;
+  border-radius: 3px;
+}
+
+
+/* ================================
+   Document library cards
+   ================================ */
+
+.document-card {
+  border-top: 1px solid var(--line-soft);
+  padding: 18px 0 6px;
+}
+
+.document-card:first-of-type {
+  border-top: 0;
+  padding-top: 4px;
+}
+
+.document-card h4 {
+  margin: 0 0 8px;
+}
+
+.document-card p {
+  margin-bottom: 12px;
+}
+
+.document-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.document-actions a {
+  display: inline-block;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  padding: 8px 12px;
+  color: var(--accent);
+  font-weight: 800;
+  text-decoration: none;
+  background: #ffffff;
+}
+
+.document-actions a:hover,
+.document-actions a:focus {
+  background: #e8f1ff;
+}
+
+/* ================================
+   Footer
+   ================================ */
+
+#siteFooter {
+  max-width: 1120px;
+  margin: 28px auto 60px;
+  padding: 0 28px;
+  text-align: center;
+  color: #5b6472;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+/* ================================
+   Desktop/tablet
+   ================================ */
+
+@media (min-width: 760px) {
+  main {
+    padding: 34px;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .layout {
+    grid-template-columns: 300px 1fr;
+    align-items: start;
+  }
+
+  /* Advanced CFR-reader navigation for tablet/desktop only. Keeping the
+     existing bookmark sidebar in view lets experienced users jump between
+     saved sections while reading long regulatory text. Phone intentionally
+     remains unchanged because screen space is more valuable there. */
+  #bookmarkSidebar,
+  #oshaBookmarkSidebar {
+    position: sticky;
+    top: 144px;
+    max-height: calc(100vh - 164px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+  }
+
+  .info-panel,
+  .module-header,
+  .quick-info-card {
+    padding: 32px;
+  }
+
+  .risk-matrix-table {
+    font-size: 0.95rem;
+  }
+}
+
+/* ================================
+   Small phone refinements
+   ================================ */
+
+@media (max-width: 430px) {
+  .main-header {
+    padding: 24px 22px 22px;
+  }
+
+  .brand-logo {
+    width: 58px;
+    height: 58px;
+    border-radius: 14px;
+  }
+
+  main {
+    padding: 20px;
+  }
+
+  .quick-info-card,
+  .module-header,
+  .info-panel,
+  .dashboard-tile {
+    border-radius: 22px;
+    padding: 20px;
+  }
+
+  .dashboard-tile {
+    min-height: 170px;
+  }
+
+  .tile-subtitle {
+    margin-top: 54px;
+  }
+
+  .risk-matrix-table {
+    min-width: 860px;
+    width: 860px;
+    font-size: 0.82rem;
+  }
+
+  .risk-matrix-table th,
+  .risk-matrix-table td {
+    padding: 6px 7px;
+  }
+}

@@ -1,0 +1,164 @@
+(function () {
+  function readNumber(id, fallback) {
+    var element = document.getElementById(id);
+    if (!element) return fallback;
+
+    var rawValue = element.value;
+    var value = Number(rawValue);
+
+    if (!Number.isFinite(value)) return fallback;
+    return value;
+  }
+
+  function setText(id, value) {
+    var element = document.getElementById(id);
+    if (!element) return;
+    element.textContent = value;
+  }
+
+  function calculateRpn(severity, occurrence, detection) {
+    return (severity * severity * occurrence * detection) / 100;
+  }
+
+  function getRiskLevel(rpn) {
+    if (rpn <= 1.24) {
+      return {
+        level: "Low Risk",
+        interpretation: "Monitor and improve if practical",
+        action: "Acceptable / Monitor"
+      };
+    }
+
+    if (rpn <= 5.49) {
+      return {
+        level: "Moderate Risk",
+        interpretation: "Action required with planned controls",
+        action: "Improve Further"
+      };
+    }
+
+    return {
+      level: "High Risk",
+      interpretation: "Immediate mitigation and escalation required",
+      action: "Unacceptable / Immediate Action Required"
+    };
+  }
+
+  function formatRpn(value) {
+    if (!Number.isFinite(value)) return "0.00";
+    return value.toFixed(2);
+  }
+
+  function updateMainRiskCalculator() {
+    var severity = readNumber("riskSeverity", 1);
+    var occurrence = readNumber("riskOccurrence", 1);
+    var detection = readNumber("riskDetection", 1);
+
+    var rpn = calculateRpn(severity, occurrence, detection);
+    var risk = getRiskLevel(rpn);
+
+    setText("riskRpnResult", formatRpn(rpn));
+    setText("riskLevelResult", risk.level);
+    setText("riskInterpretationResult", risk.interpretation);
+  }
+
+  function updatePostControlRiskCalculator() {
+    var severity = readNumber("postRiskSeverity", 1);
+    var occurrence = readNumber("postRiskOccurrence", 1);
+    var detection = readNumber("postRiskDetection", 1);
+
+    var rpn = calculateRpn(severity, occurrence, detection);
+    var risk = getRiskLevel(rpn);
+
+    setText("postRiskRpnResult", formatRpn(rpn));
+    setText("postRiskLevelResult", risk.level);
+    setText("postRiskActionStatus", risk.action);
+  }
+
+  function updateAllRiskMatrixCalculators() {
+    updateMainRiskCalculator();
+    updatePostControlRiskCalculator();
+  }
+
+  function isRiskSelect(element) {
+    if (!element || !element.id) return false;
+
+    return [
+      "riskSeverity",
+      "riskOccurrence",
+      "riskDetection",
+      "postRiskSeverity",
+      "postRiskOccurrence",
+      "postRiskDetection"
+    ].indexOf(element.id) !== -1;
+  }
+
+  function bindRiskMatrixCalculatorEvents() {
+    document.addEventListener("change", function (event) {
+      if (isRiskSelect(event.target)) {
+        updateAllRiskMatrixCalculators();
+      }
+    });
+
+    document.addEventListener("input", function (event) {
+      if (isRiskSelect(event.target)) {
+        updateAllRiskMatrixCalculators();
+      }
+    });
+
+    updateAllRiskMatrixCalculators();
+    window.setTimeout(updateAllRiskMatrixCalculators, 250);
+    window.setTimeout(updateAllRiskMatrixCalculators, 1000);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", bindRiskMatrixCalculatorEvents);
+  } else {
+    bindRiskMatrixCalculatorEvents();
+  }
+
+  window.SkyFireRiskMatrix = {
+    update: updateAllRiskMatrixCalculators,
+    calculateRpn: calculateRpn
+  };
+})();
+
+(function loadMobileQualityModule() {
+  if (document.querySelector('script[data-skyfire-mobile-quality="true"]')) return;
+  var script = document.createElement("script");
+  script.src = "mobile-quality.js?v=quality-v7";
+  script.dataset.skyfireMobileQuality = "true";
+  document.head.appendChild(script);
+})();
+
+(function loadPPMGuidanceModule() {
+  if (document.querySelector('script[data-skyfire-ppm="true"]')) return;
+  var script = document.createElement("script");
+  script.src = "ppm-guidance.js?v=ppm-v8";
+  script.dataset.skyfirePpm = "true";
+  document.head.appendChild(script);
+})();
+
+(function loadCfrV13Module() {
+  if (document.querySelector('script[data-skyfire-cfr-v13="true"]')) return;
+  var script = document.createElement("script");
+  script.src = "cfr-v13.js?v=cfr-v13-1";
+  script.dataset.skyfireCfrV13 = "true";
+  document.head.appendChild(script);
+})();
+
+(function loadResponsiveV13Module() {
+  if (document.querySelector('script[data-skyfire-responsive-v13="true"]')) return;
+  var script = document.createElement("script");
+  script.src = "responsive-v13.js?v=responsive-v13-1";
+  script.dataset.skyfireResponsiveV13 = "true";
+  document.head.appendChild(script);
+})();
+
+(function loadEnforcementResourcesModule() {
+  if (document.querySelector('script[data-skyfire-enforcement="true"]')) return;
+  var script = document.createElement("script");
+  script.src = "enforcement-resources.js?v=enforcement-v2";
+  script.dataset.skyfireEnforcement = "true";
+  document.head.appendChild(script);
+})();

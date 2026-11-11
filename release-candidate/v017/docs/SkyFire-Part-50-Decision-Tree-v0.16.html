@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SkyFire MSHA Part 50 Decision Tree</title>
+<script>
+const qs=new URLSearchParams(location.search);
+if(qs.get("embed")==="1")document.documentElement.classList.add("embed");
+function backToSkyFire(){
+  if(window.opener&&!window.opener.closed){window.close();return;}
+  if(history.length>1){history.back();return;}
+  window.location.href="../";
+}
+</script>
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#0b1016;color:#fff;font-family:Arial,Helvetica,sans-serif}
+  body{min-height:100vh;padding:16px}
+  .toolbar{
+    width:min(1122px,100%);margin:0 auto 12px;display:flex;gap:10px;
+    align-items:center;justify-content:space-between
+  }
+  .toolbar button{
+    appearance:none;border:1px solid #8193a5;background:#fff;color:#111b25;
+    padding:10px 14px;border-radius:10px;font:inherit;font-weight:800;cursor:pointer
+  }
+  .viewer{width:min(1122px,100%);margin:0 auto}
+  .viewer img{
+    display:block;width:100%;height:auto;margin:0 auto;background:#05080c;
+    box-shadow:0 14px 50px rgba(0,0,0,.42)
+  }
+  .embed body{padding:0;background:#05080c}
+  .embed .toolbar{display:none}
+  .embed .viewer{width:100%;max-width:none}
+  .embed .viewer img{box-shadow:none}
+  @media(max-width:680px){
+    body{padding:8px}
+    .toolbar{position:sticky;top:0;z-index:10;background:rgba(11,16,22,.94);padding:8px 0;margin-bottom:8px}
+    .toolbar button{padding:10px 11px;font-size:.92rem}
+  }
+  @media print{
+    @page{size:letter portrait;margin:.25in}
+    html,body{width:8in;height:10.5in;background:#fff;padding:0;margin:0}
+    .toolbar{display:none!important}
+    .viewer{width:8in;height:10.5in;margin:0 auto;display:flex;align-items:flex-start;justify-content:center}
+    .viewer img{width:8in;height:auto;max-height:10.5in;object-fit:contain;box-shadow:none;margin:0}
+  }
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <button type="button" onclick="backToSkyFire()">← Back to SkyFire</button>
+  <button type="button" onclick="window.print()">Print / Save as PDF</button>
+</div>
+<main class="viewer" aria-label="Approved SkyFire MSHA Part 50 Decision Tree">
+  <img src="../assets/SkyFire-Part-50-Decision-Tree-approved.jpeg" alt="SkyFire MSHA Part 50 Decision Tree — approved field reference">
+</main>
+</body>
+</html>

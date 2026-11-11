@@ -1,0 +1,9 @@
+{
+  "releaseCandidate": "SkyFire v0.17",
+  "status": "TEST ONLY",
+  "sourceBranch": "v0.17/forms-audit-57",
+  "sourceCommit": "d6b947d6c0feb3e31fc73d8816cde98ad07ac9ef",
+  "previewDate": "2026-11-11",
+  "previewScopedServiceWorker": true,
+  "offlineCFRCurrentness": "Unverified; issue #79"
+}

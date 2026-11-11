@@ -1,0 +1,291 @@
+const SHELL_CACHE_NAME = "skyfire-preview-v017-shell-v39";
+const DATA_CACHE_NAME = "skyfire-preview-v017-regdata-v1";
+const CACHE_VERSION = "quality-v39";
+
+const SHELL_CACHE = [
+  "./",
+  `./index.html?v=${CACHE_VERSION}`,
+  `./styles.css?v=${CACHE_VERSION}`,
+  "./feedback.css",
+  `./app.js?v=${CACHE_VERSION}`,
+  `./risk-matrix.js?v=${CACHE_VERSION}`,
+  "./feedback.js",
+  `./mobile-quality.js?v=${CACHE_VERSION}`,
+  `./navigation.js?v=${CACHE_VERSION}`,
+  `./ppm-guidance.js?v=${CACHE_VERSION}`,
+  `./ppm-14109-stretch.js?v=${CACHE_VERSION}`,
+  `./ppm-source-fidelity-v14.js?v=${CACHE_VERSION}`,
+  `./ppm-audit-v14.js?v=${CACHE_VERSION}`,
+  `./cfr-fullscreen-polish-v14.js?v=${CACHE_VERSION}`,
+  `./nested-tree.js?v=${CACHE_VERSION}`,
+  `./bookmark-onboarding-v15.js?v=${CACHE_VERSION}`,
+  `./bookmark-remove-state-v15.js?v=${CACHE_VERSION}`,
+  `./bookmark-folder-state-v15.js?v=${CACHE_VERSION}`,
+  `./msha-ready-v16.js?v=${CACHE_VERSION}`,
+  `./msha-ready-v16.css?v=${CACHE_VERSION}`,
+  `./inspection-ready-v16.js?v=${CACHE_VERSION}`,
+  `./inspection-ready-v16.css?v=${CACHE_VERSION}`,
+  `./inspection-ready-depth-v16.js?v=${CACHE_VERSION}`,
+  `./inspection-ready-types-v16.js?v=${CACHE_VERSION}`,
+  `./inspection-ready-lifecycle-depth-v16.js?v=${CACHE_VERSION}`,
+  `./incident-ready-v16.js?v=${CACHE_VERSION}`,
+  `./incident-ready-v16.css?v=${CACHE_VERSION}`,
+  `./mine-act-v16.js?v=${CACHE_VERSION}`,
+  `./mine-act-v16.css?v=${CACHE_VERSION}`,
+  `./mine-act-offline-depth-v16.js?v=${CACHE_VERSION}`,
+  `./mine-act-crosswalk-v16.js?v=${CACHE_VERSION}`,
+  `./mine-act-verbatim-v16.js?v=${CACHE_VERSION}`,
+  `./regulatory-layout-v16.js?v=${CACHE_VERSION}`,
+  `./home-preview.js?v=${CACHE_VERSION}`,
+  `./cfr-v13.js?v=${CACHE_VERSION}`,
+  `./responsive-v13.js?v=${CACHE_VERSION}`,
+  `./enforcement-resources.js?v=${CACHE_VERSION}`,
+  `./manifest.json?v=${CACHE_VERSION}`,
+  "./Data/mine-act/802.txt",
+  "./Data/mine-act/813.txt",
+  "./Data/mine-act/814.txt",
+  "./Data/mine-act/815.txt",
+  "./Data/mine-act/817.txt",
+  "./Data/mine-act/820.txt",
+  "./Data/mine-act/source-meta.json",
+  "./Icons/icon-192.png",
+  "./Icons/icon-512.png",
+  "./Icons/lynx-logo.png",
+  "./Icons/mss-logo.png",
+  "./Icons/skyfire-logo.jpg",
+  "./docs/SkyFire-Risk-Matrix.png",
+  "./docs/SkyFire-Part-50-Decision-Tree-v0.16.html",
+  "./assets/SkyFire-Part-50-Decision-Tree-approved.jpeg",
+  "./docs/MSHA-form-2000-7.pdf",
+  "./docs/MSHA-form-2000-38.pdf",
+  "./docs/MSHA-form-2000-224.pdf",
+  "./docs/MSHA-form-2000-238.pdf",
+  "./docs/MSHA-form-4000-9.pdf",
+  "./docs/MSHA-form-5000-1.pdf",
+  "./docs/MSHA-form-5000-3.pdf",
+  "./docs/MSHA-form-5000-23.pdf",
+  "./docs/MSHA-form-5000-41.pdf",
+  "./docs/MSHA-form-5000-46.pdf",
+  "./docs/MSHA-form-7000-1.pdf",
+  "./docs/MSHA-form-7000-2.pdf",
+  "./docs/MSHA-form-7000-51.pdf",
+  "./docs/MSHA-form-7000-52.pdf"
+];
+
+self.addEventListener("install", event => {
+  event.waitUntil(
+    caches.open(SHELL_CACHE_NAME).then(async cache => {
+      for (const asset of SHELL_CACHE) {
+        try {
+          // A new cache name alone does not invalidate the browser HTTP cache.
+          // Fetch uncached bytes so unchanged PDF URLs receive the new edition.
+          const refreshedRequest = new Request(asset, { cache: "reload" });
+          await cache.add(refreshedRequest);
+        } catch (error) {
+          console.warn("Install cache skipped:", asset, error);
+        }
+      }
+      // Activate only after the corrected cache is fully populated.
+      await self.skipWaiting();
+    })()
+  );
+});
+
+self.addEventListener("activate", event => {
+  event.waitUntil(
+    (async () => {
+      const keys = await caches.keys();
+
+      await Promise.all(
+        keys.map(key => {
+          if (key.startsWith("skyfire-preview-v017-") && key !== SHELL_CACHE_NAME && key !== DATA_CACHE_NAME) {
+            return caches.delete(key);
+          }
+        })
+      );
+
+      await self.clients.claim();
+
+      const clients = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
+      for (const client of clients) {
+        client.postMessage({
+          type: "SW_UPDATED",
+          cacheName: SHELL_CACHE_NAME
+        });
+      }
+    })()
+  );
+});
+
+self.addEventListener("fetch", event => {
+  const request = event.request;
+
+  if (request.method !== "GET") return;
+
+  const url = new URL(request.url);
+
+  if (url.origin !== self.location.origin) return;
+
+  const isNavigation = request.mode === "navigate";
+  const isShellAsset =
+    url.pathname.endsWith("/") ||
+    url.pathname.endsWith("/index.html") ||
+    url.pathname.endsWith("/styles.css") ||
+    url.pathname.endsWith("/feedback.css") ||
+    url.pathname.endsWith("/app.js") ||
+    url.pathname.endsWith("/risk-matrix.js") ||
+    url.pathname.endsWith("/feedback.js") ||
+    url.pathname.endsWith("/mobile-quality.js") ||
+    url.pathname.endsWith("/navigation.js") ||
+    url.pathname.endsWith("/ppm-guidance.js") ||
+    url.pathname.endsWith("/ppm-14109-stretch.js") ||
+    url.pathname.endsWith("/ppm-source-fidelity-v14.js") ||
+    url.pathname.endsWith("/ppm-audit-v14.js") ||
+    url.pathname.endsWith("/cfr-fullscreen-polish-v14.js") ||
+    url.pathname.endsWith("/nested-tree.js") ||
+    url.pathname.endsWith("/bookmark-onboarding-v15.js") ||
+    url.pathname.endsWith("/bookmark-remove-state-v15.js") ||
+    url.pathname.endsWith("/bookmark-folder-state-v15.js") ||
+    url.pathname.endsWith("/msha-ready-v16.js") ||
+    url.pathname.endsWith("/msha-ready-v16.css") ||
+    url.pathname.endsWith("/inspection-ready-v16.js") ||
+    url.pathname.endsWith("/inspection-ready-v16.css") ||
+    url.pathname.endsWith("/inspection-ready-depth-v16.js") ||
+    url.pathname.endsWith("/inspection-ready-types-v16.js") ||
+    url.pathname.endsWith("/inspection-ready-lifecycle-depth-v16.js") ||
+    url.pathname.endsWith("/incident-ready-v16.js") ||
+    url.pathname.endsWith("/incident-ready-v16.css") ||
+    url.pathname.endsWith("/docs/SkyFire-Part-50-Decision-Tree-v0.16.html") ||
+    url.pathname.endsWith("/assets/SkyFire-Part-50-Decision-Tree-approved.jpeg") ||
+    url.pathname.endsWith("/mine-act-v16.js") ||
+    url.pathname.endsWith("/mine-act-v16.css") ||
+    url.pathname.endsWith("/mine-act-offline-depth-v16.js") ||
+    url.pathname.endsWith("/mine-act-crosswalk-v16.js") ||
+    url.pathname.endsWith("/mine-act-verbatim-v16.js") ||
+    url.pathname.endsWith("/regulatory-layout-v16.js") ||
+    url.pathname.endsWith("/home-preview.js") ||
+    url.pathname.endsWith("/cfr-v13.js") ||
+    url.pathname.endsWith("/responsive-v13.js") ||
+    url.pathname.endsWith("/enforcement-resources.js") ||
+    url.pathname.endsWith("/manifest.json") ||
+    url.pathname.includes("/Icons/");
+
+  const isDataFile =
+    url.pathname.includes("/Data/") &&
+    url.pathname.endsWith(".xml");
+
+  const isDocumentFile =
+    url.pathname.includes("/docs/") &&
+    (url.pathname.endsWith(".pdf") || url.pathname.endsWith(".png"));
+
+  if (isNavigation || isShellAsset) {
+    event.respondWith(
+      (async () => {
+        const cache = await caches.open(SHELL_CACHE_NAME);
+
+        try {
+          const fresh = await fetch(request, { cache: "no-store" });
+          cache.put(request, fresh.clone()).catch(() => {});
+          return fresh;
+        } catch (error) {
+          const cached =
+            (await cache.match(request)) ||
+            (await cache.match(url.pathname, { ignoreSearch: true })) ||
+            (isNavigation ? await cache.match("./") : null);
+
+          if (cached) return cached;
+
+          return new Response("Offline content not available yet.", {
+            status: 503,
+            statusText: "Service Unavailable",
+            headers: { "Content-Type": "text/plain" }
+          });
+        }
+      })()
+    );
+    return;
+  }
+
+  if (isDataFile) {
+    event.respondWith(
+      (async () => {
+        const cache = await caches.open(DATA_CACHE_NAME);
+        const cached = await cache.match(request) || await cache.match(url.pathname, { ignoreSearch: true });
+
+        if (cached) {
+          fetch(request, { cache: "no-store" })
+            .then(response => {
+              if (response && response.ok) {
+                cache.put(request, response.clone()).catch(() => {});
+              }
+            })
+            .catch(() => {});
+
+          return cached;
+        }
+
+        try {
+          const fresh = await fetch(request, { cache: "no-store" });
+          if (fresh && fresh.ok) {
+            cache.put(request, fresh.clone()).catch(() => {});
+          }
+          return fresh;
+        } catch (error) {
+          return new Response("Offline regulatory data not available yet.", {
+            status: 503,
+            statusText: "Service Unavailable",
+            headers: { "Content-Type": "text/plain" }
+          });
+        }
+      })()
+    );
+    return;
+  }
+
+  if (isDocumentFile) {
+    event.respondWith(
+      (async () => {
+        const cache = await caches.open(SHELL_CACHE_NAME);
+        const cached = await cache.match(request) || await cache.match(url.pathname, { ignoreSearch: true });
+
+        if (cached) return cached;
+
+        try {
+          const fresh = await fetch(request, { cache: "no-store" });
+          if (fresh && fresh.ok) {
+            cache.put(request, fresh.clone()).catch(() => {});
+          }
+          return fresh;
+        } catch (error) {
+          return new Response("Offline file not available yet.", {
+            status: 503,
+            statusText: "Service Unavailable",
+            headers: { "Content-Type": "text/plain" }
+          });
+        }
+      })()
+    );
+    return;
+  }
+
+  event.respondWith(
+    (async () => {
+      const cache = await caches.open(SHELL_CACHE_NAME);
+
+      try {
+        const fresh = await fetch(request);
+        cache.put(request, fresh.clone()).catch(() => {});
+        return fresh;
+      } catch (error) {
+        const cached = await cache.match(request) || await cache.match(url.pathname, { ignoreSearch: true });
+        if (cached) return cached;
+
+        return new Response("Offline content not available yet.", {
+          status: 503,
+          statusText: "Service Unavailable",
+          headers: { "Content-Type": "text/plain" }
+        });
+      }
+    })()
+  );
+});

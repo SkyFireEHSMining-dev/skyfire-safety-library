@@ -117,6 +117,62 @@ jobs:
             echo "- MSHA direct static-file delivery is currently presenting a JavaScript verification page to automated audit clients. Where a current OMB/Reginfo instrument mirror exists, this audit uses that official federal mirror solely for byte/revision comparison and retains the MSHA URL as the canonical product source."
           } >> "$REPORT"
 
+
+      - name: Replace two verified obsolete local PDFs (guarded)
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Use verified U.S. government/RegInfo form instruments only. Never use an unverified PDF.
+          mkdir -p docs
+          NOTES="docs/MSHA_FORMS_BINARY_REPLACEMENTS_v0.17.md"
+          {
+            echo "# MSHA v0.17 verified PDF replacements"
+            echo
+            echo "Source audit and replacement run: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            echo
+            echo "| Form | Original local SHA-256 | New SHA-256 | Source | Revision | Disposition |"
+            echo "|---|---|---|---|---|---|"
+          } > "$NOTES"
+
+          replace_form () {
+            local FORM="$1" URL="$2" OLD_SHA="$3" NEW_SHA="$4"
+            local LOCAL="docs/MSHA-form-$FORM.pdf"
+            local NEW="/tmp/msha-current/verified-$FORM.pdf"
+            local CURRENT_SHA
+            CURRENT_SHA="$(sha256sum "$LOCAL" | awk '{print $1}')"
+            if [ "$CURRENT_SHA" != "$OLD_SHA" ]; then
+              echo "::error::Source PDF SHA mismatch for $FORM; refusing to overwrite."
+              exit 1
+            fi
+            curl --fail --location --retry 3 --retry-delay 2 \
+              --user-agent "Mozilla/5.0 (compatible; SkyFire source-integrity audit)" \
+              "$URL" -o "$NEW" >/dev/null 2>&1
+            [ "$(head -c 4 "$NEW")" = "%PDF" ]
+            echo "$NEW_SHA  $NEW" | sha256sum --check --status || {
+              echo "::error::Unexpected official-mirror bytes for $FORM; refusing to overwrite."
+              exit 1
+            }
+            pdftotext -layout "$NEW" - | grep -Fq "February 2025" || exit 1
+            pdftotext -layout "$NEW" - | grep -Fq "Previous editions are obsolete" || exit 1
+            pdftotext -layout "$NEW" - | grep -Fq "$FORM" || exit 1
+            cp "$NEW" "$LOCAL"
+            echo "| $FORM | \`$OLD_SHA\` | \`$NEW_SHA\` | [Federal RegInfo OMB instrument]($URL) | February 2025 | Previous editions obsolete; replaced draft local copy |" >> "$NOTES"
+          }
+
+          replace_form 5000-23 "https://www.reginfo.gov/public/do/DownloadDocument?objectID=152309501" \
+            "fcad8a09d4987a60415dbc3fa995fa5114b9ecfd8f86a58eb2a47e0057b955fb" \
+            "feb6fd371dbfda725f0d47b0f03140e552110b942301d53d5b912de142f6d567"
+          replace_form 7000-51 "https://www.reginfo.gov/public/do/DownloadDocument?objectID=152310401" \
+            "8fa604c293f4740c70135b7d914ae1824c04bd72675434e523e6943d8b70d643" \
+            "6294cf4e177430b923ebf321feec730d64bf4c935f7b6ebea55722142e8c20b8"
+
+          # This workflow runs only on explicit workflow-file changes and commits to draft branch.
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/MSHA-form-5000-23.pdf docs/MSHA-form-7000-51.pdf "$NOTES"
+          git commit -m "Replace obsolete 5000-23 and 7000-51 PDFs from verified federal instruments"
+          git push origin HEAD:v0.17/forms-audit-57
+
       - name: Commit audit report
         run: |
           if [ -z "$(git status --porcelain -- docs/MSHA_FORMS_BINARY_COMPARE_v0.17.md docs/MSHA_FORMS_LOCAL_REVISIONS_v0.17.md)" ]; then

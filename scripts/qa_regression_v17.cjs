@@ -35,15 +35,13 @@ const origin="http://127.0.0.1:8765/";
        if(await page.locator("#searchBar").count()!==1)throw Error("CFR search absent");
        await openFromHub("Regulatory Resources","OSHA / 29 CFR","oshaSection");
        await openFromHub("Regulatory Resources","Mine Act","mineActSection");
-       await hub("Regulatory Resources");
-       await page.locator("#regulatoryResourcesHubSection button.msha-ready-hub-item").click();
-       await page.locator("#mshaReadySection").waitFor({state:"visible",timeout:18000});
        for(const [sub,id] of [["inspection","inspectionReadySection"],["incident","incidentReadySection"]]){
+         await hub("Regulatory Resources");
+         await page.locator("#regulatoryResourcesHubSection button.msha-ready-hub-item").click();
+         await page.locator("#mshaReadySection").waitFor({state:"visible",timeout:18000});
          await page.locator('#mshaReadySection [data-msha-ready-target="'+id+'"]').click();
          await page.locator("#"+id).waitFor({state:"visible",timeout:18000});
          console.log("PASS",vp.name,"MSHA Ready /",sub);
-         await page.locator('#'+id+' button.msha-ready-back').first().click();
-         await page.locator("#mshaReadySection").waitFor({state:"visible",timeout:18000});
        }
        await openFromHub("Regulatory Resources","MSHA Forms Library","docsSection");
        for(const form of ["5000-23","7000-51","2000-38","4000-9","7000-2","5000-1","2000-224"]){

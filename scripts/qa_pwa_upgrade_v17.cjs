@@ -30,6 +30,22 @@ const path = require("node:path");
       const keys = await caches.keys();
       return keys.includes("skyfire-quality-cache-v36");
     },null,{timeout:90000});
+    // Simulate a real v0.16 user who has already opened this PDF, so the
+    // pre-upgrade cache definitely contains the old document.
+    await page.reload({waitUntil:"domcontentloaded",timeout:30000});
+    await page.waitForFunction(() => Boolean(navigator.serviceWorker.controller),null,{timeout:25000});
+    const first = await page.evaluate(async () => {
+      const r=await fetch("docs/MSHA-form-5000-23.pdf");
+      return {ok:r.ok,bytes:(await r.arrayBuffer()).byteLength};
+    });
+    if(!first.ok || first.bytes<10000)throw Error("Could not prime old PDF: "+JSON.stringify(first));
+    await page.waitForFunction(async expected => {
+      const pdf=await caches.match("./docs/MSHA-form-5000-23.pdf");
+      if(!pdf)return false;
+      const d=await crypto.subtle.digest("SHA-256",await pdf.arrayBuffer());
+      const sha=Array.from(new Uint8Array(d)).map(x=>x.toString(16).padStart(2,"0")).join("");
+      return sha===expected;
+    },oldSha,{timeout:90000});
     let s=await dump();
     console.log("PRE-UPGRADE",JSON.stringify(s));
     if(s.sha !== oldSha) throw new Error("Old installed cached form hash mismatch: "+s.sha);

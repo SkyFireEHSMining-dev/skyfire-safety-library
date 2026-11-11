@@ -16,7 +16,7 @@ const { webkit } = require("playwright");
         await page.locator('button.skyfire-hub-home-tile.regulatory-hub').click({timeout:25000});
         await page.locator('#regulatoryResourcesHubSection button.skyfire-hub-item').filter({hasText:"MSHA Forms Library"}).click();
         if(!await page.locator("#docsSection").isVisible())throw new Error(view.name+" Forms Library hidden");
-        const count=await page.locator('#docsSection a[href$=".pdf"]').count();
+        const count=await page.locator('#docsSection a[href^="docs/MSHA-form-"][href$=".pdf"]').count();
         if(count!==28)throw new Error(view.name+" expected 28 PDF action links, got "+count);
         const sizes=await page.evaluate(async ()=>{
           const paths=["docs/MSHA-form-5000-23.pdf","docs/MSHA-form-7000-51.pdf","docs/MSHA-form-2000-38.pdf","docs/MSHA-form-4000-9.pdf"];

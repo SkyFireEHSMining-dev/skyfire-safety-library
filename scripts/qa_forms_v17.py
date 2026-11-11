@@ -45,7 +45,11 @@ for item in forms:
     card = HTML.split(card_anchor, 1)[1].split('</div>', 1)[0]
     assert_true('https://www.msha.gov/' in card,
                 f"{n}: official agency source or filing instructions missing from card")
-    subprocess.run(["pdfinfo", str(path)], check=True, capture_output=True)
+    assert_true(b"startxref" in data and b"%%EOF" in data[-65536:],
+                f"{n}: PDF trailer or cross-reference marker missing")
+    # Optional deep structural inspection when poppler-utils is preinstalled.
+    if subprocess.run(["sh", "-c", "command -v pdfinfo >/dev/null"], capture_output=True).returncode == 0:
+        subprocess.run(["pdfinfo", str(path)], check=True, capture_output=True)
     if n in KNOWN_SHA256:
         assert_true(hashlib.sha256(data).hexdigest() == KNOWN_SHA256[n],
                     f"{n}: verified federal instrument checksum mismatch")

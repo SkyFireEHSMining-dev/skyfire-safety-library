@@ -22,8 +22,11 @@ const path = require("node:path");
         versions[name] = Array.from(new Uint8Array(digest)).map(x=>x.toString(16).padStart(2,"0")).join("");
       } else versions[name]=null;
     }
+    const reg = await navigator.serviceWorker.getRegistration();
     return {keys:ks,versions,controller:navigator.serviceWorker.controller?.scriptURL,
-      sw:(await navigator.serviceWorker.getRegistration())?.active?.scriptURL};
+      sw:reg?.active?.scriptURL,controllerMatchesActive: navigator.serviceWorker.controller===reg?.active,
+      controllerState:navigator.serviceWorker.controller?.state, activeState:reg?.active?.state,
+      installing:reg?.installing?.state,waiting:reg?.waiting?.state};
   });
   try {
     await page.goto(base,{waitUntil:"domcontentloaded",timeout:45000});
@@ -86,7 +89,8 @@ const path = require("node:path");
       const reg=await navigator.serviceWorker.getRegistration();
       return keys.includes("skyfire-quality-cache-v39") &&
         !keys.includes("skyfire-quality-cache-v36") &&
-        reg?.active?.state==="activated" && !reg.installing && !reg.waiting;
+        reg?.active?.state==="activated" && !reg.installing && !reg.waiting &&
+        navigator.serviceWorker.controller===reg.active;
     },null,{timeout:90000});
     await page.waitForTimeout(800);
     s=await dump();

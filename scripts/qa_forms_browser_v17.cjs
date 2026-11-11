@@ -26,7 +26,7 @@ const { chromium } = require("playwright");
         if (!await page.locator("#docsSection").isVisible()) {
           throw new Error(screen.name+": Forms Library did not open");
         }
-        const anchorCount = await page.locator('#docsSection a[href$=".pdf"]').count();
+        const anchorCount = await page.locator('#docsSection a[href^="docs/MSHA-form-"][href$=".pdf"]').count();
         if(anchorCount < 28) throw new Error(screen.name+": missing form links "+anchorCount);
         // PWA install is asynchronous; confirm its cache contains the corrected sources.
         await page.evaluate(async () => { await navigator.serviceWorker.ready; });

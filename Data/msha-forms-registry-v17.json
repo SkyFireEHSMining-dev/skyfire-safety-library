@@ -156,14 +156,18 @@
       "formNumber": "2000-38",
       "officialTitle": "Electrically Operated Equipment Field Approval Application (Coal Only)",
       "localFilename": "docs/MSHA-form-2000-38.pdf",
-      "localBlobSha": "5552db950dae11c50c37af5d87fa371a0547d2ad",
+      "localBlobSha": "2675a0230c46ac659985d72372f1e97b16e14551",
       "officialSourceUrl": "https://www.msha.gov/support-resources/forms-online-filing/2015/04/15/electrically-operated-equipment-field-approval",
       "revision": "April 2013",
       "priorEditionStatus": "supersedes MSHA Form 6-1481",
       "sourceStatus": "verified-official-source; OMB-date-followup",
-      "localStatus": "binary-confirmation-needed",
+      "localStatus": "verified-replaced-with-newer-federal-blank-instrument",
       "uiAction": "keep current short title; official form body uses Electrically Operated Mining Equipment Field Approval Application (coal operator)",
-      "notes": "The reviewed official form shows OMB 1219-0066 and an expired printed approval date. Verify the current OMB renewal/status separately; do not call the form obsolete based only on the printed date."
+      "notes": "The reviewed official form shows OMB 1219-0066 and an expired printed approval date. Verify the current OMB renewal/status separately; do not call the form obsolete based only on the printed date. Draft local blank PDF was updated to more recent federal instrument on November 10, 2026 with old/new checksum in docs/MSHA_FORMS_BINARY_REPLACEMENTS_FOLLOWUP_v0.17.md. OMB expiration is not itself proof of edition obsolescence; check current agency instructions prior to filing.",
+      "previousLocalBlobSha": "5552db950dae11c50c37af5d87fa371a0547d2ad",
+      "verifiedLocalSha256": "3a8f7d9c7f69d8b264d0c9e07117e5e53d8a9c76a3473b970735fc8e60ca96d7",
+      "localVerifiedDate": "2026-11-10",
+      "sourceComparisonUrl": "https://www.reginfo.gov/public/do/DownloadDocument?objectID=143355601"
     },
     {
       "formNumber": "5000-3",
@@ -182,14 +186,18 @@
       "formNumber": "4000-9",
       "officialTitle": "Record of Individual Exposure to Radon Daughters",
       "localFilename": "docs/MSHA-form-4000-9.pdf",
-      "localBlobSha": "ffd12dcf26670c91fec793bba822113d0235c333",
+      "localBlobSha": "cf5ca4a1c07a474f0a70fd56321928f8b2de23c8",
       "officialSourceUrl": "https://www.msha.gov/sites/default/files/Support_Resources/Forms/4000-9.pdf",
       "revision": "August 2015 (mailing address)",
       "priorEditionStatus": "not stated in reviewed source",
       "sourceStatus": "official-source-verified; current-OMB-status-followup",
-      "localStatus": "binary-confirmation-needed",
+      "localStatus": "verified-replaced-with-newer-federal-blank-instrument",
       "uiAction": "keep title",
-      "notes": "30 CFR 57.5040 requires the operator to maintain Form 4000-9 or an equivalent form acceptable to MSHA. Printed OMB date on the PDF is old; status needs a current-control check rather than an age-based conclusion."
+      "notes": "30 CFR 57.5040 requires the operator to maintain Form 4000-9 or an equivalent form acceptable to MSHA. Printed OMB date on the PDF is old; status needs a current-control check rather than an age-based conclusion. Draft local blank PDF was updated to more recent federal instrument on November 10, 2026 with old/new checksum in docs/MSHA_FORMS_BINARY_REPLACEMENTS_FOLLOWUP_v0.17.md. OMB expiration is not itself proof of edition obsolescence; check current agency instructions prior to filing.",
+      "previousLocalBlobSha": "ffd12dcf26670c91fec793bba822113d0235c333",
+      "verifiedLocalSha256": "d09e5babbf75040384797d4e0b92b4f562852c8ad9f77c802304193e9e04861c",
+      "localVerifiedDate": "2026-11-10",
+      "sourceComparisonUrl": "https://www.reginfo.gov/public/do/DownloadDocument?objectID=130233001"
     }
   ]
 }

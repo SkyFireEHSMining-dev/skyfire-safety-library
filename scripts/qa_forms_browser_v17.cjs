@@ -42,7 +42,7 @@ const { chromium } = require("playwright");
         await page.locator('#regulatoryResourcesHubSection button.skyfire-hub-item').filter({hasText:'MSHA Forms Library'}).click();
         if(!await page.locator("#docsSection").isVisible()) throw new Error(screen.name+": offline Forms Library not accessible");
         const asset = await page.evaluate(async () => {
-          const paths = ["docs/MSHA-form-5000-23.pdf","docs/MSHA-form-7000-51.pdf","docs/MSHA-form-2000-38.pdf","docs/MSHA-form-4000-9.pdf"];
+          const paths = [...new Set([...document.querySelectorAll('#docsSection a[href^="docs/MSHA-form-"][href$=".pdf"]')].map(a=>a.getAttribute("href")))];
           const report=[];
           for (const path of paths) {
             const r=await fetch(path);
@@ -51,9 +51,9 @@ const { chromium } = require("playwright");
           }
           return report;
         });
-        if(asset.some(x=>x.status!==200 || x.bytes<10000)) throw new Error(screen.name+": offline corrected form not available "+JSON.stringify(asset));
+        if(asset.length!==14 || asset.some(x=>x.status!==200 || x.bytes<10000)) throw new Error(screen.name+": offline form inventory incomplete "+JSON.stringify(asset));
         if(errors.length) console.warn(screen.name+" browser page errors: "+errors.slice(0,3).join(" | "));
-        console.log("PASS "+screen.name+" (Chromium emulation): online/open, 14 PDF links, SW cache, offline reload, four corrected PDFs "+JSON.stringify(asset.map(x=>x.bytes)));
+        console.log("PASS "+screen.name+" (Chromium emulation): online/open, 14 PDF links, SW cache, offline reload, all 14 form PDFs "+JSON.stringify(asset.map(x=>x.bytes)));
       } finally {
         await context.close();
       }

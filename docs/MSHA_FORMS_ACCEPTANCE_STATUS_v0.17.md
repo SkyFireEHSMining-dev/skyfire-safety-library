@@ -19,6 +19,15 @@ The test evidence below applies to this draft branch and does **not** establish 
 
 **Disposition:** Draft remains UNMERGED. A static test PASS cannot substitute for new browser test outcomes or physical-device acceptance.
 
+## Final automated upgrade verification — November 11, 2026
+
+- [x] **Installed v0.16 → draft v0.17 update simulation: PASS.** [GitHub Actions run #43056526901](https://github.com/SkyFireEHSMining-dev/skyfire-safety-library/actions/runs/43056526901). The test seeded a real prior v0.16 cached **May 2021 Form 5000-23**, then swapped the served app to the draft v0.17 files on the same origin and browser profile, updated the registration, required controller transition, verified old cache retirement, and confirmed **February 2025 5000-23** bytes from an actual offline fetch. All four corrected PDFs returned HTTP 200 offline. The underlying SW installation now uses fresh HTTP-cache-bypassing requests and only requests activation after precaching.
+- [x] **Broad Chromium regression: PASS** on [run #43056492097](https://github.com/SkyFireEHSMining-dev/skyfire-safety-library/actions/runs/43056492097) after the SW code change. Earlier [#43054768282](https://github.com/SkyFireEHSMining-dev/skyfire-safety-library/actions/runs/43054768282) confirmed all 14 forms offline and field modules' basic navigation.
+- [x] **Static source QA: PASS** [#43055755491](https://github.com/SkyFireEHSMining-dev/skyfire-safety-library/actions/runs/43055755491) on the cache-bypass code. The later activating/claim change must also pass syntax and integrity checks before merge.
+- [ ] **Not yet a public release.** PR #78 remains a draft, live GitHub Pages remains v0.16. The full native iPhone/iPad viewer and installed-PWA update checks are not physically performed, and WebKit revalidation after the final link changes remains blocked by CI runner package dependencies. The earlier WebKit run passed.
+- [ ] Release metadata, final release dates, controlled merge/live verify, Drive closeout, and formal issue closure remain pending.
+- [ ] Exact edition equivalence on a minority of legacy reference PDFs cannot be certified; official source/filer links and caveats are intentionally preserved. Do not claim all offline blank forms are agency-current filing editions.
+
 ## Form-by-form disposition
 | Form | Draft branch source-integrity state | Current release gate |
 |---|---|---|

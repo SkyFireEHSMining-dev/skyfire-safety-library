@@ -1,4 +1,4 @@
-# MSHA Forms Local Revision Inventory — v0.17
+> **HISTORICAL PRE-REPLACEMENT SNAPSHOT (October 6, 2026):** The SHA and revision comparisons below reflect the PDF bytes *before* the November 10 draft corrections. Current replacement records are `docs/MSHA_FORMS_BINARY_REPLACEMENTS_v0.17.md`, `docs/MSHA_FORMS_BINARY_REPLACEMENTS_FOLLOWUP_v0.17.md` and `Data/msha-forms-registry-v17.json`. Do not use this snapshot as the current state of the PDFs.\n\n# MSHA Forms Local Revision Inventory — v0.17
 
 **Generated:** 2026-10-06T23:09:42Z
 

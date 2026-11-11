@@ -1,20 +1,23 @@
 {
   "schemaVersion": 1,
-  "auditDate": "2026-10-06",
-  "purpose": "Authoritative-source provenance registry for the MSHA forms shipped in SkyFire. A verified current source does not by itself prove that the local PDF bytes match that source.",
+  "auditDate": "2026-11-10",
+  "purpose": "MSHA source and revision provenance registry. Audit status is per-form, not a blanket currentness determination. Distinguish initial source validation from verified local PDF content.",
   "forms": [
     {
       "formNumber": "5000-23",
       "officialTitle": "Certificate of Training",
       "localFilename": "docs/MSHA-form-5000-23.pdf",
-      "localBlobSha": "72f49eb447f81e9a9b306d5d8f2cc6a2e5dc16d7",
+      "localBlobSha": "7ea1201ef25b02bb928cb11b5f3d2c544b422c86",
       "officialSourceUrl": "https://www.msha.gov/sites/default/files/Support_Resources/Forms/2025/MSHA_5000-23.pdf",
       "revision": "February 2025",
       "priorEditionStatus": "Previous editions are obsolete",
       "sourceStatus": "verified-current-official",
-      "localStatus": "replacement-required",
+      "localStatus": "verified-replaced-current-federal-instrument",
       "uiAction": "keep title; update source/revision metadata",
-      "notes": "Known #57 defect: SkyFire local copy predates the current February 2025 official revision."
+      "notes": "Known #57 defect: SkyFire local copy predates the current February 2025 official revision. Replaced draft local PDF with verified February 2025 federal RegInfo instrument on Nov 10, 2026; original SHA-256 and current checksum in docs/MSHA_FORMS_BINARY_REPLACEMENTS_v0.17.md.",
+      "previousLocalBlobSha": "72f49eb447f81e9a9b306d5d8f2cc6a2e5dc16d7",
+      "verifiedLocalSha256": "feb6fd371dbfda725f0d47b0f03140e552110b942301d53d5b912de142f6d567",
+      "localVerifiedDate": "2026-11-10"
     },
     {
       "formNumber": "5000-1",
@@ -59,14 +62,17 @@
       "formNumber": "7000-51",
       "officialTitle": "Mine Operator Identification Request",
       "localFilename": "docs/MSHA-form-7000-51.pdf",
-      "localBlobSha": "e6576bcb983a14bfc270a1c1287ca5e79cf3fca1",
+      "localBlobSha": "f429e4d0cfecc1876c7b9be6f205137da42f0e9d",
       "officialSourceUrl": "https://www.msha.gov/sites/default/files/Support_Resources/Forms/2025/MSHA_7000-51.pdf",
       "revision": "February 2025",
       "priorEditionStatus": "Previous editions are obsolete",
       "sourceStatus": "verified-current-official",
-      "localStatus": "binary-confirmation-needed",
+      "localStatus": "verified-replaced-current-federal-instrument",
       "uiAction": "change display title from Mine ID Request to official title; keep plain-language helper text",
-      "notes": "2025 official PDF is the authoritative comparison target."
+      "notes": "2025 official PDF is the authoritative comparison target. Replaced draft local PDF with verified February 2025 federal RegInfo instrument on Nov 10, 2026; original SHA-256 and current checksum in docs/MSHA_FORMS_BINARY_REPLACEMENTS_v0.17.md.",
+      "previousLocalBlobSha": "e6576bcb983a14bfc270a1c1287ca5e79cf3fca1",
+      "verifiedLocalSha256": "6294cf4e177430b923ebf321feec730d64bf4c935f7b6ebea55722142e8c20b8",
+      "localVerifiedDate": "2026-11-10"
     },
     {
       "formNumber": "2000-7",

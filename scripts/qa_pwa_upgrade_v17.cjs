@@ -59,6 +59,8 @@ const path = require("node:path");
     let s=await dump();
     console.log("PRE-UPGRADE",JSON.stringify(s));
     if(s.versions["skyfire-quality-cache-v36"] !== oldSha) throw new Error("Old installed cached form hash mismatch: "+JSON.stringify(s.versions));
+    // Save the actual v0.16 worker object; scriptURL is unchanged across versions.
+    await page.evaluate(() => {window.__skyfireOldController = navigator.serviceWorker.controller});
     // Keep the same origin and browser profile; atomically update the served directory.
     if(fs.existsSync(newLink)) fs.unlinkSync(newLink);
     fs.symlinkSync("draft",newLink);
@@ -90,7 +92,8 @@ const path = require("node:path");
       return keys.includes("skyfire-quality-cache-v39") &&
         !keys.includes("skyfire-quality-cache-v36") &&
         reg?.active?.state==="activated" && !reg.installing && !reg.waiting &&
-        navigator.serviceWorker.controller===reg.active;
+        navigator.serviceWorker.controller===reg.active &&
+        navigator.serviceWorker.controller!==window.__skyfireOldController;
     },null,{timeout:90000});
     await page.waitForTimeout(800);
     s=await dump();

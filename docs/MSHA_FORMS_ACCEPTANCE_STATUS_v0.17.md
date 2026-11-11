@@ -5,6 +5,20 @@
 
 The test evidence below applies to this draft branch and does **not** establish that an older installed SkyFire PWA or the current public main branch has received these changes.
 
+## November 11 source-and-test checkpoint
+
+- [x] All 14 Forms Library cards link to a specific official MSHA source or agency filing instruction; offline reference and filing-currentness caveats added.
+- [x] Federal source/filer evidence and unresolved edition equivalence recorded in [source disposition ledger](MSHA_FORMS_SOURCE_DISPOSITION_2026-11-11.md).
+- [x] Four corrected PDFs have source and SHA-256 provenance; prior byte evidence preserved.
+- [x] Network-independent static QA successfully ran on the draft branch: [GitHub Actions run 43054085060](https://github.com/SkyFireEHSMining-dev/skyfire-safety-library/actions/runs/43054085060).
+- [x] Original automated Chromium offline smoke and WebKit navigation/PDF-download checks passed on earlier draft: [run 42970961367](https://github.com/SkyFireEHSMining-dev/skyfire-safety-library/actions/runs/42970961367).
+- [ ] New broad regression and v0.16-to-v0.17 installed-PWA upgrade workflows: **not yet accepted**. Initial attempt(s) were blocked before tests ran by the CI runner's inability to resolve Ubuntu package mirrors. The workflow dependencies have been reduced and reruns submitted.
+- [ ] Physical Safari/iPad PDF/installed-PWA check: **not performed**. [Manual device QA card](MSHA_FORMS_MANUAL_DEVICE_QA_v0.17.md) is ready once the v0.17 candidate is accessible without affecting production.
+- [ ] For forms with unverified exact current local binary (notably 5000-1, 2000-224), complete final official-document/viewer acceptance or explicitly retain reference-only status and official-filing handoff. Do not falsely claim all 14 offline blanks are the latest agency submission editions.
+- [ ] Formal v0.17 release metadata, merge/live-site verification, and Google Drive closeout: **not performed**.
+
+**Disposition:** Draft remains UNMERGED. A static test PASS cannot substitute for new browser test outcomes or physical-device acceptance.
+
 ## Form-by-form disposition
 | Form | Draft branch source-integrity state | Current release gate |
 |---|---|---|

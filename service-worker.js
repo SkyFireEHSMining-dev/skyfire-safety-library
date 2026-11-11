@@ -77,7 +77,10 @@ self.addEventListener("install", event => {
     caches.open(SHELL_CACHE_NAME).then(async cache => {
       for (const asset of SHELL_CACHE) {
         try {
-          await cache.add(asset);
+          // A new cache name alone does not invalidate the browser HTTP cache.
+          // Fetch uncached bytes so unchanged PDF URLs receive the new edition.
+          const refreshedRequest = new Request(asset, { cache: "reload" });
+          await cache.add(refreshedRequest);
         } catch (error) {
           console.warn("Install cache skipped:", asset, error);
         }

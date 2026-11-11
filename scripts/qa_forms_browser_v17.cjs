@@ -20,8 +20,9 @@ const { chromium } = require("playwright");
         page.on("pageerror",e=>errors.push(e.message));
         const resp = await page.goto(root,{waitUntil:"domcontentloaded",timeout:30000});
         if (!resp || !resp.ok()) throw new Error(screen.name+": home unavailable");
-        await page.waitForSelector('button[data-open-section="docsSection"]',{timeout:25000});
-        await page.locator('button[data-open-section="docsSection"]').click();
+        await page.waitForSelector('button.skyfire-hub-home-tile.regulatory-hub',{timeout:25000});
+        await page.locator('button.skyfire-hub-home-tile.regulatory-hub').click();
+        await page.locator('#regulatoryResourcesHubSection button.skyfire-hub-item').filter({hasText:'MSHA Forms Library'}).click();
         if (!await page.locator("#docsSection").isVisible()) {
           throw new Error(screen.name+": Forms Library did not open");
         }
@@ -36,8 +37,9 @@ const { chromium } = require("playwright");
         await context.setOffline(true);
         const offline = await page.reload({waitUntil:"domcontentloaded",timeout:30000});
         if(!offline || !offline.ok()) throw new Error(screen.name+": cached home unavailable offline");
-        await page.waitForSelector('button[data-open-section="docsSection"]',{timeout:20000});
-        await page.locator('button[data-open-section="docsSection"]').click();
+        await page.waitForSelector('button.skyfire-hub-home-tile.regulatory-hub',{timeout:20000});
+        await page.locator('button.skyfire-hub-home-tile.regulatory-hub').click();
+        await page.locator('#regulatoryResourcesHubSection button.skyfire-hub-item').filter({hasText:'MSHA Forms Library'}).click();
         if(!await page.locator("#docsSection").isVisible()) throw new Error(screen.name+": offline Forms Library not accessible");
         const asset = await page.evaluate(async () => {
           const paths = ["docs/MSHA-form-5000-23.pdf","docs/MSHA-form-7000-51.pdf","docs/MSHA-form-2000-38.pdf","docs/MSHA-form-4000-9.pdf"];

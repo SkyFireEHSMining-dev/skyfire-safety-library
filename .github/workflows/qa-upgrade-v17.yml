@@ -1,0 +1,36 @@
+name: SkyFire v0.17 installed PWA upgrade QA
+on:
+  push:
+    branches: [v0.17/forms-audit-57]
+    paths:
+      - .github/workflows/qa-upgrade-v17.yml
+      - scripts/qa_pwa_upgrade_v17.cjs
+      - service-worker.js
+      - "docs/MSHA-form-*.pdf"
+permissions:
+  contents: read
+jobs:
+  install-upgrade:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out released v0.16 baseline
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: old
+      - name: Check out draft v0.17
+        uses: actions/checkout@v4
+        with:
+          ref: v0.17/forms-audit-57
+          path: draft
+      - name: Install Chromium for migration QA
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Simulate update of an installed v0.16 app
+        run: |
+          ln -s old live
+          python3 -m http.server 8766 --bind 127.0.0.1 --directory live >/tmp/skyfire-upgrade-http.log 2>&1 &
+          sleep 3
+          node draft/scripts/qa_pwa_upgrade_v17.cjs

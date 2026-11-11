@@ -34,6 +34,7 @@ const knownCurrentSha="feb6fd371dbfda725f0d47b0f03140e552110b942301d53d5b912de14
    });
    assert(state.scope.endsWith("/release-candidate/v017/"),"Staging service-worker scope not isolated "+JSON.stringify(state));
    assert(state.keys.includes("skyfire-preview-v017-shell-v39"),"Staging offline cache missing");
+   assert(state.rootCachePreserved,"Preview SW should not delete installed production cache");
    console.log("PASS staging page, provenance, PWA scope, isolated cache",JSON.stringify(state));
    await context.setOffline(true);
    await page.reload({waitUntil:"domcontentloaded",timeout:30000});
@@ -44,7 +45,26 @@ const knownCurrentSha="feb6fd371dbfda725f0d47b0f03140e552110b942301d53d5b912de14
      return {ok:r.ok,sha:hash};
    });
    assert(off.ok&&off.sha===knownCurrentSha,"Staging offline PDF is wrong: "+JSON.stringify(off));
-   console.log("PASS public HTTPS staging offline corrected Form 5000-23",JSON.stringify(off));
+   const inventory=await page.evaluate(async()=>{
+     const paths=[...new Set([...document.querySelectorAll('#docsSection a[href^="docs/MSHA-form-"][href$=".pdf"]')].map(x=>x.getAttribute("href")))];
+     const checks=[];
+     for(const p of paths){
+       const response=await fetch(p);
+       const bytes=await response.arrayBuffer();
+       const digest=await crypto.subtle.digest("SHA-256",bytes);
+       const hash=Array.from(new Uint8Array(digest)).map(n=>n.toString(16).padStart(2,"0")).join("");
+       checks.push({path:p,ok:response.ok,size:bytes.byteLength,sha:hash});
+     }
+     return checks;
+   });
+   assert.equal(inventory.length,14,"Missing offline MSHA form entries in hosted preview");
+   assert(inventory.every(x=>x.ok&&x.size>10000),"At least one hosted offline form unavailable");
+   const named=Object.fromEntries(inventory.map(x=>[x.path,x.sha]));
+   assert.equal(named["docs/MSHA-form-5000-23.pdf"],knownCurrentSha);
+   assert.equal(named["docs/MSHA-form-7000-51.pdf"],"6294cf4e177430b923ebf321feec730d64bf4c935f7b6ebea55722142e8c20b8");
+   assert.equal(named["docs/MSHA-form-2000-38.pdf"],"3a8f7d9c7f69d8b264d0c9e07117e5e53d8a9c76a3473b970735fc8e60ca96d7");
+   assert.equal(named["docs/MSHA-form-4000-9.pdf"],"d09e5babbf75040384797d4e0b92b4f562852c8ad9f77c802304193e9e04861c");
+   console.log("PASS HTTPS preview offline all 14 PDFs, four corrected SHA-256 verified",inventory.map(x=>x.path.split("/").at(-1)));
    await context.setOffline(false);
    const after=await page.goto(base,{waitUntil:"domcontentloaded",timeout:30000});
    assert(after&&after.ok(),"Live homepage unavailable after staging PWA install");

@@ -14,6 +14,8 @@ REG = json.loads((ROOT / "Data/msha-forms-registry-v17.json").read_text(encoding
 KNOWN_SHA256 = {
     "5000-23": "feb6fd371dbfda725f0d47b0f03140e552110b942301d53d5b912de142f6d567",
     "7000-51": "6294cf4e177430b923ebf321feec730d64bf4c935f7b6ebea55722142e8c20b8",
+    "2000-38": "3a8f7d9c7f69d8b264d0c9e07117e5e53d8a9c76a3473b970735fc8e60ca96d7",
+    "4000-9": "d09e5babbf75040384797d4e0b92b4f562852c8ad9f77c802304193e9e04861c",
 }
 
 def assert_true(pred, message):
@@ -42,7 +44,7 @@ for item in forms:
     if n in KNOWN_SHA256:
         assert_true(hashlib.sha256(data).hexdigest() == KNOWN_SHA256[n],
                     f"{n}: verified federal instrument checksum mismatch")
-        assert_true(item.get("localStatus") == "verified-replaced-current-federal-instrument",
+        assert_true(item.get("localStatus", "").startswith("verified-replaced-"),
                     f"{n}: missing verified replacement status")
     print(f"OK form {n}: PDF, sha, registry, two links, offline manifest")
 

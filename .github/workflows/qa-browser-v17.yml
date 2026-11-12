@@ -8,6 +8,8 @@ on:
       - scripts/qa_forms_webkit_v17.cjs
       - scripts/qa_regression_v17.cjs
       - index.html
+      - app.js
+      - feedback.js
       - service-worker.js
       - "docs/MSHA-form-*.pdf"
 permissions:

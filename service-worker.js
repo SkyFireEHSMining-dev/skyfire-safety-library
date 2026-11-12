@@ -1,6 +1,6 @@
-const SHELL_CACHE_NAME = "skyfire-quality-cache-v36";
+const SHELL_CACHE_NAME = "skyfire-quality-cache-v39";
 const DATA_CACHE_NAME = "skyfire-regulatory-data-v1";
-const CACHE_VERSION = "quality-v38";
+const CACHE_VERSION = "quality-v39";
 
 const SHELL_CACHE = [
   "./",
@@ -77,15 +77,18 @@ self.addEventListener("install", event => {
     caches.open(SHELL_CACHE_NAME).then(async cache => {
       for (const asset of SHELL_CACHE) {
         try {
-          await cache.add(asset);
+          // A new cache name alone does not invalidate the browser HTTP cache.
+          // Fetch uncached bytes so unchanged PDF URLs receive the new edition.
+          const refreshedRequest = new Request(asset, { cache: "reload" });
+          await cache.add(refreshedRequest);
         } catch (error) {
           console.warn("Install cache skipped:", asset, error);
         }
       }
+      // Activate only after the corrected cache is fully populated.
+      await self.skipWaiting();
     })()
   );
-
-  self.skipWaiting();
 });
 
 self.addEventListener("activate", event => {

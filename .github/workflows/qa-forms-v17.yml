@@ -1,0 +1,22 @@
+name: SkyFire v0.17 static integrity QA
+on:
+  push:
+    branches: [v0.17/forms-audit-57]
+    paths:
+      - .github/workflows/qa-forms-v17.yml
+      - scripts/qa_forms_v17.py
+      - Data/msha-forms-registry-v17.json
+      - index.html
+      - app.js
+      - feedback.js
+      - service-worker.js
+      - "docs/MSHA-form-*.pdf"
+permissions:
+  contents: read
+jobs:
+  static-forms:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run structural and form-provenance checks
+        run: python3 scripts/qa_forms_v17.py

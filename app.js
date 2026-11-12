@@ -157,12 +157,8 @@ function bindSectionButtons() {
 }
 
 function setHomePlaceholders() {
-  const today = new Date();
-  const dateText = today.toLocaleDateString(undefined, {
-    year: "numeric",
-    month: "long",
-    day: "numeric"
-  });
+  // Show the actual verified application release date, not today's date.
+  const dateText = "November 11, 2026";
 
   if (fatalityStat) {
     fatalityStat.textContent = "Offline-ready field reference";

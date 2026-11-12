@@ -13,6 +13,10 @@ const origin="http://127.0.0.1:8765/";
        const res=await page.goto(origin,{waitUntil:"domcontentloaded",timeout:45000});
        if(!res || !res.ok())throw Error("home failed "+vp.name);
        await page.locator('button.skyfire-hub-home-tile.regulatory-hub').waitFor({state:"visible",timeout:25000});
+       const version=await page.locator(".quick-banner-subtitle").textContent();
+       if(!version?.includes("v0.17 Beta"))throw Error("Incorrect release dashboard label "+version);
+       const releaseDate=await page.locator("#homeLastUpdated").textContent();
+       if(releaseDate?.trim()!=="November 11, 2026")throw Error("Incorrect release date: "+releaseDate);
      }
      async function hub(name){
        await reset();

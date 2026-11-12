@@ -54,10 +54,18 @@ async function shaOfResponse(page,url){
    r=await page.goto(base+"release-candidate/v017/",{waitUntil:"domcontentloaded",timeout:45000});
    assert(r?.ok(),"QA preview unavailable");
    await page.locator("#skyfire-v017-test-banner").waitFor({state:"visible",timeout:15000});
-   await page.evaluate(async()=>navigator.serviceWorker.ready);
+   await page.waitForFunction(async()=>{
+     const regs=await navigator.serviceWorker.getRegistrations();
+     return regs.some(r=>r.scope.endsWith("/release-candidate/v017/") && r.active);
+   },null,{timeout:60000});
+   // The production worker may still control this browsing context until the
+   // narrower-scoped QA worker activates and the page is reloaded.
+   await page.reload({waitUntil:"domcontentloaded",timeout:30000});
+   await page.waitForFunction(()=>navigator.serviceWorker.controller?.scriptURL.includes("/release-candidate/v017/service-worker.js"),null,{timeout:60000});
    const state=await page.evaluate(async()=>{
-     const reg=await navigator.serviceWorker.getRegistration();
-     return {scope:reg?.scope,keys:await caches.keys()};
+     const regs=await navigator.serviceWorker.getRegistrations();
+     const qa=regs.find(r=>r.scope.endsWith("/release-candidate/v017/"));
+     return {scope:qa?.scope,controller:navigator.serviceWorker.controller?.scriptURL,keys:await caches.keys()};
    });
    assert(state.scope.endsWith("/release-candidate/v017/"),"QA SW unexpectedly controls production");
    assert(state.keys.includes("skyfire-quality-cache-v39"),"QA deleted production cache");

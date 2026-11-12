@@ -11,6 +11,8 @@ ROOT = Path(__file__).resolve().parents[1]
 HTML = (ROOT / "index.html").read_text(encoding="utf-8")
 SW = (ROOT / "service-worker.js").read_text(encoding="utf-8")
 REG = json.loads((ROOT / "Data/msha-forms-registry-v17.json").read_text(encoding="utf-8"))
+APP = (ROOT / "app.js").read_text(encoding="utf-8")
+FEEDBACK = (ROOT / "feedback.js").read_text(encoding="utf-8")
 KNOWN_SHA256 = {
     "5000-23": "feb6fd371dbfda725f0d47b0f03140e552110b942301d53d5b912de142f6d567",
     "7000-51": "6294cf4e177430b923ebf321feec730d64bf4c935f7b6ebea55722142e8c20b8",
@@ -21,6 +23,13 @@ KNOWN_SHA256 = {
 def assert_true(pred, message):
     if not pred:
         raise AssertionError(message)
+
+assert_true("SkyFire Safety Library v0.17 Beta" in HTML,
+            "Release dashboard must identify v0.17")
+assert_true('const SKYFIRE_FEEDBACK_VERSION = "v0.17 Beta";' in FEEDBACK,
+            "Feedback metadata must identify v0.17")
+assert_true('const dateText = "November 11, 2026";' in APP,
+            "Dashboard must use verified release date rather than runtime current date")
 
 forms = REG["forms"]
 assert_true(len(forms) == 14, "Expected exactly 14 MSHA source registry entries")

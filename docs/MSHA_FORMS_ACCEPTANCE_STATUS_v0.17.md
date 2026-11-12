@@ -1,3 +1,30 @@
+# SkyFire v0.17 — Release Acceptance Decision (November 11, 2026)
+
+**Decision:** APPROVED FOR CONTROLLED BETA RELEASE, subject to a clean final CI run, conflict-free merge, and successful live-site verification. **Not yet deployed at the time of this checkpoint.**
+
+## Accepted release scope
+- [x] All 14 PDF references have been inventoried, source/filer options linked and uncertainties recorded in the form-specific provenance register.
+- [x] Four older local blank instruments were replaced with checksum-controlled federal copies and old/new evidence: 5000-23, 7000-51, 2000-38, and 4000-9.
+- [x] The two specifically obsolete 2025 form corrections (5000-23 and 7000-51) are stored in the draft application and accessible from the Forms Library.
+- [x] Chromium full-form offline/reload navigation and the v0.16 → v0.17 cache-migration test passed, including actual updated Form 5000-23 bytes offline.
+- [x] Physical iPhone installed SkyFire QA launch/relaunch and February 2025 Form 5000-23 opening **with Wi-Fi and cellular unavailable** passed. First attempt before opening the PWA online was blocked; retest after first online initialization passed.
+- [x] Public HTTPS preview tested, with the live v0.16 root left intact and all 14 PDFs retrievable offline in the preview.
+
+## Explicitly limited or deferred acceptance
+- **Reference-only caveat:** Some specialized historical PDFs have not been proven byte-identical to the current MSHA filing instrument. **#81 remains OPEN** for exact edition, XFA viewer and filing-method verification. SkyFire directs users to the authoritative current MSHA site and does not guarantee cached copies are accepted for filing.
+- **iPad physical test not conducted:** Automated tablet-size Chromium and earlier WebKit coverage passed. Manual iPad testing is a POST-RELEASE FOLLOW-UP, not a representation that it passed.
+- **PDF Back/Close UX:** Known cross-device return-navigation issue recorded as **#80**, separate from source integrity; not included in v0.17.
+- **CFR data currency:** **#79** remains OPEN. This forms-only release does not certify that the entire 29/30 CFR XML dataset is current.
+- **General PDF editor/XFA fields:** Open/view tests do not establish that every interactive PDF field is fillable in native mobile PDF viewers. Compatibility guidance is included.
+
+## Release controls
+- Do not treat the old unchecked checklists below as current requirements without applying this November 11 superseding decision.
+- On GitHub Actions final PASS, merge PR #78 while preserving the existing /release-candidate/v017/ QA site. Verify the deployed release label, federal-form hashes and app/offline service-worker scope.
+- After production verification, convert release notes/history from DRAFT to RELEASED and update the master backlog/issue status. Record the merge SHA and release date.
+
+---
+## Historical working acceptance checkpoints (retained for audit)
+
 # SkyFire v0.17 - MSHA Forms Library Acceptance & Remaining Decisions
 **Status:** DRAFT / NOT RELEASED / NOT ACCEPTED  
 **Audit checkpoint:** November 10, 2026 (Pacific; GitHub Actions timestamps may show November 11 UTC)  

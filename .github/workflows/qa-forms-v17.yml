@@ -7,6 +7,8 @@ on:
       - scripts/qa_forms_v17.py
       - Data/msha-forms-registry-v17.json
       - index.html
+      - app.js
+      - feedback.js
       - service-worker.js
       - "docs/MSHA-form-*.pdf"
 permissions:

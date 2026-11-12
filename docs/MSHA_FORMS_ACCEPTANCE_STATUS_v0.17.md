@@ -1,6 +1,6 @@
 # SkyFire v0.17 — Release Acceptance Decision (November 11, 2026)
 
-**Decision:** APPROVED FOR CONTROLLED BETA RELEASE, subject to a clean final CI run, conflict-free merge, and successful live-site verification. **Not yet deployed at the time of this checkpoint.**
+**Decision:** RELEASED November 11, 2026 (Pacific). Final static and Chromium QA PASS; physical iPhone offline Form 5000-23 PASS; production PR #78 merged as b7e0e059540480516bf9aa0cc61a5332054a5578; Pages deployment #43166793416 PASS; live production / all-forms offline / QA-isolation test #43167192408 PASS. Physical iPad manual testing and unresolved specialized reference editions remain documented deferred work (#81), not completed claims.
 
 ## Accepted release scope
 - [x] All 14 PDF references have been inventoried, source/filer options linked and uncertainties recorded in the form-specific provenance register.

@@ -1,75 +1,67 @@
-// Public HTTPS staging smoke test. Never writes to production.
-const {chromium}=require("playwright");
+// Published-site release smoke test: production v0.17 + isolated QA preview.
+// Never modifies source data on the hosted application.
+const { chromium }=require("playwright");
 const assert=require("node:assert/strict");
-const crypto=require("node:crypto");
 const base="https://skyfireehsmining-dev.github.io/skyfire-safety-library/";
-const preview=base+"release-candidate/v017/";
-const knownCurrentSha="feb6fd371dbfda725f0d47b0f03140e552110b942301d53d5b912de142f6d567";
-(async ()=>{
+const known={
+ "5000-23":"feb6fd371dbfda725f0d47b0f03140e552110b942301d53d5b912de142f6d567",
+ "7000-51":"6294cf4e177430b923ebf321feec730d64bf4c935f7b6ebea55722142e8c20b8",
+ "2000-38":"3a8f7d9c7f69d8b264d0c9e07117e5e53d8a9c76a3473b970735fc8e60ca96d7",
+ "4000-9":"d09e5babbf75040384797d4e0b92b4f562852c8ad9f77c802304193e9e04861c"
+};
+async function shaOfResponse(page,url){
+ return page.evaluate(async url=>{
+   const response=await fetch(url);
+   const bytes=await response.arrayBuffer();
+   const b=await crypto.subtle.digest("SHA-256",bytes);
+   const hash=Array.from(new Uint8Array(b)).map(n=>n.toString(16).padStart(2,"0")).join("");
+   return {status:response.status,bytes:bytes.byteLength,sha:hash};
+ },url);
+}
+(async()=>{
  const browser=await chromium.launch({headless:true,args:["--no-sandbox"]});
- try {
+ try{
    const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,serviceWorkers:"allow"});
    const page=await context.newPage();
-   const root=await page.goto(base,{waitUntil:"domcontentloaded",timeout:45000});
-   assert(root&&root.ok(),"Published v0.16 homepage not accessible");
-   assert(!(await page.locator("#skyfire-v017-test-banner").count()),"Production contains staging banner");
-   await page.evaluate(async()=>{await navigator.serviceWorker.ready});
-   console.log("PASS production root reachable and unchanged UI");
-   const res=await page.goto(preview,{waitUntil:"domcontentloaded",timeout:45000});
-   assert(res&&res.ok(),"Staging URL inaccessible; HTTP "+res?.status());
-   await page.locator("#skyfire-v017-test-banner").waitFor({state:"visible",timeout:20000});
-   assert((await page.title()).includes("QA Preview"),"Missing preview browser title");
-   assert.equal(await page.locator('a[href="docs/MSHA-form-5000-23.pdf"]').count(),2);
-   const provenance=await page.evaluate(async()=>{const r=await fetch("PREVIEW_PROVENANCE.json",{cache:"no-store"});return {status:r.status,body:await r.json()};});
-   assert.equal(provenance.status,200);
-   assert.equal(provenance.body.sourceCommit,"d6b947d6c0feb3e31fc73d8816cde98ad07ac9ef");
-   await page.waitForFunction(async()=>(await caches.keys()).includes("skyfire-preview-v017-shell-v39"),null,{timeout:65000});
-   await page.reload({waitUntil:"domcontentloaded"});
-   await page.waitForFunction(()=>navigator.serviceWorker.controller?.scriptURL.includes("/release-candidate/v017/service-worker.js"),null,{timeout:30000});
-   const state=await page.evaluate(async()=>{
-     const reg=await navigator.serviceWorker.getRegistration();
-     const keys=await caches.keys();
-     const old=keys.includes("skyfire-quality-cache-v36");
-     return {scope:reg?.scope,keys,rootCachePreserved:old};
-   });
-   assert(state.scope.endsWith("/release-candidate/v017/"),"Staging service-worker scope not isolated "+JSON.stringify(state));
-   assert(state.keys.includes("skyfire-preview-v017-shell-v39"),"Staging offline cache missing");
-   assert(state.rootCachePreserved,"Preview SW should not delete installed production cache");
-   console.log("PASS staging page, provenance, PWA scope, isolated cache",JSON.stringify(state));
+   let r=await page.goto(base,{waitUntil:"domcontentloaded",timeout:60000});
+   assert(r?.ok(),"Production root is not online");
+   assert.equal(await page.locator("#skyfire-v017-test-banner").count(),0);
+   assert((await page.locator(".quick-banner-subtitle").textContent()).includes("v0.17 Beta"),"Live dashboard not v0.17");
+   assert.equal((await page.locator("#homeLastUpdated").textContent()).trim(),"November 11, 2026","Release date not fixed");
+   assert.equal(await page.locator('#docsSection a[href^="docs/MSHA-form-"][href$=".pdf"]').count(),28);
+   for(const [form,sha] of Object.entries(known)){
+     const result=await shaOfResponse(page,"docs/MSHA-form-"+form+".pdf");
+     assert.equal(result.status,200);
+     assert.equal(result.sha,sha,"Live PDF checksum mismatch "+form);
+   }
+   console.log("PASS production v0.17 dashboard and four corrected federal PDF SHA-256 values");
+   await page.evaluate(async()=>navigator.serviceWorker.ready);
+   await page.waitForFunction(async()=>(await caches.keys()).includes("skyfire-quality-cache-v39"),null,{timeout:120000});
+   await page.reload({waitUntil:"domcontentloaded",timeout:30000});
+   await page.waitForFunction(()=>navigator.serviceWorker.controller?.scriptURL.endsWith("/skyfire-safety-library/service-worker.js"),null,{timeout:45000});
    await context.setOffline(true);
    await page.reload({waitUntil:"domcontentloaded",timeout:30000});
-   await page.locator("#skyfire-v017-test-banner").waitFor({state:"visible"});
-   const off=await page.evaluate(async()=>{
-     let r=await fetch("docs/MSHA-form-5000-23.pdf");
-     const hash=Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",await r.arrayBuffer()))).map(n=>n.toString(16).padStart(2,"0")).join("");
-     return {ok:r.ok,sha:hash};
-   });
-   assert(off.ok&&off.sha===knownCurrentSha,"Staging offline PDF is wrong: "+JSON.stringify(off));
-   const inventory=await page.evaluate(async()=>{
-     const paths=[...new Set([...document.querySelectorAll('#docsSection a[href^="docs/MSHA-form-"][href$=".pdf"]')].map(x=>x.getAttribute("href")))];
-     const checks=[];
-     for(const p of paths){
-       const response=await fetch(p);
-       const bytes=await response.arrayBuffer();
-       const digest=await crypto.subtle.digest("SHA-256",bytes);
-       const hash=Array.from(new Uint8Array(digest)).map(n=>n.toString(16).padStart(2,"0")).join("");
-       checks.push({path:p,ok:response.ok,size:bytes.byteLength,sha:hash});
-     }
-     return checks;
-   });
-   assert.equal(inventory.length,14,"Missing offline MSHA form entries in hosted preview");
-   assert(inventory.every(x=>x.ok&&x.size>10000),"At least one hosted offline form unavailable");
-   const named=Object.fromEntries(inventory.map(x=>[x.path,x.sha]));
-   assert.equal(named["docs/MSHA-form-5000-23.pdf"],knownCurrentSha);
-   assert.equal(named["docs/MSHA-form-7000-51.pdf"],"6294cf4e177430b923ebf321feec730d64bf4c935f7b6ebea55722142e8c20b8");
-   assert.equal(named["docs/MSHA-form-2000-38.pdf"],"3a8f7d9c7f69d8b264d0c9e07117e5e53d8a9c76a3473b970735fc8e60ca96d7");
-   assert.equal(named["docs/MSHA-form-4000-9.pdf"],"d09e5babbf75040384797d4e0b92b4f562852c8ad9f77c802304193e9e04861c");
-   console.log("PASS HTTPS preview offline all 14 PDFs, four corrected SHA-256 verified",inventory.map(x=>x.path.split("/").at(-1)));
+   const paths=await page.locator('#docsSection a[href^="docs/MSHA-form-"][href$=".pdf"]').evaluateAll(links=>[...new Set(links.map(x=>x.getAttribute("href")))]);
+   assert.equal(paths.length,14,"Production missing one or more local forms");
+   for(const path of paths){
+     const check=await shaOfResponse(page,path);
+     assert(check.status===200&&check.bytes>10000,"Offline PDF missing "+path);
+     const form=path.match(/MSHA-form-(.+)\.pdf/)[1];
+     if(known[form])assert.equal(check.sha,known[form],"Offline PDF stale "+form);
+   }
+   console.log("PASS live installed production PWA offline reload and all 14 forms, corrected SHA values");
    await context.setOffline(false);
-   const after=await page.goto(base,{waitUntil:"domcontentloaded",timeout:30000});
-   assert(after&&after.ok(),"Live homepage unavailable after staging PWA install");
-   assert(!(await page.locator("#skyfire-v017-test-banner").count()),"Preview banner appeared on production");
-   console.log("PASS live homepage still accessible after preview install");
+   r=await page.goto(base+"release-candidate/v017/",{waitUntil:"domcontentloaded",timeout:45000});
+   assert(r?.ok(),"QA preview unavailable");
+   await page.locator("#skyfire-v017-test-banner").waitFor({state:"visible",timeout:15000});
+   await page.evaluate(async()=>navigator.serviceWorker.ready);
+   const state=await page.evaluate(async()=>{
+     const reg=await navigator.serviceWorker.getRegistration();
+     return {scope:reg?.scope,keys:await caches.keys()};
+   });
+   assert(state.scope.endsWith("/release-candidate/v017/"),"QA SW unexpectedly controls production");
+   assert(state.keys.includes("skyfire-quality-cache-v39"),"QA deleted production cache");
+   console.log("PASS separate SkyFire QA scope and production cache preserved");
    await context.close();
- } finally{await browser.close()}
-})().catch(e=>{console.error("FAIL remotely hosted staging QA",e.stack||e);process.exit(1)});
+ }finally{await browser.close();}
+})().catch(e=>{console.error("FAIL post-release smoke",e.stack||e);process.exit(1);});

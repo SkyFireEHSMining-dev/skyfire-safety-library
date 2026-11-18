@@ -31,7 +31,7 @@
     const flag=source==="legacy-cache"?
       "WARNING: earlier cached dataset loaded; reconnect and refresh before relying on the listed snapshot date. ":
       source==="network-verified-source"?
-      "Loaded from SkyFire's bundled XML over the network; not from live eCFR. ":
+      "SkyFire bundled snapshot (downloaded online, available from offline cache); not live eCFR. ":
       source==="not-yet-loaded"?
       "Dataset not loaded yet; open the reader online before depending on offline access. ":
       "Dataset provenance cannot yet be confirmed. ";

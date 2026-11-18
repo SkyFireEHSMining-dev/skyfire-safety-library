@@ -41,10 +41,7 @@ const base="http://127.0.0.1:8765/";
     await page.locator("#"+searchId).fill("");
   }
   await openReader("MSHA / 30 CFR",30,"searchBar","statusMessage","cfrSection");
-  await page.locator("#cfrSection button[data-open-section='homeSection']").first().click().catch(()=>{});
-  if(!await page.locator('button.skyfire-hub-home-tile.regulatory-hub').isVisible()){
-    await page.locator("button.module-home-btn").first().click();
-  }
+  await page.goto(base,{waitUntil:"domcontentloaded",timeout:30000});
   await openReader("OSHA / 29 CFR",29,"oshaSearchBar","oshaStatusMessage","oshaSection");
   const keys=await page.evaluate(()=>caches.keys());
   assert(keys.includes("skyfire-regulatory-data-v2"),"Missing data cache v2");
@@ -53,9 +50,7 @@ const base="http://127.0.0.1:8765/";
   const source=await page.locator("#cfrSourceStatus").textContent();
   assert(source.includes("Offline"),"Offline not clearly labeled");
   await openReader("MSHA / 30 CFR",30,"searchBar","statusMessage","cfrSection");
-  await page.locator("#cfrSection button[data-open-section='homeSection']").first().click().catch(()=>{});
-  if(!await page.locator('button.skyfire-hub-home-tile.regulatory-hub').isVisible())
-    await page.locator("button.module-home-btn").first().click();
+  await page.goto(base,{waitUntil:"domcontentloaded",timeout:30000});
   await openReader("OSHA / 29 CFR",29,"oshaSearchBar","oshaStatusMessage","oshaSection");
   assert.equal(errors.length,0,"JS runtime errors: "+JSON.stringify(errors.slice(0,5)));
   console.log("PASS both eCFR reader modules, source date status and cached XML while fully offline");

@@ -4,7 +4,7 @@ const base="http://127.0.0.1:8765/";
 (async()=>{
  const browser=await chromium.launch({headless:true,args:["--no-sandbox"]});
  try {
-  const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,serviceWorkers:"allow"});
+  const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,serviceWorkers:"allow",timezoneId:"America/Los_Angeles"});
   const page=await context.newPage();
   const errors=[];
   page.on("pageerror",e=>errors.push(e.message));
@@ -30,6 +30,8 @@ const base="http://127.0.0.1:8765/";
     assert(/Loaded|Showing/.test(status),title+": CFR not loaded "+status);
     const source=await page.locator("#"+(title===30?"cfrSourceStatus":"oshaSourceStatus")).textContent();
     assert(source.includes("eCFR API reported current through:"),"Source date missing");
+    const expected=new Date(2026,10,13).toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"});
+    assert(source.includes("eCFR API reported current through: "+expected), "eCFR date-only value shifted in Pacific timezone: "+source);
     assert(source.includes("2026"),"Source year missing");
     console.log("PASS Title",title,"reader, source label, status:",status.slice(0,90));
     // Avoid saving any user data; queries exercise the live parsed reader.

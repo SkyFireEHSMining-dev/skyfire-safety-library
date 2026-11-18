@@ -984,7 +984,7 @@ function rerenderCurrentView(libraryKey) {
 
 function saveXmlCache(cacheKey, xmlText) {
   try {
-    localStorage.setItem(cacheKey, xmlText);
+    window.SkyFireStorage.setItem(cacheKey, xmlText);
   } catch (error) {
     console.warn("Could not save XML cache:", error);
   }
@@ -992,7 +992,7 @@ function saveXmlCache(cacheKey, xmlText) {
 
 function loadXmlCache(cacheKey) {
   try {
-    return localStorage.getItem(cacheKey);
+    return window.SkyFireStorage.getItem(cacheKey);
   } catch (error) {
     console.warn("Could not load XML cache:", error);
     return null;
@@ -1001,7 +1001,7 @@ function loadXmlCache(cacheKey) {
 
 function saveBookmarkFolders(bookmarksKey, folders) {
   try {
-    localStorage.setItem(bookmarksKey, JSON.stringify(folders));
+    window.SkyFireStorage.setItem(bookmarksKey, JSON.stringify(folders));
   } catch (error) {
     console.warn("Could not save bookmark folders:", error);
   }
@@ -1009,7 +1009,7 @@ function saveBookmarkFolders(bookmarksKey, folders) {
 
 function loadBookmarkFolders(bookmarksKey) {
   try {
-    const saved = localStorage.getItem(bookmarksKey);
+    const saved = window.SkyFireStorage.getItem(bookmarksKey);
     return saved ? JSON.parse(saved) : [];
   } catch (error) {
     console.warn("Could not load bookmark folders:", error);

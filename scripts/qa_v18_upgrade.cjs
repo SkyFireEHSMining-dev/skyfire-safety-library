@@ -69,11 +69,23 @@ const folder="./live", next="./live-next";
   }
   console.log("PASS v0.18 worker preserves both old cached datasets for offline fallback before refreshing");
   await context.setOffline(true);
-  const legacy=await open(30);
-  const debugHeader=await page.evaluate(async()=>{const r=await fetch("Data/ECFR-title30.xml");return {status:r.status,marker:r.headers.get("X-SkyFire-Data-Provenance")};});
-  console.log("OFFLINE LEGACY STATUS",JSON.stringify({display:legacy.slice(0,900),header:debugHeader}));
-  assert(legacy.includes("earlier cached dataset"),"Legacy Title 30 not flagged in UI");
-  await open(29);
+  for (const title of [30,29]){
+    const label=await open(title);
+    const response=await page.evaluate(async title=>{
+      const r=await fetch("Data/ECFR-title"+title+".xml");
+      return {status:r.status,marker:r.headers.get("X-SkyFire-Data-Provenance")};
+    },title);
+    const refreshedState=await version("skyfire-regulatory-data-v2",title);
+    if(refreshedState.sha===versions.current[title]){
+      assert.equal(response.marker,"network-verified-source","Verified updated cache was not marked correctly");
+      assert(!label.includes("earlier cached dataset"),"Verified updated cache incorrectly marked legacy");
+      console.log("PASS Title",title,"already refreshed before offline test: source label accurate");
+    }else{
+      assert(label.includes("earlier cached dataset"),"Old offline fallback not labeled legacy");
+      assert.equal(response.marker,"legacy-cache","Offline old snapshot returned without legacy marker");
+      console.log("PASS Title",title,"old snapshot preserved offline and labeled legacy");
+    }
+  }
   assert.equal(await page.evaluate(()=>SkyFireStorage.getItem("skyfire_bookmarks_title30_v1")),marker);
   console.log("PASS old cached Title 29/30 readable OFFLINE after SW upgrade; legacy warning and bookmarks intact");
   await context.setOffline(false);

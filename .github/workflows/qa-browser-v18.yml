@@ -1,0 +1,40 @@
+name: SkyFire v0.18 CFR and QA-storage browser tests
+on:
+  push:
+    branches: [v0.18/regulatory-integrity-reliability]
+    paths:
+      - .github/workflows/qa-browser-v18.yml
+      - scripts/qa_v18_reader.cjs
+      - scripts/qa_v18_storage.cjs
+      - Data/ecfr-source-provenance-v18.json
+      - Data/ECFR-title29.xml
+      - Data/ECFR-title30.xml
+      - app.js
+      - index.html
+      - inspection-ready-v16.js
+      - ecfr-provenance-v18.js
+      - service-worker.js
+      - storage-namespace-v18.js
+permissions:
+  contents: read
+jobs:
+  browser-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install chromium
+      - name: Prepare same-origin QA sandbox with current v0.18 code (runner only)
+        run: |
+          mkdir -p release-candidate/v017/Data
+          cp ./*.js ./*.css index.html manifest.json release-candidate/v017/
+          cp Data/ECFR-title29.xml Data/ECFR-title30.xml Data/ecfr-source-provenance-v18.json release-candidate/v017/Data/
+      - name: Run local site and browser validation
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/skyfire-v18-http.log 2>&1 &
+          sleep 3
+          node scripts/qa_v18_storage.cjs
+          node scripts/qa_v18_reader.cjs

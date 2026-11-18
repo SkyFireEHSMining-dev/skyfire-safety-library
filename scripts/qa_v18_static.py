@@ -31,7 +31,7 @@ assert re.search(r'(?<!\.)\blocalStorage\.(?:getItem|setItem|removeItem|clear)',
 assert re.search(r'(?<!\.)\blocalStorage\.(?:getItem|setItem|removeItem|clear)',inspection) is None
 assert '"skyfire_qa_v18_"' in qa_storage
 assert re.search(r'localStorage\.clear\(',qa_storage) is None
-assert "source===\\"legacy-cache\\"" in source
+assert 'source==="legacy-cache"' in source
 for number in (29,30):
     title=manifest["titles"][str(number)]
     assert title["ecfr_versioner"]["up_to_date_as_of"]

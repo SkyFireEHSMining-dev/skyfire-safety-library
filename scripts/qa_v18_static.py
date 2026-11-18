@@ -5,6 +5,8 @@ import json,re,subprocess,sys
 ROOT=Path(__file__).resolve().parents[1]
 def contents(p): return (ROOT/p).read_text(encoding="utf-8")
 html=contents("index.html")
+feedback=contents("feedback.js")
+app=contents("app.js")
 app=contents("app.js")
 sw=contents("service-worker.js")
 qa_storage=contents("storage-namespace-v18.js")
@@ -12,6 +14,9 @@ inspection=contents("inspection-ready-v16.js")
 source=contents("ecfr-provenance-v18.js")
 manifest=json.loads(contents("Data/ecfr-source-provenance-v18.json"))
 assert manifest["schema"]=="skyfire-ecfr-provenance-v18"
+assert "SkyFire Safety Library v0.18 Beta" in html
+assert 'const SKYFIRE_FEEDBACK_VERSION = "v0.18 Beta";' in feedback
+assert 'const dateText = "November 17, 2026";' in app
 assert set(manifest["titles"])=={"29","30"}
 assert html.index("storage-namespace-v18.js") < html.index('src="app.js')
 assert html.count('id="cfrSourceStatus"')==1

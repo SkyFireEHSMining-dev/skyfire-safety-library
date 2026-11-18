@@ -11,6 +11,7 @@ either file. Updates only the isolated development branch via an authorized CI
 workflow. No automatic scheduling or production deployment.
 """
 import datetime as dt
+import difflib
 import email.utils
 import hashlib
 import json
@@ -66,6 +67,7 @@ def section_number(raw):
 def inspect_xml(path, title):
     numbers=set()
     samples={}
+    sample_text={}
     tagcounts=Counter()
     try:
         for _, el in ET.iterparse(str(path), events=("end",)):
@@ -75,7 +77,9 @@ def inspect_xml(path, title):
                 if num:
                     numbers.add(num)
                     if num in CRITICAL[title]:
-                        samples[num]=hashlib.sha256(" ".join("".join(el.itertext()).split()).encode()).hexdigest()
+                        wording=" ".join("".join(el.itertext()).split())
+                        samples[num]=hashlib.sha256(wording.encode()).hexdigest()
+                        sample_text[num]=wording
                 tagcounts["sections"] += 1
                 el.clear()
             elif tag in ("DIV1","DIV5","DIV6","DIV9"):
@@ -88,7 +92,8 @@ def inspect_xml(path, title):
     missing=[n for n in CRITICAL[title] if n not in numbers]
     if missing: raise RuntimeError(f"Title {title}: missing critical test sections {missing}")
     return {"section_count":tagcounts["sections"],"unique_section_numbers":len(numbers),
-            "critical_sections":samples,"structural_counts":dict(tagcounts)}
+            "critical_sections":samples,"critical_text":sample_text,"all_section_numbers":sorted(numbers),
+            "structural_counts":dict(tagcounts)}
 
 def versioner_status():
     try:
@@ -127,11 +132,24 @@ def check(apply=False):
                 raise RuntimeError(f"Title {t}: >15% section loss vs baseline")
             changes={n: ("changed" if old_info["critical_sections"].get(n)!=new_info["critical_sections"].get(n)
                          else "same") for n in CRITICAL[t]}
+            additions=sorted(set(new_info["all_section_numbers"])-set(old_info["all_section_numbers"]))
+            removals=sorted(set(old_info["all_section_numbers"])-set(new_info["all_section_numbers"]))
+            print(json.dumps({"title":t,"added_sections":additions[:80],"removed_sections":removals[:80],
+                        "total_added":len(additions),"total_removed":len(removals)}))
+            for n in CRITICAL[t]:
+                if changes[n]=="changed":
+                    old_words=old_info["critical_text"][n].split()
+                    new_words=new_info["critical_text"][n].split()
+                    difference=list(difflib.unified_diff(old_words,new_words,fromfile="bundled-"+n,tofile="GPO-"+n,n=7))
+                    print(json.dumps({"title":t,"critical_change":n,"token_diff_lines":difference[:140],
+                                      "diff_truncated":len(difference)>140}))
             results[str(t)]={"source_url":URL.format(t=t),"existing_sha256":old_sha,
                   "retrieved_sha256":sha(blob),"existing_bytes":len(old_bytes),
                   "retrieved_bytes":len(blob),"old_sections":old_info["section_count"],
                   "new_sections":new_info["section_count"],"critical_section_comparison":changes,
-                  "retrieved_checks":new_info,"http":h,"ecfr_versioner":verified.get(str(t)),
+                  "retrieved_checks":{k:v for k,v in new_info.items() if k not in ("critical_text","all_section_numbers")},
+                  "section_additions":additions,"section_removals":removals,
+                  "http":h,"ecfr_versioner":verified.get(str(t)),
                   "changed":old_sha!=sha(blob)}
             info[str(t)]=new
             print(json.dumps({"title":t,"result":"VALIDATED","existing_sha256":old_sha,

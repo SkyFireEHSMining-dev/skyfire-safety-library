@@ -27,7 +27,8 @@ const folder="./live", next="./live-next";
       const t=document.getElementById(id)?.textContent||"";
       return t.includes("Loaded")||t.includes("Showing");
     },title===30?"statusMessage":"oshaStatusMessage",{timeout:110000});
-    return page.locator("#"+(title===30?"cfrSourceStatus":"oshaSourceStatus")).textContent();
+    const sourceStatus=page.locator("#"+(title===30?"cfrSourceStatus":"oshaSourceStatus"));
+    return (await sourceStatus.count()) ? sourceStatus.textContent() : "";
   }
   async function version(cacheName,title){
     return page.evaluate(async ({cacheName,title})=>{

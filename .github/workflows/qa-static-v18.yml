@@ -1,0 +1,27 @@
+name: SkyFire v0.18 regulatory and storage integrity QA
+on:
+  push:
+    branches: [v0.18/regulatory-integrity-reliability]
+    paths:
+      - .github/workflows/qa-static-v18.yml
+      - scripts/qa_v18_static.py
+      - scripts/ecfr_integrity_v18.py
+      - Data/ecfr-source-provenance-v18.json
+      - Data/ECFR-title29.xml
+      - Data/ECFR-title30.xml
+      - app.js
+      - index.html
+      - service-worker.js
+      - ecfr-provenance-v18.js
+      - storage-namespace-v18.js
+      - inspection-ready-v16.js
+permissions:
+  contents: read
+jobs:
+  static-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify source integrity and storage boundary
+        run: python3 scripts/qa_v18_static.py

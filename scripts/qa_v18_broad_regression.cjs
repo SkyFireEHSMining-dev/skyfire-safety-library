@@ -14,9 +14,9 @@ const origin="http://127.0.0.1:8765/";
        if(!res || !res.ok())throw Error("home failed "+vp.name);
        await page.locator('button.skyfire-hub-home-tile.regulatory-hub').waitFor({state:"visible",timeout:25000});
        const version=await page.locator(".quick-banner-subtitle").textContent();
-       if(!version?.includes("v0.17 Beta"))throw Error("Production release label changed prematurely in v0.18 draft "+version);
+       if(!version?.includes("v0.18 Beta"))throw Error("Incorrect v0.18 release dashboard "+version);
        const releaseDate=await page.locator("#homeLastUpdated").textContent();
-       if(releaseDate?.trim()!=="November 11, 2026")throw Error("Incorrect release date: "+releaseDate);
+       if(releaseDate?.trim()!=="November 17, 2026")throw Error("Incorrect release date: "+releaseDate);
      }
      async function hub(name){
        await reset();

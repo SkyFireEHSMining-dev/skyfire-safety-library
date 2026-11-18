@@ -17,7 +17,9 @@
   <link rel="stylesheet" href="styles.css?v=feedback-v1">
   <link rel="stylesheet" href="feedback.css?v=feedback-v1">
 
+  <script src="storage-namespace-v18.js" defer></script>
   <script src="app.js?v=feedback-v1" defer></script>
+  <script src="ecfr-provenance-v18.js" defer></script>
   <script src="risk-matrix.js?v=feedback-v1" defer></script>
   <script src="feedback.js?v=feedback-v1" defer></script>
 </head>
@@ -123,6 +125,7 @@
         <input type="text" id="searchBar" placeholder="Search MSHA / 30 CFR...">
       </div>
 
+      <div id="cfrSourceStatus" class="info-panel" role="status" aria-live="polite" style="font-size:0.9rem;line-height:1.5;padding:12px 16px;">Verifying 30 CFR source dates…</div>
       <div id="statusMessage">Loading CFR data...</div>
 
       <div class="layout">
@@ -164,6 +167,7 @@
         <input type="text" id="oshaSearchBar" placeholder="Search OSHA / 29 CFR...">
       </div>
 
+      <div id="oshaSourceStatus" class="info-panel" role="status" aria-live="polite" style="font-size:0.9rem;line-height:1.5;padding:12px 16px;">Verifying 29 CFR source dates…</div>
       <div id="oshaStatusMessage">Loading OSHA data...</div>
 
       <div class="layout">

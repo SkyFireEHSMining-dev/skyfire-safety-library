@@ -1,0 +1,143 @@
+{
+  "ecfr_status_api": {
+    "retrieved": "2026-11-18T00:20:01+00:00",
+    "source": "eCFR versioner API",
+    "url": "https://www.ecfr.gov/api/versioner/v1/titles.json"
+  },
+  "note": "HTTP Last-Modified is file publication metadata; latest_amended_on is not the file snapshot date. Confirm applicable effective dates in controlling text. Cached/offline copy is not live.",
+  "publisher": "U.S. Government Publishing Office (GovInfo eCFR bulk data)",
+  "schema": "skyfire-ecfr-provenance-v18",
+  "source_type": "eCFR continually updated unofficial editorial compilation (not annual legal CFR edition)",
+  "titles": {
+    "29": {
+      "changed": true,
+      "critical_section_comparison": {
+        "1910.1200": "same",
+        "1910.134": "same",
+        "1910.147": "same",
+        "1910.95": "same",
+        "1926.501": "same"
+      },
+      "ecfr_versioner": {
+        "latest_amended_on": "2026-11-10",
+        "latest_issue_date": "2026-11-10",
+        "up_to_date_as_of": "2026-11-13"
+      },
+      "existing_bytes": 28917470,
+      "existing_sha256": "85b5561b9753d64151d9af4bff301578805b3aabfb0746e93da85a6b6a1bb7ac",
+      "http": {
+        "content_type": "text/xml",
+        "etag": null,
+        "final_url": "https://www.govinfo.gov/bulkdata/ECFR/title-29/ECFR-title29.xml",
+        "last_modified": "Thu, 12 Nov 2026 22:17:51 GMT"
+      },
+      "new_sections": 7262,
+      "old_sections": 7284,
+      "retrieved_bytes": 28880513,
+      "retrieved_checks": {
+        "critical_sections": {
+          "1910.1200": "29664e77fe7e3c9407a1af8ec23dc95af5f987ba8feaf60b85053c3ff28095bd",
+          "1910.134": "c0478c443b3334b1baf0dd38667ca96f0e90923d809d41ce8e7cccd29e2945d3",
+          "1910.147": "fcb413ada77d31748fa45a969d5358296c07f858132325d8641e6e81f36dcc61",
+          "1910.95": "e90443961ca1c5236fb12a72dde3f864e8e11aac12f8e4159519ae0e75e0b6c4",
+          "1926.501": "3697ba487d59da99703f3221fcbcae86006236f1364e2cdc93a88bc1009bd31c"
+        },
+        "section_count": 7262,
+        "structural_counts": {
+          "DIV1": 9,
+          "DIV5": 329,
+          "DIV6": 702,
+          "DIV9": 114,
+          "sections": 7262
+        },
+        "unique_section_numbers": 6994
+      },
+      "retrieved_sha256": "c6736291247275b289efff576f5e9084c90b9982fcf62e70891b9a03cd61b7f3",
+      "section_additions": [
+        "102.102",
+        "102.103"
+      ],
+      "section_removals": [
+        "1601.74",
+        "1608.1",
+        "1608.10",
+        "1608.11",
+        "1608.12",
+        "1608.2",
+        "1608.3",
+        "1608.4",
+        "1608.5",
+        "1608.6",
+        "1608.7",
+        "1608.8",
+        "1608.9",
+        "42.1",
+        "42.10",
+        "42.2",
+        "42.20",
+        "42.21",
+        "42.3",
+        "42.4",
+        "42.5",
+        "42.6",
+        "42.7",
+        "42.8",
+        "42.9"
+      ],
+      "source_url": "https://www.govinfo.gov/bulkdata/ECFR/title-29/ECFR-title29.xml"
+    },
+    "30": {
+      "changed": true,
+      "critical_section_comparison": {
+        "46.3": "changed",
+        "46.5": "same",
+        "48.5": "same",
+        "50.10": "same",
+        "56.14107": "same",
+        "56.18002": "same",
+        "60.1": "same"
+      },
+      "ecfr_versioner": {
+        "latest_amended_on": "2026-11-12",
+        "latest_issue_date": "2026-11-12",
+        "up_to_date_as_of": "2026-11-13"
+      },
+      "existing_bytes": 10326523,
+      "existing_sha256": "eb6842184d0c4c2e1f5b7a47e80740c247af5c2e9c1ecc0440155e9934145846",
+      "http": {
+        "content_type": "text/xml",
+        "etag": null,
+        "final_url": "https://www.govinfo.gov/bulkdata/ECFR/title-30/ECFR-title30.xml",
+        "last_modified": "Fri, 13 Nov 2026 22:43:08 GMT"
+      },
+      "new_sections": 5954,
+      "old_sections": 5954,
+      "retrieved_bytes": 10365747,
+      "retrieved_checks": {
+        "critical_sections": {
+          "46.3": "dd01f337011bb4a02cc3e362ddd93b3da1856fa1d1a39d099846502bf6b5d817",
+          "46.5": "1b04aa6eed520919170c91a040c939473f888b623ff88c0fb6b6f8fd22b305c6",
+          "48.5": "d33543996727846177b4d356e41b82f6d1654f00b82afb7334b28a2bb87114f4",
+          "50.10": "1f75a7eb13e1f458c783b190e4314e2864f098fdb63b1085021364ca89ea971e",
+          "56.14107": "f4562fb4d2fa605bf36af73b812a4b6e7f9dd745e327a0d724ba5213dd728d65",
+          "56.18002": "a9faf1c6eaf8434f52f9978093b44a3a301cb5bb163ed06660f947a2b6d3685d",
+          "60.1": "f464373afd754582056a02d25b8f9901df62ba774be5aaf1e61f8b80dfb2cd44"
+        },
+        "section_count": 5954,
+        "structural_counts": {
+          "DIV1": 3,
+          "DIV5": 220,
+          "DIV6": 406,
+          "DIV9": 15,
+          "sections": 5954
+        },
+        "unique_section_numbers": 5673
+      },
+      "retrieved_sha256": "a87a94ae38f995bb56cf0242e8de6c7d1694b640fca2eeb776ee0aef42735f7c",
+      "section_additions": [],
+      "section_removals": [],
+      "source_url": "https://www.govinfo.gov/bulkdata/ECFR/title-30/ECFR-title30.xml"
+    }
+  },
+  "verification_time_utc": "2026-11-18T00:20:03+00:00"
+}

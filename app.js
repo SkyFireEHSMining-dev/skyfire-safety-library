@@ -1503,6 +1503,10 @@ async function loadLibraryXml(libraryKey) {
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
     xmlText = await response.text();
+    const provenance=response.headers.get("X-SkyFire-Data-Provenance") || "not-marked";
+    window.dispatchEvent(new CustomEvent("skyfire:cfr-data-status",{
+      detail:{title:libraryKey==="cfr"?30:29,sourceStatus:provenance}
+    }));
     saveXmlCache(config.cacheKey, xmlText);
   } catch (error) {
     console.warn(`Could not fetch ${config.label} XML. Trying local cache.`, error);

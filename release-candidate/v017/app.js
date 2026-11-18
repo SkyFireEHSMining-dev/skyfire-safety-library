@@ -157,12 +157,8 @@ function bindSectionButtons() {
 }
 
 function setHomePlaceholders() {
-  const today = new Date();
-  const dateText = today.toLocaleDateString(undefined, {
-    year: "numeric",
-    month: "long",
-    day: "numeric"
-  });
+  // Show the actual verified application release date, not today's date.
+  const dateText = "November 11, 2026";
 
   if (fatalityStat) {
     fatalityStat.textContent = "Offline-ready field reference";
@@ -988,7 +984,7 @@ function rerenderCurrentView(libraryKey) {
 
 function saveXmlCache(cacheKey, xmlText) {
   try {
-    localStorage.setItem(cacheKey, xmlText);
+    window.SkyFireStorage.setItem(cacheKey, xmlText);
   } catch (error) {
     console.warn("Could not save XML cache:", error);
   }
@@ -996,7 +992,7 @@ function saveXmlCache(cacheKey, xmlText) {
 
 function loadXmlCache(cacheKey) {
   try {
-    return localStorage.getItem(cacheKey);
+    return window.SkyFireStorage.getItem(cacheKey);
   } catch (error) {
     console.warn("Could not load XML cache:", error);
     return null;
@@ -1005,7 +1001,7 @@ function loadXmlCache(cacheKey) {
 
 function saveBookmarkFolders(bookmarksKey, folders) {
   try {
-    localStorage.setItem(bookmarksKey, JSON.stringify(folders));
+    window.SkyFireStorage.setItem(bookmarksKey, JSON.stringify(folders));
   } catch (error) {
     console.warn("Could not save bookmark folders:", error);
   }
@@ -1013,7 +1009,7 @@ function saveBookmarkFolders(bookmarksKey, folders) {
 
 function loadBookmarkFolders(bookmarksKey) {
   try {
-    const saved = localStorage.getItem(bookmarksKey);
+    const saved = window.SkyFireStorage.getItem(bookmarksKey);
     return saved ? JSON.parse(saved) : [];
   } catch (error) {
     console.warn("Could not load bookmark folders:", error);
@@ -1507,6 +1503,10 @@ async function loadLibraryXml(libraryKey) {
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
     xmlText = await response.text();
+    const provenance=response.headers.get("X-SkyFire-Data-Provenance") || "not-marked";
+    window.dispatchEvent(new CustomEvent("skyfire:cfr-data-status",{
+      detail:{title:libraryKey==="cfr"?30:29,sourceStatus:provenance}
+    }));
     saveXmlCache(config.cacheKey, xmlText);
   } catch (error) {
     console.warn(`Could not fetch ${config.label} XML. Trying local cache.`, error);

@@ -1,7 +1,7 @@
 {
-  "name": "SkyFire Safety — v0.17 QA Preview",
+  "name": "SkyFire Safety — v0.18 QA Preview",
   "short_name": "SkyFire QA",
-  "description": "TEST ONLY — separate v0.17 release candidate; not the public SkyFire safety reference.",
+  "description": "TEST ONLY: SkyFire v0.18 Regulatory Integrity QA, isolated saved data and caches",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

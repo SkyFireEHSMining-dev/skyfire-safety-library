@@ -2,7 +2,15 @@
 **Status:** READY FOR EXECUTION ON AN ACCESSIBLE v0.17 BUILD; NOT YET TESTED  
 **Issue:** #57 | **Release:** MSHA Forms Integrity & Maintenance
 
-**Critical limitation:** The existing public GitHub Pages app is still v0.16. Testing that URL now cannot count as v0.17 acceptance. This checklist must be performed against a separately accessible, version-confirmed v0.17 release candidate or a formally approved controlled rollout after merge. No production change is authorized by this document.
+**Staging URL (verified November 11, 2026):** https://skyfireehsmining-dev.github.io/skyfire-safety-library/release-candidate/v017/ 
+
+**Production URL (STILL v0.16):** https://skyfireehsmining-dev.github.io/skyfire-safety-library/
+
+**Preview evidence:** [Hosted HTTPS acceptance run 43066703549](https://github.com/SkyFireEHSMining-dev/skyfire-safety-library/actions/runs/43066703549) passed preview load, independent service-worker scope/cache, corrected 5000-23 actual offline response, and live-homepage isolation. [Pages deployment 43066350642](https://github.com/SkyFireEHSMining-dev/skyfire-safety-library/actions/runs/43066350642) passed. Root app source files have unchanged Git blob hashes; the preview is a separate subpath in the same Pages repository, not a new domain.
+
+**Important same-origin limitation:** The preview and live site share the same origin, so **localStorage (bookmarks, saved states and preferences) can be shared** even though service-worker scopes and cache names are isolated. Do not create/delete/edit bookmarks or saved inspection states in the preview while testing; restrict manual QA to opening/navigation and PDF viewing. A noindex preview banner explicitly labels the test build.
+
+**Critical limitation:** The existing public GitHub Pages homepage remains v0.16. Testing the homepage cannot count as v0.17 acceptance. Use the staging URL above and verify its TEST PREVIEW banner before following this checklist.
 
 ## Device and environment record
 - Tester / date / timezone:

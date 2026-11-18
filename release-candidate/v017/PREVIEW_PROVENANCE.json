@@ -1,9 +1,11 @@
 {
-  "releaseCandidate": "SkyFire v0.17",
+  "releaseCandidate": "SkyFire v0.18",
   "status": "TEST ONLY",
-  "sourceBranch": "v0.17/forms-audit-57",
-  "sourceCommit": "d6b947d6c0feb3e31fc73d8816cde98ad07ac9ef",
-  "previewDate": "2026-11-11",
-  "previewScopedServiceWorker": true,
-  "offlineCFRCurrentness": "Unverified; issue #79"
+  "sourceBranch": "v0.18/regulatory-integrity-reliability",
+  "sourceCommit": "a1e9cf0d352503038b0ae01d570c328f3a879191",
+  "previewDateLocal": "2026-11-17",
+  "storageKeyNamespace": "skyfire_qa_v18_",
+  "serviceWorkerScope": "/skyfire-safety-library/release-candidate/v017/",
+  "sourceStatus": "GPO eCFR through 2026-11-13 (see metadata)",
+  "productionApp": "v0.17 unchanged"
 }

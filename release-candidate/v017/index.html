@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>SkyFire v0.17 — QA Preview (Not Live)</title>
+  <title>SkyFire v0.18 — QA Preview (Not Live)</title>
   <meta name="theme-color" content="#0b0b0b">
   <meta
     name="description"
@@ -18,12 +18,14 @@
   <link rel="stylesheet" href="styles.css?v=feedback-v1">
   <link rel="stylesheet" href="feedback.css?v=feedback-v1">
 
+  <script src="storage-namespace-v18.js" defer></script>
   <script src="app.js?v=feedback-v1" defer></script>
+  <script src="ecfr-provenance-v18.js" defer></script>
   <script src="risk-matrix.js?v=feedback-v1" defer></script>
   <script src="feedback.js?v=feedback-v1" defer></script>
 </head>
 <body>
-  <div id="skyfire-v017-test-banner" role="note" style="box-sizing:border-box;background:#fff3d6;color:#5d3500;border-bottom:2px solid #b97412;padding:9px 14px;text-align:center;font:600 13px/1.45 system-ui,-apple-system,sans-serif;position:relative;z-index:99999">SkyFire v0.17 TEST PREVIEW — Not the live app. Do not use cached forms as proof of current MSHA filing requirements.</div>
+  <div id="skyfire-v018-test-banner" role="note" style="box-sizing:border-box;background:#fff3d6;color:#5d3500;border-bottom:2px solid #b97412;padding:9px 14px;text-align:center;font:600 13px/1.45 system-ui,-apple-system,sans-serif;position:relative;z-index:99999">SkyFire v0.18 TEST PREVIEW — Regulatory Integrity & Reliability. Not the live app. Verify applicable eCFR source dates before field decisions.</div>
 
   <header class="main-header">
     <div class="brand-row">
@@ -42,7 +44,7 @@
         <div class="quick-info-card">
           <div class="quick-info-banner">
             <span class="quick-banner-title">Field Status Dashboard</span>
-            <span class="quick-banner-subtitle">SkyFire Safety Library v0.16 Beta — MSHA Ready adds the Mine Act, Inspection Ready, and Part 50 Incident Ready decision support.</span>
+            <span class="quick-banner-subtitle">SkyFire Safety Library v0.17 Beta — MSHA Forms Integrity & Maintenance; existing Mine Act, Inspection Ready, and Part 50 resources remain available.</span>
           </div>
 
           <div class="quick-info-item">
@@ -125,6 +127,7 @@
         <input type="text" id="searchBar" placeholder="Search MSHA / 30 CFR...">
       </div>
 
+      <div id="cfrSourceStatus" class="info-panel" role="status" aria-live="polite" style="font-size:0.9rem;line-height:1.5;padding:12px 16px;">Verifying 30 CFR source dates…</div>
       <div id="statusMessage">Loading CFR data...</div>
 
       <div class="layout">
@@ -166,6 +169,7 @@
         <input type="text" id="oshaSearchBar" placeholder="Search OSHA / 29 CFR...">
       </div>
 
+      <div id="oshaSourceStatus" class="info-panel" role="status" aria-live="polite" style="font-size:0.9rem;line-height:1.5;padding:12px 16px;">Verifying 29 CFR source dates…</div>
       <div id="oshaStatusMessage">Loading OSHA data...</div>
 
       <div class="layout">

@@ -1,12 +1,15 @@
-const SHELL_CACHE_NAME = "skyfire-preview-v017-shell-v39";
-const DATA_CACHE_NAME = "skyfire-preview-v017-regdata-v1";
-const CACHE_VERSION = "quality-v39";
+const SHELL_CACHE_NAME = "skyfire-preview-v017-shell-v40";
+const DATA_CACHE_NAME = "skyfire-preview-v017-regdata-v2";
+const CACHE_VERSION = "quality-v40";
 
 const SHELL_CACHE = [
   "./",
   `./index.html?v=${CACHE_VERSION}`,
   `./styles.css?v=${CACHE_VERSION}`,
   "./feedback.css",
+  "./storage-namespace-v18.js",
+  "./ecfr-provenance-v18.js",
+  "./Data/ecfr-source-provenance-v18.json",
   `./app.js?v=${CACHE_VERSION}`,
   `./risk-matrix.js?v=${CACHE_VERSION}`,
   "./feedback.js",
@@ -94,11 +97,23 @@ self.addEventListener("install", event => {
 self.addEventListener("activate", event => {
   event.waitUntil(
     (async () => {
+      const previousDataCache = await caches.open("skyfire-preview-v017-regdata-v1");
+      const currentDataCache = await caches.open(DATA_CACHE_NAME);
+      for(const title of [29,30]) {
+        const url = new URL("./Data/ECFR-title"+title+".xml",self.registration.scope).href;
+        if(await currentDataCache.match(url))continue;
+        const old=await previousDataCache.match(url);
+        if(old) {
+          const headers=new Headers(old.headers);
+          headers.set("X-SkyFire-Data-Provenance","legacy-cache");
+          await currentDataCache.put(url,new Response(old.body,{status:old.status,headers}));
+        }
+      }
       const keys = await caches.keys();
 
       await Promise.all(
         keys.map(key => {
-          if (key.startsWith("skyfire-preview-v017-") && key !== SHELL_CACHE_NAME && key !== DATA_CACHE_NAME) {
+          if ((key.startsWith("skyfire-preview-v017-")) && key !== SHELL_CACHE_NAME && key !== DATA_CACHE_NAME) {
             return caches.delete(key);
           }
         })
@@ -168,6 +183,9 @@ self.addEventListener("fetch", event => {
     url.pathname.endsWith("/responsive-v13.js") ||
     url.pathname.endsWith("/enforcement-resources.js") ||
     url.pathname.endsWith("/manifest.json") ||
+    url.pathname.endsWith("/storage-namespace-v18.js") ||
+    url.pathname.endsWith("/ecfr-provenance-v18.js") ||
+    url.pathname.endsWith("/Data/ecfr-source-provenance-v18.json") ||
     url.pathname.includes("/Icons/");
 
   const isDataFile =
@@ -209,32 +227,22 @@ self.addEventListener("fetch", event => {
   if (isDataFile) {
     event.respondWith(
       (async () => {
-        const cache = await caches.open(DATA_CACHE_NAME);
-        const cached = await cache.match(request) || await cache.match(url.pathname, { ignoreSearch: true });
-
-        if (cached) {
-          fetch(request, { cache: "no-store" })
-            .then(response => {
-              if (response && response.ok) {
-                cache.put(request, response.clone()).catch(() => {});
-              }
-            })
-            .catch(() => {});
-
-          return cached;
-        }
-
+        const cache=await caches.open(DATA_CACHE_NAME);
+        // Network-first on the first online read after an update prevents old
+        // data-cache entries being mistaken for the newly verified GPO source.
         try {
-          const fresh = await fetch(request, { cache: "no-store" });
-          if (fresh && fresh.ok) {
-            cache.put(request, fresh.clone()).catch(() => {});
-          }
-          return fresh;
-        } catch (error) {
-          return new Response("Offline regulatory data not available yet.", {
-            status: 503,
-            statusText: "Service Unavailable",
-            headers: { "Content-Type": "text/plain" }
+          const fresh=await fetch(request,{cache:"no-store"});
+          if(!fresh.ok)throw Error("HTTP "+fresh.status);
+          const headers=new Headers(fresh.headers);
+          headers.set("X-SkyFire-Data-Provenance","network-verified-source");
+          const response=new Response(fresh.body,{status:fresh.status,statusText:fresh.statusText,headers});
+          event.waitUntil(cache.put(request,response.clone()).catch(()=>{}));
+          return response;
+        }catch(error){
+          const stored=await cache.match(request) || await cache.match(url.pathname,{ignoreSearch:true});
+          if(stored)return stored;
+          return new Response("No cached regulatory dataset available. Connect online and open the CFR reader once.",{
+            status:503,headers:{"Content-Type":"text/plain","X-SkyFire-Data-Provenance":"unavailable"}
           });
         }
       })()

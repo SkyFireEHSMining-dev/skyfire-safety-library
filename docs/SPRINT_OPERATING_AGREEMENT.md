@@ -37,6 +37,7 @@ Routine technical implementation choices and necessary supporting fixes do **not
 ## 5. Release and closeout
 - The product owner evaluates acceptance and authorizes production release, or explicitly approves any documented deferral/exception. Do not describe untested physical devices or unresolved source editions as verified.
 - CTO performs merge, deployment and live/offline smoke checks, release metadata, rollback verification as needed, issue disposition, release notes, master register and sprint-history reconciliation.
+- For every verified release, CTO also saves full final release notes in GitHub and SkyFire Drive and adds them to the quarterly LinkedIn collection under [`docs/QUARTERLY_RELEASE_COMMUNICATIONS.md`](QUARTERLY_RELEASE_COMMUNICATIONS.md). The owner decides whether and what to post, at most once per calendar quarter; no automatic publishing.
 - Verify all writes/results by reading back current GitHub and Drive state; then close sprint and only afterward plan the next.
 - Avoid routine completion emails. Record work in GitHub/Drive and summarize to the owner in the conversation. Preserve account-security notifications.
 - Existing product guardrails (issue #13), architecture rules and `docs/RELEASE_QA_CHECKLIST.md` remain authoritative.

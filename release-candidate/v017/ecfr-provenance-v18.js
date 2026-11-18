@@ -5,9 +5,16 @@
   let provenance=null;
   const dataStatus={29:"not-yet-loaded",30:"not-yet-loaded"};
   function date(iso) {
-    if(!iso) return "not verified";
-    const d=new Date(iso);
-    return Number.isNaN(d.getTime()) ? String(iso).slice(0,10) :
+    if (!iso) return "not verified";
+    const str=String(iso);
+    // eCFR API "up_to_date_as_of" is a calendar date, not a UTC timestamp.
+    // Date.parse("YYYY-MM-DD") treats midnight as UTC and displays the
+    // previous day in western US time zones. Preserve the source's date.
+    const match=/^(\d{4})-(\d{2})-(\d{2})$/.exec(str);
+    const d=match
+      ? new Date(Number(match[1]),Number(match[2])-1,Number(match[3]))
+      : new Date(str);
+    return Number.isNaN(d.getTime()) ? str.slice(0,10) :
       d.toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"});
   }
   function text(id,t) {

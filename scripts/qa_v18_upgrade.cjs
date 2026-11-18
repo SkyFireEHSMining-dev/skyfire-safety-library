@@ -65,6 +65,7 @@ const folder="./live", next="./live-next";
   await page.waitForFunction(async()=>!(await caches.keys()).includes("skyfire-regulatory-data-v1"),null,{timeout:60000});
   for(const title of [29,30]){
     const state=await version("skyfire-regulatory-data-v2",title);
+    console.log("MIGRATED-CACHE",JSON.stringify({title,state,expected:versions.old[title]}));
     assert.equal(state.sha,versions.old[title],"Missing migrated old Title "+title+" after update");
     assert.equal(state.mark,"legacy-cache","Old migrated title must be flagged legacy");
   }

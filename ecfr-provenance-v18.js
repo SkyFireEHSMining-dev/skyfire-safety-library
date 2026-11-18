@@ -3,6 +3,7 @@
 (function(){
   "use strict";
   let provenance=null;
+  const dataStatus={29:"not-yet-loaded",30:"not-yet-loaded"};
   function date(iso) {
     if(!iso) return "not verified";
     const d=new Date(iso);
@@ -19,8 +20,16 @@
     if(!target)return;
     const entry=provenance?.titles?.[String(title)];
     const online=navigator.onLine;
-    const live=online?"Connected — this still displays a dated offline-capable snapshot.":
-         "Offline — cached snapshot only; current amendments cannot be checked.";
+    const source=dataStatus[title];
+    const flag=source==="legacy-cache"?
+      "WARNING: earlier cached dataset loaded; reconnect and refresh before relying on the listed snapshot date. ":
+      source==="network-verified-source"?
+      "Loaded from SkyFire's bundled XML over the network; not from live eCFR. ":
+      source==="not-yet-loaded"?
+      "Dataset not loaded yet; open the reader online before depending on offline access. ":
+      "Dataset provenance cannot yet be confirmed. ";
+    const live=(online?"Connected — bundled snapshot, not live regulations. ":
+      "Offline — only previously loaded data is available. ")+flag;
     if(!entry) {
       target.textContent="Source provenance unavailable. Bundled regulation text is a dated reference, not verified current. "+live;
       return;
@@ -50,6 +59,13 @@
     all();
     window.addEventListener("online",all);
     window.addEventListener("offline",all);
+    window.addEventListener("skyfire:cfr-data-status",event=>{
+      const t=Number(event.detail?.title);
+      if(t===29||t===30){
+        dataStatus[t]=event.detail.sourceStatus||"unmarked";
+        render(t);
+      }
+    });
   }
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",initialize,{once:true});
   else initialize();

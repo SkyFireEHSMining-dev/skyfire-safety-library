@@ -15,11 +15,13 @@ async function expectLoaded(page,title){
   },id,{timeout:120000});
   const data=await page.locator("#"+(title===30?"cfrSourceStatus":"oshaSourceStatus")).textContent();
   assert(data.includes("eCFR API reported current through"),"Source current-through label missing");
+  const expected=new Date(2026,10,13).toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"});
+  assert(data.includes("eCFR API reported current through: "+expected),"Incorrect date-only rendering in Pacific timezone: "+data);
   console.log("PASS Title",title,"loaded:",(await page.locator("#"+id).textContent()).slice(0,90));
 }
 (async()=>{
  const browser=await chromium.launch({headless:true,args:["--no-sandbox"]});
- const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,serviceWorkers:"allow"});
+ const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,serviceWorkers:"allow",timezoneId:"America/Los_Angeles"});
  try{
   const prod=await context.newPage();
   const pr=await prod.goto(base,{waitUntil:"domcontentloaded",timeout:45000});

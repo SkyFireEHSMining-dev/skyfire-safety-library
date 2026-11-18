@@ -8,6 +8,7 @@ on:
       - service-worker.js
       - app.js
       - storage-namespace-v18.js
+      - ecfr-provenance-v18.js
 permissions:
   contents: read
 jobs:

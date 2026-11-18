@@ -87,7 +87,7 @@ const folder="./live", next="./live-next";
     }
   }
   assert.equal(await page.evaluate(()=>SkyFireStorage.getItem("skyfire_bookmarks_title30_v1")),marker);
-  console.log("PASS old cached Title 29/30 readable OFFLINE after SW upgrade; legacy warning and bookmarks intact");
+  console.log("PASS both CFR titles readable offline after upgrade; source labels match cached revisions and bookmarks intact");
   await context.setOffline(false);
   await open(30);
   await open(29);

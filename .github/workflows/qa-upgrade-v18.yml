@@ -1,0 +1,36 @@
+name: SkyFire v0.18 existing PWA data-cache migration
+on:
+  push:
+    branches: [v0.18/regulatory-integrity-reliability]
+    paths:
+      - .github/workflows/qa-upgrade-v18.yml
+      - scripts/qa_v18_upgrade.cjs
+      - service-worker.js
+      - app.js
+      - storage-namespace-v18.js
+      - ecfr-provenance-v18.js
+permissions:
+  contents: read
+jobs:
+  upgrade:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          path: old
+      - uses: actions/checkout@v4
+        with:
+          ref: v0.18/regulatory-integrity-reliability
+          path: draft
+      - name: Install Chromium
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install chromium
+      - name: Simulate installed v0.17 CFR cache migration to v0.18
+        run: |
+          ln -s old live
+          python3 -m http.server 8766 --bind 127.0.0.1 --directory live >/tmp/skyfire-v18-upgrade-http.log 2>&1 &
+          sleep 3
+          node draft/scripts/qa_v18_upgrade.cjs

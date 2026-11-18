@@ -1,0 +1,18 @@
+name: v0.18 eCFR official source check (read only)
+on:
+  push:
+    branches: [v0.18/regulatory-integrity-reliability]
+    paths:
+      - scripts/ecfr_integrity_v18.py
+      - .github/workflows/ecfr-source-check-v18.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  authoritative-source-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compare both bundled titles against official GPO eCFR XML
+        run: python3 scripts/ecfr_integrity_v18.py check

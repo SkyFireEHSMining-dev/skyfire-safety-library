@@ -5,6 +5,7 @@ on:
     paths:
       - .github/workflows/qa-browser-v18.yml
       - scripts/qa_v18_reader.cjs
+      - scripts/qa_v18_broad_regression.cjs
       - scripts/qa_v18_storage.cjs
       - Data/ecfr-source-provenance-v18.json
       - Data/ECFR-title29.xml
@@ -38,3 +39,4 @@ jobs:
           sleep 3
           node scripts/qa_v18_storage.cjs
           node scripts/qa_v18_reader.cjs
+          node scripts/qa_v18_broad_regression.cjs

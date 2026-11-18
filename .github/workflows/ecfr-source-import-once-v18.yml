@@ -1,0 +1,34 @@
+name: One-time authorized v0.18 GPO eCFR import
+on:
+  push:
+    branches: [v0.18/regulatory-integrity-reliability]
+    paths:
+      - .github/workflows/ecfr-source-import-once-v18.yml
+permissions:
+  contents: write
+jobs:
+  apply-verified-snapshots:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v0.18/regulatory-integrity-reliability
+          persist-credentials: true
+      - name: Retrieve and validate BOTH official eCFR title snapshots
+        run: python3 scripts/ecfr_integrity_v18.py apply
+      - name: Verify both stored data SHA-256 against provenance
+        run: python3 scripts/ecfr_integrity_v18.py verify
+      - name: Commit official XML only after passing integrity checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Data/ECFR-title29.xml Data/ECFR-title30.xml Data/ecfr-source-provenance-v18.json
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Refresh Title 29/30 from verified GPO eCFR XML and record provenance"
+            git push origin HEAD:v0.18/regulatory-integrity-reliability
+          fi

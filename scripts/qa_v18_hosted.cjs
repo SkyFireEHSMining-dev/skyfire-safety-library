@@ -53,7 +53,7 @@ async function expectLoaded(page,title){
        keys:await caches.keys()};
   });
   assert(scope.qa.endsWith("/release-candidate/v017/"));
-  assert(scope.keys.includes("skyfire-preview-v017-shell-v40"),"Preview shell not installed");
+  assert(scope.keys.includes("skyfire-preview-v017-shell-v41"),"Preview shell not installed");
   assert(scope.keys.some(x=>x.startsWith("skyfire-quality-cache-")),"Preview deleted prod cache");
   console.log("PASS v0.18 preview banner, source manifest, independent PWA scope and caches");
   await expectLoaded(test,30);

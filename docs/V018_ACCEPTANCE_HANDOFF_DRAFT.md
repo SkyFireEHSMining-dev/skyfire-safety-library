@@ -1,7 +1,18 @@
-# SkyFire v0.18 Beta — Acceptance Handoff (Draft; production NOT released)
+# SkyFire v0.18 Beta — Acceptance Handoff (CTO BUILD COMPLETE / OWNER QA PENDING)
 **Sprint:** #83 | **Primary:** #79 | **Supporting:** #82  
 **QA installation:** existing SkyFire QA icon at https://skyfireehsmining-dev.github.io/skyfire-safety-library/release-candidate/v017/  
-**State:** CTO build / internal QA; only begin manual steps once the v0.18 yellow TEST PREVIEW banner and automated pass evidence are confirmed.
+**State:** READY FOR PRODUCT OWNER'S PHYSICAL ACCEPTANCE. All mandatory source, offline, migration, QA isolation and regression tests have passed. Production remains v0.17. No release authorization or physical device pass is implied.
+
+## Internal QA evidence — completed on November 17, 2026 Pacific
+- [x] Authoritative Title 29/30 official GPO acquisition, exact source hashes / section-change diff and eCFR API dates: [#44206930663](https://github.com/SkyFireEHSMining-dev/skyfire-safety-library/actions/runs/44206930663) PASS.
+- [x] Static source/schema/JS/storage invariant QA: [#44209610813](https://github.com/SkyFireEHSMining-dev/skyfire-safety-library/actions/runs/44209610813) PASS.
+- [x] Browser Title 29 and Title 30 readers, date labels, search and offline XML: [#44210980589](https://github.com/SkyFireEHSMining-dev/skyfire-safety-library/actions/runs/44210980589) PASS.
+- [x] Same-origin QA bookmark and Inspection Ready state isolation: [#44210980589](https://github.com/SkyFireEHSMining-dev/skyfire-safety-library/actions/runs/44210980589) PASS.
+- [x] Hosted HTTPS QA preview, both CFR readers online/offline, production v0.17 unchanged: [#44208498820 attempt 2](https://github.com/SkyFireEHSMining-dev/skyfire-safety-library/actions/runs/44208498820) PASS, following [GitHub Pages preview update #44210355949](https://github.com/SkyFireEHSMining-dev/skyfire-safety-library/actions/runs/44210355949) PASS.
+- [x] Existing installed v0.17 service-worker migration, preserved bookmarks and offline CFR, correct legacy/fresh cache status, eventual new SHA from official source: [#44210268217](https://github.com/SkyFireEHSMining-dev/skyfire-safety-library/actions/runs/44210268217) PASS.
+- [x] Broad existing SkyFire field modules (Risk, ROI, Mine Act, Inspection/Incident Ready, Forms Library and guidance): [#44210980589](https://github.com/SkyFireEHSMining-dev/skyfire-safety-library/actions/runs/44210980589) PASS on phone/desktop-sized browser.
+- [ ] Actual physical iPhone installed QA app, bookmarks and offline reader acceptance: OWNER PENDING.
+- [ ] Production release merge and final v0.18 public metadata: NOT AUTHORIZED.
 
 ## Implementation intent
 1. Refresh both offline CFR titles from GPO authoritative eCFR bulk XML with SHA-256/provenance. Display GPO file last-modified, eCFR API up-to-date-through, date checked, app release date and offline status as separate fields.
@@ -29,15 +40,6 @@
 **Step 4 — broader regression if available**
 - Check representative safety tools, Mine Act, Inspection Ready and Form 5000-23 navigation. Do not treat iPad physical acceptance as complete without an actual iPad test.
 - Confirm the production app remains on v0.17 until the final merge is authorized.
-
-## CTO evidence required before handoff
-- [ ] GPO Title 29/30 updated XML hashes and section diff recorded; source dates verified from official API/HTTP.
-- [ ] Static/source/schema checks passed.
-- [ ] Desktop/phone-emulated tests of both CFR readers online/offline and source-status indicators passed.
-- [ ] Browser test demonstrates QA bookmarks and Inspection Ready saved states cannot modify production keys on same origin.
-- [ ] Updated HTTPS QA candidate deployed to existing path, no production-root changes; PWA scopes/caches isolated.
-- [ ] All applicable v0.17 regressions pass.
-- [ ] Owner acceptance and release approval remains separate from code readiness.
 
 ## Known limitations
 The eCFR is an unofficial, frequently updated editorial compilation; cached SkyFire reference is dated, not an always-current live legal database. A newly proposed rule is not automatically the law. Source dates do not prove independent review of every section. CFR §46.3 and Title 29 section inventory changed; the authoritative-source diff must remain preserved. No data migration should overwrite or merge production bookmarks into QA. Future periodic refreshes require verification and authorization; auto-deployment is intentionally disabled.

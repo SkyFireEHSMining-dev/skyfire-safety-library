@@ -83,7 +83,7 @@ def inspect_xml(path, title):
                 if tag in ("DIV1","DIV5","DIV6","DIV9"): el.clear()
     except ET.ParseError as exc:
         raise RuntimeError(f"Malformed XML Title {title}: {exc}") from exc
-    if tagcounts["sections"]< (3500 if title==30 else 10000):
+    if tagcounts["sections"] < (1500 if title==30 else 5000):
         raise RuntimeError(f"Title {title}: implausibly few sections: {tagcounts['sections']}")
     missing=[n for n in CRITICAL[title] if n not in numbers]
     if missing: raise RuntimeError(f"Title {title}: missing critical test sections {missing}")

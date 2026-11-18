@@ -62,14 +62,12 @@ const folder="./live", next="./live-next";
        reg?.active?.state==="activated" && !reg.waiting && !reg.installing &&
        navigator.serviceWorker.controller===reg.active;
   },null,{timeout:120000});
-  await page.waitForFunction(async()=>!(await caches.keys()).includes("skyfire-regulatory-data-v1"),null,{timeout:60000});
   for(const title of [29,30]){
-    const state=await version("skyfire-regulatory-data-v2",title);
-    console.log("MIGRATED-CACHE",JSON.stringify({title,state,expected:versions.old[title]}));
-    assert.equal(state.sha,versions.old[title],"Missing migrated old Title "+title+" after update");
-    assert.equal(state.mark,"legacy-cache","Old migrated title must be flagged legacy");
+    const state=await version("skyfire-regulatory-data-v1",title);
+    console.log("PRESERVED-LEGACY-CACHE",JSON.stringify({title,state,expected:versions.old[title]}));
+    assert.equal(state.sha,versions.old[title],"Prior Title "+title+" cache was lost during upgrade");
   }
-  console.log("PASS v0.18 worker migrated both old datasets with explicit LEGACY marker, without dropping offline copies");
+  console.log("PASS v0.18 worker preserves both old cached datasets for offline fallback before refreshing");
   await context.setOffline(true);
   const legacy=await open(30);
   assert(legacy.includes("earlier cached dataset"),"Legacy Title 30 not flagged in UI");

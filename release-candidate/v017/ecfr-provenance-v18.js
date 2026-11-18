@@ -49,6 +49,13 @@
   function all(){render(29);render(30);}
   async function initialize(){
     all();
+    window.addEventListener("skyfire:cfr-data-status",event=>{
+      const t=Number(event.detail?.title);
+      if(t===29||t===30){
+        dataStatus[t]=event.detail.sourceStatus||"unmarked";
+        render(t);
+      }
+    });
     try{
       const response=await fetch("Data/ecfr-source-provenance-v18.json",{cache:"no-store"});
       if(!response.ok)throw Error("HTTP "+response.status);
@@ -59,13 +66,7 @@
     all();
     window.addEventListener("online",all);
     window.addEventListener("offline",all);
-    window.addEventListener("skyfire:cfr-data-status",event=>{
-      const t=Number(event.detail?.title);
-      if(t===29||t===30){
-        dataStatus[t]=event.detail.sourceStatus||"unmarked";
-        render(t);
-      }
-    });
+
   }
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",initialize,{once:true});
   else initialize();

@@ -2,10 +2,9 @@
   "releaseCandidate": "SkyFire v0.18",
   "status": "TEST ONLY",
   "sourceBranch": "v0.18/regulatory-integrity-reliability",
-  "sourceCommit": "a1e9cf0d352503038b0ae01d570c328f3a879191",
-  "previewDateLocal": "2026-11-17",
+  "sourceCommit": "26922c8466674539b343095e6e2e64dc7f1be607",
+  "qaStableHomeScreenPath": "/skyfire-safety-library/release-candidate/v017/",
+  "offlineSources": "GPO eCFR Titles 29 and 30; see Data/ecfr-source-provenance-v18.json",
   "storageKeyNamespace": "skyfire_qa_v18_",
-  "serviceWorkerScope": "/skyfire-safety-library/release-candidate/v017/",
-  "sourceStatus": "GPO eCFR through 2026-11-13 (see metadata)",
   "productionApp": "v0.17 unchanged"
 }

@@ -97,23 +97,13 @@ self.addEventListener("install", event => {
 self.addEventListener("activate", event => {
   event.waitUntil(
     (async () => {
-      const previousDataCache = await caches.open("skyfire-regulatory-data-v1");
-      const currentDataCache = await caches.open(DATA_CACHE_NAME);
-      for(const title of [29,30]) {
-        const url = new URL("./Data/ECFR-title"+title+".xml",self.registration.scope).href;
-        if(await currentDataCache.match(url))continue;
-        const old=await previousDataCache.match(url);
-        if(old) {
-          const headers=new Headers(old.headers);
-          headers.set("X-SkyFire-Data-Provenance","legacy-cache");
-          await currentDataCache.put(url,new Response(old.body,{status:old.status,headers}));
-        }
-      }
+      // Retain previously downloaded CFR data until both refreshed titles have
+      // been fetched; v0.18 can read the legacy cache offline if needed.
       const keys = await caches.keys();
 
       await Promise.all(
         keys.map(key => {
-          if ((key.startsWith("skyfire-quality-cache-") || key.startsWith("skyfire-regulatory-data-")) && key !== SHELL_CACHE_NAME && key !== DATA_CACHE_NAME) {
+          if (key.startsWith("skyfire-quality-cache-") && key !== SHELL_CACHE_NAME) {
             return caches.delete(key);
           }
         })
@@ -236,11 +226,26 @@ self.addEventListener("fetch", event => {
           const headers=new Headers(fresh.headers);
           headers.set("X-SkyFire-Data-Provenance","network-verified-source");
           const response=new Response(fresh.body,{status:fresh.status,statusText:fresh.statusText,headers});
-          event.waitUntil(cache.put(request,response.clone()).catch(()=>{}));
+          event.waitUntil((async()=>{
+            await cache.put(request,response.clone());
+            // Delete the old dataset cache only after BOTH updated titles
+            // have actually been cached (not merely fetched once).
+            const both=await Promise.all([29,30].map(title=>
+              cache.match(new URL("./Data/ECFR-title"+title+".xml",self.registration.scope).href)));
+            if(both.every(Boolean))await caches.delete("skyfire-regulatory-data-v1");
+          })().catch(error=>console.warn("CFR cache persistence:",error)));
           return response;
         }catch(error){
           const stored=await cache.match(request) || await cache.match(url.pathname,{ignoreSearch:true});
           if(stored)return stored;
+          // Safe legacy fallback while offline, explicitly flagged for users.
+          const legacy=await caches.open("skyfire-regulatory-data-v1");
+          const old=await legacy.match(request) || await legacy.match(url.pathname,{ignoreSearch:true});
+          if(old){
+            const headers=new Headers(old.headers);
+            headers.set("X-SkyFire-Data-Provenance","legacy-cache");
+            return new Response(old.body,{status:old.status,statusText:old.statusText,headers});
+          }
           return new Response("No cached regulatory dataset available. Connect online and open the CFR reader once.",{
             status:503,headers:{"Content-Type":"text/plain","X-SkyFire-Data-Provenance":"unavailable"}
           });

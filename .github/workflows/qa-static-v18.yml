@@ -10,6 +10,7 @@ on:
       - Data/ECFR-title29.xml
       - Data/ECFR-title30.xml
       - app.js
+      - feedback.js
       - index.html
       - service-worker.js
       - ecfr-provenance-v18.js

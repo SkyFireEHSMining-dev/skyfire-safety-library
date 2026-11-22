@@ -23,10 +23,21 @@ async function checkForm(page,context,id,expectedPages){
   const frames=await page.locator("#skyfirePdfPreview iframe").count();
   if(frames) throw Error("Native PDF iframe is still present");
   const pageItems=page.locator("#sfPdfPages .sf-pdf-page");
-  await page.waitForFunction(expected=>{
-    const nodes=document.querySelectorAll("#sfPdfPages .sf-pdf-page");
-    return nodes.length>=expected && document.querySelector("#sfPdfCounter").textContent.includes("of "+expected);
-  },expectedPages,{timeout:35000});
+  try {
+    await page.waitForFunction(expected=>{
+      const nodes=document.querySelectorAll("#sfPdfPages .sf-pdf-page");
+      return nodes.length>=expected && document.querySelector("#sfPdfCounter").textContent.includes("of "+expected);
+    },expectedPages,{timeout:18000});
+  } catch(error) {
+    const diagnostic=await page.evaluate(()=>({
+      count:document.querySelectorAll("#sfPdfPages .sf-pdf-page").length,
+      status:document.querySelector("#sfPdfCounter")?.textContent,
+      previewText:document.querySelector("#sfPdfPages")?.innerText?.slice(0,450),
+      jsLoaded:document.querySelector('script[src*="pdf-preview-v19.js"]')?.src,
+      renderAssets:[...document.querySelectorAll('link[rel="modulepreload"]')].map(x=>x.href)
+    }));
+    throw Error("PDF page-count or load failure "+id+": "+JSON.stringify(diagnostic)+"; "+error.message);
+  }
   const count=await pageItems.count();
   if(count!==expectedPages) throw Error(id+" had "+count+" page containers, expected "+expectedPages);
   await page.locator('#sfPdfPages .sf-pdf-page[data-page="1"] canvas').waitFor({state:"visible",timeout:45000});
@@ -54,6 +65,8 @@ async function checkForm(page,context,id,expectedPages){
     try{
      const page=await ctx.newPage(),errors=[];
      page.on("pageerror",e=>errors.push(e.message));
+     page.on("console",m=>{if(m.type()==="error"||m.type()==="warning")console.log("BROWSER "+name+" "+screen.name+": "+m.type()+" "+m.text().slice(0,500));});
+     page.on("requestfailed",q=>console.log("REQUEST FAILED "+q.url()+" "+(q.failure()?.errorText||"")));
      const home=await page.goto(root,{waitUntil:"domcontentloaded",timeout:60000});
      if(!home||!home.ok())throw Error("Home unavailable "+name+" "+screen.name);
      if((await page.title())!=="SkyFire Safety")throw Error("Wrong branding");

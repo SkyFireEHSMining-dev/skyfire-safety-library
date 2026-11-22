@@ -17,11 +17,15 @@ assert manifest["short_name"] == "SkyFire Safety", manifest["short_name"]
 assert manifest["scope"] == "./" and manifest["start_url"] == "./index.html"
 assert "<title>SkyFire Safety</title>" in index
 assert "<h1>SkyFire Safety</h1>" in index
+assert "SkyFire Safety v0.19 Beta — Field Reliability & Forms Accessibility" in index
+assert 'id="homeLastUpdated">November 21, 2026' in index
+assert 'const dateText = "November 21, 2026";' in app
+assert 'const SKYFIRE_FEEDBACK_VERSION = "v0.19 Beta";' in (root / "feedback.js").read_text(encoding="utf-8")
 assert "SkyFire Safety Library" not in index
 assert "pdf-preview-v19.css" in index and "pdf-preview-v19.js" in index
 assert "SkyFire Safety Library" not in app and "app: \"SkyFire Safety\"" in app
 assert "SkyFire Safety Library" not in (root / "feedback.js").read_text(encoding="utf-8")
-assert "skyfire-quality-cache-v42" in worker
+assert "skyfire-quality-cache-v43" in worker
 assert "pdf-preview-v19.css" in worker and "pdf-preview-v19.js" in worker
 assert "sfPdfReturn" in script and "sfPdfClose" in script
 assert 'dialog.showModal()' in script and 'dialog.addEventListener("close", restorePlace)' in script

@@ -19,6 +19,7 @@ const qa=base+"release-candidate/v017/";
   assert(p&&p.ok(),"QA unavailable");
   await test.locator("#skyfire-v019-test-banner").waitFor({state:"visible"});
   assert.equal((await test.locator(".main-header h1").innerText()).trim(),"SkyFire Safety");
+  assert.equal((await test.locator("#homeLastUpdated").innerText()).trim(),"November 17, 2026","QA must reflect latest public release date");
   assert.equal(await test.evaluate(()=>SkyFireStorage.isQA),true);
   const meta=await test.evaluate(async()=>await (await fetch("PREVIEW_PROVENANCE.json",{cache:"no-store"})).json());
   assert.equal(meta.releaseCandidate,"SkyFire Safety v0.19");
@@ -43,7 +44,7 @@ const qa=base+"release-candidate/v017/";
     console.log("PASS hosted online PDF return "+id);
   }
   await test.evaluate(()=>navigator.serviceWorker.ready);
-  await test.waitForFunction(async()=>(await caches.keys()).includes("skyfire-preview-v017-shell-v42"),null,{timeout:70000});
+  await test.waitForFunction(async()=>(await caches.keys()).includes("skyfire-preview-v017-shell-v43"),null,{timeout:70000});
   await test.reload({waitUntil:"domcontentloaded",timeout:35000});
   await test.waitForFunction(()=>navigator.serviceWorker.controller?.scriptURL.includes("/release-candidate/v017/service-worker.js"),null,{timeout:50000});
   const cacheAfter=await test.evaluate(async()=>await caches.keys());

@@ -20,18 +20,22 @@ jobs:
       - name: Install pinned, prebuilt renderer without lifecycle scripts
         run: |
           mkdir -p "$RUNNER_TEMP/pdfjs-dist-v19"
-          npm install --prefix "$RUNNER_TEMP/pdfjs-dist-v19" --no-save --ignore-scripts --no-audit --no-fund --package-lock=false pdfjs-dist@6.5.438
+          npm install --prefix "$RUNNER_TEMP/pdfjs-dist-v19" --no-save --ignore-scripts --no-audit --no-fund --package-lock=false pdfjs-dist@5.4.624
           mkdir -p vendor/pdfjs
           cp "$RUNNER_TEMP/pdfjs-dist-v19/node_modules/pdfjs-dist/build/pdf.mjs" vendor/pdfjs/pdf.mjs
           cp "$RUNNER_TEMP/pdfjs-dist-v19/node_modules/pdfjs-dist/build/pdf.worker.mjs" vendor/pdfjs/pdf.worker.mjs
           cp "$RUNNER_TEMP/pdfjs-dist-v19/node_modules/pdfjs-dist/LICENSE" vendor/pdfjs/LICENSE
           test -s vendor/pdfjs/pdf.mjs
           test -s vendor/pdfjs/pdf.worker.mjs
+          if grep -q 'getOrInsertComputed' vendor/pdfjs/pdf.mjs vendor/pdfjs/pdf.worker.mjs; then
+            echo "Unsupported browser Map.getOrInsertComputed detected; reject renderer" >&2
+            exit 1
+          fi
           sha256sum vendor/pdfjs/pdf.mjs vendor/pdfjs/pdf.worker.mjs | tee vendor/pdfjs/SHA256SUMS
           cat > vendor/pdfjs/README.md <<'EOF'
           # Offline PDF.js rendering assets
           These unmodified build files are from the Apache-2.0-licensed pdfjs-dist
-          NPM distribution, version 6.5.438, pinned for SkyFire Safety v0.19.
+          NPM distribution, version 5.4.624, pinned for SkyFire Safety v0.19.
           Source: https://github.com/mozilla/pdf.js
           Do not load the renderer from a public CDN at runtime; both files must
           be cached by the SkyFire service worker before offline use.

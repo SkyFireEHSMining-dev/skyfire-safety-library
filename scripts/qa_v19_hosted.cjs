@@ -30,7 +30,7 @@ const qa=base+"release-candidate/v017/";
   await test.locator("button.skyfire-hub-home-tile.regulatory-hub").click();
   await test.locator("#regulatoryResourcesHubSection button.skyfire-hub-item")
     .filter({hasText:"MSHA Forms Library"}).first().click();
-  for(const id of ["5000-23","7000-1"]){
+  for(const [id,total] of [["5000-23",4],["7000-1",5]]){
     const a=test.locator('#docsSection a[href="docs/MSHA-form-'+id+'.pdf"][target="_blank"]');
     await a.scrollIntoViewIfNeeded();
     const y=await test.evaluate(()=>scrollY),n=ctx.pages().length;
@@ -38,17 +38,27 @@ const qa=base+"release-candidate/v017/";
     await test.locator("#skyfirePdfPreview").waitFor({state:"visible"});
     assert.equal(ctx.pages().length,n);
     assert(await test.locator("#sfPdfReturn").isVisible());
+    await test.waitForFunction(n=>document.querySelectorAll("#sfPdfPages .sf-pdf-page").length===n,total,{timeout:45000});
+    assert.equal(await test.locator("#skyfirePdfPreview iframe").count(),0,"Native single-page iframe reintroduced");
+    await test.locator('#sfPdfPages .sf-pdf-page[data-page="'+total+'"]').scrollIntoViewIfNeeded();
+    await test.locator('#sfPdfPages .sf-pdf-page[data-page="'+total+'"] canvas').waitFor({state:"visible",timeout:45000});
     await test.locator("#sfPdfReturn").click();
     assert(await test.locator("#docsSection").isVisible());
     assert(Math.abs((await test.evaluate(()=>scrollY))-y)<10);
-    console.log("PASS hosted online PDF return "+id);
+    console.log("PASS hosted online PDF "+id+": "+total+" pages available with rendered last page and return");
   }
   await test.evaluate(()=>navigator.serviceWorker.ready);
-  await test.waitForFunction(async()=>(await caches.keys()).includes("skyfire-preview-v017-shell-v43"),null,{timeout:70000});
+  await test.waitForFunction(async()=>(await caches.keys()).includes("skyfire-preview-v017-shell-v44"),null,{timeout:70000});
   await test.reload({waitUntil:"domcontentloaded",timeout:35000});
   await test.waitForFunction(()=>navigator.serviceWorker.controller?.scriptURL.includes("/release-candidate/v017/service-worker.js"),null,{timeout:50000});
   const cacheAfter=await test.evaluate(async()=>await caches.keys());
   assert(cacheBefore.some(n=>cacheAfter.includes(n)),"QA deleted production cache");
+  const depCache=await test.evaluate(async()=>{
+    const m=await caches.match("./vendor/pdfjs/pdf.mjs",{ignoreSearch:true});
+    const w=await caches.match("./vendor/pdfjs/pdf.worker.mjs",{ignoreSearch:true});
+    return Boolean(m&&m.ok&&w&&w.ok);
+  });
+  assert(depCache,"Vendored PDF.js module and worker not available offline");
   await ctx.setOffline(true);
   await test.reload({waitUntil:"domcontentloaded",timeout:35000});
   await test.locator("#skyfire-v019-test-banner").waitFor({state:"visible"});
@@ -56,10 +66,13 @@ const qa=base+"release-candidate/v017/";
   await test.locator("#regulatoryResourcesHubSection button.skyfire-hub-item").filter({hasText:"MSHA Forms Library"}).first().click();
   await test.locator('#docsSection a[href="docs/MSHA-form-5000-23.pdf"][target="_blank"]').click();
   await test.locator("#skyfirePdfPreview").waitFor({state:"visible"});
+  await test.waitForFunction(()=>document.querySelectorAll("#sfPdfPages .sf-pdf-page").length===4,null,{timeout:45000});
+  await test.locator('#sfPdfPages .sf-pdf-page[data-page="4"]').scrollIntoViewIfNeeded();
+  await test.locator('#sfPdfPages .sf-pdf-page[data-page="4"] canvas').waitFor({state:"visible",timeout:45000});
   const pdf=await test.evaluate(async()=>{const r=await fetch("docs/MSHA-form-5000-23.pdf");return {status:r.status,sig:new TextDecoder().decode((await r.arrayBuffer()).slice(0,4))}});
   assert.equal(pdf.status,200);assert.equal(pdf.sig,"%PDF");
   await test.locator("#sfPdfReturn").click();
-  console.log("PASS hosted offline cold launch, PDF response and return");
+  console.log("PASS hosted offline cold launch, all 4 Form 5000-23 PDF pages and return");
   await ctx.setOffline(false);
   await prod.goto(base,{waitUntil:"domcontentloaded"});
   assert.equal((await prod.locator(".main-header h1").innerText()).trim(),"SkyFire Safety Library");

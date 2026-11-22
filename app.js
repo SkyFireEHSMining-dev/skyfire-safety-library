@@ -158,7 +158,7 @@ function bindSectionButtons() {
 
 function setHomePlaceholders() {
   // Show the actual verified application release date, not today's date.
-  const dateText = "November 17, 2026";
+  const dateText = "November 21, 2026";
 
   if (fatalityStat) {
     fatalityStat.textContent = "Offline-ready field reference";
@@ -1358,7 +1358,7 @@ function renderStarterPacks(libraryKey) {
 function createBookmarkExportData(libraryKey) {
   const state = libraryStates[libraryKey];
   return {
-    app: "SkyFire Safety Library",
+    app: "SkyFire Safety",
     library: state.config.label,
     exportedAt: new Date().toISOString(),
     folders: state.bookmarkFolders

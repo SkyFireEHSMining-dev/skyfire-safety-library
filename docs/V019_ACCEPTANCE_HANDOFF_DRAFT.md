@@ -47,3 +47,11 @@ The physical iPhone screenshots **do not independently show a post-return screen
 ## Product-owner recommendation
 
 **Recommended: conditional GO to release preparation.** Physical-iPhone usability blocker for #80 is resolved on the tested documents, online and offline. The remaining physical-iPad and interactive-PDF limitations can be explicitly deferred if the owner accepts the risk and continues to provide the original PDF handoff. There is no evidence supporting a claim of comprehensive current form editions. No production merge is authorized or complete as of this document.
+
+## Product-owner conditional release authorization — November 21, 2026 (Pacific)
+
+The product owner responded **“I agree”** to the specific recommendation to release SkyFire Safety v0.19 with the physical iPad and XFA/printing exceptions accepted, *provided final checks pass*. This supersedes earlier statements in this historical pre-release handoff that production authorization had not been granted. It does not mean the merge has already occurred.
+
+The CTO is authorized to finalize v0.19 Beta metadata for the November 21, 2026 release, verify upgrading a v0.18 installed PWA while preserving bookmarks, Inspection Ready state, cached PDFs and dated CFR sources, execute final static/browser/hosted checks, and merge PR #86 only after those checks pass. Post-merge GitHub Pages and live online/offline validation remain mandatory; failures will be disclosed and corrected rather than treated as a release PASS.
+
+**Scope boundary:** Issue #81 remains open for unresolved form editions, accepted filing routes and XFA compatibility. Physical iPad testing is deferred and NOT a PASS. Interactive form submissions remain the agency/original-PDF reader's responsibility.

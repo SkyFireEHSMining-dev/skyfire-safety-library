@@ -6,6 +6,7 @@
   "qaStableHomeScreenPath": "/skyfire-safety-library/release-candidate/v017/",
   "offlineSources": "GPO eCFR Titles 29 and 30; see Data/ecfr-source-provenance-v18.json",
   "storageKeyNamespace": "skyfire_qa_v18_",
-  "productionApp": "v0.18 unchanged",
-  "qaNotes": "v0.19 multipage PDF.js 5.4.624 preview candidate. Original iOS iframe only showed page 1. Form 5000-23 has 4 pages. Physical iPhone all-page/offline acceptance pending; interactive/XFA and iPad not passed."
+  "productionApp": "v0.19 Beta — released November 21, 2026 Pacific",
+  "qaNotes": "Separate persistent TEST ONLY app; public v0.19 now released and verified. Physical iPad remains untested; interactive/XFA fields and printing require original PDF handoff. Test bookmarks remain isolated.",
+  "releasedProductionCommit": "ad6a636d9f6af9bdc1a49b1cc93c4e4864ecdb5e"
 }

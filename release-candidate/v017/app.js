@@ -1358,7 +1358,7 @@ function renderStarterPacks(libraryKey) {
 function createBookmarkExportData(libraryKey) {
   const state = libraryStates[libraryKey];
   return {
-    app: "SkyFire Safety Library",
+    app: "SkyFire Safety",
     library: state.config.label,
     exportedAt: new Date().toISOString(),
     folders: state.bookmarkFolders

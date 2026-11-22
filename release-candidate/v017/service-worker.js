@@ -1,11 +1,13 @@
-const SHELL_CACHE_NAME = "skyfire-preview-v017-shell-v41";
+const SHELL_CACHE_NAME = "skyfire-preview-v017-shell-v42";
 const DATA_CACHE_NAME = "skyfire-preview-v017-regdata-v2";
-const CACHE_VERSION = "quality-v41";
+const CACHE_VERSION = "quality-v42";
 
 const SHELL_CACHE = [
   "./",
   `./index.html?v=${CACHE_VERSION}`,
   `./styles.css?v=${CACHE_VERSION}`,
+  `./pdf-preview-v19.css?v=${CACHE_VERSION}`,
+  `./pdf-preview-v19.js?v=${CACHE_VERSION}`,
   "./feedback.css",
   "./storage-namespace-v18.js",
   "./ecfr-provenance-v18.js",
@@ -172,6 +174,8 @@ self.addEventListener("fetch", event => {
     url.pathname.endsWith("/cfr-v13.js") ||
     url.pathname.endsWith("/responsive-v13.js") ||
     url.pathname.endsWith("/enforcement-resources.js") ||
+    url.pathname.endsWith("/pdf-preview-v19.css") ||
+    url.pathname.endsWith("/pdf-preview-v19.js") ||
     url.pathname.endsWith("/manifest.json") ||
     url.pathname.endsWith("/storage-namespace-v18.js") ||
     url.pathname.endsWith("/ecfr-provenance-v18.js") ||

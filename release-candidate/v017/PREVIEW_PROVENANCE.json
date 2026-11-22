@@ -1,10 +1,11 @@
 {
-  "releaseCandidate": "SkyFire v0.18",
-  "status": "TEST ONLY",
-  "sourceBranch": "v0.18/regulatory-integrity-reliability",
-  "sourceCommit": "26922c8466674539b343095e6e2e64dc7f1be607",
+  "releaseCandidate": "SkyFire Safety v0.19",
+  "status": "TEST ONLY — NOT PRODUCTION",
+  "sourceBranch": "v0.19/field-reliability-forms",
+  "sourceCommit": "861d30b9c6f22ceaeb2a5bf9b3e14f8514f091b6",
   "qaStableHomeScreenPath": "/skyfire-safety-library/release-candidate/v017/",
   "offlineSources": "GPO eCFR Titles 29 and 30; see Data/ecfr-source-provenance-v18.json",
   "storageKeyNamespace": "skyfire_qa_v18_",
-  "productionApp": "v0.17 unchanged"
+  "productionApp": "v0.18 unchanged",
+  "qaNotes": "PDF preview candidate; physical iPhone/iPad multipage, XFA and offline cold-launch acceptance outstanding."
 }

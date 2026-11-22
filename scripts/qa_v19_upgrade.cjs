@@ -29,7 +29,21 @@ const oldCache="skyfire-quality-cache-v40",newCache="skyfire-quality-cache-v43";
     return {status:r.status,sig:new TextDecoder().decode(b.slice(0,4))};
   });
   assert.equal(oldForm.status,200);assert.equal(oldForm.sig,"%PDF");
-  console.log("PASS v0.18 baseline installed, bookmarks and inspection sentinel seeded, PDF cached");
+  // CFR XML is an on-demand offline asset. Seed it exactly as a real user
+  // who opened the CFR readers online before losing connectivity would do.
+  for (const title of [29,30]) {
+    const verified = await page.evaluate(async id=>{
+      const r=await fetch("Data/ECFR-title"+id+".xml",{cache:"no-store"});
+      if(!r.ok)return false;
+      await r.arrayBuffer();
+      return true;
+    },title);
+    assert(verified,"Old Title "+title+" dataset did not download");
+    await page.waitForFunction(async id=>Boolean(
+      await caches.match("./Data/ECFR-title"+id+".xml",{ignoreSearch:true})
+    ),title,{timeout:85000});
+  }
+  console.log("PASS v0.18 baseline installed, bookmarks/inspection state, PDF and CFR 29/30 snapshots cached");
 
   // Switch server assets atomically without changing the origin or data store.
   fs.symlinkSync("draft","./live-next");

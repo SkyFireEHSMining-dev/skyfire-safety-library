@@ -96,7 +96,15 @@ const screens = [
           }
           await page.locator("#sfPdfReturn").click();
           if (!(await page.locator("#docsSection").isVisible())) throw Error("Lost app offline");
-          if (errors.length) throw Error("Page JS errors: " + errors.slice(0, 5).join(" | "));
+          // Playwright Linux WebKit reports an expected worker-script network
+          // failure when context.setOffline(true) is used without cold reload.
+          // This is an explicit headless limitation, NOT an offline acceptance pass.
+          const expectedHeadless = message => engineName === "WebKit" &&
+            /^TypeError: Script http:\/\/127\.0\.0\.1:8765\/service-worker\.js load failed$/.test(message);
+          const unexpected = errors.filter(message => !expectedHeadless(message));
+          if (errors.length > unexpected.length)
+            console.log("LIMITATION WebKit offline headless service-worker script load not validated");
+          if (unexpected.length) throw Error("Page JS errors: " + unexpected.slice(0, 5).join(" | "));
           console.log("PASS", engineName, screen.name, engineName === "Chromium" ?
             "offline cold PWA reload, cached PDF and return" :
             "cached PDF bytes and in-app return (offline network/display unverified)");

@@ -1,7 +1,7 @@
 {
-  "name": "SkyFire Safety Library",
-  "short_name": "SkyFire",
-  "description": "Offline-ready field safety reference for CFR, OSHA, MSHA resources, and future safety modules.",
+  "name": "SkyFire Safety",
+  "short_name": "SkyFire Safety",
+  "description": "Offline-ready MSHA/OSHA reference, field safety guidance and tools.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

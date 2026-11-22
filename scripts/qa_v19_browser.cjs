@@ -75,7 +75,7 @@ async function checkForm(page,context,id,expectedPages){
      if(links!==28)throw Error("Forms inventory incomplete: "+links);
      await checkForm(page,ctx,"5000-23",4);
      // The second form catches state-reset and renderer reuse errors.
-     await checkForm(page,ctx,"7000-1",2);
+     await checkForm(page,ctx,"7000-1",5);
      if(name==="Chromium"){
       await page.evaluate(()=>navigator.serviceWorker.ready);
       await page.waitForFunction(async()=>{

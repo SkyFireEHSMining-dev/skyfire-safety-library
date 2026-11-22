@@ -1,0 +1,41 @@
+name: SkyFire v0.19 PDF Preview and Branding QA
+on:
+  push:
+    branches: [v0.19/field-reliability-forms]
+    paths:
+      - .github/workflows/qa-v19.yml
+      - index.html
+      - manifest.json
+      - service-worker.js
+      - pdf-preview-v19.js
+      - pdf-preview-v19.css
+      - app.js
+      - feedback.js
+      - scripts/qa_v19_static.py
+      - scripts/qa_v19_browser.cjs
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  static:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Static source and form link integrity
+        run: python3 scripts/qa_v19_static.py
+  browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Playwright Chromium and WebKit
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium webkit
+      - name: Run local HTTPS-equivalent PWA behavior on localhost
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/skyfire-v19-http.log 2>&1 &
+          sleep 3
+          node scripts/qa_v19_browser.cjs

@@ -1,6 +1,6 @@
 # Offline PDF.js rendering assets
 These unmodified build files are from the Apache-2.0-licensed pdfjs-dist
-NPM distribution, version 6.5.438, pinned for SkyFire Safety v0.19.
+NPM distribution, version 5.4.624, pinned for SkyFire Safety v0.19.
 Source: https://github.com/mozilla/pdf.js
 Do not load the renderer from a public CDN at runtime; both files must
 be cached by the SkyFire service worker before offline use.

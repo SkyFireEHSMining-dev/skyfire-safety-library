@@ -40,6 +40,9 @@ for filename, min_bytes in (("pdf.mjs", 100_000), ("pdf.worker.mjs", 100_000)):
     assert vendor.exists() and vendor.stat().st_size > min_bytes, vendor
     assert filename in worker, "Vendored PDF.js file missing from offline cache"
 assert (root / "vendor" / "pdfjs" / "LICENSE").exists()
+assert "version 5.4.624" in (root / "vendor" / "pdfjs" / "README.md").read_text(encoding="utf-8")
+for filename in ("pdf.mjs", "pdf.worker.mjs"):
+    assert b"getOrInsertComputed" not in (root / "vendor" / "pdfjs" / filename).read_bytes(), filename
 
 
 opens = re.findall(r'<a href="docs/MSHA-form-([\w-]+)\.pdf" target="_blank" rel="noopener">Open Form</a>', index)

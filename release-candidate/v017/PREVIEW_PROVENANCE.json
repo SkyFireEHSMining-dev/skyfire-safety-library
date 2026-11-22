@@ -2,10 +2,10 @@
   "releaseCandidate": "SkyFire Safety v0.19",
   "status": "TEST ONLY — NOT PRODUCTION",
   "sourceBranch": "v0.19/field-reliability-forms",
-  "sourceCommit": "861d30b9c6f22ceaeb2a5bf9b3e14f8514f091b6",
+  "sourceCommit": "1efc89af844638a38fc986e08515f140923ee0fc",
   "qaStableHomeScreenPath": "/skyfire-safety-library/release-candidate/v017/",
   "offlineSources": "GPO eCFR Titles 29 and 30; see Data/ecfr-source-provenance-v18.json",
   "storageKeyNamespace": "skyfire_qa_v18_",
   "productionApp": "v0.18 unchanged",
-  "qaNotes": "PDF preview candidate; physical iPhone/iPad multipage, XFA and offline cold-launch acceptance outstanding."
+  "qaNotes": "v0.19 multipage PDF.js 5.4.624 preview candidate. Original iOS iframe only showed page 1. Form 5000-23 has 4 pages. Physical iPhone all-page/offline acceptance pending; interactive/XFA and iPad not passed."
 }

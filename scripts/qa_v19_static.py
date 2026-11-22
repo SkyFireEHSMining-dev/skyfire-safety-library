@@ -21,13 +21,26 @@ assert "SkyFire Safety Library" not in index
 assert "pdf-preview-v19.css" in index and "pdf-preview-v19.js" in index
 assert "SkyFire Safety Library" not in app and "app: \"SkyFire Safety\"" in app
 assert "SkyFire Safety Library" not in (root / "feedback.js").read_text(encoding="utf-8")
-assert "skyfire-quality-cache-v41" in worker
+assert "skyfire-quality-cache-v42" in worker
 assert "pdf-preview-v19.css" in worker and "pdf-preview-v19.js" in worker
 assert "sfPdfReturn" in script and "sfPdfClose" in script
 assert 'dialog.showModal()' in script and 'dialog.addEventListener("close", restorePlace)' in script
 assert "url.origin !== appRoot.origin" in script and "link.hasAttribute(\"download\")" in script
 assert "html" not in script[:1]  # basic read sanity
 assert ".sf-pdf-preview" in css
+assert "<iframe" not in script and "<object" not in script
+assert "lib.getDocument" in script and "pdf.numPages" in script
+assert "Page \" + n + \" of \"" in script
+assert "pdfModulePromise = import(modulePath)" in script
+assert "sfPdfScroll" in script and "sfPdfPages" in script
+assert "sfPdfPrev" in script and "sfPdfNext" in script
+assert ".sf-pdf-scroll" in css and ".sf-pdf-page" in css
+for filename, min_bytes in (("pdf.mjs", 100_000), ("pdf.worker.mjs", 100_000)):
+    vendor = root / "vendor" / "pdfjs" / filename
+    assert vendor.exists() and vendor.stat().st_size > min_bytes, vendor
+    assert filename in worker, "Vendored PDF.js file missing from offline cache"
+assert (root / "vendor" / "pdfjs" / "LICENSE").exists()
+
 
 opens = re.findall(r'<a href="docs/MSHA-form-([\w-]+)\.pdf" target="_blank" rel="noopener">Open Form</a>', index)
 downloads = re.findall(r'<a href="docs/MSHA-form-([\w-]+)\.pdf" download>Download PDF</a>', index)
@@ -37,4 +50,4 @@ for form in set(opens):
     path = root / "docs" / ("MSHA-form-" + form + ".pdf")
     assert path.exists() and path.stat().st_size > 1000, path
 
-print("PASS v0.19 static: SkyFire Safety branding, 14 form pairs, preview controls, unchanged PWA identity, and offline caching references")
+print("PASS v0.19 static: SkyFire Safety branding, 14 form pairs, no PDF iframe, self-hosted PDF.js multipage renderer, PWA identity and offline cache")

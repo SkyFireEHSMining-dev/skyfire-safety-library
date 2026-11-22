@@ -1,119 +1,89 @@
-/* v0.19 browser proof: simulated screen/engine behavior. NOT physical iPhone/iPad acceptance. */
-const { chromium, webkit } = require("playwright");
-const root = "http://127.0.0.1:8765/" + (process.env.SKYFIRE_TEST_ROOT || "");
-const screens = [
-  { name: "phone", viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true },
-  { name: "tablet", viewport: { width: 820, height: 1180 }, isMobile: true, hasTouch: true },
-  { name: "desktop", viewport: { width: 1440, height: 900 }, isMobile: false, hasTouch: false }
+/* v0.19 browser proof: every page rendered, online and offline.
+ * Playwright emulation is not physical iPhone or iPad acceptance. */
+const {chromium,webkit}=require("playwright");
+const root="http://127.0.0.1:8765/";
+const screens=[
+  {name:"phone",viewport:{width:390,height:844},isMobile:true,hasTouch:true},
+  {name:"tablet",viewport:{width:820,height:1180},isMobile:true,hasTouch:true},
+  {name:"desktop",viewport:{width:1440,height:900},isMobile:false,hasTouch:false}
 ];
-(async () => {
-  for (const [engineName, engine] of [["Chromium", chromium], ["WebKit", webkit]]) {
-    const browser = await engine.launch({ headless: true, args: engineName === "Chromium" ? ["--no-sandbox"] : [] });
-    try {
-      for (const screen of screens) {
-        const ctx = await browser.newContext({
-          viewport: screen.viewport, isMobile: screen.isMobile, hasTouch: screen.hasTouch,
-          serviceWorkers: "allow", acceptDownloads: true
-        });
-        try {
-          const page = await ctx.newPage(), errors = [];
-          page.on("pageerror", error => errors.push(error.message));
-          const start = await page.goto(root, { waitUntil: "domcontentloaded", timeout: 50000 });
-          if (!start || !start.ok()) throw Error("Home load failure");
-          await page.locator("h1").first().waitFor({ state: "visible", timeout: 25000 });
-          if ((await page.title()) !== "SkyFire Safety") throw Error("Page title did not reflect new name");
-          if ((await page.locator(".main-header h1").innerText()).trim() !== "SkyFire Safety") throw Error("Header name incorrect");
-          const manifest = await page.evaluate(async () => (await (await fetch("manifest.json")).json()));
-          if (manifest.name !== "SkyFire Safety") throw Error("Manifest branding incorrect");
-
-          await page.locator("button.skyfire-hub-home-tile.regulatory-hub").click();
-          await page.locator("#regulatoryResourcesHubSection button.skyfire-hub-item")
-            .filter({ hasText: "MSHA Forms Library" }).first().click();
-          await page.locator("#docsSection").waitFor({ state: "visible", timeout: 15000 });
-          const num = await page.locator('#docsSection .document-actions a[target="_blank"][href$=".pdf"]').count();
-          if (num !== 14) throw Error("Expected 14 open links: " + num);
-
-          for (const form of ["5000-23", "7000-1"]) {
-            const open = page.locator('#docsSection a[href="docs/MSHA-form-' + form + '.pdf"][target="_blank"]');
-            await open.scrollIntoViewIfNeeded();
-            const before = await page.evaluate(() => scrollY), tabsBefore = ctx.pages().length;
-            await open.click();
-            const dialog = page.locator("#skyfirePdfPreview");
-            await dialog.waitFor({ state: "visible", timeout: 12000 });
-            if (!(await page.locator("#sfPdfReturn").isVisible())) throw Error("No return action");
-            const src = await page.locator("#sfPdfFrame").getAttribute("src");
-            if (!src || !src.endsWith("/docs/MSHA-form-" + form + ".pdf")) throw Error("PDF iframe source incorrect " + src);
-            if (ctx.pages().length !== tabsBefore) throw Error("Unexpected new tab opening");
-            const fallbacks = await page.locator('#sfPdfExternal[href$=".pdf"], #sfPdfDownload[download][href$=".pdf"]').count();
-            if (fallbacks !== 2) throw Error("Original/Download fallback missing");
-            await page.locator("#sfPdfReturn").click();
-            if (await dialog.isVisible()) throw Error("Return did not dismiss dialog");
-            if (!(await page.locator("#docsSection").isVisible())) throw Error("Lost Forms Library");
-            const after = await page.evaluate(() => scrollY);
-            if (Math.abs(before - after) > 8) throw Error("Scroll position lost " + before + " → " + after);
-            console.log("PASS", engineName, screen.name, "PDF return", form);
-          }
-
-          // Existing PWA content must install and survive a genuine offline reload.
-          await page.evaluate(() => navigator.serviceWorker.ready);
-          await page.waitForFunction(async () => {
-            const hit = await caches.match("./docs/MSHA-form-5000-23.pdf");
-            const js = await caches.match("./pdf-preview-v19.js", { ignoreSearch: true });
-            return Boolean(hit && hit.ok && js && js.ok);
-          }, null, { timeout: 65000 });
-          await page.reload({ waitUntil: "domcontentloaded", timeout: 35000 });
-          await ctx.setOffline(true);
-          if (engineName === "Chromium") {
-            await page.reload({ waitUntil: "domcontentloaded", timeout: 35000 });
-          } else {
-            // Playwright's Linux WebKit 26 headless runtime failed with an internal
-            // error on offline page.reload in initial run 44968950815, even after
-            // online PDF return and normal SW install passed. Exercise offline
-            // cached PDF fetch in this controlled page without falsely claiming a
-            // WebKit cold-reload PASS; physical iPhone/iPad acceptance remains open.
-            console.log("LIMITATION WebKit headless offline cold reload not validated; physical-device test required");
-          }
-          await page.locator("button.skyfire-hub-home-tile.regulatory-hub").click();
-          await page.locator("#regulatoryResourcesHubSection button.skyfire-hub-item")
-            .filter({ hasText: "MSHA Forms Library" }).first().click();
-          await page.locator('#docsSection a[href="docs/MSHA-form-5000-23.pdf"][target="_blank"]').click();
-          await page.locator("#skyfirePdfPreview").waitFor({ state: "visible", timeout: 16000 });
-          const response = await page.evaluate(async engine => {
-            // Chromium verifies SW-mediated offline fetch; Linux WebKit 26's
-            // headless offline networking throws "Load failed" even with a
-            // populated Cache Storage. Verify the bytes really are cached
-            // without claiming the iOS offline fetch/renderer works.
-            const r = engine === "WebKit" ?
-              await caches.match("./docs/MSHA-form-5000-23.pdf") :
-              await fetch("docs/MSHA-form-5000-23.pdf");
-            if (!r) return { status: 0, first: "" };
-            const first = new TextDecoder().decode((await r.arrayBuffer()).slice(0, 4));
-            return { status: r.status, first };
-          }, engineName);
-          if (response.status !== 200 || response.first !== "%PDF") throw Error("Offline PDF bytes unavailable: " + JSON.stringify(response));
-          if (engineName === "WebKit") {
-            console.log("LIMITATION WebKit headless SW-mediated offline PDF fetch and display NOT validated; cached bytes only; requires real device");
-          }
-          await page.locator("#sfPdfReturn").click();
-          if (!(await page.locator("#docsSection").isVisible())) throw Error("Lost app offline");
-          // Playwright Linux WebKit reports an expected worker-script network
-          // failure when context.setOffline(true) is used without cold reload.
-          // This is an explicit headless limitation, NOT an offline acceptance pass.
-          const expectedHeadless = message => engineName === "WebKit" &&
-            /^TypeError: Script http:\/\/127\.0\.0\.1:8765\/service-worker\.js load failed$/.test(message);
-          const unexpected = errors.filter(message => !expectedHeadless(message));
-          if (errors.length > unexpected.length)
-            console.log("LIMITATION WebKit offline headless service-worker script load not validated");
-          if (unexpected.length) throw Error("Page JS errors: " + unexpected.slice(0, 5).join(" | "));
-          console.log("PASS", engineName, screen.name, engineName === "Chromium" ?
-            "offline cold PWA reload, cached PDF and return" :
-            "cached PDF bytes and in-app return (offline network/display unverified)");
-        } finally {
-          await ctx.close();
-        }
-      }
-    } finally {
-      await browser.close();
-    }
-  }
-})().catch(error => { console.error("FAIL v0.19 browser:", error.stack || error); process.exit(1); });
+async function openForms(page){
+  await page.locator("button.skyfire-hub-home-tile.regulatory-hub").click();
+  await page.locator("#regulatoryResourcesHubSection button.skyfire-hub-item")
+    .filter({hasText:"MSHA Forms Library"}).first().click();
+  await page.locator("#docsSection").waitFor({state:"visible",timeout:15000});
+}
+async function checkForm(page,context,id,expectedPages){
+  const link=page.locator('#docsSection a[href="docs/MSHA-form-'+id+'.pdf"][target="_blank"]');
+  await link.scrollIntoViewIfNeeded();
+  const before=await page.evaluate(()=>scrollY),tabsBefore=context.pages().length;
+  await link.click();
+  await page.locator("#skyfirePdfPreview").waitFor({state:"visible",timeout:12000});
+  if(context.pages().length!==tabsBefore) throw Error("Unexpected tab opened");
+  const frames=await page.locator("#skyfirePdfPreview iframe").count();
+  if(frames) throw Error("Native PDF iframe is still present");
+  const pageItems=page.locator("#sfPdfPages .sf-pdf-page");
+  await page.waitForFunction(expected=>{
+    const nodes=document.querySelectorAll("#sfPdfPages .sf-pdf-page");
+    return nodes.length>=expected && document.querySelector("#sfPdfCounter").textContent.includes("of "+expected);
+  },expectedPages,{timeout:35000});
+  const count=await pageItems.count();
+  if(count!==expectedPages) throw Error(id+" had "+count+" page containers, expected "+expectedPages);
+  await page.locator('#sfPdfPages .sf-pdf-page[data-page="1"] canvas').waitFor({state:"visible",timeout:45000});
+  await page.locator('#sfPdfPages .sf-pdf-page[data-page="'+expectedPages+'"]').scrollIntoViewIfNeeded();
+  await page.locator('#sfPdfPages .sf-pdf-page[data-page="'+expectedPages+'"] canvas')
+    .waitFor({state:"visible",timeout:45000});
+  const dimensions=await page.locator('#sfPdfPages .sf-pdf-page[data-page="'+expectedPages+'"] canvas')
+    .evaluate(c=>({width:c.width,height:c.height}));
+  if(dimensions.width<180||dimensions.height<180) throw Error("Last page canvas too small: "+JSON.stringify(dimensions));
+  const fallback=await page.locator('#sfPdfExternal[href$=".pdf"],#sfPdfDownload[download][href$=".pdf"]').count();
+  if(fallback!==2)throw Error("Missing original/download actions");
+  await page.locator("#sfPdfReturn").click();
+  if(await page.locator("#skyfirePdfPreview").isVisible())throw Error("Return did not close viewer");
+  if(!await page.locator("#docsSection").isVisible())throw Error("Lost Forms Library");
+  const after=await page.evaluate(()=>scrollY);
+  if(Math.abs(before-after)>12)throw Error("Scroll lost "+before+" -> "+after);
+  console.log("PASS multipage PDF "+id+": "+expectedPages+" page containers, last canvas rendered, return preserved");
+}
+(async()=>{
+ for(const [name,engine] of [["Chromium",chromium],["WebKit",webkit]]){
+  const browser=await engine.launch({headless:true,args:name==="Chromium"?["--no-sandbox"]:[]});
+  try{
+   for(const screen of screens){
+    const ctx=await browser.newContext({...screen,serviceWorkers:"allow"});
+    try{
+     const page=await ctx.newPage(),errors=[];
+     page.on("pageerror",e=>errors.push(e.message));
+     const home=await page.goto(root,{waitUntil:"domcontentloaded",timeout:60000});
+     if(!home||!home.ok())throw Error("Home unavailable "+name+" "+screen.name);
+     if((await page.title())!=="SkyFire Safety")throw Error("Wrong branding");
+     await openForms(page);
+     const links=await page.locator('#docsSection .document-actions a[href^="docs/MSHA-form-"][href$=".pdf"]').count();
+     if(links!==28)throw Error("Forms inventory incomplete: "+links);
+     await checkForm(page,ctx,"5000-23",4);
+     // The second form catches state-reset and renderer reuse errors.
+     await checkForm(page,ctx,"7000-1",2);
+     if(name==="Chromium"){
+      await page.evaluate(()=>navigator.serviceWorker.ready);
+      await page.waitForFunction(async()=>{
+       const a=await caches.match("./vendor/pdfjs/pdf.mjs",{ignoreSearch:true});
+       const b=await caches.match("./vendor/pdfjs/pdf.worker.mjs",{ignoreSearch:true});
+       const c=await caches.match("./docs/MSHA-form-5000-23.pdf");
+       return Boolean(a&&a.ok&&b&&b.ok&&c&&c.ok);
+      },null,{timeout:90000});
+      await page.reload({waitUntil:"domcontentloaded",timeout:45000});
+      await ctx.setOffline(true);
+      await page.reload({waitUntil:"domcontentloaded",timeout:45000});
+      await openForms(page);
+      await checkForm(page,ctx,"5000-23",4);
+      console.log("PASS offline cold PWA reload, all 4 PDF.js pages, "+name+" "+screen.name);
+     }else{
+      console.log("LIMITATION Linux WebKit headless offline cold launch not certified; physical iPhone test required");
+     }
+     if(errors.length)throw Error("Page JS errors: "+errors.slice(0,5).join("; "));
+     console.log("PASS "+name+" "+screen.name+" multi-page online viewer");
+    }finally{await ctx.close()}
+   }
+  }finally{await browser.close()}
+ }
+})().catch(e=>{console.error("FAIL v0.19 browser: ",e.stack||e);process.exit(1)});

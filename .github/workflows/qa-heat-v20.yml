@@ -13,6 +13,7 @@ on:
       - scripts/qa_heat_v20.cjs
       - scripts/qa_v19_static.py
       - scripts/qa_heat_v20_browser.cjs
+      - scripts/qa_heat_upgrade_v20.cjs
   workflow_dispatch:
 permissions:
   contents: read
@@ -46,3 +47,25 @@ jobs:
           sleep 3
           node scripts/qa_heat_v20_browser.cjs
           node scripts/qa_v19_browser.cjs
+
+  upgrade:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install Chromium for installed PWA migration test
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Build two local same-origin snapshots and test production v0.19 upgrade
+        run: |
+          mkdir -p /tmp/skyfire-v20-upgrade/v019 /tmp/skyfire-v20-upgrade/draft
+          git archive 4d653ec3daadce706532161484142761bc34d041 | tar -x -C /tmp/skyfire-v20-upgrade/v019
+          git archive HEAD | tar -x -C /tmp/skyfire-v20-upgrade/draft
+          cd /tmp/skyfire-v20-upgrade
+          ln -s v019 live
+          python3 -m http.server 8766 --bind 127.0.0.1 >/tmp/skyfire-v20-upgrade.log 2>&1 &
+          sleep 3
+          node "$GITHUB_WORKSPACE/scripts/qa_heat_upgrade_v20.cjs"

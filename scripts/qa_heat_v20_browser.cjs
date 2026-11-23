@@ -37,6 +37,15 @@ async function checkCalculations(page){
   if(!await page.locator("#heatIndexPanel").isVisible())throw Error("Heat Index tab hidden");
   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>document.documentElement.clientWidth+3);
   if(overflow)throw Error("Horizontal overflow detected");
+  // A new child module must not strand users behind a temporary hub.
+  const back=page.locator("#heatStressSection .skyfire-nav-back");
+  await back.waitFor({state:"visible",timeout:10000});
+  await back.click();
+  if(!await page.locator("#safetyToolsHubSection").isVisible())throw Error("Back from Heat Stress lost the Safety Tools hub");
+  await page.locator("#safetyToolsHubSection .skyfire-hub-item").filter({hasText:"Occupational Heat Stress"}).click();
+  if(!await page.locator("#heatStressSection").isVisible())throw Error("Heat Stress cannot reopen after Back");
+  await page.locator("#heatStressSection .skyfire-nav-home").click();
+  if(!await page.locator("#homeSection").isVisible())throw Error("Home navigation failed from Heat Stress");
 }
 (async()=>{
   for(const [name,engine] of [["Chromium",chromium],["WebKit",webkit]]){

@@ -28,6 +28,7 @@ Current contents:
 - Risk Assessment Matrix
 - Safety ROI Calculator
 - 5S Workplace Organization
+- Occupational Heat Stress (v0.20 development branch; manual Heat Index and measured WBGT; not released)
 
 Potential future contents:
 - Work Area Safety Check
@@ -78,3 +79,7 @@ Revisit the information architecture whenever:
 - a hub becomes too broad to scan easily;
 - a new feature does not clearly fit an existing category; or
 - mobile scrolling begins to interfere with quick field use.
+
+## v0.20 — Product-family boundary (approved November 22, 2026)
+
+SkyFire Safety is an offline-first field safety reference and decision-support product. It does not store official employee safety records, site permits or company approvals. SkyFire SDS is a separate private chemical inventory/SDS management product; SkyFire Education is a separate LMS. Company-controlled inspections, incidents, corrective actions, JHAs, work permits and maintenance coordination remain with the operator-approved system, with Lynx considered where actually contracted and supported. General mining, geology and environmental calculators are not automatically SkyFire Safety features. Weather/Conditions #14 is deferred; v0.20 Heat Stress works without it. Numerical guidance is not a regulatory work authorization.

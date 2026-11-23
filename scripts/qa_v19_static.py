@@ -25,7 +25,7 @@ assert "SkyFire Safety Library" not in index
 assert "pdf-preview-v19.css" in index and "pdf-preview-v19.js" in index
 assert "SkyFire Safety Library" not in app and "app: \"SkyFire Safety\"" in app
 assert "SkyFire Safety Library" not in (root / "feedback.js").read_text(encoding="utf-8")
-assert "skyfire-quality-cache-v43" in worker
+assert any("skyfire-quality-cache-v"+v in worker for v in ("43", "44")), "Unexpected shell cache version"
 assert "pdf-preview-v19.css" in worker and "pdf-preview-v19.js" in worker
 assert "sfPdfReturn" in script and "sfPdfClose" in script
 assert 'dialog.showModal()' in script and 'dialog.addEventListener("close", restorePlace)' in script

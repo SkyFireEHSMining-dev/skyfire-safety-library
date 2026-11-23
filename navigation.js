@@ -11,6 +11,7 @@
     riskMatrixSection: { label: "Risk Assessment Matrix", parent: "safetyToolsHubSection" },
     roiCalculatorSection: { label: "Safety ROI Calculator", parent: "safetyToolsHubSection" },
     fiveSSection: { label: "5S Workplace Organization", parent: "safetyToolsHubSection" },
+    heatStressSection: { label: "Occupational Heat Stress", parent: "safetyToolsHubSection" },
 
     cfrSection: { label: "MSHA / 30 CFR", parent: "regulatoryResourcesHubSection" },
     oshaSection: { label: "OSHA / 29 CFR", parent: "regulatoryResourcesHubSection" },

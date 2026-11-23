@@ -11,6 +11,7 @@ on:
       - navigation.js
       - service-worker.js
       - scripts/qa_heat_v20.cjs
+      - scripts/qa_v19_static.py
       - scripts/qa_heat_v20_browser.cjs
   workflow_dispatch:
 permissions:

@@ -1,0 +1,31 @@
+/* SkyFire Safety v0.20 Heat Stress — module-scoped, mobile-first */
+#heatStressSection [hidden]{display:none!important}
+#heatStressSection .module-header{border-top-color:#0f8f83}
+#heatStressSection p{line-height:1.55}
+.sf-heat-notice{background:#fff9ed;border-left:5px solid #ac7717}
+.sf-heat-notice strong{display:block;margin-bottom:8px}
+.sf-heat-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0 0 20px}
+.sf-heat-tab{border:1px solid #abbfc9;background:#f0f7fa;color:#173a43;border-radius:12px;padding:12px 8px;min-height:50px;font:inherit;font-weight:800;cursor:pointer}
+.sf-heat-tab[aria-selected="true"]{background:#087e73;border-color:#087e73;color:white}
+.sf-heat-tab:focus-visible,.sf-heat-submit:focus-visible,.sf-heat-form input:focus-visible,.sf-heat-form select:focus-visible{outline:3px solid #1f71c1;outline-offset:2px}
+.sf-heat-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:16px 0}
+.sf-heat-fields label{display:flex;flex-direction:column;gap:7px;min-width:0;font-size:.94rem;font-weight:700;color:#1c3242}
+.sf-heat-fields input,.sf-heat-fields select{font:inherit;color:#172b39;background:white;border:1px solid #b1c2ca;border-radius:10px;min-height:46px;width:100%;min-width:0;padding:10px;box-sizing:border-box}
+.sf-heat-help{color:#4d626f;font-size:.91rem}
+.sf-heat-context{border:1px solid #d4dfe5;border-radius:12px;padding:14px;margin:12px 0 18px}
+.sf-heat-context legend{font-weight:800;padding:0 6px}
+.sf-heat-check{display:flex;gap:9px;align-items:flex-start;margin:11px 0;line-height:1.4}
+.sf-heat-check input{width:19px;height:19px;flex-shrink:0;margin-top:2px;accent-color:#087e73}
+.sf-heat-submit{width:100%;background:#087e73;color:#fff;border:0;border-radius:12px;min-height:50px;padding:12px;font:inherit;font-weight:800;cursor:pointer}
+.sf-heat-error{margin-top:13px;background:#fff2f0;border-left:5px solid #b73c2c;border-radius:8px;padding:12px;color:#74271d;font-weight:700}
+.sf-heat-result{margin-top:16px;background:#f5fafd;border:1px solid #bdd2dd;border-left:5px solid #607e90;border-radius:14px;padding:16px}
+.sf-heat-result[data-level="moderate"]{background:#fffbe9;border-left-color:#ac8211}
+.sf-heat-result[data-level="high"]{background:#fff4e9;border-left-color:#bb6712}
+.sf-heat-result[data-level="extreme"]{background:#fff0ef;border-left-color:#b53e35}
+.sf-heat-number{font-size:clamp(2rem,7vw,2.6rem);font-weight:850;margin:6px 0;line-height:1.1;overflow-wrap:anywhere}
+.sf-heat-secondary{font-size:.98rem;color:#476273;font-weight:700}
+.sf-heat-title{font-size:1.05rem;font-weight:800;margin:12px 0 4px}
+.sf-heat-sources a{overflow-wrap:anywhere}
+.sf-heat-sources li{margin:7px 0}
+.sf-heat-education summary{cursor:pointer;font-weight:800;padding:11px 0}
+@media(max-width:480px){.sf-heat-fields{grid-template-columns:1fr}.sf-heat-tab{font-size:.9rem;padding:9px 4px}.sf-heat-result{padding:13px}}

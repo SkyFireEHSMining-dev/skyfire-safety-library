@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="styles.css?v=feedback-v1">
   <link rel="stylesheet" href="feedback.css?v=feedback-v1">
   <link rel="stylesheet" href="pdf-preview-v19.css?v=v19">
+  <link rel="stylesheet" href="heat-stress-v20.css?v=v20">
 
   <script src="storage-namespace-v18.js" defer></script>
   <script src="app.js?v=feedback-v1" defer></script>
@@ -24,6 +25,7 @@
   <script src="risk-matrix.js?v=feedback-v1" defer></script>
   <script src="feedback.js?v=feedback-v1" defer></script>
   <script src="pdf-preview-v19.js?v=v19" defer></script>
+  <script src="heat-stress-v20.js?v=v20" defer></script>
 </head>
 <body>
 
@@ -975,6 +977,141 @@
       </div>
     </section>
 
+
+    <section id="heatStressSection" class="app-section hidden">
+      <div class="module-header">
+        <button class="module-home-btn" data-open-section="safetyToolsHubSection">Back to Safety Tools</button>
+        <div class="module-header-text">
+          <h2>Occupational Heat Stress</h2>
+          <p>Heat Index screening and measured WBGT occupational comparison.</p>
+        </div>
+      </div>
+      <div class="info-panel sf-heat-notice">
+        <strong>Decision support — not a work authorization.</strong>
+        <p>This tool does not measure heat, determine medical fitness or certify MSHA compliance. Use your mine's heat-stress program and emergency procedures. A result below a screening value is not a declaration that work is safe.</p>
+      </div>
+      <div class="info-panel">
+        <div class="sf-heat-tabs" role="tablist" aria-label="Heat assessment mode">
+          <button class="sf-heat-tab" id="heatTabIndex" type="button" role="tab" aria-selected="true" aria-controls="heatIndexPanel">Heat Index Screen</button>
+          <button class="sf-heat-tab" id="heatTabWbgt" type="button" role="tab" aria-selected="false" aria-controls="heatWbgtPanel" tabindex="-1">Measured WBGT</button>
+        </div>
+        <div id="heatIndexPanel" role="tabpanel" aria-labelledby="heatTabIndex">
+          <h3>Heat Index — quick outdoor screen</h3>
+          <p class="sf-heat-help">Enter an actual or stated-source air temperature and relative humidity. Heat Index represents shade/light wind; it cannot account for workload, solar or equipment radiation, or unusual PPE.</p>
+          <form id="heatIndexForm" class="sf-heat-form" novalidate>
+            <div class="sf-heat-fields">
+              <label for="heatAirTemperature">Air temperature
+                <input id="heatAirTemperature" type="number" step="any" inputmode="decimal" required placeholder="e.g., 100">
+              </label>
+              <label for="heatIndexUnit">Temperature unit
+                <select id="heatIndexUnit"><option value="F">°F (Fahrenheit)</option><option value="C">°C (Celsius)</option></select>
+              </label>
+              <label for="heatHumidity">Relative humidity (%)
+                <input id="heatHumidity" type="number" step="any" inputmode="decimal" min="0" max="100" required placeholder="e.g., 25">
+              </label>
+              <label for="heatIndexWorkload">Physical workload — context only
+                <select id="heatIndexWorkload">
+                  <option value="unknown">Not specified</option>
+                  <option value="light">Light</option>
+                  <option value="moderate">Moderate</option>
+                  <option value="heavy">Heavy</option>
+                  <option value="veryHeavy">Very heavy</option>
+                </select>
+              </label>
+            </div>
+            <fieldset class="sf-heat-context">
+              <legend>Work-area conditions needing additional assessment</legend>
+              <label class="sf-heat-check"><input type="checkbox" name="heatContext" value="direct sun"> Direct sunlight, exposed stockpile or haul road</label>
+              <label class="sf-heat-check"><input type="checkbox" name="heatContext" value="radiant heat or hot machinery"> Radiant heat, equipment or process heat</label>
+              <label class="sf-heat-check"><input type="checkbox" name="heatContext" value="indoor or underground work"> Indoor or underground work</label>
+              <label class="sf-heat-check"><input type="checkbox" name="heatContext" value="heat-retaining PPE"> Heat-retaining PPE or clothing</label>
+            </fieldset>
+            <button class="sf-heat-submit" type="submit">Calculate Heat Index</button>
+            <p id="heatIndexError" class="sf-heat-error" role="alert" hidden></p>
+            <div id="heatIndexResult" class="sf-heat-result" role="status" aria-live="polite" hidden>
+              <strong>Calculated Heat Index</strong>
+              <div id="heatIndexValue" class="sf-heat-number"></div>
+              <div id="heatIndexOtherUnit" class="sf-heat-secondary"></div>
+              <div id="heatIndexBand" class="sf-heat-title"></div>
+              <p id="heatIndexGuidance"></p>
+              <p id="heatIndexNotes"></p>
+              <p class="sf-heat-help">NIOSH Appendix C Table C-1: occupational screening guidance, not a legal work threshold.</p>
+            </div>
+          </form>
+        </div>
+        <div id="heatWbgtPanel" role="tabpanel" aria-labelledby="heatTabWbgt" hidden>
+          <h3>Measured WBGT — occupational comparison</h3>
+          <p class="sf-heat-help">Provide the reading from a worksite WBGT instrument placed and operated according to its manufacturer. SkyFire does not measure or estimate WBGT.</p>
+          <form id="heatWbgtForm" class="sf-heat-form" novalidate>
+            <div class="sf-heat-fields">
+              <label for="heatWbgtMeasured">Instrument-measured WBGT
+                <input id="heatWbgtMeasured" type="number" step="any" inputmode="decimal" required placeholder="e.g., 26">
+              </label>
+              <label for="heatWbgtUnit">Instrument units
+                <select id="heatWbgtUnit"><option value="C">°C (Celsius)</option><option value="F">°F (Fahrenheit)</option></select>
+              </label>
+              <label for="heatWbgtWorkload">Physical workload
+                <select id="heatWbgtWorkload">
+                  <option value="light">Light — minimal arm and leg work</option>
+                  <option value="moderate">Moderate — walking, mobile equipment</option>
+                  <option value="heavy">Heavy — sustained manual handling, drilling</option>
+                  <option value="veryHeavy">Very heavy — near-maximum effort</option>
+                </select>
+              </label>
+              <label for="heatWbgtAcclimatization">Heat acclimatization
+                <select id="heatWbgtAcclimatization">
+                  <option value="unacclimatized">Unacclimatized / uncertain</option>
+                  <option value="acclimatized">Acclimatized</option>
+                </select>
+              </label>
+              <label for="heatWbgtClothing">Clothing / PPE category
+                <select id="heatWbgtClothing">
+                  <option value="work">Ordinary work clothing (+0°C)</option>
+                  <option value="cloth">Cloth coveralls (+0°C)</option>
+                  <option value="sms">SMS coveralls (+0.5°C)</option>
+                  <option value="polyolefin">Polyolefin coveralls (+1°C)</option>
+                  <option value="double">Double-layer cloth (+3°C)</option>
+                  <option value="vapor">Limited-use vapor barrier (+11°C)</option>
+                  <option value="other">Other / unlisted PPE — site review needed</option>
+                </select>
+              </label>
+            </div>
+            <p class="sf-heat-help">Source-backed clothing temperature adjustments are added to the measured WBGT. Unlisted PPE cannot be assigned a guessed factor.</p>
+            <button class="sf-heat-submit" type="submit">Assess Measured WBGT</button>
+            <p id="heatWbgtError" class="sf-heat-error" role="alert" hidden></p>
+            <div id="heatWbgtResult" class="sf-heat-result" role="status" aria-live="polite" hidden>
+              <strong>Effective WBGT (measurement plus clothing factor)</strong>
+              <div id="heatWbgtValue" class="sf-heat-number"></div>
+              <div id="heatWbgtOtherUnit" class="sf-heat-secondary"></div>
+              <p id="heatWbgtFactor"></p>
+              <p id="heatWbgtLimit" class="sf-heat-title"></p>
+              <p id="heatWbgtGuidance"></p>
+              <p class="sf-heat-help">OSHA Table 2 recommended occupational comparisons, adapted from NIOSH (2016). Not universal MSHA regulatory limits or automatic work-stop criteria.</p>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="info-panel sf-heat-sources">
+        <h3>Using the result responsibly</h3>
+        <details class="sf-heat-education">
+          <summary>Heat Index versus WBGT</summary>
+          <p>Heat Index uses air temperature and humidity under shade/light-wind assumptions. Worksite WBGT considers radiant heat and air movement. Workload and acclimatization also affect heat strain.</p>
+        </details>
+        <details class="sf-heat-education">
+          <summary>Acclimatization, workload and controls</summary>
+          <p>NIOSH recommends progressive acclimatization over 7–14 days, especially for new or returning workers. Use site-specific workload reduction, shade/cooling, water, recovery breaks, buddy checks and prompt reporting of heat-illness symptoms.</p>
+        </details>
+        <h3>Official references</h3>
+        <p class="sf-heat-help">Calculations and tables last verified November 22, 2026. Offline values cannot be checked against newly published guidance until you reconnect.</p>
+        <ul>
+          <li><a href="https://www.weather.gov/tbw/heatindex" target="_blank" rel="noopener noreferrer">NWS Heat Index calculation</a></li>
+          <li><a href="https://www.osha.gov/heat-exposure/hazards" target="_blank" rel="noopener noreferrer">OSHA Heat Hazard Recognition and WBGT Tables</a></li>
+          <li><a href="https://www.cdc.gov/niosh/docs/2016-106/" target="_blank" rel="noopener noreferrer">NIOSH 2016 occupational heat criteria, Appendix C</a></li>
+          <li><a href="https://www.cdc.gov/niosh/heat-stress/recommendations/" target="_blank" rel="noopener noreferrer">NIOSH prevention and acclimatization guidance</a></li>
+          <li><a href="https://www.msha.gov/sites/default/files/Alerts%20and%20Hazards/HealthAlert-HeatStress.pdf" target="_blank" rel="noopener noreferrer">MSHA Heat Stress Health Alert</a></li>
+        </ul>
+      </div>
+    </section>
 
     <section id="feedbackSection" class="app-section hidden">
       <div class="module-header feedback-module-header">
